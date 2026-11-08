@@ -2,6 +2,14 @@
 
 Dates use Europe/Berlin. This records the documentation repository separately from any future application or hardware-module release.
 
+## 2026-11-08 · Website 0.2.1: consistent project name
+
+- Corrected website branding to **Loopy Pro Interface Control** in the header, footer, demo and browser title.
+- Updated the downloadable planning-guide heading and export filenames to match, plus the website README and visible changelog.
+- Added a clear independent-software and non-affiliation notice on the website and near the top of the GitHub README. Updated the README project heading; the repository name and URLs are unchanged.
+- Preserved existing browser-saved plans, control behavior, evidence and hardware-verification boundaries.
+- Added a branding regression test. `npm test` passed all 12 tests; `npm run build` passed TypeScript and production-build checks. This is a website correction, not a hardware-control release.
+
 ## 2026-11-08 · Documentation and collaboration structure
 
 ### Added

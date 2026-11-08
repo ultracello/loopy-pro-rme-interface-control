@@ -1,6 +1,8 @@
-# Loopy Pro RME Interface Control
+# Loopy Pro Interface Control
 
 Reusable controls for RME audio interfaces from Loopy Pro, with device-specific MIDI paths and TotalMix behavior documented separately.
+
+**Independent software. Not affiliated with RME.**
 
 **Status: research and early development.** This repository publishes documentation, contribution templates and a browser-only planning configurator. It does not yet contain a released hardware-control module, an importable Loopy Pro project, or a reproducible hardware-validation package.
 

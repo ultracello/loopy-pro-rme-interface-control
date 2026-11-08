@@ -1,4 +1,4 @@
-# LoopMix planning website
+# Loopy Pro Interface Control planning website
 
 Static React/Vite application for GitHub Pages. It lets visitors select desired Loopy Pro / RME controls, inspect compatibility boundaries, preview a local-only control surface and download a planning brief. No MIDI, OSC, audio, account access or hardware connection exists in this application.
 
