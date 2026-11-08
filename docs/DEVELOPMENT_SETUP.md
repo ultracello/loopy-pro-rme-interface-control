@@ -24,7 +24,13 @@ A typical documented architecture is test client → Appium/XCUITest driver on t
 
 Sources: [Appium driver architecture](https://appium.github.io/appium-xcuitest-driver/latest/overview/), [device preparation](https://appium.github.io/appium-xcuitest-driver/latest/getting-started/device-setup/), and [WebDriverAgent](https://github.com/appium/WebDriverAgent). Exact compatibility and setup vary with tool and OS versions. Follow current upstream documentation rather than copying old commands blindly.
 
-## Current project profile: not yet published
+## Recorded passive-reception checkpoint
+
+The [8 November 2026 milestone](milestones/2026-11-08-passive-ipad-reception.md) documents a narrow result recorded on 8 November 2026: Babyface Port 2 → a fresh MidiFire Event Monitor, temporarily extended through virtual MidiFire 1 to the existing Loopy StreamByter input monitor. Full messages were observed using existing TotalMix traffic; the Loopy output monitor was empty during the check. The original scene was restored and temporary remote-control services were shut down afterwards.
+
+This supplies a scoped control-return-path observation, not a complete inventory. The package does not identify exact OS/app/tool versions, automation transport or a reusable automation script. Do not infer an active Appium/WDA service, a permanent TotalMix requirement, or a hostless end-user setup from it.
+
+## Complete current project profile: not yet published
 
 A reproducible current test-session inventory has not been published in this repository. Historical use of Appium/WDA/XCTest in another iPad test workflow must not be treated as proof that the same services, transport or versions are active for this project now. This page does not claim that any remote-control service is currently running.
 
@@ -33,7 +39,7 @@ The following are deliberately **not yet specified as a reproducible current pro
 - Mac/iPad OS versions and Xcode version.
 - Appium, XCUITest driver and WDA versions, and which processes are currently running.
 - Current USB versus WLAN automation transport, and whether tunnelling/forwarding is used.
-- Exact physical audio/MIDI topology and required control bridge.
+- Complete physical audio/MIDI topology and required released control bridge; only the limited passive return path above has been reported.
 - Role and current use of any additional remote-access software.
 
 A project test rig can be paused or reconfigured. Every observation needs a timestamp and an explicit historical/current label. Do not publish account names, device identifiers, IP addresses, session IDs, signing assets or credentials to make this section more specific.

@@ -10,6 +10,12 @@ Reusable controls for RME audio interfaces from Loopy Pro, with device-specific 
 
 The static [planning configurator source](website/) lets visitors select desired controls, preview a local-only surface and export a setup brief. It sends no MIDI, OSC or audio and is not a tested hardware controller. See [website setup and privacy](website/README.md) and the repository's **Build and deploy planning website** Actions workflow for deployment status.
 
+## Latest development milestone
+
+The [8 November passive iPad reception report](docs/milestones/2026-11-08-passive-ipad-reception.md) records complete 227/207-byte Babyface messages reaching a fresh MidiFire monitor and, through a temporary return path, the existing StreamByter input monitor in Loopy Pro. The Loopy output monitor stayed empty during that check.
+
+This is scoped reception evidence using existing TotalMix traffic. It does not establish independent Loopy-only operation, decoded control readiness, new gain/mute behavior or a released device profile. No new Loopy state query was executed in that check. Versions, reproducible artifacts and further acceptance tests remain outstanding.
+
 ## The goal
 
 Make useful interface controls easy to add to an existing Loopy Pro project, without rebuilding its audio routing:
@@ -71,7 +77,8 @@ Exact tool versions and a reproducible developer setup should accompany the corr
 - [Module status and evidence levels](docs/MODULE_STATUS.md)
 - [Contributing](CONTRIBUTING.md)
 - [Developer setup versus end-user requirements](docs/DEVELOPMENT_SETUP.md)
-- [Future browser-test checklist](docs/TESTING.md)
+- [Planning website tests and browser checklist](docs/TESTING.md)
+- [Passive iPad reception milestone](docs/milestones/2026-11-08-passive-ipad-reception.md)
 - [Hardware and release acceptance gates](docs/ACCEPTANCE.md)
 - [Test-report template](templates/test-report.md) and [device-profile template](templates/device-profile.md)
 - [Sources](docs/SOURCES.md) and [changelog](CHANGELOG.md)

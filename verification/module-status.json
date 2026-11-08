@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "asOf": "2026-11-08",
-  "scope": "Public documentation and contribution structure only; no runnable application or executable hardware modules shipped.",
+  "scope": "Public documentation, contribution templates and a software-tested browser-only planner; no executable hardware-control modules shipped.",
   "modules": [
     {
       "id": "phones-fader",
@@ -63,5 +63,19 @@
     "pan",
     "additional-mixer-functions",
     "iphone-control"
+  ],
+  "researchEvidence": [
+    {
+      "id": "passive-ipad-reception-2026-11-08",
+      "report": "docs/milestones/2026-11-08-passive-ipad-reception.md",
+      "evidenceLevel": "project-reported-scoped-device-observation",
+      "scope": "Complete-message reception through MidiFire into an existing Loopy StreamByter input monitor, using existing TotalMix traffic.",
+      "newLoopyStateQueryExecuted": false,
+      "newGainOrMuteTestExecuted": false,
+      "independentLoopyOnlyOperationVerified": false,
+      "promotesHardwareModule": false,
+      "rawCaptureIncluded": false,
+      "reproducibleProfileIncluded": false
+    }
   ]
 }
