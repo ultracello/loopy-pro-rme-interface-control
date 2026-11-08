@@ -2,7 +2,7 @@
 
 Reusable controls for RME audio interfaces from Loopy Pro, with device-specific MIDI paths and TotalMix behavior documented separately.
 
-**Status: research and early development.** This repository currently publishes the project overview. It does not yet contain a released control module, an importable Loopy Pro project, a runnable configurator, or a reproducible hardware-validation package.
+**Status: research and early development.** This repository currently publishes the project overview, contribution guides, test plans and report templates. It does not yet contain a released control module, an importable Loopy Pro project, a runnable configurator, or a reproducible hardware-validation package.
 
 ## The goal
 
@@ -59,6 +59,18 @@ A verified minimal end-user setup has not yet been published. It will depend on 
 Mac-based tools such as Xcode, Appium, WebDriverAgent and XCTest can be part of a developer's iPad UI-testing setup. They are not established end-user requirements for these controls. UI automation, the MIDI/control connection and the audio connection must be documented separately, including whether each uses USB or a network.
 
 Exact tool versions and a reproducible developer setup should accompany the corresponding test report. No machine-specific setup or automation script is included in this repository yet.
+
+## Documentation
+
+- [Module status and evidence levels](docs/MODULE_STATUS.md)
+- [Contributing](CONTRIBUTING.md)
+- [Developer setup versus end-user requirements](docs/DEVELOPMENT_SETUP.md)
+- [Future browser-test checklist](docs/TESTING.md)
+- [Hardware and release acceptance gates](docs/ACCEPTANCE.md)
+- [Test-report template](templates/test-report.md) and [device-profile template](templates/device-profile.md)
+- [Sources](docs/SOURCES.md) and [changelog](CHANGELOG.md)
+
+The issue chooser provides forms for test reports and feature requests. These forms do not authorize a hardware test or establish compatibility.
 
 ## How to help
 

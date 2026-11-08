@@ -1,0 +1,59 @@
+# Development and test setup
+
+This document separates the tools used to develop and inspect an iPad workflow from what a musician would need to use a future released module. It is a reproducibility guide, not a promise that the current repository already automates a device.
+
+## Three different kinds of connection
+
+| Connection | Purpose | What it does not prove |
+|---|---|---|
+| Mac to iPad developer/test connection | Inspect and operate the test app UI | A supported Loopy-to-RME control protocol |
+| Loopy/control bridge to RME | Send commands and receive state | Correct audio routing or audible output |
+| iPad/audio host to RME audio interface | Carry audio | MIDI/OSC mixer-control support |
+
+Record each path independently. A USB cable used for audio is not evidence of a USB automation connection. A network UI session is not evidence that the audio interface itself is remotely controlled over Wi-Fi.
+
+## Developer tooling roles
+
+- **Mac and Xcode:** host-side development and real-device provisioning/build tools. A device automation setup needs its own compatible toolchain and authorized device pairing.
+- **Appium with the XCUITest driver:** a possible test-session and command layer on the host. It is distinct from the app under test.
+- **WebDriverAgent (WDA):** the device-side automation server used by the XCUITest driver. It uses Apple's XCTest automation APIs for UI actions and inspection.
+- **XCTest / XCUITest:** Apple's testing facilities behind that native UI automation. They do not implement TotalMix's audio or MIDI protocol.
+- **Screen sharing or another remote desktop tool:** may let a developer view or operate the Mac. It is an additional access layer, not an RME control protocol. Do not list any particular remote-access product as required without evidence.
+
+A typical documented architecture is test client → Appium/XCUITest driver on the Mac → WDA/XCTest on the iPad → app UI. Direct use of an already-running WDA is a different arrangement and must be identified explicitly; do not infer that an Appium server is running merely because WDA is available.
+
+Sources: [Appium driver architecture](https://appium.github.io/appium-xcuitest-driver/latest/overview/), [device preparation](https://appium.github.io/appium-xcuitest-driver/latest/getting-started/device-setup/), and [WebDriverAgent](https://github.com/appium/WebDriverAgent). Exact compatibility and setup vary with tool and OS versions. Follow current upstream documentation rather than copying old commands blindly.
+
+## Current project profile: not yet published
+
+A reproducible current test-session inventory has not been published in this repository. Historical use of Appium/WDA/XCTest in another iPad test workflow must not be treated as proof that the same services, transport or versions are active for this project now. This page does not claim that any remote-control service is currently running.
+
+The following are deliberately **not yet specified as a reproducible current profile**:
+
+- Mac/iPad OS versions and Xcode version.
+- Appium, XCUITest driver and WDA versions, and which processes are currently running.
+- Current USB versus WLAN automation transport, and whether tunnelling/forwarding is used.
+- Exact physical audio/MIDI topology and required control bridge.
+- Role and current use of any additional remote-access software.
+
+A project test rig can be paused or reconfigured. Every observation needs a timestamp and an explicit historical/current label. Do not publish account names, device identifiers, IP addresses, session IDs, signing assets or credentials to make this section more specific.
+
+## End-user requirements
+
+**There is no validated minimal end-user setup yet**, because no executable hardware profile is shipped here. The intended module prerequisites will be Loopy Pro, a supported RME device and the exact control route required by its verified profile. A desktop-host route may require a Mac/PC; a hostless route must be independently proven.
+
+Appium, WDA and Xcode are development/test tools. They are not established end-user requirements for this project. Do not ask a musician to install them merely to use a future Loopy control. Conversely, do not promise that no computer or bridge is needed until a hostless profile passes.
+
+## Reproduce work without the original maintainer
+
+1. Choose documentation review, software-only testing or a device test. Documentation contributions need only this repository and a text editor; no Mac/iPad automation is required.
+2. For a device test, fill in the version/topology inventory in [the device-profile template](../templates/device-profile.md), using generic identifiers in public examples.
+3. Prepare a separate test project and reviewed procedure. Define safe monitoring, a stop condition and how to restore the working copy. Do not modify a working production setup incidentally.
+4. Set up only the automation tools actually needed. Use your own authorized device, signing and pairing. Security-sensitive permissions and persistent access must be handled deliberately; this document does not authorize changes to someone else's device.
+5. Verify transport and UI inspection first. Do not treat this as a successful MIDI command or audio test.
+6. Run the chosen case for one output. Record UI state, device state and audible/measurement result separately. Keep mute independent from level.
+7. Test startup, stale state, disconnection, reconnection and state changes made outside the UI where applicable.
+8. Save the exact code revision, version inventory, sanitized procedure and results. Label failed, blocked and not-run cases. End test sessions and release the device when the run is complete.
+9. Submit a sanitized [test report](../templates/test-report.md) or draft pull request. A finding on one rig is not universal compatibility.
+
+Automated tests and reproducible fixtures for this rig are not shipped in the repository yet. Contributors can help by supplying a reviewed, sanitized setup recipe and exact evidence, rather than undocumented claims or machine-specific scripts.

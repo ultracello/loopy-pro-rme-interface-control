@@ -1,0 +1,96 @@
+name: Test report or bug
+description: Tell us what you tried, expected, and observed. Unknown is a valid answer.
+title: '[Test] '
+body:
+- type: markdown
+  attributes:
+    value: This issue and its attachments will be public. Review and sanitize them before posting. Do not attach secrets, personal recordings, original
+      projects, private messages, or device/network identifiers. This form does not authorize a hardware
+      test.
+- type: dropdown
+  id: scope
+  attributes:
+    label: What did you test?
+    options:
+    - Planning preview
+    - Documentation
+    - Separately approved hardware procedure
+  validations:
+    required: true
+- type: input
+  id: revision
+  attributes:
+    label: Version or revision
+    description: Enter the app version and build/commit if supplied; otherwise write unknown.
+  validations:
+    required: true
+- type: input
+  id: environment
+  attributes:
+    label: Device and software
+    description: OS/browser for preview tests; exact model, firmware and app versions for an approved
+      hardware test.
+  validations:
+    required: true
+- type: dropdown
+  id: module
+  attributes:
+    label: Control or area
+    options:
+    - phones-fader
+    - phones-steps
+    - phones-mute
+    - main-fader
+    - main-steps
+    - main-mute
+    - Plan or checklist export
+    - Setup or compatibility wording
+    - Other
+  validations:
+    required: true
+- type: textarea
+  id: steps
+  attributes:
+    label: What did you do?
+    description: Short numbered steps are enough.
+  validations:
+    required: true
+- type: textarea
+  id: expected
+  attributes:
+    label: What did you expect?
+  validations:
+    required: true
+- type: textarea
+  id: actual
+  attributes:
+    label: What actually happened?
+    description: Include whether the other output was affected. For hardware, distinguish confirmed mute
+      state from level.
+  validations:
+    required: true
+- type: dropdown
+  id: result
+  attributes:
+    label: Result
+    options:
+    - Pass
+    - Fail
+    - Blocked
+    - Not run
+  validations:
+    required: true
+- type: textarea
+  id: notrun
+  attributes:
+    label: Limits and checks not run
+    description: Mention repeated attempts, reload, reconnect or other cases you did not test. Use none
+      only if accurate.
+  validations:
+    required: true
+- type: textarea
+  id: evidence
+  attributes:
+    label: Supporting evidence
+    description: Sanitized details only. For hardware tests, include the approved profile and procedure
+      reference.

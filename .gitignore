@@ -1,0 +1,23 @@
+# Merge with an existing app .gitignore; do not replace it blindly.
+.env
+.env.*
+!.env.example
+.dev.vars*
+*.pem
+*.key
+*.p12
+*.pfx
+.DS_Store
+node_modules/
+dist/
+.next/
+.sites-runtime/
+.wrangler/
+.vinext/
+coverage/
+*.tsbuildinfo
+# Keep raw captures, originals and personal media outside the repository.
+private/
+raw-evidence/
+original-projects/
+*.log

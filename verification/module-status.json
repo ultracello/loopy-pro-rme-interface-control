@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "asOf": "2026-11-08",
+  "scope": "Public documentation and contribution structure only; no runnable application or executable hardware modules shipped.",
+  "modules": [
+    {
+      "id": "phones-fader",
+      "status": "planned",
+      "implementationIncluded": false,
+      "softwareTestEvidence": null,
+      "hardwareStatus": "unverified",
+      "verifiedProfileIds": [],
+      "executableArtifactIncluded": false
+    },
+    {
+      "id": "phones-steps",
+      "status": "planned",
+      "implementationIncluded": false,
+      "softwareTestEvidence": null,
+      "hardwareStatus": "unverified",
+      "verifiedProfileIds": [],
+      "executableArtifactIncluded": false
+    },
+    {
+      "id": "phones-mute",
+      "status": "planned",
+      "implementationIncluded": false,
+      "softwareTestEvidence": null,
+      "hardwareStatus": "unverified",
+      "verifiedProfileIds": [],
+      "executableArtifactIncluded": false
+    },
+    {
+      "id": "main-fader",
+      "status": "planned",
+      "implementationIncluded": false,
+      "softwareTestEvidence": null,
+      "hardwareStatus": "unverified",
+      "verifiedProfileIds": [],
+      "executableArtifactIncluded": false
+    },
+    {
+      "id": "main-steps",
+      "status": "planned",
+      "implementationIncluded": false,
+      "softwareTestEvidence": null,
+      "hardwareStatus": "unverified",
+      "verifiedProfileIds": [],
+      "executableArtifactIncluded": false
+    },
+    {
+      "id": "main-mute",
+      "status": "planned",
+      "implementationIncluded": false,
+      "softwareTestEvidence": null,
+      "hardwareStatus": "unverified",
+      "verifiedProfileIds": [],
+      "executableArtifactIncluded": false
+    }
+  ],
+  "futureResearch": [
+    "input-gain",
+    "pan",
+    "additional-mixer-functions",
+    "iphone-control"
+  ]
+}

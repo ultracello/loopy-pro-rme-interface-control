@@ -1,0 +1,45 @@
+name: Suggest a control or improvement
+description: Describe one useful musical task and the smallest improvement that would help.
+title: '[Idea] '
+body:
+- type: markdown
+  attributes:
+    value: Ideas are welcome. A request is not a compatibility promise or authorization to change hardware,
+      routing, permissions, or publication.
+- type: textarea
+  id: goal
+  attributes:
+    label: What do you want to do?
+    description: Describe the musical task in plain language.
+  validations:
+    required: true
+- type: input
+  id: setup
+  attributes:
+    label: What setup would you use?
+    description: Device/model, apps, and whether a computer is involved. Unknown is fine.
+  validations:
+    required: true
+- type: textarea
+  id: minimum
+  attributes:
+    label: Smallest useful result
+    description: For example, a separate headphone mute button. Say what must stay unchanged.
+  validations:
+    required: true
+- type: textarea
+  id: current
+  attributes:
+    label: How do you do it now?
+- type: textarea
+  id: done
+  attributes:
+    label: How would you know it works?
+    description: Describe a visible or measurable outcome.
+  validations:
+    required: true
+- type: textarea
+  id: sources
+  attributes:
+    label: References, if any
+    description: Prefer an official manual section. Do not paste private conversations or unlicensed code.
