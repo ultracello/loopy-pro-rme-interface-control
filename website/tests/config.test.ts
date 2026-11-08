@@ -1,8 +1,8 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {EVIDENCE, REPORTS, PUBLIC_REPOSITORY, LAB_STATUS, LATEST_MILESTONE} from '../src/lib/evidence.ts';
-import {DEFAULT_CONFIG, PROJECT_NAME, INDEPENDENCE_NOTICE, PLAN_FILENAME, VERSION, FEATURES, normalizeConfig, adjustLevel, buildPlan, buildGuide} from '../src/lib/config.ts';
+import {EVIDENCE, REPORTS, PUBLIC_REPOSITORY, LAB_STATUS, LATEST_MILESTONE, STEP_SIMULATION} from '../src/lib/evidence.ts';
+import {DEFAULT_CONFIG, PROJECT_NAME, INDEPENDENCE_NOTICE, PLAN_FILENAME, PLANNING_STEP_SIZES, VERSION, FEATURES, normalizeConfig, adjustLevel, buildPlan, buildGuide} from '../src/lib/config.ts';
 test('defaults select the headphone controls only',()=>assert.deepEqual(DEFAULT_CONFIG.selected,['phones-fader','phones-steps','phones-mute']));
 test('all 64 selections generate only selected controls and never executable code',()=>{for(let mask=0;mask<64;mask++){const selected=FEATURES.filter((_,i)=>mask&(1<<i)).map(f=>f.id);const p=buildPlan({...DEFAULT_CONFIG,selected});assert.equal(p.selectedControls.length,selected.length);assert.equal(p.executable,false);assert.equal(p.hardwareTested,false);assert.deepEqual(p.selectedControls.map(c=>c.id),selected);}});
 test('invalid saved configuration is normalized',()=>{const c=normalizeConfig({selected:['phones-mute','phones-mute','fake'] as never,route:'fake' as never,step:999});assert.deepEqual(c.selected,['phones-mute']);assert.equal(c.route,'undecided');assert.equal(c.step,2)});
@@ -11,7 +11,7 @@ test('unsupported iPad app path is explicit in all artifacts',()=>{const c={...D
 test('guide preserves supplied model and versions but warns about no executable code',()=>{const guide=buildGuide({...DEFAULT_CONFIG,model:'Example model',loopyVersion:'Example version'});assert.match(guide,/Example model/);assert.match(guide,/Example version/);assert.match(guide,/No executable control code/)});
 test('step data is only present on step controls',()=>{const p=buildPlan({...DEFAULT_CONFIG,selected:FEATURES.map(f=>f.id),step:3});assert.equal(p.selectedControls.filter(f=>'requestedStepDb' in f).length,2)});
 
-test('exports carry pinned public evidence and remain nonexecutable',()=>{const p=buildPlan(DEFAULT_CONFIG);assert.equal(p.publicationStatus,'public-planning-release');assert.match(p.projectRepository.url,/github.com\/ultracello\/loopy-pro-rme-interface-control$/);assert.match(p.projectRepository.reviewedCommit,/^[0-9a-f]{40}$/);assert.equal(p.evidence.length,8);assert.equal(p.executable,false);assert.ok(buildGuide(DEFAULT_CONFIG).includes(`Planning release ${VERSION}`))});
+test('exports carry pinned public evidence and remain nonexecutable',()=>{const p=buildPlan(DEFAULT_CONFIG);assert.equal(p.publicationStatus,'public-planning-release');assert.match(p.projectRepository.url,/github.com\/ultracello\/loopy-pro-rme-interface-control$/);assert.match(p.projectRepository.reviewedCommit,/^[0-9a-f]{40}$/);assert.equal(p.evidence.length,9);assert.equal(p.executable,false);assert.ok(buildGuide(DEFAULT_CONFIG).includes(`Planning release ${VERSION}`))});
 test('validation requires reading current state and separate outputs',()=>{const text=buildPlan(DEFAULT_CONFIG).requiredValidation.join(' ');assert.match(text,/current hardware state/);assert.match(text,/headphones and main output independently/);assert.match(text,/restart, reconnect/)});
 
 test('historical evidence stays separate from current scoped checkpoints',()=>{const p=buildPlan(DEFAULT_CONFIG);assert.equal(p.labEvidence.releaseReady,false);const v06=LAB_STATUS.entries.find(e=>e.id==='earlier-v06')!;const v08=LAB_STATUS.entries.find(e=>e.id==='earlier-v08')!;assert.match(v06.result,/output 1 only/);assert.match(v06.boundary,/native TotalMix mute/);assert.match(v08.level,/Historical offline/);assert.match(buildGuide(DEFAULT_CONFIG),/34,304/);assert.equal(p.hardwareTested,false)});
@@ -63,9 +63,9 @@ test('display query origin and fixed-button test remain distinct',()=>{
  assert.notEqual(display.sourceUrl,step.sourceUrl);
 });
 test('all current milestone links are pinned and exported in both formats',()=>{
- assert.equal(PUBLIC_REPOSITORY.reviewedCommit,'1bf9b91149590be331b75897af24a4f388b34ca3');
+ assert.equal(PUBLIC_REPOSITORY.reviewedCommit,'6f4e1a50fb9ce24027b29c2068b2cf38c503a3e1');
  const json=JSON.stringify(buildPlan(DEFAULT_CONFIG));const guide=buildGuide(DEFAULT_CONFIG);
- for(const url of [REPORTS.faderWrite,REPORTS.display,REPORTS.step,REPORTS.mapping]){
+ for(const url of [REPORTS.faderWrite,REPORTS.display,REPORTS.step,REPORTS.mapping,REPORTS.stepSimulation]){
   assert.ok(url.includes(`/blob/${PUBLIC_REPOSITORY.reviewedCommit}/docs/`));
   assert.ok(json.includes(url));assert.ok(guide.includes(url));
  }
@@ -73,7 +73,7 @@ test('all current milestone links are pinned and exported in both formats',()=>{
  assert.equal(new Set(EVIDENCE.map(e=>e.id)).size,EVIDENCE.length);
 });
 test('planning step choices never become validated native controls',()=>{
- for(const step of [0.5,1,2,3]){
+ for(const step of PLANNING_STEP_SIZES){
   const p=buildPlan({...DEFAULT_CONFIG,selected:FEATURES.map(f=>f.id),step});
   assert.equal(p.executable,false);assert.equal(p.hardwareTested,false);
   assert.ok(p.selectedControls.every(c=>c.verification==='not-hardware-verified'));
@@ -84,4 +84,53 @@ test('planning step choices never become validated native controls',()=>{
  assert.ok(app.includes('Latest development checkpoint'));
  assert.ok(app.includes('Tested code export: not available yet'));
  assert.doesNotMatch(app,/Raw test artifacts are not bundled here and are not part of the pinned/);
+});
+
+test('step simulation keeps offline, compilation and native widget evidence separate',()=>{
+ assert.deepEqual(STEP_SIMULATION.stepSizesDb,[0.5,1,2,3,6]);
+ assert.equal(STEP_SIMULATION.offline.groups,6);
+ assert.equal(STEP_SIMULATION.offline.cases,34102);
+ assert.equal(STEP_SIMULATION.offline.additionalRegressions,1792);
+ assert.equal(STEP_SIMULATION.offline.repeatedSameCaseSet,true);
+ assert.equal(STEP_SIMULATION.offline.publiclyRerunnable,false);
+ assert.equal(STEP_SIMULATION.backend.nativeCompilation,true);
+ assert.equal(STEP_SIMULATION.backend.nativeRuntimeCommandsTested,false);
+ assert.equal(STEP_SIMULATION.backend.senderConnected,false);
+ assert.equal(STEP_SIMULATION.widgets.nativeCases,10);
+ assert.equal(STEP_SIMULATION.widgets.widgetOnly,true);
+});
+test('native simulated startup and reload do not imply physical changes or device defaults',()=>{
+ assert.equal(STEP_SIMULATION.widgets.inertStartup,true);
+ assert.equal(STEP_SIMULATION.widgets.unknownDefaultNoop,true);
+ assert.equal(STEP_SIMULATION.widgets.reloadPreservedStepDb,6);
+ assert.equal(STEP_SIMULATION.newHardwareTest,false);
+ assert.equal(STEP_SIMULATION.largerPhysicalStepsTested,false);
+ assert.match(STEP_SIMULATION.boundary,/simulation reference, not a device factory default/);
+ assert.equal(LATEST_MILESTONE.id,'phones-fader-write');
+ assert.match(LATEST_MILESTONE.result,/-10.5 → -11.0 → -10.5 dB/);
+});
+test('five browser planning choices remain bounded and six-dB requests round-trip',()=>{
+ assert.deepEqual(PLANNING_STEP_SIZES,[0.5,1,2,3,6]);
+ for(const step of PLANNING_STEP_SIZES){
+  const c=normalizeConfig({...DEFAULT_CONFIG,step});assert.equal(c.step,step);
+  const p=buildPlan(c);assert.equal(p.executable,false);assert.equal(p.hardwareTested,false);
+  assert.ok(buildGuide(c).includes(`(${step} dB requested)`));
+  assert.equal(adjustLevel(-10.5,step),-10.5+step);
+  assert.equal(adjustLevel(-10.5,-step),-10.5-step);
+  assert.equal(adjustLevel(-59,-step),Math.max(-60,-59-step));
+  assert.equal(adjustLevel(-1,step),Math.min(0,-1+step));
+ }
+ assert.equal(normalizeConfig({step:7}).step,2);
+});
+test('both exports include send-free boundaries and no simulated hardware promotion',()=>{
+ const p=buildPlan({...DEFAULT_CONFIG,step:6});const guide=buildGuide({...DEFAULT_CONFIG,step:6});
+ const sim=p.labEvidence.entries.find(e=>e.id==='step-simulation')!;
+ assert.equal(sim.newHardwareTest,false);assert.equal(sim.backend.nativeRuntimeCommandsTested,false);
+ for(const text of ['34,102','1,792','Ten Loopy-only','not executed at native runtime','not a device factory default'])assert.ok(guide.includes(text),text);
+ assert.ok(guide.includes(REPORTS.stepSimulation));
+ const app=readFileSync(new URL('../src/App.tsx',import.meta.url),'utf8');
+ assert.ok(app.includes('NEW CHECKPOINT · SIMULATION ONLY'));
+ assert.ok(app.includes('No MIDI sender or larger physical step was tested'));
+ assert.ok(app.includes('Planning values only. Native selector simulation does not validate hardware steps.'));
+ assert.ok(app.includes('PLANNING_STEP_SIZES.map'));
 });

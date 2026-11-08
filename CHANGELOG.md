@@ -2,6 +2,14 @@
 
 Dates use Europe/Berlin. This records the documentation repository separately from any future application or hardware-module release.
 
+## 2026-11-08 · Website 0.2.3: send-free step-selection evidence
+
+- **Added:** a distinct simulation notice and pinned [native step-selection report](docs/milestones/2026-11-08-native-step-simulation.md), alongside the unchanged bounded Phones hardware checkpoint.
+- **Separated:** six reported offline groups / 34,102 cases plus 1,792 additional regressions, native backend compilation without native runtime command execution, and ten native Loopy widget-only direction cases. No real sender or larger physical step is implied.
+- **Planning:** added 6 dB to browser-only requested steps; all five options remain unverified hardware requests. JSON and readable exports carry the simulation boundaries, source and unchanged release gates.
+- **Preserved:** earlier reports, current public docs, existing controls and browser saving. No device or music-app UI actions are part of this website publication.
+- **Checks:** 20 regression tests, TypeScript/production build, static rendering and JSON/Markdown exports passed. CI and public asset verification follow the commit.
+
 ## 2026-11-08 · Native step-selection simulation
 
 - **Added:** [send-free step-selection report](docs/milestones/2026-11-08-native-step-simulation.md), separating six groups / 34,102 reported offline preview cases, 1,792 additional independent regressions and native compilation from actual Loopy widget-only simulation.

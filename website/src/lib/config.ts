@@ -2,8 +2,9 @@ import { EVIDENCE, PUBLIC_REPOSITORY, RELEASE_GATES, LAB_STATUS } from './eviden
 export const PROJECT_NAME = 'Loopy Pro Interface Control';
 export const INDEPENDENCE_NOTICE = 'Independent software. Not affiliated with RME.';
 export const PLAN_FILENAME = 'loopy-pro-interface-control-plan';
-export const VERSION = '0.2.2';
+export const VERSION = '0.2.3';
 export const RELEASE_DATE = '2026-11-08';
+export const PLANNING_STEP_SIZES = [0.5,1,2,3,6] as const;
 export const FEATURES = [
   { id: 'phones-fader', group: 'Headphones', name: 'Smooth level fader', description: 'A dedicated continuous volume control.', kind: 'fader' },
   { id: 'phones-steps', group: 'Headphones', name: 'Volume step buttons', description: 'A pair of level up / down buttons.', kind: 'steps' },
@@ -24,7 +25,7 @@ export const ROUTES: Record<Route, {title:string; status:string; detail:string}>
 };
 export function normalizeConfig(input: Partial<Config>): Config {
   const routes = Object.keys(ROUTES);
-  return { selected: [...new Set((input.selected ?? DEFAULT_CONFIG.selected).filter(id => FEATURES.some(f=>f.id===id)))], route: routes.includes(input.route ?? '') ? input.route! : 'undecided', step: [0.5,1,2,3].includes(Number(input.step)) ? Number(input.step) : 2, model: String(input.model ?? '').slice(0,100), loopyVersion: String(input.loopyVersion ?? '').slice(0,60), totalmixVersion: String(input.totalmixVersion ?? '').slice(0,60) };
+  return { selected: [...new Set((input.selected ?? DEFAULT_CONFIG.selected).filter(id => FEATURES.some(f=>f.id===id)))], route: routes.includes(input.route ?? '') ? input.route! : 'undecided', step: (PLANNING_STEP_SIZES as readonly number[]).includes(Number(input.step)) ? Number(input.step) : 2, model: String(input.model ?? '').slice(0,100), loopyVersion: String(input.loopyVersion ?? '').slice(0,60), totalmixVersion: String(input.totalmixVersion ?? '').slice(0,60) };
 }
 export function adjustLevel(level:number, delta:number) { return Math.min(0,Math.max(-60, Math.round((level+delta)*10)/10)); }
 export function buildPlan(config: Config) {
