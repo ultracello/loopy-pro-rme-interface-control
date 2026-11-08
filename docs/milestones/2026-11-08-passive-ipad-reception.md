@@ -2,6 +2,8 @@
 
 Date: **8 November 2026**. Evidence level: **project-reported, scoped device observation**. This report records the development session's monitor observations; it is not an independently repeated test or a released hardware-control profile.
 
+**Later follow-up:** a [same-day Loopy READ test](2026-11-08-loopy-read-ready-locked.md) subsequently reached READY / LOCKED. The report below preserves the earlier passive checkpoint; its unexecuted-query statements describe that earlier test, not the later result.
+
 ## What was observed
 
 - After a user-performed USB reconnect, TotalMix again reported the Babyface Pro connected, and both Babyface MIDI ports were present. The app's reported device name does not establish an exact model/firmware profile.

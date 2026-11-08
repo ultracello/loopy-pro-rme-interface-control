@@ -6,15 +6,27 @@ Reusable controls for RME audio interfaces from Loopy Pro, with device-specific 
 
 **Status: research and early development.** This repository publishes documentation, contribution templates and a browser-only planning configurator. It does not yet contain a released hardware-control module, an importable Loopy Pro project, or a reproducible hardware-validation package.
 
+## Why control an interface from Loopy?
+
+Keep main/headphone controls within reach beside the looping controls, without switching apps or reaching down to an interface. The aim is reusable controls that fit into an existing Loopy project while preserving its audio routing.
+
+An ordinary Loopy audio fader changes the signal in Loopy. Interface output level, preamp gain and an independently routed hardware direct-monitor mix are different parameters. This project investigates device-specific controls for those hardware functions, starting with outputs. Input gain and hardware-monitor mix controls still need separate implementation and tests.
+
+The intended path uses model-specific USB MIDI/SysEx with StreamByter processing and a MidiFire return path. It does not assume that TotalMix FX for iPad accepts desktop Mackie Control or OSC commands. Reliable operation with TotalMix closed, a complete iPhone-only setup and a validated minimum end-user setup remain unproven.
+
+Read the [project overview](docs/PROJECT_OVERVIEW.md) for signal-path examples, iPad/iPhone/Mac roles, effects limitations, earlier prototype results and ways to contribute. Loopy also documents device-dependent hardware-gain controls; this project does not establish whether those support a particular Babyface setup.
+
 ## Planning website
 
 The static [planning configurator source](website/) lets visitors select desired controls, preview a local-only surface and export a setup brief. It sends no MIDI, OSC or audio and is not a tested hardware controller. See [website setup and privacy](website/README.md) and the repository's **Build and deploy planning website** Actions workflow for deployment status.
 
 ## Latest development milestone
 
-The [8 November passive iPad reception report](docs/milestones/2026-11-08-passive-ipad-reception.md) records complete 227/207-byte Babyface messages reaching a fresh MidiFire monitor and, through a temporary return path, the existing StreamByter input monitor in Loopy Pro. The Loopy output monitor stayed empty during that check.
+The [8 November Loopy READ follow-up](docs/milestones/2026-11-08-loopy-read-ready-locked.md) reached **READY / LOCKED** after one fixed state query, with complete 227/207/207-byte replies. Stopping the clock returned the panel to READ / LOCKED. Observed output levels were unchanged, and the original MidiFire scene was restored.
 
-This is scoped reception evidence using existing TotalMix traffic. It does not establish independent Loopy-only operation, decoded control readiness, new gain/mute behavior or a released device profile. No new Loopy state query was executed in that check. Versions, reproducible artifacts and further acceptance tests remain outstanding.
+TotalMix remained running in the background. This verifies one scoped read/readiness observation, not TotalMix-independent operation, new gain/mute/fader behavior or a released device profile. Versions, portable artifacts and further acceptance tests remain outstanding.
+
+The [earlier passive reception report](docs/milestones/2026-11-08-passive-ipad-reception.md) records the preceding receive-only checkpoint, which did not send a new Loopy query. The two reports describe different tests.
 
 ## The goal
 
@@ -24,6 +36,7 @@ Make useful interface controls easy to add to an existing Loopy Pro project, wit
 - Volume up/down buttons.
 - Continuous faders.
 - Separate mute/unmute toggles.
+- Feedback showing actual device state, with safe startup and reconnection.
 - A simple, complete setup guide for each verified hardware/software combination.
 
 The initial research focus is RME Babyface Pro / Babyface Pro FS workflows with iPad. That is a development focus, not a compatibility claim for every model, firmware version, or connection. iPhone support is not confirmed.
@@ -36,7 +49,7 @@ The initial research focus is RME Babyface Pro / Babyface Pro FS workflows with 
 | Continuous faders | Unconfirmed; require their own implementation and tests |
 | Independent mute/unmute | Requires verified mute semantics and state feedback |
 | Input gain, pan and additional mixer functions | Further research |
-| iPhone workflow | Unconfirmed |
+| iPhone workflow | Limited earlier prototype observation; complete workflow remains unverified |
 | Installable module or tested device profile | Not published in this repository yet |
 
 A private experiment or a working browser preview is not a general compatibility guarantee. Each released module needs its exact device model, firmware, software versions, transport, mappings and reproducible results.
@@ -68,17 +81,19 @@ Official references:
 
 A verified minimal end-user setup has not yet been published. It will depend on the released device profile. A desktop-host route may need a Mac/PC; a hostless route must be proven separately.
 
-Mac-based tools such as Xcode, Appium, WebDriverAgent and XCTest can be part of a developer's iPad UI-testing setup. They are not established end-user requirements for these controls. UI automation, the MIDI/control connection and the audio connection must be documented separately, including whether each uses USB or a network.
+Mac-based testing for this project has involved Appium and WebDriverAgent/XCTest. Xcode supports the underlying development/provisioning toolchain. They are not established end-user requirements for these controls. UI automation, the MIDI/control connection and the audio connection must be documented separately, including whether each uses USB or a network.
 
 Exact tool versions and a reproducible developer setup should accompany the corresponding test report. No machine-specific setup or automation script is included in this repository yet.
 
 ## Documentation
 
+- [Purpose, control paths, platform requirements and current limits](docs/PROJECT_OVERVIEW.md)
 - [Module status and evidence levels](docs/MODULE_STATUS.md)
 - [Contributing](CONTRIBUTING.md)
 - [Developer setup versus end-user requirements](docs/DEVELOPMENT_SETUP.md)
 - [Planning website tests and browser checklist](docs/TESTING.md)
-- [Passive iPad reception milestone](docs/milestones/2026-11-08-passive-ipad-reception.md)
+- [Loopy READ / READY / LOCKED milestone](docs/milestones/2026-11-08-loopy-read-ready-locked.md)
+- [Earlier passive iPad reception milestone](docs/milestones/2026-11-08-passive-ipad-reception.md)
 - [Hardware and release acceptance gates](docs/ACCEPTANCE.md)
 - [Test-report template](templates/test-report.md) and [device-profile template](templates/device-profile.md)
 - [Sources](docs/SOURCES.md) and [changelog](CHANGELOG.md)

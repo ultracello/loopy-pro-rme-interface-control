@@ -27,7 +27,11 @@ Exact dB steps require a verified mapping and measured behavior, not an assumed 
 
 The [passive iPad reception milestone](milestones/2026-11-08-passive-ipad-reception.md) records complete Babyface messages reaching MidiFire and the existing Loopy StreamByter input monitor through a temporary return path. The output monitor remained empty during that check. Existing TotalMix traffic supplied the samples; no new Loopy query or gain/mute test was executed.
 
-That observation advances reception evidence only. It does not promote any of the six hardware modules above. Raw captures, exact versions and a ready-to-install receive setup are not included. The planning website's software-test status is likewise separate from hardware-module status.
+That observation advances reception evidence only. The [same-day READ follow-up](milestones/2026-11-08-loopy-read-ready-locked.md) adds one query/readiness result: READY / LOCKED with complete replies and unchanged observed levels, while TotalMix remained running in the background. No new gain/mute/fader behavior was tested.
+
+Neither observation promotes any of the six hardware modules above. Raw captures, exact versions and a ready-to-install receive setup are not included. The planning website's software-test status is likewise separate from hardware-module status.
+
+The [project overview](PROJECT_OVERVIEW.md#what-the-evidence-currently-supports) separately records earlier maintainer-reported iPad step/mute experiments and a limited iPhone command followed by a feedback failure. Earlier prototype observations are not validation of a later receiver/decoder, and they do not supply the missing release profiles.
 
 ## Promotion rule
 

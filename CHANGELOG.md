@@ -2,6 +2,22 @@
 
 Dates use Europe/Berlin. This records the documentation repository separately from any future application or hardware-module release.
 
+## 2026-11-08 · Loopy READ reaches READY / LOCKED
+
+- **Added:** [sanitized READ follow-up](docs/milestones/2026-11-08-loopy-read-ready-locked.md), using existing v06 Loopy controls and the verified MidiFire return path. One fixed seven-byte request was observed; complete 227/207/207-byte replies reached Loopy. A passive receiver reassembled five chunks without an incomplete remainder and sent no second request.
+- **Observed:** native READY / LOCKED after READ, then READ / LOCKED after clock stop. Output-gain fields remained unchanged. The tested scene was saved natively, the original scene restored, clip/transport stopped and temporary remote services shut down.
+- **Still open:** no new gain/mute/fader validation, no TotalMix-terminated test, no portable MFR export or complete versioned profile. No hardware module is promoted.
+- **Documentation:** linked the follow-up from the overview, README, developer setup, source register and machine-readable research evidence. Kept the earlier passive report as a historical checkpoint with a forward link.
+- **Checks:** publication checks only; this documentation update did not repeat the device test or alter the website.
+
+## 2026-11-08 · Purpose and platform explanations
+
+- **Added:** [project overview](docs/PROJECT_OVERVIEW.md) explaining the performance use case, ordinary Loopy faders versus interface output/preamp/direct-monitor controls, and the experimental USB MIDI/SysEx path.
+- **Clarified:** iPad/iPhone/Mac roles; TotalMix FX for iPad versus desktop TotalMix/TotalMix Remote; the still-unproven TotalMix-independent workflow; and Babyface Pro FS hardware processing versus host-calculated Reverb/Echo.
+- **Evidence:** added official RME/Loopy references and separated historical maintainer-reported iPad/iPhone experiments from the published passive-reception checkpoint, offline checks and browser-only planner.
+- **Preserved:** independent-project notices, existing module status and all release gates. No new hardware compatibility, native mute synchronization, hardware fader or complete iPhone support is claimed.
+- **Checks:** documentation link, YAML/JSON, checksum and public-content review only. No device actions or new hardware/software behavior tests. Website source, workflow and Pages settings are unchanged.
+
 ## 2026-11-08 · Passive iPad reception milestone
 
 - **Added:** [sanitized development report](docs/milestones/2026-11-08-passive-ipad-reception.md) for full 227/207-byte reception in a fresh MidiFire monitor and the temporary path into Loopy's StreamByter input monitor. The Loopy output monitor was empty during the passive check.

@@ -1,15 +1,15 @@
 # Documentation validation
 
-Date: **2026-11-08**. Scope: the public documentation update for the passive iPad reception milestone. The existing website implementation and workflow are unchanged.
+Date: **2026-11-08**. Scope: the public explanation update covering project purpose, control layers, platform dependencies, and the subsequent Loopy READ milestone with its evidence boundaries. The existing website implementation and workflow are unchanged.
 
 ## Local publication checks
 
-- Relative Markdown file links resolve against the documentation package and the repository tree read at revision `dfd5dc10a32f4ba5dcb4e837b1c4a6cd024df9e9`. This checks file targets, not remote page availability or rendered anchors.
+- Relative Markdown file links resolve against the documentation package and the repository tree read at revision `df9e2d6a04509578cd8674c97e751e161aa4d0d7`. This checks file targets, not remote page availability or rendered anchors.
 - The two issue forms parse as YAML and retain supported body types, unique field IDs, string labels and required top-level keys. The issue-chooser configuration also parses.
-- The JSON registry retains six distinct hardware-module IDs, no verified hardware profiles and no executable artifacts. A separate research record links to the scoped passive-reception report without promoting a hardware module.
+- The JSON registry retains six distinct hardware-module IDs, no verified hardware profiles and no executable artifacts. Separate research records link to the scoped passive-reception and subsequent READ reports without promoting a hardware module.
 - Public-content review checks for credentials, private previews, private service/project identifiers, local paths, network details, raw conversations and unrelated personal material. The milestone is a sanitized technical summary, not a raw session log.
 - `SHA256SUMS` covers the documentation and template files, excluding itself. It does not cover the website source or establish hardware behavior.
-- The report and associated status text received a separate content review for evidence boundaries and public suitability.
+- The explanation and associated status text received a separate content review for evidence boundaries and public suitability. Product-behavior statements were checked against official RME and Loopy sources; reported prototype observations remain distinct from independent tests.
 
 ## Evidence boundaries
 

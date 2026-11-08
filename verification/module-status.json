@@ -76,6 +76,23 @@
       "promotesHardwareModule": false,
       "rawCaptureIncluded": false,
       "reproducibleProfileIncluded": false
+    },
+    {
+      "id": "loopy-read-ready-locked-2026-11-08",
+      "report": "docs/milestones/2026-11-08-loopy-read-ready-locked.md",
+      "evidenceLevel": "project-reported-scoped-device-observation",
+      "scope": "One fixed Loopy state query with complete replies and native READY / LOCKED, returning to READ / LOCKED after clock stop.",
+      "prototypeRevision": "v06",
+      "newLoopyStateQueryExecuted": true,
+      "readyLockedObserved": true,
+      "observedOutputLevelsUnchanged": true,
+      "totalMixRunningInBackground": true,
+      "newGainOrMuteTestExecuted": false,
+      "independentLoopyOnlyOperationVerified": false,
+      "promotesHardwareModule": false,
+      "rawCaptureIncluded": false,
+      "reproducibleProfileIncluded": false,
+      "portableReceiverArtifactIncluded": false
     }
   ]
 }

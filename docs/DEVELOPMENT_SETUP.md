@@ -2,6 +2,12 @@
 
 This document separates the tools used to develop and inspect an iPad workflow from what a musician would need to use a future released module. It is a reproducibility guide, not a promise that the current repository already automates a device.
 
+## Reported development background
+
+The [project overview](PROJECT_OVERVIEW.md) records the reported development equipment and prototype approach: iPad Pro 11-inch M4, Babyface Pro FS in class-compliant mode, Loopy Pro/StreamByter, MidiFire, TotalMix FX, a Belkin WCZ002 adapter and a Mac used for development/testing. Appium and WebDriverAgent/XCTest have been involved in Mac-based UI testing.
+
+This background is not a complete versioned device profile or proof that every item was present in every checkpoint. Do not infer current running services, USB/WLAN automation transport, a permanent Mac/TotalMix dependency, or a validated shopping list. The version and reproducibility gaps below remain open.
+
 ## Three different kinds of connection
 
 | Connection | Purpose | What it does not prove |
@@ -30,6 +36,12 @@ The [8 November 2026 milestone](milestones/2026-11-08-passive-ipad-reception.md)
 
 This supplies a scoped control-return-path observation, not a complete inventory. The package does not identify exact OS/app/tool versions, automation transport or a reusable automation script. Do not infer an active Appium/WDA service, a permanent TotalMix requirement, or a hostless end-user setup from it.
 
+## Subsequent READ checkpoint
+
+The [same-day READ follow-up](milestones/2026-11-08-loopy-read-ready-locked.md) used the existing v06 controls and that return path. One fixed Loopy request and complete replies produced READY / LOCKED; clock stop returned READ / LOCKED. The three-block scene was saved natively, with no portable MFR export yet. The Mac handled UI automation and passive observation, not MIDI relaying. TotalMix remained running in the background.
+
+That is a scoped state-query/readiness result. It does not validate new gain/mute/fader behavior or operation with TotalMix terminated, and it does not supply the missing versioned inventory.
+
 ## Complete current project profile: not yet published
 
 A reproducible current test-session inventory has not been published in this repository. Historical use of Appium/WDA/XCTest in another iPad test workflow must not be treated as proof that the same services, transport or versions are active for this project now. This page does not claim that any remote-control service is currently running.
@@ -39,7 +51,7 @@ The following are deliberately **not yet specified as a reproducible current pro
 - Mac/iPad OS versions and Xcode version.
 - Appium, XCUITest driver and WDA versions, and which processes are currently running.
 - Current USB versus WLAN automation transport, and whether tunnelling/forwarding is used.
-- Complete physical audio/MIDI topology and required released control bridge; only the limited passive return path above has been reported.
+- Complete physical audio/MIDI topology and required released control bridge; only the limited return path and READ follow-up above have been reported.
 - Role and current use of any additional remote-access software.
 
 A project test rig can be paused or reconfigured. Every observation needs a timestamp and an explicit historical/current label. Do not publish account names, device identifiers, IP addresses, session IDs, signing assets or credentials to make this section more specific.
