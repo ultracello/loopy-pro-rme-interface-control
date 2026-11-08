@@ -2,7 +2,11 @@
 
 Reusable controls for RME audio interfaces from Loopy Pro, with device-specific MIDI paths and TotalMix behavior documented separately.
 
-**Status: research and early development.** This repository currently publishes the project overview, contribution guides, test plans and report templates. It does not yet contain a released control module, an importable Loopy Pro project, a runnable configurator, or a reproducible hardware-validation package.
+**Status: research and early development.** This repository publishes documentation, contribution templates and a browser-only planning configurator. It does not yet contain a released hardware-control module, an importable Loopy Pro project, or a reproducible hardware-validation package.
+
+## Planning website
+
+The static [planning configurator source](website/) lets visitors select desired controls, preview a local-only surface and export a setup brief. It sends no MIDI, OSC or audio and is not a tested hardware controller. See [website setup and privacy](website/README.md) and the repository's **Build and deploy planning website** Actions workflow for deployment status.
 
 ## The goal
 
@@ -95,4 +99,5 @@ A control module needs a documented profile, verified mappings and feedback, ind
 This repository is independent of RME and Loopy Pro. No software license has been selected yet, and no rights to third-party material are granted. Resolve licensing and attribution before incorporating or distributing code.
 
 _Last reviewed: 8 November 2026._
+
 
