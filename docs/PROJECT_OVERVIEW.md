@@ -76,12 +76,21 @@ The following levels must remain separate. Earlier observations are maintainer-r
 | Limited earlier iPhone test | Both headphone channels were lowered by a reported 0.5 dB, then a feedback error blocked further commands. The corrected setup still requires device testing; this is not a working iPhone-profile claim. |
 | Passive iPad reception checkpoint, 8 November 2026 | Complete 227-byte state and 207-byte meter messages reached MidiFire and, temporarily, the existing Loopy StreamByter input monitor. The output monitor remained empty during that check. No new query, gain or mute test was part of it. |
 | Loopy READ follow-up, 8 November 2026 | One fixed query was observed alongside complete 227/207/207-byte replies and READY / LOCKED; stopping clock returned READ / LOCKED. Observed levels were unchanged. TotalMix remained running in the background; no new gain/mute/fader test was performed. |
+| Later filtered receive/Phones checkpoint | Three native READs passed, followed by one paired Phones-minus raw unit and exact restoration; Main unchanged. No mute or acoustic test. See the [scoped report](milestones/2026-11-08-phones-step-restore.md). |
+| Native Loopy fader display | Actual Main/Phones levels automatically updated visible sliders after a helper-triggered query. UI-only decoder, no gain writes in this checkpoint. No hardware write occurred in this display checkpoint; see [report](milestones/2026-11-08-native-fader-display.md). |
+| Bounded native Phones-fader write | Both channels −10.5 → −11.0 → −10.5 dB with fresh full readback before restore, Main unchanged. One mapped half-dB operation, not full-range or acoustic validation; see [report](milestones/2026-11-08-phones-fader-write-restore.md) and [mapping](protocol/output-gain-evidence.md). |
 | Offline fader tests | Software checks exercise proposed logic. They do not verify native Loopy widget behavior or actual interface faders. |
 | Public planning website | A software-tested browser-only layout planner and brief exporter. It sends no MIDI, OSC or audio and does not install controls. |
 
-The earlier prototype state queries, passive-only checkpoint and subsequent READ follow-up describe different tests. The follow-up used the existing v06 controls, not a newly released control package. Do not treat an earlier prototype pass as validation of the current receiver/decoder or a future build.
+The earlier prototype state queries, passive-only checkpoint, READ follow-up, filtered Phones test, native display test and later bounded Phones-fader write describe different tests. The early READ follow-up and fixed-button filter test used existing v06 controls. The later bounded native fader write used v09 TEST; neither is a released control package. Do not treat an earlier prototype pass as validation of the current receiver/decoder or a future build.
 
 The [module registry](MODULE_STATUS.md) remains unverified for executable hardware releases. Exact firmware, OS/app/plugin versions, source revisions, sanitized artifacts, safe procedures and reproducible results are still needed. The [passive report](milestones/2026-11-08-passive-ipad-reception.md) and [READ follow-up](milestones/2026-11-08-loopy-read-ready-locked.md) each describe their evidence gaps explicitly.
+
+## Selectable steps and release priorities
+
+Selectable up/down sizes are a first-class goal, not a controller permanently fixed at the historical 0.5-dB setting. The available sizes must come from each validated device profile. Possible future options such as 0.5, 1, 2, 3 or 6 dB and supported-grid custom values are proposals, not a tested or fixed native UI specification. The bounded mapped half-dB Phones operation does not validate an arbitrary list of steps.
+
+Before advertising a size, test both directions, fresh-state deltas, boundaries, repeated input, stereo pairing and existing balance offsets, unchanged other outputs, external changes and safe startup/reconnection. Faders additionally need no-jump/pickup behavior, bounded update rates and separation of automatic feedback from human write intent. Mute must be explicitly native or custom restore behavior, with unknown state retained when necessary.
 
 ## Development equipment versus a musician's setup
 
@@ -95,7 +104,7 @@ Product references: [StreamByter](https://www.audeonic.com/streambyter/), [MidiF
 
 ## Contributing a useful next step
 
-The immediate priorities are reliable state queries and decoding, verified mappings and dB behavior, independent output tests, faders and mute semantics, safe reconnect/external-change handling, and reproducible iPad/iPhone profiles. A release also needs installation and removal instructions that a non-programmer can follow.
+The immediate priorities are robust state/freshness handling, verified mappings and selectable dB behavior, independent output tests, full-range hardware-writing faders and mute semantics, safe reconnect/external-change handling, and reproducible iPad/iPhone profiles. Scoped read, step and display observations do not close those full acceptance gates. A release also needs installation and removal instructions that a non-programmer can follow.
 
 Musicians, developers, testers and documentation contributors are welcome. Useful contributions include one concrete musical use case, an official protocol reference, a focused code review or a reproducible sanitized observation. AI-assisted work is welcome; technical claims still need source and device evidence. Other RME models require separate compatibility work.
 

@@ -33,6 +33,13 @@ Neither observation promotes any of the six hardware modules above. Raw captures
 
 The [project overview](PROJECT_OVERVIEW.md#what-the-evidence-currently-supports) separately records earlier maintainer-reported iPad step/mute experiments and a limited iPhone command followed by a feedback failure. Earlier prototype observations are not validation of a later receiver/decoder, and they do not supply the missing release profiles.
 
+### Later scoped step and display results
+
+- [Filtered reception and Phones step/restore](milestones/2026-11-08-phones-step-restore.md): three native READ checks, one paired raw-unit reduction and exact restore with Main unchanged. No new mute or acoustic test.
+- [Native fader display](milestones/2026-11-08-native-fader-display.md): actual levels reached the visible Loopy sliders through UI-only feedback. The triggering query came from a helper, and no hardware-writing fader was tested in that checkpoint.
+
+These observations advance the development evidence without releasing any implementation in the table above. The [later v09 Phones-fader report](milestones/2026-11-08-phones-fader-write-restore.md) adds one bounded native write and exact restore at mapped −10.5/−11.0 dB with Main unchanged. This advances Phones-fader evidence only; full-range writes, native/custom mute semantics, other selectable step sizes, stereo Main and longer/reload/reconnect behavior remain separate work. A selectable step-size UI must not advertise unvalidated hardware values.
+
 ## Promotion rule
 
 Promote a hardware status only when a completed [device profile](../templates/device-profile.md) and test report meet [the acceptance gates](ACCEPTANCE.md). If only one control passed, promote only that control for that profile and revision. Keep failed and not-run cases visible.

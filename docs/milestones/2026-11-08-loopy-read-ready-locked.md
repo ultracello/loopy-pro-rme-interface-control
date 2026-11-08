@@ -2,6 +2,8 @@
 
 Date: **8 November 2026**. Evidence level: **project-reported, scoped native device observation**. This follows the [passive reception checkpoint](2026-11-08-passive-ipad-reception.md); it is not a released hardware-control profile or an independently repeated test.
 
+**Later checkpoints:** [filtered receive and Phones step/restore](2026-11-08-phones-step-restore.md), then [native fader display](2026-11-08-native-fader-display.md), added separate evidence. This report retains the earlier read-only test and its limits.
+
 ## Observed result
 
 One clock-only read test used the existing **v06 Loopy controls** and the newly verified MidiFire return path. The audio clip was stopped and the metronome was off. After starting the clock and pressing READ once, the actual StreamByter panel displayed **BEREIT / GESPERRT (READY / LOCKED)**. Stopping the clock returned the panel to **LESEN / GESPERRT (READ / LOCKED)** as intended.

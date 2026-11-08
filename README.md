@@ -18,22 +18,24 @@ Read the [project overview](docs/PROJECT_OVERVIEW.md) for signal-path examples, 
 
 ## Planning website
 
-The static [planning configurator source](website/) lets visitors select desired controls, preview a local-only surface and export a setup brief. It sends no MIDI, OSC or audio and is not a tested hardware controller. See [website setup and privacy](website/README.md) and the repository's **Build and deploy planning website** Actions workflow for deployment status.
+The [public planning website](https://ultracello.github.io/loopy-pro-rme-interface-control/) and its [source](website/) let visitors select desired controls, preview a local-only surface and export a setup brief. It sends no MIDI, OSC or audio and is not a tested hardware controller. See [website setup and privacy](website/README.md) and the repository's **Build and deploy planning website** Actions workflow for deployment status.
 
-## Latest development milestone
+## Latest development milestones
 
-The [8 November Loopy READ follow-up](docs/milestones/2026-11-08-loopy-read-ready-locked.md) reached **READY / LOCKED** after one fixed state query, with complete 227/207/207-byte replies. Stopping the clock returned the panel to READ / LOCKED. Observed output levels were unchanged, and the original MidiFire scene was restored.
+The [bounded native Phones-fader test](docs/milestones/2026-11-08-phones-fader-write-restore.md) now records both headphone channels changing **−10.5 → −11.0 → −10.5 dB**, with fresh complete readback before restoration and Main unchanged. These are mapped device/display values, not a new acoustic measurement. The original project and scene were restored.
 
-TotalMix remained running in the background. This verifies one scoped read/readiness observation, not TotalMix-independent operation, new gain/mute/fader behavior or a released device profile. Versions, portable artifacts and further acceptance tests remain outstanding.
+The preceding [filtered receive/step test](docs/milestones/2026-11-08-phones-step-restore.md) and [automatic native fader display](docs/milestones/2026-11-08-native-fader-display.md) remain separate checkpoints. See the [mapping evidence](docs/protocol/output-gain-evidence.md) for the raw-unit/dB distinction.
 
-The [earlier passive reception report](docs/milestones/2026-11-08-passive-ipad-reception.md) records the preceding receive-only checkpoint, which did not send a new Loopy query. The two reports describe different tests.
+This is one bounded Phones operation, not full-range fader validation or a finished live controller. Native selectable-step controls, new mute/toggle tests, stereo Main writes, suspend/reconnect/duration behavior, TotalMix independence and a complete installable profile remain open.
+
+The [earlier READ report](docs/milestones/2026-11-08-loopy-read-ready-locked.md) and [passive report](docs/milestones/2026-11-08-passive-ipad-reception.md) remain dated historical evidence, with forward links to later tests.
 
 ## The goal
 
 Make useful interface controls easy to add to an existing Loopy Pro project, without rebuilding its audio routing:
 
 - Independent headphone and main-output volume controls.
-- Volume up/down buttons.
+- Volume up/down buttons with selectable, profile-verified step sizes.
 - Continuous faders.
 - Separate mute/unmute toggles.
 - Feedback showing actual device state, with safe startup and reconnection.
@@ -45,8 +47,8 @@ The initial research focus is RME Babyface Pro / Babyface Pro FS workflows with 
 
 | Area | Status |
 |---|---|
-| Headphone/main-output step controls | Under development; no validated release is published here |
-| Continuous faders | Unconfirmed; require their own implementation and tests |
+| Headphone/main-output step controls | One later paired Phones step/restore observed; other sizes and stereo Main need separate tests; no validated release |
+| Continuous faders | Native display plus one bounded Phones write/restore observed; full range, Main and lifecycle safety remain unverified |
 | Independent mute/unmute | Requires verified mute semantics and state feedback |
 | Input gain, pan and additional mixer functions | Further research |
 | iPhone workflow | Limited earlier prototype observation; complete workflow remains unverified |
@@ -92,7 +94,11 @@ Exact tool versions and a reproducible developer setup should accompany the corr
 - [Contributing](CONTRIBUTING.md)
 - [Developer setup versus end-user requirements](docs/DEVELOPMENT_SETUP.md)
 - [Planning website tests and browser checklist](docs/TESTING.md)
-- [Loopy READ / READY / LOCKED milestone](docs/milestones/2026-11-08-loopy-read-ready-locked.md)
+- [Bounded native Phones-fader write/restore](docs/milestones/2026-11-08-phones-fader-write-restore.md)
+- [Output-gain mapping and tested points](docs/protocol/output-gain-evidence.md)
+- [Earlier Phones step/restore milestone](docs/milestones/2026-11-08-phones-step-restore.md)
+- [Native Loopy fader-display milestone](docs/milestones/2026-11-08-native-fader-display.md)
+- [Earlier Loopy READ / READY / LOCKED milestone](docs/milestones/2026-11-08-loopy-read-ready-locked.md)
 - [Earlier passive iPad reception milestone](docs/milestones/2026-11-08-passive-ipad-reception.md)
 - [Hardware and release acceptance gates](docs/ACCEPTANCE.md)
 - [Test-report template](templates/test-report.md) and [device-profile template](templates/device-profile.md)

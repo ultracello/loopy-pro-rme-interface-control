@@ -2,6 +2,22 @@
 
 Dates use Europe/Berlin. This records the documentation repository separately from any future application or hardware-module release.
 
+## 2026-11-08 · Bounded native Phones-fader write/restore
+
+- **Added:** [v09 test report](docs/milestones/2026-11-08-phones-fader-write-restore.md) for both Phones channels −10.5 → −11.0 → −10.5 dB with fresh complete readback before restore, Main unchanged and original project/scene restored.
+- **Evidence:** native display, diagnostic gesture and actual write phases distinguished; no new complete outbound trace, acoustic measurement, Main or mute test claimed. [Mapping notes](docs/protocol/output-gain-evidence.md) explain the raw-unit/dB relationship without generalizing software bounds into hardware limits.
+- **Reported software checks:** 16 groups / 18,511 interpreter cases, repeated by a separate synthetic portable copy; parameter planner 25 tests including 32,768 stereo boundary cases. These counts are not a newly run public test suite; source/test artifacts are not shipped in this docs update.
+- **Still open:** full-range native fader, native step selector, new mute toggles, stereo Main, query correlation, stale/suspend/reconnect/long-duration behavior, TotalMix independence and portable release artifacts.
+- **Scope:** documentation and evidence status. The planning website remains a browser-only planner, not the tested controller.
+
+## 2026-11-08 · Filtered Phones step and native fader display
+
+- **Added:** [receive-filter/Phones report](docs/milestones/2026-11-08-phones-step-restore.md): nine offline groups, 1,265 packet cases and a 3,200-short-message flood; three native READs; one paired Phones raw-unit reduction and exact restoration, Main unchanged. No mute or acoustic test.
+- **Added:** [native display report](docs/milestones/2026-11-08-native-fader-display.md): 2,506 offline decoder cases, native text/compiler checks, and automatic Main/Phones slider updates after a helper-triggered query. No hardware-write SysEx from that UI decoder.
+- **Clarified:** displayed feedback is not human write intent; the two receive scenes are separate experiments; original working scenes/projects were restored. Hardware-writing faders, mute, stereo Main, other step sizes and lifecycle validation remain open.
+- **Updated:** README, overview, developer setup, source register and research registry; historical checkpoints preserved. Selectable step sizes remain profile-driven requirements, not claims that all proposed values work.
+- **Checks:** documentation, public-content and checksum validation. No device or acoustic test was performed by this publication. The public planning site remains a non-executable hardware-planning tool.
+
 ## 2026-11-08 · Loopy READ reaches READY / LOCKED
 
 - **Added:** [sanitized READ follow-up](docs/milestones/2026-11-08-loopy-read-ready-locked.md), using existing v06 Loopy controls and the verified MidiFire return path. One fixed seven-byte request was observed; complete 227/207/207-byte replies reached Loopy. A passive receiver reassembled five chunks without an incomplete remainder and sent no second request.

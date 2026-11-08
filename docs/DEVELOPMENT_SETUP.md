@@ -42,16 +42,30 @@ The [same-day READ follow-up](milestones/2026-11-08-loopy-read-ready-locked.md) 
 
 That is a scoped state-query/readiness result. It does not validate new gain/mute/fader behavior or operation with TotalMix terminated, and it does not supply the missing versioned inventory.
 
+## Later receive filter and native display checkpoints
+
+The [filtered-receive test](milestones/2026-11-08-phones-step-restore.md) passed only complete valid state frames through a separate MidiFire return scene while leaving existing Loopy v06 gates unchanged. Three native READs and one paired Phones step/restore were observed. The original scene was restored afterwards; it intentionally does not retain that test return route.
+
+A different [state-to-UI scene](milestones/2026-11-08-native-fader-display.md) decoded complete states into virtual CCs and automatically updated visible Loopy sliders. It had no hardware output or write SysEx. Its query was triggered by a temporary helper; its data return ran directly on iPad without a Mac MIDI relay. The native display setup, receive-only raw-state filter and existing Loopy command path must not be presented as one already packaged installation.
+
+Both scenes were saved separately. No portable, fully versioned release is supplied. These results do not establish operation with TotalMix terminated or complete independence from the development setup.
+
+## Bounded native Phones-fader follow-up
+
+The [later v09 TEST checkpoint](milestones/2026-11-08-phones-fader-write-restore.md) separated read display, a diagnostic gesture with sending disabled, and one native Phones reduction/restore. Both Phones values returned to their fresh baseline; Main remained unchanged. The original project and scene were restored. The candidate was restricted to Phones and one raw step, without Main/mute/legacy writes.
+
+This phase verified iPadOS 27.2 / build 24B119. The report records rule hashes and reported offline checks, but current firmware and all app versions were not inventoried again. No full-range, long-running, reconnect, native-step-selector or new mute claim follows. Portable test material was described by the test owner but is not reviewed or shipped by this documentation update.
+
 ## Complete current project profile: not yet published
 
 A reproducible current test-session inventory has not been published in this repository. Historical use of Appium/WDA/XCTest in another iPad test workflow must not be treated as proof that the same services, transport or versions are active for this project now. This page does not claim that any remote-control service is currently running.
 
 The following are deliberately **not yet specified as a reproducible current profile**:
 
-- Mac/iPad OS versions and Xcode version.
+- Complete host/device/tool version inventory. Only the iPadOS version explicitly recorded for the later v09 test is current evidence here; Mac/Xcode, firmware and music-app versions still need a dated full inventory.
 - Appium, XCUITest driver and WDA versions, and which processes are currently running.
 - Current USB versus WLAN automation transport, and whether tunnelling/forwarding is used.
-- Complete physical audio/MIDI topology and required released control bridge; only the limited return path and READ follow-up above have been reported.
+- Complete physical audio/MIDI topology and required released control bridge; only the scoped return paths, READ/step and native-display observations above have been reported.
 - Role and current use of any additional remote-access software.
 
 A project test rig can be paused or reconfigured. Every observation needs a timestamp and an explicit historical/current label. Do not publish account names, device identifiers, IP addresses, session IDs, signing assets or credentials to make this section more specific.

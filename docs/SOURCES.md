@@ -12,6 +12,10 @@ Reviewed 2026-11-08. These references support narrow documentation claims, not a
 
 ## Project evidence
 
+- [Bounded native Phones-fader write/restore](milestones/2026-11-08-phones-fader-write-restore.md): one later native gesture/readback/restore sequence with Main unchanged, exact candidate hashes and reported offline counts. Full-range and live/reconnect readiness remain open.
+- [Output-gain mapping](protocol/output-gain-evidence.md): reverse-engineered raw-to-dB formula, tested points and conservative software bounds. Matching native display is not independent acoustic calibration.
+- [Filtered reception and paired Phones step/restore](milestones/2026-11-08-phones-step-restore.md): later native READ and register/readback observations, with no mute/acoustic test. Raw-unit change is not a general validated dB-step specification.
+- [Native Loopy fader display](milestones/2026-11-08-native-fader-display.md): automatic native UI feedback after a helper query; 2,506 offline decoder cases reported separately. Not a hardware-writing-fader test or portable release.
 - [Purpose, platform dependencies and earlier prototype observations](PROJECT_OVERVIEW.md): separates documented product behavior, design goals, maintainer-reported prototype results and a released profile. The older iPad/iPhone results do not include a public reproducibility package and do not promote hardware-module status.
 - [Loopy READ / READY / LOCKED follow-up, 8 November 2026](milestones/2026-11-08-loopy-read-ready-locked.md): one fixed Loopy query and complete replies, with TotalMix still running. This adds scoped readiness evidence, not a new gain/mute/fader test or a released profile.
 - [Passive iPad reception milestone, 8 November 2026](milestones/2026-11-08-passive-ipad-reception.md): sanitized project-reported native monitor observations. Complete-message reception is narrower than decoder or hardware-control verification. The package does not include original captures, a full version inventory or an installable profile.
