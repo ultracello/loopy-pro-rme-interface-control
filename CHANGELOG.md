@@ -2,6 +2,13 @@
 
 Dates use Europe/Berlin. This records the documentation repository separately from any future application or hardware-module release.
 
+## 2026-11-08 · Native step-selection simulation
+
+- **Added:** [send-free step-selection report](docs/milestones/2026-11-08-native-step-simulation.md), separating six groups / 34,102 reported offline preview cases, 1,792 additional independent regressions and native compilation from actual Loopy widget-only simulation.
+- **Native simulation:** ten preset/direction cases for 0.5 / 1 / 2 / 3 / 6 dB, visible selection, inert startup, inactive unknown default and save/reload. An explicit inert first item corrected a simulated NoSelection retrigger trap.
+- **Limits:** no native runtime execution of StreamByter preview commands, real sender integration, larger physical steps or expanded hardware range. Original project restored; MidiFire untouched. Internal simulation Reset does not establish a device factory default.
+- **Scope/checks:** documentation and evidence registry only, with link/YAML/JSON/privacy/checksum review. No device test was run by this publication; no module promoted.
+
 ## 2026-11-08 · Website 0.2.2: scoped milestones and source links
 
 - **Updated:** the public planner now highlights one bounded native Phones-fader reduction/restore and links separate display-only and fixed-button checkpoints at documentation commit `1bf9b91149590be331b75897af24a4f388b34ca3`.

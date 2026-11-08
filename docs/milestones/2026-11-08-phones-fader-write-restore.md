@@ -2,6 +2,8 @@
 
 Date: **8 November 2026**. Device-test interval: **21:02:26–21:02:41 UTC**. Evidence level: **project-reported, scoped native device/register observation**. This advances the earlier [display-only checkpoint](2026-11-08-native-fader-display.md); it is not a full-range fader release or a live-safety guarantee.
 
+**Later UI-only checkpoint:** [native step-selection simulation](2026-11-08-native-step-simulation.md) added five preset choices and persistence checks without MIDI sending. It does not expand the hardware test below.
+
 ## Display, human gesture and hardware write were tested separately
 
 1. **Display:** a separate passive MidiFire scene branched the hardware input through a complete-state filter to one virtual return, and through a state-to-UI decoder to another. It had no hardware output or connected virtual feedback input. Actual device values updated the native outer Loopy faders.

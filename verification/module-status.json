@@ -155,6 +155,34 @@
       "promotesHardwareModule": false,
       "rawCaptureIncluded": false,
       "reproducibleProfileIncluded": false
+    },
+    {
+      "id": "native-step-simulation-2026-11-08",
+      "report": "docs/milestones/2026-11-08-native-step-simulation.md",
+      "evidenceLevel": "project-reported-native-ui-simulation",
+      "scope": "Five step choices and both directions, inert startup and reload in internal Loopy widgets; separate offline preview and native compilation.",
+      "previewSourceSha256": "071a4021a54f7b784b6f8cb3cfded54755118c7bfd54c13bbc894f6ea68ac06a",
+      "offlinePreviewGroups": 6,
+      "offlinePreviewCases": 34102,
+      "additionalIndependentRegressionCases": 1792,
+      "nativeWidgetDirectionCases": 10,
+      "simulatedStepSizesDb": [
+        0.5,
+        1,
+        2,
+        3,
+        6
+      ],
+      "nativeCompilationObserved": true,
+      "nativePreviewCommandsExecuted": false,
+      "nativeWidgetSimulationObserved": true,
+      "hardwareSenderConnected": false,
+      "newHardwareQueryExecuted": false,
+      "newGainOrMuteTestExecuted": false,
+      "largerHardwareStepsVerified": false,
+      "promotesHardwareModule": false,
+      "independentLoopyOnlyOperationVerified": false,
+      "reproducibleProfileIncluded": false
     }
   ]
 }

@@ -24,9 +24,11 @@ The [public planning website](https://ultracello.github.io/loopy-pro-rme-interfa
 
 The [bounded native Phones-fader test](docs/milestones/2026-11-08-phones-fader-write-restore.md) now records both headphone channels changing **−10.5 → −11.0 → −10.5 dB**, with fresh complete readback before restoration and Main unchanged. These are mapped device/display values, not a new acoustic measurement. The original project and scene were restored.
 
+A later [native step-selection simulation](docs/milestones/2026-11-08-native-step-simulation.md) checked 0.5 / 1 / 2 / 3 / 6 dB choices, both directions, inert startup and reload using only internal Loopy widgets. It sent no MIDI and did not test larger real steps or the native sender connection.
+
 The preceding [filtered receive/step test](docs/milestones/2026-11-08-phones-step-restore.md) and [automatic native fader display](docs/milestones/2026-11-08-native-fader-display.md) remain separate checkpoints. See the [mapping evidence](docs/protocol/output-gain-evidence.md) for the raw-unit/dB distinction.
 
-This is one bounded Phones operation, not full-range fader validation or a finished live controller. Native selectable-step controls, new mute/toggle tests, stereo Main writes, suspend/reconnect/duration behavior, TotalMix independence and a complete installable profile remain open.
+This is one bounded Phones operation, not full-range fader validation or a finished live controller. Connecting the simulated step selector to the native sender, larger physical steps, new mute/toggle tests, stereo Main writes, suspend/reconnect/duration behavior, TotalMix independence and a complete installable profile remain open.
 
 The [earlier READ report](docs/milestones/2026-11-08-loopy-read-ready-locked.md) and [passive report](docs/milestones/2026-11-08-passive-ipad-reception.md) remain dated historical evidence, with forward links to later tests.
 
@@ -47,7 +49,7 @@ The initial research focus is RME Babyface Pro / Babyface Pro FS workflows with 
 
 | Area | Status |
 |---|---|
-| Headphone/main-output step controls | One later paired Phones step/restore observed; other sizes and stereo Main need separate tests; no validated release |
+| Headphone/main-output step controls | One paired Phones step/restore observed; five sizes tested in send-free native widget simulation only; larger real steps, sender integration and stereo Main remain unverified |
 | Continuous faders | Native display plus one bounded Phones write/restore observed; full range, Main and lifecycle safety remain unverified |
 | Independent mute/unmute | Requires verified mute semantics and state feedback |
 | Input gain, pan and additional mixer functions | Further research |
@@ -94,6 +96,7 @@ Exact tool versions and a reproducible developer setup should accompany the corr
 - [Contributing](CONTRIBUTING.md)
 - [Developer setup versus end-user requirements](docs/DEVELOPMENT_SETUP.md)
 - [Planning website tests and browser checklist](docs/TESTING.md)
+- [Native step-selection simulation](docs/milestones/2026-11-08-native-step-simulation.md)
 - [Bounded native Phones-fader write/restore](docs/milestones/2026-11-08-phones-fader-write-restore.md)
 - [Output-gain mapping and tested points](docs/protocol/output-gain-evidence.md)
 - [Earlier Phones step/restore milestone](docs/milestones/2026-11-08-phones-step-restore.md)

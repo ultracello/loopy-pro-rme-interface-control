@@ -56,6 +56,12 @@ The [later v09 TEST checkpoint](milestones/2026-11-08-phones-fader-write-restore
 
 This phase verified iPadOS 27.2 / build 24B119. The report records rule hashes and reported offline checks, but current firmware and all app versions were not inventoried again. No full-range, long-running, reconnect, native-step-selector or new mute claim follows. Portable test material was described by the test owner but is not reviewed or shipped by this documentation update.
 
+## Separate send-free step-selection simulation
+
+The [later step-selector checkpoint](milestones/2026-11-08-native-step-simulation.md) contains two independent evidence layers: an offline/no-SND StreamByter preview with native compilation, and a native Loopy-only widget simulation. The preview commands were not driven into StreamByter at native runtime. The actual widget simulation used only internal actions, with empty MIDI destinations and no SendMIDI bindings.
+
+Its five preset choices and persistence checks do not establish a native sender connection or larger hardware steps. The original Loopy project was restored; MidiFire scenes and routes were untouched. Do not combine these results into an end-to-end MIDI test.
+
 ## Complete current project profile: not yet published
 
 A reproducible current test-session inventory has not been published in this repository. Historical use of Appium/WDA/XCTest in another iPad test workflow must not be treated as proof that the same services, transport or versions are active for this project now. This page does not claim that any remote-control service is currently running.

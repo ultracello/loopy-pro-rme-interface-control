@@ -40,6 +40,10 @@ The [project overview](PROJECT_OVERVIEW.md#what-the-evidence-currently-supports)
 
 These observations advance the development evidence without releasing any implementation in the table above. The [later v09 Phones-fader report](milestones/2026-11-08-phones-fader-write-restore.md) adds one bounded native write and exact restore at mapped −10.5/−11.0 dB with Main unchanged. This advances Phones-fader evidence only; full-range writes, native/custom mute semantics, other selectable step sizes, stereo Main and longer/reload/reconnect behavior remain separate work. A selectable step-size UI must not advertise unvalidated hardware values.
 
+### Native step-selection simulation
+
+A [later send-free Loopy widget simulation](milestones/2026-11-08-native-step-simulation.md) checked five 0.5/1/2/3/6-dB choices, both directions, inert startup, unknown-default inactivity and reload. The separate StreamByter preview compiled and passed reported offline tests, but its commands were not exercised at native runtime. No real sender or larger physical step was tested. This advances UI-simulation evidence only and does not promote a step module.
+
 ## Promotion rule
 
 Promote a hardware status only when a completed [device profile](../templates/device-profile.md) and test report meet [the acceptance gates](ACCEPTANCE.md). If only one control passed, promote only that control for that profile and revision. Keep failed and not-run cases visible.

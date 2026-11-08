@@ -12,6 +12,7 @@ Reviewed 2026-11-08. These references support narrow documentation claims, not a
 
 ## Project evidence
 
+- [Native step-selection simulation](milestones/2026-11-08-native-step-simulation.md): separate reported offline preview, native compilation and Loopy-only widget checks. No native StreamByter preview-runtime, sender integration or larger hardware-step pass follows.
 - [Bounded native Phones-fader write/restore](milestones/2026-11-08-phones-fader-write-restore.md): one later native gesture/readback/restore sequence with Main unchanged, exact candidate hashes and reported offline counts. Full-range and live/reconnect readiness remain open.
 - [Output-gain mapping](protocol/output-gain-evidence.md): reverse-engineered raw-to-dB formula, tested points and conservative software bounds. Matching native display is not independent acoustic calibration.
 - [Filtered reception and paired Phones step/restore](milestones/2026-11-08-phones-step-restore.md): later native READ and register/readback observations, with no mute/acoustic test. Raw-unit change is not a general validated dB-step specification.
