@@ -15,7 +15,7 @@ The output is `dist/`. Relative asset URLs support a GitHub project-site subdire
 
 ## Status and boundaries
 
-The browser interface is implemented and software-tested. The requested hardware controls are not provided as a tested installable module. Scoped v06 iPad observations and v08 offline test results are labeled separately and do not establish general hardware support. Native fader behavior, stereo main output, hardware feedback, TotalMix mute synchronization and iPhone compatibility remain unverified.
+The browser interface is implemented and software-tested. The requested hardware controls are not provided as a tested installable module. The current evidence snapshot links three separate checkpoints: one bounded native Phones-fader reduction/restore, actual-level display feedback and a fixed-button step/restore. The fader result is both Phones channels -10.5 → -11.0 → -10.5 dB with fresh register readback before restore and Main unchanged. These are project-reported observations, not a full-range fader release or an acoustic measurement. Full-range behavior, native step selection, new mute toggles, stereo Main, freshness/reconnect/long-duration behavior, TotalMix-independent operation and the full iPhone workflow remain open. Each report and the output mapping are pinned to the reviewed documentation revision in `src/lib/evidence.ts`; historical observations remain separate.
 
 The same distinction applies to exports: `hardwareTested: false` describes the selected exported configuration, not a claim that no project experiment has ever occurred. No control-code export is unlocked.
 

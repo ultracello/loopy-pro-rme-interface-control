@@ -2,6 +2,14 @@
 
 Dates use Europe/Berlin. This records the documentation repository separately from any future application or hardware-module release.
 
+## 2026-11-08 · Website 0.2.2: scoped milestones and source links
+
+- **Updated:** the public planner now highlights one bounded native Phones-fader reduction/restore and links separate display-only and fixed-button checkpoints at documentation commit `1bf9b91149590be331b75897af24a4f388b34ca3`.
+- **Evidence:** both Phones channels -10.5 → -11.0 → -10.5 dB, fresh full readback before restore and Main unchanged. Mapped register/display values, not acoustic calibration, a full-range pass or a new complete outbound trace.
+- **Exports:** JSON plans and readable checklists carry the dated reports, source links and remaining validation gates. Historical evidence remains separate. No executable hardware code or new native step-selector result is included.
+- **Preserved:** browser-only demo, saved plans, independence notice, existing docs/workflow and unreleased hardware-profile status.
+- **Checks:** 16 website regression tests, TypeScript/production build and static React rendering passed. Deployment status is recorded separately in GitHub Actions. No device or music-app UI actions are part of this publication.
+
 ## 2026-11-08 · Bounded native Phones-fader write/restore
 
 - **Added:** [v09 test report](docs/milestones/2026-11-08-phones-fader-write-restore.md) for both Phones channels −10.5 → −11.0 → −10.5 dB with fresh complete readback before restore, Main unchanged and original project/scene restored.

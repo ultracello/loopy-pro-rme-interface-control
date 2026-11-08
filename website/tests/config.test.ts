@@ -1,6 +1,7 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
+import {EVIDENCE, REPORTS, PUBLIC_REPOSITORY, LAB_STATUS, LATEST_MILESTONE} from '../src/lib/evidence.ts';
 import {DEFAULT_CONFIG, PROJECT_NAME, INDEPENDENCE_NOTICE, PLAN_FILENAME, VERSION, FEATURES, normalizeConfig, adjustLevel, buildPlan, buildGuide} from '../src/lib/config.ts';
 test('defaults select the headphone controls only',()=>assert.deepEqual(DEFAULT_CONFIG.selected,['phones-fader','phones-steps','phones-mute']));
 test('all 64 selections generate only selected controls and never executable code',()=>{for(let mask=0;mask<64;mask++){const selected=FEATURES.filter((_,i)=>mask&(1<<i)).map(f=>f.id);const p=buildPlan({...DEFAULT_CONFIG,selected});assert.equal(p.selectedControls.length,selected.length);assert.equal(p.executable,false);assert.equal(p.hardwareTested,false);assert.deepEqual(p.selectedControls.map(c=>c.id),selected);}});
@@ -10,10 +11,11 @@ test('unsupported iPad app path is explicit in all artifacts',()=>{const c={...D
 test('guide preserves supplied model and versions but warns about no executable code',()=>{const guide=buildGuide({...DEFAULT_CONFIG,model:'Example model',loopyVersion:'Example version'});assert.match(guide,/Example model/);assert.match(guide,/Example version/);assert.match(guide,/No executable control code/)});
 test('step data is only present on step controls',()=>{const p=buildPlan({...DEFAULT_CONFIG,selected:FEATURES.map(f=>f.id),step:3});assert.equal(p.selectedControls.filter(f=>'requestedStepDb' in f).length,2)});
 
-test('exports carry pinned public evidence and remain nonexecutable',()=>{const p=buildPlan(DEFAULT_CONFIG);assert.equal(p.publicationStatus,'public-planning-release');assert.match(p.projectRepository.url,/github.com\/ultracello\/loopy-pro-rme-interface-control$/);assert.match(p.projectRepository.reviewedCommit,/^[0-9a-f]{40}$/);assert.equal(p.evidence.length,4);assert.equal(p.executable,false);assert.ok(buildGuide(DEFAULT_CONFIG).includes(`Planning release ${VERSION}`))});
+test('exports carry pinned public evidence and remain nonexecutable',()=>{const p=buildPlan(DEFAULT_CONFIG);assert.equal(p.publicationStatus,'public-planning-release');assert.match(p.projectRepository.url,/github.com\/ultracello\/loopy-pro-rme-interface-control$/);assert.match(p.projectRepository.reviewedCommit,/^[0-9a-f]{40}$/);assert.equal(p.evidence.length,8);assert.equal(p.executable,false);assert.ok(buildGuide(DEFAULT_CONFIG).includes(`Planning release ${VERSION}`))});
 test('validation requires reading current state and separate outputs',()=>{const text=buildPlan(DEFAULT_CONFIG).requiredValidation.join(' ');assert.match(text,/current hardware state/);assert.match(text,/headphones and main output independently/);assert.match(text,/restart, reconnect/)});
 
-test('lab evidence distinguishes scoped device checks from offline tests and release readiness',()=>{const p=buildPlan(DEFAULT_CONFIG);assert.equal(p.labEvidence.releaseReady,false);assert.equal(p.labEvidence.entries[1].level,'Offline tests only');assert.match(p.labEvidence.entries[0].result,/output 1 only/);assert.match(p.labEvidence.entries[0].boundary,/native TotalMix mute/);assert.match(buildGuide(DEFAULT_CONFIG),/34,304/);assert.equal(p.hardwareTested,false)});
+test('historical evidence stays separate from current scoped checkpoints',()=>{const p=buildPlan(DEFAULT_CONFIG);assert.equal(p.labEvidence.releaseReady,false);const v06=LAB_STATUS.entries.find(e=>e.id==='earlier-v06')!;const v08=LAB_STATUS.entries.find(e=>e.id==='earlier-v08')!;assert.match(v06.result,/output 1 only/);assert.match(v06.boundary,/native TotalMix mute/);assert.match(v08.level,/Historical offline/);assert.match(buildGuide(DEFAULT_CONFIG),/34,304/);assert.equal(p.hardwareTested,false)});
+
 
 test('project branding is consistent in the UI, title and planning downloads',()=>{
  assert.equal(PROJECT_NAME,'Loopy Pro Interface Control');
@@ -40,4 +42,46 @@ test('website and GitHub README clearly state software independence',()=>{
  assert.ok(app.includes('<p>{INDEPENDENCE_NOTICE}<br/>'));
  assert.ok(readme.includes(`**${INDEPENDENCE_NOTICE}**`));
  assert.ok(readme.startsWith(`# ${PROJECT_NAME}`));
+});
+
+test('new native write evidence is bounded and does not promote a release',()=>{
+ assert.equal(LATEST_MILESTONE.id,'phones-fader-write');
+ assert.match(LATEST_MILESTONE.result,/-10.5 → -11.0 → -10.5 dB/);
+ assert.match(LATEST_MILESTONE.result,/Fresh full register readback/);
+ assert.match(LATEST_MILESTONE.result,/Main stayed unchanged/);
+ assert.match(LATEST_MILESTONE.boundary,/not a full-range fader pass/);
+ assert.match(LATEST_MILESTONE.boundary,/No acoustic measurement or new complete outbound trace/);
+ assert.equal(LAB_STATUS.releaseReady,false);
+});
+test('display query origin and fixed-button test remain distinct',()=>{
+ const display=LAB_STATUS.entries.find(e=>e.id==='native-display')!;
+ const step=LAB_STATUS.entries.find(e=>e.id==='phones-step')!;
+ assert.match(display.boundary,/helper triggered the query, not the Loopy READ widget/);
+ assert.match(display.boundary,/No gain writes/);
+ assert.match(step.result,/Three separate Loopy READs/);
+ assert.match(step.boundary,/separate experiments/);
+ assert.notEqual(display.sourceUrl,step.sourceUrl);
+});
+test('all current milestone links are pinned and exported in both formats',()=>{
+ assert.equal(PUBLIC_REPOSITORY.reviewedCommit,'1bf9b91149590be331b75897af24a4f388b34ca3');
+ const json=JSON.stringify(buildPlan(DEFAULT_CONFIG));const guide=buildGuide(DEFAULT_CONFIG);
+ for(const url of [REPORTS.faderWrite,REPORTS.display,REPORTS.step,REPORTS.mapping]){
+  assert.ok(url.includes(`/blob/${PUBLIC_REPOSITORY.reviewedCommit}/docs/`));
+  assert.ok(json.includes(url));assert.ok(guide.includes(url));
+ }
+ for(const entry of LAB_STATUS.entries)assert.ok(guide.includes(entry.sourceUrl));
+ assert.equal(new Set(EVIDENCE.map(e=>e.id)).size,EVIDENCE.length);
+});
+test('planning step choices never become validated native controls',()=>{
+ for(const step of [0.5,1,2,3]){
+  const p=buildPlan({...DEFAULT_CONFIG,selected:FEATURES.map(f=>f.id),step});
+  assert.equal(p.executable,false);assert.equal(p.hardwareTested,false);
+  assert.ok(p.selectedControls.every(c=>c.verification==='not-hardware-verified'));
+ }
+ const remaining=LAB_STATUS.remaining.join(' ');
+ for(const boundary of ['Full-range','Native selectable-step UI','mute','Stereo Main','reconnect','TotalMix-independent','iPhone'])assert.ok(remaining.includes(boundary));
+ const app=readFileSync(new URL('../src/App.tsx',import.meta.url),'utf8');
+ assert.ok(app.includes('Latest development checkpoint'));
+ assert.ok(app.includes('Tested code export: not available yet'));
+ assert.doesNotMatch(app,/Raw test artifacts are not bundled here and are not part of the pinned/);
 });
