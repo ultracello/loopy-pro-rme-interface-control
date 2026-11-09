@@ -1,5 +1,7 @@
 # Main and Phones: five step sizes and gain-mute restoration
 
+> Later current-policy update: [Restricted control and Interface integration](2026-11-09-restricted-control-interface-integration.md). Gain-mute and old saved-level restore are blocked in that later revision; the observations below retain their historical scope.
+
 Later checkpoint: [Sync LIVE1 fader startup, bounded writes and activation gates](2026-11-09-live-faders-startup-gates.md). This report retains the scope and open items of its own completed test.
 
 Date: **9 November 2026** (Europe/Berlin). Evidence level: project-reported, scoped iPad/Babyface device tests. These later tests are separate from the [v09b3 half-dB follow-up-read checkpoint](2026-11-09-phones-v09b3-follow-up.md) and the [8 November send-free widget simulation](2026-11-08-native-step-simulation.md).

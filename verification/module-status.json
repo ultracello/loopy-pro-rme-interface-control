@@ -308,6 +308,34 @@
       "promotesHardwareModule": false,
       "rawCaptureIncluded": false,
       "reproducibleProfileIncluded": false
+    },
+    {
+      "id": "restricted-interface-2026-11-09",
+      "report": "docs/milestones/2026-11-09-restricted-control-interface-integration.md",
+      "evidenceLevel": "project-reported-bounded-native-observations",
+      "ruleSha256": "6d1149cc2e798d3de28426d658b28945af1f671cf8d67493c2ea86635b4639b7",
+      "separateCopy": {
+        "halfDbDownUpBothGroups": true,
+        "boundedFaderDownUpBothGroups": true,
+        "otherGroupUnchanged": true,
+        "exactCurrentSessionRestore": true
+      },
+      "integrationCopy": {
+        "InterfacePage": true,
+        "fullReadAndMatchingFaderFeedback": true,
+        "sameProjectReturnWithTransportContinuing": true,
+        "gainActions": 0,
+        "acousticLoopContinuityProven": false
+      },
+      "gainMuteEnabled": false,
+      "oldSavedRestoreEnabled": false,
+      "silentUsbContinuityProven": false,
+      "crashSafeRestorationProven": false,
+      "originalProjectAndPreviousSceneRestored": true,
+      "generalLiveReadinessVerified": false,
+      "promotesHardwareModule": false,
+      "rawCaptureIncluded": false,
+      "reproducibleProfileIncluded": false
     }
   ]
 }

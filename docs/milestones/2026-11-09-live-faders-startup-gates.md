@@ -1,5 +1,7 @@
 # Native faders: startup state, bounded writes and activation gates
 
+> Later current-policy update: [Restricted control and Interface integration](2026-11-09-restricted-control-interface-integration.md). Gain-mute and old saved-level restore are blocked in that later revision; the observations below retain their historical scope.
+
 Date: **9 November 2026** (Europe/Berlin). Candidate: **Sync LIVE1**. Evidence level: project-reported, scoped iPad/Babyface device checks. This follows the [Main/Phones step-button and gain-mute checkpoint](2026-11-09-main-phones-steps-gain-mute.md); it is not a general live release.
 
 ## Completed checks

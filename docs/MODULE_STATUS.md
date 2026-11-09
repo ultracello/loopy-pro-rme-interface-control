@@ -25,6 +25,8 @@ Exact dB steps require a verified mapping and measured behavior, not an assumed 
 
 ## Scoped development observations
 
+The [latest Restricted control / Interface report](milestones/2026-11-09-restricted-control-interface-integration.md) distinguishes the separate copy’s ±0.5-dB/fader device tests from the integration copy’s READ, fader-feedback and same-project return tests. Each gain test left the other group unchanged and restored the baseline. Gain-mute and old restore are blocked; silent USB loss and crash-safe restoration remain unproven. Original project/previous scene were restored. No public profile is promoted.
+
 The [passive iPad reception milestone](milestones/2026-11-08-passive-ipad-reception.md) records complete Babyface messages reaching MidiFire and the existing Loopy StreamByter input monitor through a temporary return path. The output monitor remained empty during that check. Existing TotalMix traffic supplied the samples; no new Loopy query or gain/mute test was executed.
 
 That observation advances reception evidence only. The [same-day READ follow-up](milestones/2026-11-08-loopy-read-ready-locked.md) adds one query/readiness result: READY / LOCKED with complete replies and unchanged observed levels, while TotalMix remained running in the background. No new gain/mute/fader behavior was tested.

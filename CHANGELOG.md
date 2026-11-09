@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-11-09 · Restricted control and same-project Interface evidence
+
+- Recorded the separate Main/Phones copy's bounded ±0.5-dB steps and small fader movements, exact return and unchanged other group.
+- Recorded a distinct integration copy's Interface page, full READ, matching fader feedback and same-project return with transport continuing; no new gain writes in that integration check.
+- Current Restricted gain-mute/old restore are blocked. Silent USB failures and crash-safe restoration remain open. Original project and previous MidiFire scene were restored.
+- Documentation/evidence update only: no new controller code, license grant, public native integration package or general live approval. [Report](docs/milestones/2026-11-09-restricted-control-interface-integration.md).
+
 Dates use Europe/Berlin. This records the documentation repository separately from any future application or hardware-module release.
 
 ## 2026-11-09 · Read-path and reply-loss evidence; website 0.2.7

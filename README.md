@@ -22,6 +22,10 @@ The [public planning website](https://ultracello.github.io/loopy-pro-rme-interfa
 
 ## Latest development milestones
 
+The [Restricted control and Interface integration checkpoint](docs/milestones/2026-11-09-restricted-control-interface-integration.md) records two distinct results on the same rule revision: a separate Main/Phones copy passed ±0.5-dB steps and small fader movements with exact restoration and the other group unchanged; a separate integration copy passed full READ, matching fader feedback and return to its music page while transport continued.
+
+**Current Restricted policy: gain-mute and old saved-level restore are blocked.** Silent USB/receiver failures and crash-safe automatic restoration remain open. The original project and previous MidiFire scene were restored. These are bounded observations, not complete live approval or an installable integration for other users.
+
 The [read-path and reply-loss checkpoint](docs/milestones/2026-11-09-read-paths-reply-loss-lock.md) observed complete state and meter replies through both prepared read paths using the same persistent receiver. In a **gain-disabled diagnostic copy**, a suppressed return input blocked activation; restoring it required a new complete read followed by explicit activation. All four output values stayed unchanged, and the original project/scene were restored.
 
 The sporadic USB/hub failure and historical missing-prefix cause were **not resolved**. Safe gain-mute restore across interruptions and the complete proposed F-01–F-12 regression remain open. This result does not establish a finished product or general live approval.
@@ -65,7 +69,7 @@ The initial research focus is RME Babyface Pro / Babyface Pro FS workflows with 
 |---|---|
 | Headphone/main-output step controls | Five physical reduction/restore sizes tested for paired Phones and stereo Main, with the other group unchanged; arbitrary sequences, lifecycle safety and a released profile remain unverified |
 | Continuous faders | Three startup checks and bounded native Main/Phones writes with exact restoration passed; full range and complete lifecycle safety remain unverified |
-| Independent mute/unmute | Gain-mute/restore tested per output group; native hardware mute bits, confirmed indicators and lifecycle safety remain unverified |
+| Independent mute/unmute | Historical bounded gain-mute tests remain recorded; current Restricted gain-mute and old saved-level restore are blocked. Native hardware mute bits and interruption safety remain unverified |
 | Input gain, pan and additional mixer functions | Further research |
 | iPhone workflow | Limited earlier prototype observation; complete workflow remains unverified |
 | Installable module or tested device profile | Not published in this repository yet |
@@ -110,6 +114,7 @@ Exact tool versions and a reproducible developer setup should accompany the corr
 - [Contributing](CONTRIBUTING.md)
 - [Developer setup versus end-user requirements](docs/DEVELOPMENT_SETUP.md)
 - [Planning website tests and browser checklist](docs/TESTING.md)
+- [Restricted control and same-project Interface integration](docs/milestones/2026-11-09-restricted-control-interface-integration.md)
 - [Read-path comparison and gain-disabled reply-loss gate](docs/milestones/2026-11-09-read-paths-reply-loss-lock.md)
 - [Native fader startup, writes and activation gates](docs/milestones/2026-11-09-live-faders-startup-gates.md)
 - [Main/Phones step sizes and gain-mute restoration](docs/milestones/2026-11-09-main-phones-steps-gain-mute.md)
