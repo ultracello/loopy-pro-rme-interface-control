@@ -1,14 +1,15 @@
 export const PUBLIC_REPOSITORY = {
   url: 'https://github.com/ultracello/loopy-pro-rme-interface-control',
   branch: 'main',
-  reviewedCommit: '6f4e1a50fb9ce24027b29c2068b2cf38c503a3e1',
-  reviewedDate: '2026-11-08',
+  reviewedCommit: '8d6e62ec08384d7635e1c3f6379442187d7d4da5',
+  reviewedDate: '2026-11-09',
   reviewedFile: 'README.md, module status, scoped device milestones, step-selection simulation and output-gain evidence',
   visibility: 'public',
-  status: 'Public reports distinguish send-free native step-selection simulation from the earlier bounded Phones-fader hardware test, display feedback and fixed-button step/restore. No released installable controller or reproducible hardware-validation package is included.',
+  status: 'The v09b3 report adds one bounded Phones reduction/restore with automatic follow-up reads and separate confirmation after more than 75 seconds of transport runtime. Earlier native-write, display, fixed-button and send-free simulation checkpoints remain separate. No released installable controller or reproducible hardware-validation package is included.',
 } as const;
 const pinned = (path: string) => `${PUBLIC_REPOSITORY.url}/blob/${PUBLIC_REPOSITORY.reviewedCommit}/${path}`;
 export const REPORTS = {
+  v09b3: pinned('docs/milestones/2026-11-09-phones-v09b3-follow-up.md'),
   stepSimulation: pinned('docs/milestones/2026-11-08-native-step-simulation.md'),
   faderWrite: pinned('docs/milestones/2026-11-08-phones-fader-write-restore.md'),
   display: pinned('docs/milestones/2026-11-08-native-fader-display.md'),
@@ -21,6 +22,7 @@ export const EVIDENCE = [
   {id:'rme-midi', title:'RME MIDI remote reference', type:'Official protocol documentation', url:'https://docs.rme-audio.com/aoxm/850-1c_midi_remote_tmfx/', finding:'Desktop TotalMix MIDI remote mappings are documented. Device, operating mode, destination and feedback still need validation.'},
   {id:'loopy-manual', title:'Loopy Pro manual', type:'Official application documentation', url:'https://loopypro.com/manual/', finding:'Loopy provides MIDI actions and custom controls. The receiving hardware path must be established separately.'},
   {id:'project-status', title:'Reviewed project README', type:'Public project status, pinned revision', url:pinned('README.md'), finding:PUBLIC_REPOSITORY.status},
+  {id:'phones-v09b3', title:'v09b3 Phones test with automatic follow-up reads', type:'Project-reported bounded device observation', url:REPORTS.v09b3, finding:'After more than 75 seconds of transport runtime, both Phones channels -10.5 → -11.0 → -10.5 dB. Automatic follow-up queries at 101/100 ms received successful replies and separate queries confirmed both operations. Main stayed at -8.0 dB. Not general live or long-duration validation.'},
   {id:'phones-fader-write', title:'One native Phones-fader reduction and restoration', type:'Project-reported bounded device/register observation', url:REPORTS.faderWrite, finding:'Both Phones channels -10.5 → -11.0 → -10.5 dB; fresh full readback before restore, Main unchanged. No acoustic measurement or new complete outbound trace. Not a full-range fader release.'},
   {id:'native-display', title:'Native Loopy fader display', type:'Project-reported UI/read-feedback observation', url:REPORTS.display, finding:'Actual Main/Phones levels updated visible Loopy sliders through UI-only feedback after a helper-triggered query, not the Loopy READ widget. This separate display checkpoint made no gain writes.'},
   {id:'phones-step', title:'Filtered reception and one Phones step/restore', type:'Project-reported fixed-button/register observation', url:REPORTS.step, finding:'Three Loopy READ checks, one paired raw-unit reduction and exact restoration; Main unchanged. No new mute or acoustic test.'},
@@ -52,11 +54,22 @@ export const STEP_SIMULATION = {
   boundary:'The StreamByter preview commands were not executed at native runtime. The synthetic repeat used the same 34,102 cases, not another distinct case set. Native widgets had no MIDI targets or send bindings and were not connected to that backend or a real sender. Reset restored a simulation reference, not a device factory default. No larger physical step or expanded hardware range was tested.',
   sourceUrl:REPORTS.stepSimulation,
 } as const;
+export const V09B3_CHECKPOINT = {
+  id:'phones-v09b3', revision:'v09b3', level:'Bounded device test with automatic follow-up reads',
+  title:'Phones restored. Automatic follow-up confirmed.',
+  transportRuntimeSecondsGreaterThan:75, phonesSequenceDb:[-10.5,-11.0,-10.5],
+  automaticFollowUpQueryDelaysMs:[101,100], separateConfirmationQueriesPassed:true,
+  mainDb:-8, originalProjectAndSceneRestored:true, generalLiveReadinessVerified:false,
+  result:'After more than 75 seconds of transport runtime, both Phones channels -10.5 → -11.0 → -10.5 dB. Automatic follow-up queries after 101/100 ms received successful replies; separate device queries confirmed both operations. StreamByter showed BEREIT / AKTIV. Main stayed unchanged at -8.0 dB. The original project and scene were restored; diagnostic processes ended.',
+  boundary:'Exactly one reduction and one restoration. Mapped device/display values, not acoustic calibration. Two successful follow-up reads are not a latency distribution, full-range fader pass, long-duration test or general live approval. Native button/selector integration, larger steps, mute, stereo Main, suspend/reconnect and an installable profile remain unverified.',
+  sourceUrl:REPORTS.v09b3,
+} as const;
 export const LAB_STATUS = {
-  reviewedDate: '2026-11-08',
+  reviewedDate: '2026-11-09',
   evidenceType: 'Project-reported scoped experiments, linked to dated public reports. Raw captures and installable controller artifacts are not bundled with this planner.',
   releaseReady: false,
   entries: [
+    V09B3_CHECKPOINT,
     {id:'phones-fader-write',revision:'v09 TEST',level:'Bounded native write / restore',title:'One Phones fader gesture. Exact restore.',result:'Both Phones channels -10.5 → -11.0 → -10.5 dB. Fresh full register readback confirmed the target before restoration; Main stayed unchanged. The original project and scene were restored.',boundary:'One mapped half-dB operation, not a full-range fader pass. No acoustic measurement or new complete outbound trace. Native step-selector sender integration, new mute toggles and lifecycle tests remain open.',sourceUrl:REPORTS.faderWrite},
     STEP_SIMULATION,
     {id:'native-display',revision:'UI feedback',level:'Separate native display checkpoint',title:'Actual levels reached the visible sliders.',result:'Main -8.0 dB and Phones -10.5 dB automatically updated the native Loopy display through an iPad-only return path. The state-to-UI decoder accepted complete valid 227-byte states. 2,506 offline cases were reported passed.',boundary:'A temporary helper triggered the query, not the Loopy READ widget. No gain writes occurred in this display checkpoint. It does not establish freshness, pickup, TotalMix-independent operation or long-running feedback reliability.',sourceUrl:REPORTS.display},
@@ -64,6 +77,6 @@ export const LAB_STATUS = {
     {id:'earlier-v06',revision:'Earlier v06',level:'Historical scoped iPad observation',title:'Earlier step and custom mute experiments.',result:'Relative 0.5 dB steps and custom mute/restore were reported tested. Headphones addressed left and right together; the XLR control addressed output 1 only.',boundary:'This does not verify stereo main-output control or native TotalMix mute synchronization, and does not validate the later receiver or v09 candidate.',sourceUrl:REPORTS.overview},
     {id:'earlier-v08',revision:'Earlier v08',level:'Historical offline tests only',title:'Earlier software checks, not device proof.',result:'Eleven offline test groups covering 34,304 fader cases were recorded in the earlier website evidence snapshot.',boundary:'Those counts alone did not establish native widget or hardware behavior. Later scoped device observations are listed separately; none is a released reusable profile.',sourceUrl:`${PUBLIC_REPOSITORY.url}/blob/dfd5dc10a32f4ba5dcb4e837b1c4a6cd024df9e9/website/src/lib/evidence.ts`},
   ],
-  remaining:['Full-range native faders and pickup','Native selectable-step UI with a real sender and larger physical steps','New mute toggles and native TotalMix mute synchronization','Stereo Main writes','Freshness, query correlation and feedback separation','Suspend, reconnect and long-duration behavior','TotalMix-independent operation','Full iPhone workflow','Exact reproducible profile and installable release'],
+  remaining:['Full-range native faders and pickup','Native selectable-step UI with a real sender and larger physical steps','New mute toggles and native TotalMix mute synchronization','Stereo Main writes','Broad freshness, query-correlation and feedback-separation guarantees','Suspend, reconnect and long-duration behavior','TotalMix-independent operation','Full iPhone workflow','Exact reproducible profile and installable release'],
 } as const;
 export const LATEST_MILESTONE = LAB_STATUS.entries[0];

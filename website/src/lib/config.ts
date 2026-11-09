@@ -2,8 +2,8 @@ import { EVIDENCE, PUBLIC_REPOSITORY, RELEASE_GATES, LAB_STATUS } from './eviden
 export const PROJECT_NAME = 'Loopy Pro Interface Control';
 export const INDEPENDENCE_NOTICE = 'Independent software. Not affiliated with RME.';
 export const PLAN_FILENAME = 'loopy-pro-interface-control-plan';
-export const VERSION = '0.2.3';
-export const RELEASE_DATE = '2026-11-08';
+export const VERSION = '0.2.4';
+export const RELEASE_DATE = '2026-11-09';
 export const PLANNING_STEP_SIZES = [0.5,1,2,3,6] as const;
 export const FEATURES = [
   { id: 'phones-fader', group: 'Headphones', name: 'Smooth level fader', description: 'A dedicated continuous volume control.', kind: 'fader' },
@@ -19,7 +19,7 @@ export type Config = { selected: FeatureId[]; route: Route; step: number; model:
 export const DEFAULT_CONFIG: Config = { selected: ['phones-fader', 'phones-steps', 'phones-mute'], route: 'undecided', step: 2, model: '', loopyVersion: '', totalmixVersion: '' };
 export const ROUTES: Record<Route, {title:string; status:string; detail:string}> = {
   undecided: { title: 'Choose a setup', status: 'Setup needed', detail: 'The control path depends on the hardware, host and software versions. Choose the setup you intend to use.' },
-  standalone: { title: 'iPad → direct RME interface', status: 'Scoped lab evidence · no released profile', detail: 'Babyface research now includes one bounded native Phones-fader write/restore, separate display feedback and a fixed-button step test. Full-range control and TotalMix-independent operation are not established. No installable profile is released.' },
+  standalone: { title: 'iPad → direct RME interface', status: 'Scoped lab evidence · no released profile', detail: 'Babyface research includes a bounded v09b3 Phones write/restore with automatic follow-up reads and separate confirmation, alongside earlier display and step checkpoints. Full-range control and TotalMix-independent operation are not established. No installable profile is released.' },
   desktop: { title: 'iPad + Mac / PC host', status: 'Protocol documented · setup untested', detail: 'Desktop TotalMix FX documents MIDI remote control and OSC. The Loopy-to-host transport, exact channel map and feedback still need validation for your setup.' },
   'ipad-app': { title: 'TotalMix FX for iPad', status: 'App remote control not supported', detail: 'RME excludes MIDI / OSC and TCP/IP remote control from TotalMix FX for iPad. This app limitation does not rule out a separate, device-specific hardware path. Do not apply desktop remote instructions to this app.' },
 };
