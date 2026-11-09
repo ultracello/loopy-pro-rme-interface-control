@@ -1,5 +1,7 @@
 # v09b3: bounded Phones test with automatic follow-up reads
 
+Later checkpoint: [Main/Phones physical steps and gain-mute restoration](2026-11-09-main-phones-steps-gain-mute.md). This report keeps its original scope; the later tests do not retroactively validate this revision.
+
 Date: **9 November 2026** (Europe/Berlin). Revision: **v09b3**. Evidence level: project-reported, scoped device observation. This is a new checkpoint, separate from the [8 November v09 TEST result](2026-11-08-phones-fader-write-restore.md) and [send-free step-selection simulation](2026-11-08-native-step-simulation.md).
 
 ## Observed result

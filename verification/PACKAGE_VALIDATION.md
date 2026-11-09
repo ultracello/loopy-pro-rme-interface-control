@@ -1,18 +1,17 @@
 # Documentation validation
 
-Date: **2026-11-09**. Scope: publication of the completed, bounded v09b3 Phones result and synchronization of the public documentation and research registry. Base repository revision: `e193e9c1f9d2de08f393cdf4f0f8dcd3dcec2305`.
+Date: **2026-11-09**. Scope: completed Main/Phones step-button and gain-mute findings, synchronized public status, research registry and planning website. Base: `2f7f7f4dfd2299bbe3c7ffa7b861c3361664a416`.
 
 ## Publication checks
 
-- Relative Markdown file targets resolve within the publication package. This checks file targets, not remote availability or rendered anchors.
-- Issue-template YAML remains unchanged and parses successfully.
-- The JSON registry retains six distinct hardware-module IDs, no verified profiles and no executable artifacts. The new research record identifies v09b3 without promoting a module or borrowing older test counts/hashes.
-- The sanitized report records paired Phones −10.5 → −11.0 → −10.5 dB, the 101/100 ms automatic follow-up queries, separate confirming reads, BEREIT / AKTIV, Main unchanged at −8.0 dB and restoration of the original project/scene.
-- Public-content review excludes credentials, private conversation or thread identifiers, local filesystem/network details and original working projects.
-- `SHA256SUMS` covers documentation and templates, excluding itself and website source. It establishes content integrity, not hardware behavior.
+- Relative Markdown targets, issue-template YAML, JSON registry structure and documentation checksums are checked before publication.
+- Six hardware-module entries remain unverified as public releases: no executable native artifact or reproducible public profile is included.
+- The latest research record distinguishes five physical reduction/restore sizes on each stereo group, isolated XLR2 testing, level-based gain-mute, saved-state content checks and the remaining lifecycle/feedback work.
+- Public-content review excludes private conversation identifiers, credentials, device/network identifiers, local paths and original projects.
+- `SHA256SUMS` covers documentation/templates, excluding itself and website source. It proves content integrity, not device behavior.
 
 ## Evidence boundaries
 
-The publication did not access the device, issue a MIDI query or repeat the device test. The result is project-reported. Raw captures, complete native controller source, its checksum and a reproducible version/profile inventory are not included. Two successful automatic follow-up queries after more than 75 seconds of transport runtime do not prove long-duration, reconnect or general live readiness.
+No interface access, MIDI or music-app operation was performed for this publication. The completed device results are project-reported, not reproduced by the website. Native mute bits, acoustic silence, confirmed button indicators, free faders, transport-stop/connection-change safety and general live readiness are not established. Saved code/action verification is not a full reload/recovery test.
 
-Website regression/build checks are recorded separately in [the website testing document](../docs/TESTING.md). Remote commit readback and Pages deployment must be checked after publication; this file does not predeclare their success.
+Website software checks are recorded in [TESTING.md](../docs/TESTING.md). Exact-commit remote readback, CI and hosted-page verification follow publication and are reported separately.

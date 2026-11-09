@@ -1,5 +1,7 @@
 # Step selection: offline calculation and native widget simulation
 
+Later checkpoint: [Main/Phones physical steps and gain-mute restoration](2026-11-09-main-phones-steps-gain-mute.md). This report keeps its original scope; the later tests do not retroactively validate this revision.
+
 Date: **8 November 2026**. Evidence level: **project-reported offline checks and native Loopy widget-only simulation**. This follows the [bounded Phones-fader hardware test](2026-11-08-phones-fader-write-restore.md). It is not another hardware test and does not extend the observed physical change beyond that single mapped half-dB operation.
 
 ## 1. Exact-rule offline preview

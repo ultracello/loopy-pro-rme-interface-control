@@ -215,6 +215,43 @@
       "rawCaptureIncluded": false,
       "sourceChecksumIncluded": false,
       "reproducibleProfileIncluded": false
+    },
+    {
+      "id": "main-phones-steps-gain-mute-2026-11-09",
+      "report": "docs/milestones/2026-11-09-main-phones-steps-gain-mute.md",
+      "evidenceLevel": "project-reported-scoped-device-observation",
+      "scope": "Five physical reduction-and-restoration step sizes for paired Phones and stereo Main; XLR2 alone; gain-mute/restore per group and subsequent half-dB checks.",
+      "stepSizesDb": [
+        0.5,
+        1,
+        2,
+        3,
+        6
+      ],
+      "testedStepPattern": "reduction then exact restoration",
+      "phonesPairStepsPassed": true,
+      "mainStereoStepsPassed": true,
+      "otherGroupUnchangedDuringStepTests": true,
+      "xlr2SeparateHalfDbRestorePassed": true,
+      "gainMuteRestorePassed": [
+        "main",
+        "phones"
+      ],
+      "postGainMuteHalfDbChecksPassed": true,
+      "nativeHardwareMuteBitsVerified": false,
+      "buttonIndicatorsVerified": false,
+      "freeFadersVerified": false,
+      "transportStopSafetyVerified": false,
+      "connectionChangeSafetyVerified": false,
+      "savedCodeAndButtonActionsChecked": true,
+      "savedButtonActionCount": 22,
+      "fullReloadRecoveryVerified": false,
+      "originalProjectAndSceneRestored": true,
+      "diagnosticProcessesEnded": true,
+      "generalLiveReadinessVerified": false,
+      "promotesHardwareModule": false,
+      "reproducibleProfileIncluded": false,
+      "rawCaptureIncluded": false
     }
   ]
 }

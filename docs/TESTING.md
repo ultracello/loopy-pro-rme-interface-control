@@ -4,6 +4,8 @@ The [public planning website](https://ultracello.github.io/loopy-pro-rme-interfa
 
 ## Recorded software evidence
 
+- Website 0.2.5 (9 November 2026): 27 local regression tests and TypeScript/production build passed for the Main/Phones evidence update. Tests distinguish physical reduction/restore pairs from the historical simulation, gain-mute from native mute bits/acoustic silence, saved action contents from reload recovery, and scoped device results from a released profile. Current evidence is included in JSON/readable planning exports. This publication did not perform device tests; hosted-page checks and exact-commit CI are verified separately after publication.
+
 - Website 0.2.4 (9 November 2026): all 23 local regression tests and the TypeScript/production build passed for the v09b3 evidence update. Tests cover the exact scoped result, separation from historical/simulated evidence, pinned-report exports, nonexecutable planning output and release-date chronology. This does not repeat device tests. A local browser preview was unavailable because the browser could not reach the build server; no local visual or interaction pass is claimed. Exact-commit CI and the public deployment are verified separately after publication.
 
 - Website revision `dfd5dc10a32f4ba5dcb4e837b1c4a6cd024df9e9` (0.2.1): the website maintainer reported all 12 tests passing and a successful TypeScript/production build. [GitHub Actions run 42494183417](https://github.com/ultracello/loopy-pro-rme-interface-control/actions/runs/42494183417) completed successfully.

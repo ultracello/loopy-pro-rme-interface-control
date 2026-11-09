@@ -2,6 +2,14 @@
 
 Dates use Europe/Berlin. This records the documentation repository separately from any future application or hardware-module release.
 
+## 2026-11-09 · Main/Phones device tests and website 0.2.5
+
+- **Added:** [physical Main/Phones step and gain-mute report](docs/milestones/2026-11-09-main-phones-steps-gain-mute.md). Each stereo group passed 0.5/1/2/3/6-dB reductions with exact restoration and the other group unchanged; XLR2 was checked separately.
+- **Gain-mute:** one level-reduction/restore toggle per output group passed, as did the following half-dB checks. Native hardware-mute bits, confirmed button indicators, free faders and pause/connection-change safety remain unverified.
+- **Saved/cleaned up:** complete candidate code and 22 button actions checked; original project and previous scene restored; diagnostics ended. This does not establish complete reload recovery or public portability.
+- **Website:** current evidence, open gates and exports now reflect these completed tests; older reports retain their own scope. No hardware-control code or general live approval is released.
+- **Checks:** 27 local regression tests and TypeScript/production build passed. Exact-commit remote readback, CI and hosted-page verification follow publication.
+
 ## 2026-11-09 · Website 0.2.4: v09b3 feedback evidence
 
 - **Updated:** the public planner and JSON/readable exports include the bounded v09b3 checkpoint, automatic follow-up query timings and separate confirming reads.

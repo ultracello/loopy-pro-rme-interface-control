@@ -38,7 +38,7 @@ The [project overview](PROJECT_OVERVIEW.md#what-the-evidence-currently-supports)
 - [Filtered reception and Phones step/restore](milestones/2026-11-08-phones-step-restore.md): three native READ checks, one paired raw-unit reduction and exact restore with Main unchanged. No new mute or acoustic test.
 - [Native fader display](milestones/2026-11-08-native-fader-display.md): actual levels reached the visible Loopy sliders through UI-only feedback. The triggering query came from a helper, and no hardware-writing fader was tested in that checkpoint.
 
-These observations advance the development evidence without releasing any implementation in the table above. The [later v09 Phones-fader report](milestones/2026-11-08-phones-fader-write-restore.md) adds one bounded native write and exact restore at mapped −10.5/−11.0 dB with Main unchanged. This advances Phones-fader evidence only; full-range writes, native/custom mute semantics, other selectable step sizes, stereo Main and longer/reload/reconnect behavior remain separate work. A selectable step-size UI must not advertise unvalidated hardware values.
+These observations advance the development evidence without releasing any implementation in the table above. The [later v09 Phones-fader report](milestones/2026-11-08-phones-fader-write-restore.md) adds one bounded native write and exact restore at mapped −10.5/−11.0 dB with Main unchanged. That checkpoint advanced Phones-fader evidence only; it did not cover full-range writes, native/custom mute semantics, other selectable step sizes, stereo Main or longer/reload/reconnect behavior. Later tests are listed below. A selectable step-size UI must not advertise unvalidated hardware values.
 
 ### Native step-selection simulation
 
@@ -47,6 +47,12 @@ A [later send-free Loopy widget simulation](milestones/2026-11-08-native-step-si
 ### v09b3 follow-up-read checkpoint
 
 The [9 November v09b3 test](milestones/2026-11-09-phones-v09b3-follow-up.md) adds one paired Phones reduction/restore after more than 75 seconds of transport runtime. Both channels followed −10.5 → −11.0 → −10.5 dB. Automatic follow-up queries at 101/100 ms and separate device queries confirmed the operations; StreamByter showed BEREIT / AKTIV. Main stayed at −8.0 dB and the original project/scene were restored. This is bounded feedback evidence, not full-range, long-duration or general live validation. No module status above is promoted.
+
+### Main/Phones steps and gain-mute
+
+The [later 9 November checkpoint](milestones/2026-11-09-main-phones-steps-gain-mute.md) advances paired Phones and stereo Main step-button evidence: 0.5 / 1 / 2 / 3 / 6 dB reductions with exact restoration, each leaving the other group unchanged. XLR2 was checked separately. One gain-mute/restore toggle per group and the following 0.5-dB checks passed. Complete code and 22 button actions were verified in the saved candidate. Original project/scene restoration and diagnostic cleanup were reported complete.
+
+Gain-mute is level reduction with a saved restore value, not a verified hardware mute bit. Button feedback, free faders and pause/reconnection safety remain open. The table describes **publicly shipped modules/profiles** and therefore remains unverified: no native artifact or reproducible public profile is released here. Older checkpoints above describe their historical limits, not the latest overall test coverage.
 
 ## Promotion rule
 

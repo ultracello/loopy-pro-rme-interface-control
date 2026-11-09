@@ -18,6 +18,8 @@ The displayed scale itself uses this conversion. It is **not an independent acou
 
 The [9 November v09b3 checkpoint](../milestones/2026-11-09-phones-v09b3-follow-up.md) reports the same Phones display sequence, −10.5 → −11.0 → −10.5 dB, with Main at −8.0 dB. Its automatic follow-up and separate confirming reads add scoped feedback evidence; they do not expand the tested gain range or provide acoustic calibration.
 
+The [later Main/Phones step-button tests](../milestones/2026-11-09-main-phones-steps-gain-mute.md) add 0.5/1/2/3/6-dB reduction-and-restoration pairs for each stereo group, plus a separate XLR2 check. These are additional mapped device observations, not a full-range sweep or acoustic calibration. The tested gain-mute method changes level and restores a saved value; it does not identify a hardware mute bit or prove acoustic silence.
+
 ## Receive-field and validity boundaries
 
 Each 32-bit word is packed into five 7-bit bytes. After the six-byte header, word 1 bits 0–7 and 9–16 contain the mapped Main left/right fields; word 2 bits 14–21 and 23–30 contain Phones left/right. The current return filter accepts only complete valid **227-byte state frames**. RMS/peak messages, short states and malformed payloads do not refresh gain readiness.
