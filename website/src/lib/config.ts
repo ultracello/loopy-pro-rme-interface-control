@@ -2,7 +2,7 @@ import { EVIDENCE, PUBLIC_REPOSITORY, RELEASE_GATES, LAB_STATUS } from './eviden
 export const PROJECT_NAME = 'Loopy Pro Interface Control';
 export const INDEPENDENCE_NOTICE = 'Independent software. Not affiliated with RME.';
 export const PLAN_FILENAME = 'loopy-pro-interface-control-plan';
-export const VERSION = '0.2.6';
+export const VERSION = '0.2.7';
 export const RELEASE_DATE = '2026-11-09';
 export const PLANNING_STEP_SIZES = [0.5,1,2,3,6] as const;
 export const FEATURES = [

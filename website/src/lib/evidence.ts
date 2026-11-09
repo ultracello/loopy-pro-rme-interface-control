@@ -1,14 +1,15 @@
 export const PUBLIC_REPOSITORY = {
   url: 'https://github.com/ultracello/loopy-pro-rme-interface-control',
   branch: 'main',
-  reviewedCommit: '1ef2df430da16d4bd4e175634ab31afbcb3abb52',
+  reviewedCommit: '3d38aa134935b2504028d2841e95660a60112b8f',
   reviewedDate: '2026-11-09',
-  reviewedFile: 'README.md, module status, scoped device milestones, step-selection simulation and output-gain evidence',
+  reviewedFile: 'README.md, module status, bounded read-path/reply-loss report and earlier scoped milestones',
   visibility: 'public',
-  status: 'Sync LIVE1 adds three correct fader startups, bounded Main/Phones fader writes with independent exact restoration, transport-stop locking and missing-return activation blocking. Auxiliary feedback, gain-mute lifecycle, physical USB reconnect and duration remain open. Earlier step-button and gain-mute checkpoints retain their own scope. No released installable controller or reproducible hardware-validation package is included.',
+  status: 'Both prepared read paths returned complete replies in one bounded comparison. A gain-disabled copy blocked activation without return input and required a fresh read plus explicit reactivation. Sporadic USB/hub failure, prefix-loss cause and safe mute restore remain open. Earlier fader and step checks retain their own scope. No finished product or released installable controller is included.',
 } as const;
 const pinned = (path: string) => `${PUBLIC_REPOSITORY.url}/blob/${PUBLIC_REPOSITORY.reviewedCommit}/${path}`;
 export const REPORTS = {
+  readPaths: pinned('docs/milestones/2026-11-09-read-paths-reply-loss-lock.md'),
   liveFaders: pinned('docs/milestones/2026-11-09-live-faders-startup-gates.md'),
   mainPhones: pinned('docs/milestones/2026-11-09-main-phones-steps-gain-mute.md'),
   v09b3: pinned('docs/milestones/2026-11-09-phones-v09b3-follow-up.md'),
@@ -24,6 +25,7 @@ export const EVIDENCE = [
   {id:'rme-midi', title:'RME MIDI remote reference', type:'Official protocol documentation', url:'https://docs.rme-audio.com/aoxm/850-1c_midi_remote_tmfx/', finding:'Desktop TotalMix MIDI remote mappings are documented. Device, operating mode, destination and feedback still need validation.'},
   {id:'loopy-manual', title:'Loopy Pro manual', type:'Official application documentation', url:'https://loopypro.com/manual/', finding:'Loopy provides MIDI actions and custom controls. The receiving hardware path must be established separately.'},
   {id:'project-status', title:'Reviewed project README', type:'Public project status, pinned revision', url:pinned('README.md'), finding:PUBLIC_REPOSITORY.status},
+  {id:'read-paths-reply-loss', title:'Read paths and gain-disabled reply-loss gate', type:'Project-reported bounded device check', url:REPORTS.readPaths, finding:'Both read paths delivered complete state/meter replies with the same persistent receiver. A gain-disabled copy blocked activation without return input and required a new complete read then explicit activation. Output values stayed unchanged. USB/hub failure, prefix-loss cause and safe mute restore remain open.'},
   {id:'sync-live1-faders', title:'Sync LIVE1 fader startup, writes and activation gates', type:'Project-reported scoped device checks', url:REPORTS.liveFaders, finding:'Three starts showed correct current fader values without prior contact. Main and Phones were reduced/increased and independently restored exactly, with the other group unchanged. Transport stop locked controls; missing return input blocked activation. Auxiliary feedback, mute lifecycle, physical USB reconnect and duration remain open.'},
   {id:'main-phones-steps-gain-mute', title:'Main/Phones physical steps and gain-mute restoration', type:'Project-reported scoped device tests', url:REPORTS.mainPhones, finding:'Each stereo group passed 0.5/1/2/3/6-dB reduction/restore pairs with the other group unchanged. XLR2 was checked separately. Gain-mute/restore and following half-dB checks passed per group. That checkpoint did not establish native hardware mute bits, confirmed button feedback, free faders or lifecycle safety; later fader/gate checks are listed separately.'},
   {id:'phones-v09b3', title:'v09b3 Phones test with automatic follow-up reads', type:'Project-reported bounded device observation', url:REPORTS.v09b3, finding:'After more than 75 seconds of transport runtime, both Phones channels -10.5 → -11.0 → -10.5 dB. Automatic follow-up queries at 101/100 ms received successful replies and separate queries confirmed both operations. Main stayed at -8.0 dB. Not general live or long-duration validation.'},
@@ -96,11 +98,24 @@ export const LIVE_FADERS_CHECKPOINT = {
   boundary:'Bounded gestures and three starts, not a full-range pass or complete recovery matrix. Missing-return blocking is not physical USB reconnect validation. Auxiliary displays, gain-mute lifecycle and USB reconnect/duration remain open. Gain-mute is not a verified hardware mute bit; clear its own gain-mute before lock/transport stop. No full live approval or public installable profile.',
   sourceUrl:REPORTS.liveFaders,
 } as const;
+export const READ_PATH_CHECKPOINT = {
+  id:'read-paths-reply-loss', revision:'Read paths · 9 Nov', level:'Bounded read comparison and gain-disabled reply-loss gate',
+  title:'Both read paths complete. Reactivation stays explicit.',
+  readPathQueries:2, samePersistentReceiver:true, bothReadPathsCompleteObserved:true,
+  gateCopyGainEnabled:false, missingReturnBlocksActivationObserved:true,
+  freshReadBeforeExplicitReactivationObserved:true, outputValuesUnchangedObserved:true,
+  prefixFailureCauseResolved:false, physicalUsbReconnectVerified:false, safeMuteRestoreVerified:false,
+  fullProposedF01F12RegressionVerified:false, generalLiveReadinessVerified:false,
+  result:'Both read paths returned a complete 227-byte state and two 207-byte meter messages using the same persistent receiver. A gain-disabled copy stayed inactive without return input. After return restoration, a new complete read left it inactive until explicit activation. All four output values stayed unchanged; original project and scene were restored and diagnostics ended.',
+  boundary:'One comparison per path, not a reliability or causal-acknowledgement guarantee. Sporadic USB/hub failure, historical prefix-loss cause and safe mute restore remain open. No physical USB test, complete F-01–F-12 regression or full live approval. The planner remains browser-only; no installable controller is released.',
+  sourceUrl:REPORTS.readPaths,
+} as const;
 export const LAB_STATUS = {
   reviewedDate: '2026-11-09',
   evidenceType: 'Project-reported scoped experiments, linked to dated public reports. Raw captures and installable controller artifacts are not bundled with this planner.',
   releaseReady: false,
   entries: [
+    READ_PATH_CHECKPOINT,
     LIVE_FADERS_CHECKPOINT,
     MAIN_PHONES_CHECKPOINT,
     V09B3_CHECKPOINT,
@@ -111,6 +126,6 @@ export const LAB_STATUS = {
     {id:'earlier-v06',revision:'Earlier v06',level:'Historical scoped iPad observation',title:'Earlier step and custom mute experiments.',result:'Relative 0.5 dB steps and custom mute/restore were reported tested. Headphones addressed left and right together; the XLR control addressed output 1 only.',boundary:'This does not verify stereo main-output control or native TotalMix mute synchronization, and does not validate the later receiver or v09 candidate.',sourceUrl:REPORTS.overview},
     {id:'earlier-v08',revision:'Earlier v08',level:'Historical offline tests only',title:'Earlier software checks, not device proof.',result:'Eleven offline test groups covering 34,304 fader cases were recorded in the earlier website evidence snapshot.',boundary:'Those counts alone did not establish native widget or hardware behavior. Later scoped device observations are listed separately; none is a released reusable profile.',sourceUrl:`${PUBLIC_REPOSITORY.url}/blob/dfd5dc10a32f4ba5dcb4e837b1c4a6cd024df9e9/website/src/lib/evidence.ts`},
   ],
-  remaining:['Full-range native faders and pickup','Auxiliary displays and confirmed button-state feedback','Arbitrary or rapid step sequences beyond the tested reduction/restore pairs','Native hardware mute bits and TotalMix mute synchronization','Gain-mute recovery across lock or transport stop','Broad freshness, query-correlation and feedback-separation guarantees','Physical USB reconnect and long-duration behavior','TotalMix-independent operation','Full iPhone workflow','Exact reproducible profile and installable release'],
+  remaining:['Sporadic USB/hub failure and historical prefix-loss cause','Safe mute restore across interruptions','Complete proposed F-01–F-12 regression with a defined freshness rule','Full-range native faders and pickup','Auxiliary displays and confirmed button-state feedback','Arbitrary or rapid step sequences beyond the tested reduction/restore pairs','Native hardware mute bits and TotalMix mute synchronization','Gain-mute recovery across lock or transport stop','Broad freshness, query-correlation and feedback-separation guarantees','Physical USB reconnect and long-duration behavior','TotalMix-independent operation','Full iPhone workflow','Exact reproducible profile and installable release'],
 } as const;
 export const LATEST_MILESTONE = LAB_STATUS.entries[0];
