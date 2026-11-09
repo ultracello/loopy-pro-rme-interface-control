@@ -284,6 +284,30 @@
       "promotesHardwareModule": false,
       "reproducibleProfileIncluded": false,
       "rawCaptureIncluded": false
+    },
+    {
+      "id": "read-paths-reply-loss-2026-11-09",
+      "report": "docs/milestones/2026-11-09-read-paths-reply-loss-lock.md",
+      "evidenceLevel": "project-reported-scoped-device-observation",
+      "scope": "One complete reply per read path with the same persistent receiver, then missing-return blocking and explicit fresh-read reactivation in a gain-disabled copy.",
+      "readPathQueries": 2,
+      "bothReadPathsCompleteObserved": true,
+      "samePersistentReceiverForComparison": true,
+      "gateCopyGainEnabled": false,
+      "missingReturnBlocksActivationObserved": true,
+      "freshReadBeforeExplicitReactivationObserved": true,
+      "outputValuesUnchangedObserved": true,
+      "gainOrMuteWriteRequested": false,
+      "prefixFailureCauseResolved": false,
+      "physicalUsbReconnectVerified": false,
+      "safeMuteRestoreVerified": false,
+      "fullProposedF01F12RegressionVerified": false,
+      "originalProjectAndSceneRestored": true,
+      "diagnosticProcessesEnded": true,
+      "generalLiveReadinessVerified": false,
+      "promotesHardwareModule": false,
+      "rawCaptureIncluded": false,
+      "reproducibleProfileIncluded": false
     }
   ]
 }

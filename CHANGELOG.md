@@ -2,6 +2,13 @@
 
 Dates use Europe/Berlin. This records the documentation repository separately from any future application or hardware-module release.
 
+## 2026-11-09 · Read-path and reply-loss evidence; website 0.2.7
+
+- **Added:** [bounded read-path/reply-loss report](docs/milestones/2026-11-09-read-paths-reply-loss-lock.md). Each path produced complete state/meter replies with the same persistent receiver. A gain-disabled copy blocked activation without return input and required a fresh complete read plus explicit activation afterwards.
+- **Preserved:** all four output values unchanged; original project and prior scene restored; diagnostics ended. No gain/mute command, parser change, native artifact or module promotion is part of this update.
+- **Still open:** intermittent USB/hub failure and prefix-loss cause, safe mute restore, full proposed F-01–F-12 regression, physical reconnect and general live readiness. The planner remains browser-only.
+- **Validation:** local website and publication checks are recorded separately; exact-commit CI, remote readback and hosted-page verification follow publication.
+
 ## 2026-11-09 · Sync LIVE1 faders and website 0.2.6
 
 - **Added:** [Sync LIVE1 result](docs/milestones/2026-11-09-live-faders-startup-gates.md): correct current values on three project starts without initial fader contact; bounded Main/Phones fader reductions/increases and independently verified exact restoration with the other group unchanged.

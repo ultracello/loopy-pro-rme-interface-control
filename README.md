@@ -22,6 +22,10 @@ The [public planning website](https://ultracello.github.io/loopy-pro-rme-interfa
 
 ## Latest development milestones
 
+The [read-path and reply-loss checkpoint](docs/milestones/2026-11-09-read-paths-reply-loss-lock.md) observed complete state and meter replies through both prepared read paths using the same persistent receiver. In a **gain-disabled diagnostic copy**, a suppressed return input blocked activation; restoring it required a new complete read followed by explicit activation. All four output values stayed unchanged, and the original project/scene were restored.
+
+The sporadic USB/hub failure and historical missing-prefix cause were **not resolved**. Safe gain-mute restore across interruptions and the complete proposed F-01–F-12 regression remain open. This result does not establish a finished product or general live approval.
+
 The [Sync LIVE1 fader checkpoint](docs/milestones/2026-11-09-live-faders-startup-gates.md) confirmed correct current values after **three project starts without touching a fader first**. Main and Phones were each reduced and increased with the native fader, independently checked and restored exactly; the other output group stayed unchanged. **Transport stop locked the controls; a missing return path prevented activation.** The tested copy was saved and the original project/scene restored.
 
 These are bounded fader and activation-gate results. Auxiliary displays, gain-mute lifecycle, physical USB reconnect and duration checks remain open. No full-range or complete live approval is claimed.
@@ -106,6 +110,7 @@ Exact tool versions and a reproducible developer setup should accompany the corr
 - [Contributing](CONTRIBUTING.md)
 - [Developer setup versus end-user requirements](docs/DEVELOPMENT_SETUP.md)
 - [Planning website tests and browser checklist](docs/TESTING.md)
+- [Read-path comparison and gain-disabled reply-loss gate](docs/milestones/2026-11-09-read-paths-reply-loss-lock.md)
 - [Native fader startup, writes and activation gates](docs/milestones/2026-11-09-live-faders-startup-gates.md)
 - [Main/Phones step sizes and gain-mute restoration](docs/milestones/2026-11-09-main-phones-steps-gain-mute.md)
 - [v09b3 Phones test with automatic follow-up reads](docs/milestones/2026-11-09-phones-v09b3-follow-up.md)

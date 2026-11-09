@@ -60,6 +60,12 @@ The [later Sync LIVE1 result](milestones/2026-11-09-live-faders-startup-gates.md
 
 This advances bounded native-fader and specific gate evidence, not full-range or complete lifecycle validation. Auxiliary displays, gain-mute lifecycle, physical USB reconnect and duration checks remain open. Public hardware-module/profile status remains unchanged because no reproducible native package is released here.
 
+### Read-path and reply-loss check
+
+The [later gain-disabled check](milestones/2026-11-09-read-paths-reply-loss-lock.md) observed complete state/meter replies through both read paths with one persistent receiver. A suppressed return input prevented activation; a new complete read after restoration left the controller inactive until explicit activation. All output values stayed unchanged and original project/scene restoration was checked.
+
+The historical prefix failure was not reproduced or resolved. Physical USB/hub stability, safe gain-mute restore and full freshness/regression requirements remain open. This diagnostic result does not promote any public module or constitute a full write-controller recovery test.
+
 ## Promotion rule
 
 Promote a hardware status only when a completed [device profile](../templates/device-profile.md) and test report meet [the acceptance gates](ACCEPTANCE.md). If only one control passed, promote only that control for that profile and revision. Keep failed and not-run cases visible.
