@@ -50,6 +50,10 @@ A different [state-to-UI scene](milestones/2026-11-08-native-fader-display.md) d
 
 Both scenes were saved separately. No portable, fully versioned release is supplied. These results do not establish operation with TotalMix terminated or complete independence from the development setup.
 
+## v09b3 automatic follow-up-read checkpoint
+
+The [9 November v09b3 test](milestones/2026-11-09-phones-v09b3-follow-up.md) passed one paired Phones half-dB reduction and exact restoration after more than 75 seconds of transport runtime. Automatic follow-up queries after 101/100 ms received successful replies; separate device queries confirmed both operations. Main remained −8.0 dB and original project/scene restoration was verified. This does not validate a complete end-user installation, arbitrary gestures, reconnect or extended operation. The public report contains no native project or new setup procedure.
+
 ## Bounded native Phones-fader follow-up
 
 The [later v09 TEST checkpoint](milestones/2026-11-08-phones-fader-write-restore.md) separated read display, a diagnostic gesture with sending disabled, and one native Phones reduction/restore. Both Phones values returned to their fresh baseline; Main remained unchanged. The original project and scene were restored. The candidate was restricted to Phones and one raw step, without Main/mute/legacy writes.

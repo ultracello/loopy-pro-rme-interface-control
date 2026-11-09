@@ -1,6 +1,6 @@
 # Module status
 
-Snapshot: **2026-11-08**. The repository ships documentation, templates and a software-tested browser-only planning website. It does not ship an executable hardware-control module or a validated installable device profile.
+Snapshot: **2026-11-09**. The repository ships documentation, templates and a software-tested browser-only planning website. It does not ship an executable hardware-control module or a validated installable device profile.
 
 ## Status meanings
 
@@ -43,6 +43,10 @@ These observations advance the development evidence without releasing any implem
 ### Native step-selection simulation
 
 A [later send-free Loopy widget simulation](milestones/2026-11-08-native-step-simulation.md) checked five 0.5/1/2/3/6-dB choices, both directions, inert startup, unknown-default inactivity and reload. The separate StreamByter preview compiled and passed reported offline tests, but its commands were not exercised at native runtime. No real sender or larger physical step was tested. This advances UI-simulation evidence only and does not promote a step module.
+
+### v09b3 follow-up-read checkpoint
+
+The [9 November v09b3 test](milestones/2026-11-09-phones-v09b3-follow-up.md) adds one paired Phones reduction/restore after more than 75 seconds of transport runtime. Both channels followed −10.5 → −11.0 → −10.5 dB. Automatic follow-up queries at 101/100 ms and separate device queries confirmed the operations; StreamByter showed BEREIT / AKTIV. Main stayed at −8.0 dB and the original project/scene were restored. This is bounded feedback evidence, not full-range, long-duration or general live validation. No module status above is promoted.
 
 ## Promotion rule
 

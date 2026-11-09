@@ -2,6 +2,20 @@
 
 Dates use Europe/Berlin. This records the documentation repository separately from any future application or hardware-module release.
 
+## 2026-11-09 · Website 0.2.4: v09b3 feedback evidence
+
+- **Updated:** the public planner and JSON/readable exports include the bounded v09b3 checkpoint, automatic follow-up query timings and separate confirming reads.
+- **Preserved:** older native-write, display, fixed-button and send-free simulation evidence remains distinct. Hardware module status, browser-only transport limits and the code-export gate are unchanged.
+- **Chronology:** current release date is 9 November; prior website release entries retain 8 November.
+- **Checks:** 23 local regression tests plus TypeScript/production build passed. Local browser access was unavailable; no local visual/interaction pass is claimed. Exact-commit CI and hosted-page verification follow publication.
+
+## 2026-11-09 · v09b3: bounded Phones feedback checkpoint
+
+- **Added:** a sanitized [v09b3 report](docs/milestones/2026-11-09-phones-v09b3-follow-up.md), separate from earlier v09 TEST and widget-only simulation.
+- **Observed:** after more than 75 seconds of transport runtime, both Phones channels −10.5 → −11.0 → −10.5 dB; automatic follow-up queries at 101/100 ms received successful replies. Separate device queries confirmed both operations. StreamByter showed BEREIT / AKTIV; Main stayed at −8.0 dB.
+- **Restored:** original project and previous scene verified restored; diagnostic processes ended.
+- **Scope:** documentation and machine-readable research evidence. No source/project release, device operation during publication, full-range validation, extended-duration result or general live approval.
+
 ## 2026-11-08 · Website 0.2.3: send-free step-selection evidence
 
 - **Added:** a distinct simulation notice and pinned [native step-selection report](docs/milestones/2026-11-08-native-step-simulation.md), alongside the unchanged bounded Phones hardware checkpoint.

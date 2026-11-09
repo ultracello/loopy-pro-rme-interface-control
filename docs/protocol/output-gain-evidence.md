@@ -1,6 +1,6 @@
 # Output-gain mapping and tested points
 
-Reviewed: **8 November 2026**. Scope: the Babyface prototype's reported output-state mapping and its isolated test points. This is model-specific reverse-engineering evidence, not an official RME API or a general compatibility guarantee.
+Reviewed: **9 November 2026**. Scope: the Babyface prototype's reported output-state mapping and its isolated test points. This is model-specific reverse-engineering evidence, not an official RME API or a general compatibility guarantee.
 
 The primary [Babyface Pro protocol notes, Device State sub-ID 0](https://github.com/michaelforney/oscmix/wiki/Babyface-Pro#device-state-sub-id-0), describe this output-volume conversion:
 
@@ -15,6 +15,8 @@ The primary [Babyface Pro protocol notes, Device State sub-ID 0](https://github.
 One raw unit corresponds to **0.5 dB in this mapping**. Complete state captures were reported to show both Phones fields changing 222 → 221 → 222, while the native outer-widget display matched the calculated values. See the [native fader test](../milestones/2026-11-08-phones-fader-write-restore.md).
 
 The displayed scale itself uses this conversion. It is **not an independent acoustic calibration**, and no new analogue measurement was made. The earlier [fixed-button test](../milestones/2026-11-08-phones-step-restore.md) establishes a raw-unit change with exact restoration. The formula and separate display evidence support describing it as a **mapped 0.5-dB step**, not an acoustically measured 0.5-dB change.
+
+The [9 November v09b3 checkpoint](../milestones/2026-11-09-phones-v09b3-follow-up.md) reports the same Phones display sequence, −10.5 → −11.0 → −10.5 dB, with Main at −8.0 dB. Its automatic follow-up and separate confirming reads add scoped feedback evidence; they do not expand the tested gain range or provide acoustic calibration.
 
 ## Receive-field and validity boundaries
 

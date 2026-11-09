@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "asOf": "2026-11-08",
+  "asOf": "2026-11-09",
   "scope": "Public documentation, contribution templates and a software-tested browser-only planner; no executable hardware-control modules shipped.",
   "modules": [
     {
@@ -182,6 +182,38 @@
       "largerHardwareStepsVerified": false,
       "promotesHardwareModule": false,
       "independentLoopyOnlyOperationVerified": false,
+      "reproducibleProfileIncluded": false
+    },
+    {
+      "id": "phones-v09b3-follow-up-2026-11-09",
+      "report": "docs/milestones/2026-11-09-phones-v09b3-follow-up.md",
+      "evidenceLevel": "project-reported-scoped-device-observation",
+      "prototypeRevision": "v09b3",
+      "scope": "One paired Phones reduction and exact restore after more than 75 seconds of transport runtime, with automatic follow-up reads and separate confirming device queries.",
+      "transportRuntimeSecondsGreaterThan": 75,
+      "phonesSequenceDb": [
+        -10.5,
+        -11.0,
+        -10.5
+      ],
+      "automaticFollowUpQueryDelaysMs": [
+        101,
+        100
+      ],
+      "automaticFollowUpRepliesSuccessful": true,
+      "separateConfirmationQueriesPassed": true,
+      "nativeStatusObserved": "BEREIT / AKTIV",
+      "mainDb": -8.0,
+      "mainUnchangedObserved": true,
+      "exactRestoreObserved": true,
+      "originalProjectAndSceneRestored": true,
+      "diagnosticProcessesEnded": true,
+      "fullRangeFaderVerified": false,
+      "longDurationVerified": false,
+      "generalLiveReadinessVerified": false,
+      "promotesHardwareModule": false,
+      "rawCaptureIncluded": false,
+      "sourceChecksumIncluded": false,
       "reproducibleProfileIncluded": false
     }
   ]

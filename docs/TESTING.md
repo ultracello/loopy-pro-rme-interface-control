@@ -4,10 +4,12 @@ The [public planning website](https://ultracello.github.io/loopy-pro-rme-interfa
 
 ## Recorded software evidence
 
+- Website 0.2.4 (9 November 2026): all 23 local regression tests and the TypeScript/production build passed for the v09b3 evidence update. Tests cover the exact scoped result, separation from historical/simulated evidence, pinned-report exports, nonexecutable planning output and release-date chronology. This does not repeat device tests. A local browser preview was unavailable because the browser could not reach the build server; no local visual or interaction pass is claimed. Exact-commit CI and the public deployment are verified separately after publication.
+
 - Website revision `dfd5dc10a32f4ba5dcb4e837b1c4a6cd024df9e9` (0.2.1): the website maintainer reported all 12 tests passing and a successful TypeScript/production build. [GitHub Actions run 42494183417](https://github.com/ultracello/loopy-pro-rme-interface-control/actions/runs/42494183417) completed successfully.
 - The earlier deployment at revision `c38bdce903682fde556abfe93e21c7458847ca5c` was checked live for independent preview/mute behavior, JSON download and three documentation links. [Run 42491058463, second attempt](https://github.com/ultracello/loopy-pro-rme-interface-control/actions/runs/42491058463) succeeded. This is a scoped recorded browser check, not proof that every checklist item below passed on the later revision.
 - Physical iPad Safari, iPhone and audio hardware were not validated by those website checks. The [passive iPad MIDI milestone](milestones/2026-11-08-passive-ipad-reception.md) is separate evidence and does not count as a website test.
-- This documentation update did not rerun website or device tests. See [website/README.md](../website/README.md) for current local test/build commands.
+- The earlier documentation-only update did not rerun website or device tests. See [website/README.md](../website/README.md) for current local test/build commands.
 
 **Do not connect an interface, send MIDI/OSC, import a script, or change routing for this checklist.** A planning preview does not test your audio hardware. If the page unexpectedly asks for device or microphone access, stop and report it.
 

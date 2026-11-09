@@ -22,13 +22,15 @@ The [public planning website](https://ultracello.github.io/loopy-pro-rme-interfa
 
 ## Latest development milestones
 
+The [9 November v09b3 checkpoint](docs/milestones/2026-11-09-phones-v09b3-follow-up.md) passed one paired Phones reduction and exact restoration, **−10.5 → −11.0 → −10.5 dB**, after more than 75 seconds of transport runtime. Automatic follow-up queries after **101/100 ms** received successful replies; separate device queries confirmed both operations. StreamByter showed BEREIT / AKTIV, Main stayed at −8.0 dB, and the original project and scene were restored. This is a bounded result, not a general live release or long-duration validation.
+
 The [bounded native Phones-fader test](docs/milestones/2026-11-08-phones-fader-write-restore.md) now records both headphone channels changing **−10.5 → −11.0 → −10.5 dB**, with fresh complete readback before restoration and Main unchanged. These are mapped device/display values, not a new acoustic measurement. The original project and scene were restored.
 
 A later [native step-selection simulation](docs/milestones/2026-11-08-native-step-simulation.md) checked 0.5 / 1 / 2 / 3 / 6 dB choices, both directions, inert startup and reload using only internal Loopy widgets. It sent no MIDI and did not test larger real steps or the native sender connection.
 
 The preceding [filtered receive/step test](docs/milestones/2026-11-08-phones-step-restore.md) and [automatic native fader display](docs/milestones/2026-11-08-native-fader-display.md) remain separate checkpoints. See the [mapping evidence](docs/protocol/output-gain-evidence.md) for the raw-unit/dB distinction.
 
-This is one bounded Phones operation, not full-range fader validation or a finished live controller. Connecting the simulated step selector to the native sender, larger physical steps, new mute/toggle tests, stereo Main writes, suspend/reconnect/duration behavior, TotalMix independence and a complete installable profile remain open.
+These are separate bounded Phones checkpoints, not full-range fader validation or a finished live controller. Connecting the simulated step selector to the native sender, larger physical steps, new mute/toggle tests, stereo Main writes, suspend/reconnect/duration behavior, TotalMix independence and a complete installable profile remain open.
 
 The [earlier READ report](docs/milestones/2026-11-08-loopy-read-ready-locked.md) and [passive report](docs/milestones/2026-11-08-passive-ipad-reception.md) remain dated historical evidence, with forward links to later tests.
 
@@ -49,8 +51,8 @@ The initial research focus is RME Babyface Pro / Babyface Pro FS workflows with 
 
 | Area | Status |
 |---|---|
-| Headphone/main-output step controls | One paired Phones step/restore observed; five sizes tested in send-free native widget simulation only; larger real steps, sender integration and stereo Main remain unverified |
-| Continuous faders | Native display plus one bounded Phones write/restore observed; full range, Main and lifecycle safety remain unverified |
+| Headphone/main-output step controls | Bounded paired Phones step/restore checkpoints observed; five sizes tested in send-free native widget simulation only; larger real steps, sender integration and stereo Main remain unverified |
+| Continuous faders | Native display plus bounded Phones write/restore checkpoints observed; full range, Main and lifecycle safety remain unverified |
 | Independent mute/unmute | Requires verified mute semantics and state feedback |
 | Input gain, pan and additional mixer functions | Further research |
 | iPhone workflow | Limited earlier prototype observation; complete workflow remains unverified |
@@ -96,6 +98,7 @@ Exact tool versions and a reproducible developer setup should accompany the corr
 - [Contributing](CONTRIBUTING.md)
 - [Developer setup versus end-user requirements](docs/DEVELOPMENT_SETUP.md)
 - [Planning website tests and browser checklist](docs/TESTING.md)
+- [v09b3 Phones test with automatic follow-up reads](docs/milestones/2026-11-09-phones-v09b3-follow-up.md)
 - [Native step-selection simulation](docs/milestones/2026-11-08-native-step-simulation.md)
 - [Bounded native Phones-fader write/restore](docs/milestones/2026-11-08-phones-fader-write-restore.md)
 - [Output-gain mapping and tested points](docs/protocol/output-gain-evidence.md)
@@ -131,6 +134,6 @@ A control module needs a documented profile, verified mappings and feedback, ind
 
 This repository is independent of RME and Loopy Pro. No software license has been selected yet, and no rights to third-party material are granted. Resolve licensing and attribution before incorporating or distributing code.
 
-_Last reviewed: 8 November 2026._
+_Last reviewed: 9 November 2026._
 
 

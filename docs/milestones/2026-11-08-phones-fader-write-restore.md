@@ -1,5 +1,7 @@
 # One native Phones fader reduction and restoration
 
+Later checkpoint: [v09b3 on 9 November](2026-11-09-phones-v09b3-follow-up.md) adds automatic follow-up reads and separate confirmation. This historical report still describes v09 TEST only.
+
 Date: **8 November 2026**. Device-test interval: **21:02:26–21:02:41 UTC**. Evidence level: **project-reported, scoped native device/register observation**. This advances the earlier [display-only checkpoint](2026-11-08-native-fader-display.md); it is not a full-range fader release or a live-safety guarantee.
 
 **Later UI-only checkpoint:** [native step-selection simulation](2026-11-08-native-step-simulation.md) added five preset choices and persistence checks without MIDI sending. It does not expand the hardware test below.

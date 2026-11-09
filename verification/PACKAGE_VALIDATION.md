@@ -1,18 +1,18 @@
 # Documentation validation
 
-Date: **2026-11-08**. Scope: the documentation update for offline step preview, native compilation and separate send-free Loopy widget simulation, without expanding the hardware evidence. The existing website implementation and workflow are unchanged.
+Date: **2026-11-09**. Scope: publication of the completed, bounded v09b3 Phones result and synchronization of the public documentation and research registry. Base repository revision: `e193e9c1f9d2de08f393cdf4f0f8dcd3dcec2305`.
 
-## Local publication checks
+## Publication checks
 
-- Relative Markdown file links resolve against the documentation package and the repository tree read at revision `3897fa5a3adf7f50e1b913e685496acebfe920fa`. This checks file targets, not remote page availability or rendered anchors.
-- The two issue forms parse as YAML and retain supported body types, unique field IDs, string labels and required top-level keys. The issue-chooser configuration also parses.
-- The JSON registry retains six distinct hardware-module IDs, no verified hardware profiles and no executable artifacts. Separate research records link to the passive, READ, Phones-step, native-display, bounded native-write and send-free step-simulation reports without promoting a hardware module.
-- Public-content review checks for credentials, private previews, private service/project identifiers, local paths, network details, raw conversations and unrelated personal material. The milestone is a sanitized technical summary, not a raw session log.
-- `SHA256SUMS` covers the documentation and template files, excluding itself. It does not cover the website source or establish hardware behavior.
-- The explanation and associated status text received a separate content review for evidence boundaries and public suitability. Product-behavior statements were checked against official RME and Loopy sources; reported prototype observations remain distinct from independent tests.
+- Relative Markdown file targets resolve within the publication package. This checks file targets, not remote availability or rendered anchors.
+- Issue-template YAML remains unchanged and parses successfully.
+- The JSON registry retains six distinct hardware-module IDs, no verified profiles and no executable artifacts. The new research record identifies v09b3 without promoting a module or borrowing older test counts/hashes.
+- The sanitized report records paired Phones −10.5 → −11.0 → −10.5 dB, the 101/100 ms automatic follow-up queries, separate confirming reads, BEREIT / AKTIV, Main unchanged at −8.0 dB and restoration of the original project/scene.
+- Public-content review excludes credentials, private conversation or thread identifiers, local filesystem/network details and original working projects.
+- `SHA256SUMS` covers documentation and templates, excluding itself and website source. It establishes content integrity, not hardware behavior.
 
 ## Evidence boundaries
 
-No device test, MIDI query, website test suite or browser interaction was run for this documentation update. The device milestone remains a project-reported observation; its original captures and complete version/profile inventory are not distributed here. Earlier website tests are recorded separately with their exact revisions and runs in `docs/TESTING.md`.
+The publication did not access the device, issue a MIDI query or repeat the device test. The result is project-reported. Raw captures, complete native controller source, its checksum and a reproducible version/profile inventory are not included. Two successful automatic follow-up queries after more than 75 seconds of transport runtime do not prove long-duration, reconnect or general live readiness.
 
-Remote file readback is performed after the publication commit and reported separately. Hosted issue-form rendering has not been exercised by this check; local YAML validation is not a rendering test. No executable hardware-control module or validated installable profile is included.
+Website regression/build checks are recorded separately in [the website testing document](../docs/TESTING.md). Remote commit readback and Pages deployment must be checked after publication; this file does not predeclare their success.

@@ -1,6 +1,6 @@
 # Purpose, control paths and current limits
 
-Reviewed: **8 November 2026**. This is an independent community project, not an official RME or Loopy Pro product.
+Reviewed: **9 November 2026**. This is an independent community project, not an official RME or Loopy Pro product.
 
 ## Controls within reach during a performance
 
@@ -79,6 +79,7 @@ The following levels must remain separate. Earlier observations are maintainer-r
 | Later filtered receive/Phones checkpoint | Three native READs passed, followed by one paired Phones-minus raw unit and exact restoration; Main unchanged. No mute or acoustic test. See the [scoped report](milestones/2026-11-08-phones-step-restore.md). |
 | Native Loopy fader display | Actual Main/Phones levels automatically updated visible sliders after a helper-triggered query. UI-only decoder, no gain writes in this checkpoint. No hardware write occurred in this display checkpoint; see [report](milestones/2026-11-08-native-fader-display.md). |
 | Bounded native Phones-fader write | Both channels −10.5 → −11.0 → −10.5 dB with fresh full readback before restore, Main unchanged. One mapped half-dB operation, not full-range or acoustic validation; see [report](milestones/2026-11-08-phones-fader-write-restore.md) and [mapping](protocol/output-gain-evidence.md). |
+| v09b3 Phones checkpoint, 9 November 2026 | After more than 75 seconds of transport runtime, both Phones channels −10.5 → −11.0 → −10.5 dB. Automatic follow-up queries at 101/100 ms and separate confirming reads passed; BEREIT / AKTIV, Main unchanged at −8.0 dB, original project/scene restored. Bounded result only; see [report](milestones/2026-11-09-phones-v09b3-follow-up.md). |
 | Native step-selection simulation | Five 0.5/1/2/3/6-dB choices, both directions, inert startup and reload passed in send-free Loopy widgets. StreamByter preview compilation/offline checks were separate; no native preview runtime, real sender or larger physical steps were tested. See [report](milestones/2026-11-08-native-step-simulation.md). |
 | Offline fader tests | Software checks exercise proposed logic. They do not verify native Loopy widget behavior or actual interface faders. |
 | Public planning website | A software-tested browser-only layout planner and brief exporter. It sends no MIDI, OSC or audio and does not install controls. |
