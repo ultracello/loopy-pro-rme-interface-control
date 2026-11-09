@@ -50,11 +50,17 @@ A different [state-to-UI scene](milestones/2026-11-08-native-fader-display.md) d
 
 Both scenes were saved separately. No portable, fully versioned release is supplied. These results do not establish operation with TotalMix terminated or complete independence from the development setup.
 
+## Sync LIVE1 native faders and activation gates
+
+The [later Sync LIVE1 checkpoint](milestones/2026-11-09-live-faders-startup-gates.md) confirmed correct fader values after three project starts without prior fader contact. Main and Phones native-fader reduction/increase and exact restoration were independently checked, leaving the other group unchanged. Transport stop locked control; missing return input prevented activation. After that input was restored, output values remained unchanged.
+
+The tested copy was saved and original project/scene restored. No Mac mouse/keyboard input was reported. Auxiliary displays, gain-mute lifecycle, physical USB reconnect and duration checks remain open. The temporary missing-return test is not a USB reconnection test; three starts are not a complete recovery matrix. No portable native project or source package is released in this repository.
+
 ## Main/Phones step-button and gain-mute checkpoint
 
 The [later 9 November tests](milestones/2026-11-09-main-phones-steps-gain-mute.md) checked XLR2 independently, five physical step sizes for each stereo output group, and one gain-mute/restore toggle per group. The saved candidate's complete code and 22 button actions, including a separate AU-state resource, were checked. This is not a complete reload/recovery or portability test, and no native artifact is released here.
 
-Gain-mute is a level-based method; native mute bits and button-state feedback are not verified. The candidate still requires READ → ARM and clearing its own gain-mute before lock/transport stop. Pause and connection-change safety, free faders and a complete end-user setup remain unverified. Original project/scene restoration and diagnostic cleanup were completed after the reported tests.
+Gain-mute is a level-based method; native mute bits and button-state feedback are not verified. The candidate still requires READ → ARM and clearing its own gain-mute before lock/transport stop. That checkpoint did not validate pause/connection-change safety, free faders or a complete end-user setup. The later bounded fader and specific gate checks above do not lift the gain-mute restriction. Original project/scene restoration and diagnostic cleanup were completed after the reported tests.
 
 ## v09b3 automatic follow-up-read checkpoint
 

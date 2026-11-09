@@ -20,6 +20,8 @@ The [9 November v09b3 checkpoint](../milestones/2026-11-09-phones-v09b3-follow-u
 
 The [later Main/Phones step-button tests](../milestones/2026-11-09-main-phones-steps-gain-mute.md) add 0.5/1/2/3/6-dB reduction-and-restoration pairs for each stereo group, plus a separate XLR2 check. These are additional mapped device observations, not a full-range sweep or acoustic calibration. The tested gain-mute method changes level and restores a saved value; it does not identify a hardware mute bit or prove acoustic silence.
 
+The [Sync LIVE1 fader checkpoint](../milestones/2026-11-09-live-faders-startup-gates.md) adds bounded native Main/Phones reductions and increases with independently checked exact restoration and the other group unchanged. Three starts showed correct current values without prior fader contact. A gesture's pixel distance is not an exact dB-step guarantee; use observed state when describing these results. No full-range sweep or acoustic calibration is established.
+
 ## Receive-field and validity boundaries
 
 Each 32-bit word is packed into five 7-bit bytes. After the six-byte header, word 1 bits 0–7 and 9–16 contain the mapped Main left/right fields; word 2 bits 14–21 and 23–30 contain Phones left/right. The current return filter accepts only complete valid **227-byte state frames**. RMS/peak messages, short states and malformed payloads do not refresh gain readiness.

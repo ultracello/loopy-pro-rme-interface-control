@@ -22,9 +22,13 @@ The [public planning website](https://ultracello.github.io/loopy-pro-rme-interfa
 
 ## Latest development milestones
 
+The [Sync LIVE1 fader checkpoint](docs/milestones/2026-11-09-live-faders-startup-gates.md) confirmed correct current values after **three project starts without touching a fader first**. Main and Phones were each reduced and increased with the native fader, independently checked and restored exactly; the other output group stayed unchanged. **Transport stop locked the controls; a missing return path prevented activation.** The tested copy was saved and the original project/scene restored.
+
+These are bounded fader and activation-gate results. Auxiliary displays, gain-mute lifecycle, physical USB reconnect and duration checks remain open. No full-range or complete live approval is claimed.
+
 The [latest Main/Phones checkpoint](docs/milestones/2026-11-09-main-phones-steps-gain-mute.md) tested **0.5 / 1 / 2 / 3 / 6 dB reduction-and-restoration pairs on both stereo output groups**. Phones tests left Main unchanged; stereo Main tests left Phones unchanged. XLR2 was verified separately first. A **gain-mute/restore toggle per group** recovered its saved level, and the following 0.5-dB checks passed. The saved combined candidate's code and 22 button actions were checked; original project and scene were restored.
 
-Gain-mute uses level reduction, **not a verified hardware mute bit**. Confirmed button indicators, free faders and pause/connection-change safety remain open. This is scoped device evidence, not a full live release or a public installable package.
+Gain-mute uses level reduction, **not a verified hardware mute bit**. The later fader checkpoint advances native-fader and activation-gate evidence; auxiliary feedback, gain-mute lifecycle and USB reconnect/duration behavior remain open. This is scoped device evidence, not a full live release or a public installable package.
 
 The [9 November v09b3 checkpoint](docs/milestones/2026-11-09-phones-v09b3-follow-up.md) passed one paired Phones reduction and exact restoration, **−10.5 → −11.0 → −10.5 dB**, after more than 75 seconds of transport runtime. Automatic follow-up queries after **101/100 ms** received successful replies; separate device queries confirmed both operations. StreamByter showed BEREIT / AKTIV, Main stayed at −8.0 dB, and the original project and scene were restored. This is a bounded result, not a general live release or long-duration validation.
 
@@ -34,7 +38,7 @@ A later [native step-selection simulation](docs/milestones/2026-11-08-native-ste
 
 The preceding [filtered receive/step test](docs/milestones/2026-11-08-phones-step-restore.md) and [automatic native fader display](docs/milestones/2026-11-08-native-fader-display.md) remain separate checkpoints. See the [mapping evidence](docs/protocol/output-gain-evidence.md) for the raw-unit/dB distinction.
 
-The earlier checkpoints remain scoped to their own revisions. The newer Main/Phones tests advance physical step-button and gain-mute evidence without proving free/full-range faders, confirmed button feedback, suspend/reconnect/duration behavior, TotalMix independence or a complete installable profile.
+The checkpoints remain scoped to their own revisions. Bounded native faders, physical step buttons and gain-mute/restore now have separate device observations. Full-range behavior, auxiliary feedback, mute lifecycle, USB reconnect/duration behavior, TotalMix independence and a complete installable profile remain unverified.
 
 The [earlier READ report](docs/milestones/2026-11-08-loopy-read-ready-locked.md) and [passive report](docs/milestones/2026-11-08-passive-ipad-reception.md) remain dated historical evidence, with forward links to later tests.
 
@@ -56,7 +60,7 @@ The initial research focus is RME Babyface Pro / Babyface Pro FS workflows with 
 | Area | Status |
 |---|---|
 | Headphone/main-output step controls | Five physical reduction/restore sizes tested for paired Phones and stereo Main, with the other group unchanged; arbitrary sequences, lifecycle safety and a released profile remain unverified |
-| Continuous faders | Native display plus bounded Phones write/restore checkpoints observed; full range, Main and lifecycle safety remain unverified |
+| Continuous faders | Three startup checks and bounded native Main/Phones writes with exact restoration passed; full range and complete lifecycle safety remain unverified |
 | Independent mute/unmute | Gain-mute/restore tested per output group; native hardware mute bits, confirmed indicators and lifecycle safety remain unverified |
 | Input gain, pan and additional mixer functions | Further research |
 | iPhone workflow | Limited earlier prototype observation; complete workflow remains unverified |
@@ -102,6 +106,7 @@ Exact tool versions and a reproducible developer setup should accompany the corr
 - [Contributing](CONTRIBUTING.md)
 - [Developer setup versus end-user requirements](docs/DEVELOPMENT_SETUP.md)
 - [Planning website tests and browser checklist](docs/TESTING.md)
+- [Native fader startup, writes and activation gates](docs/milestones/2026-11-09-live-faders-startup-gates.md)
 - [Main/Phones step sizes and gain-mute restoration](docs/milestones/2026-11-09-main-phones-steps-gain-mute.md)
 - [v09b3 Phones test with automatic follow-up reads](docs/milestones/2026-11-09-phones-v09b3-follow-up.md)
 - [Native step-selection simulation](docs/milestones/2026-11-08-native-step-simulation.md)

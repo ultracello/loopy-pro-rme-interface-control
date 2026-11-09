@@ -252,6 +252,38 @@
       "promotesHardwareModule": false,
       "reproducibleProfileIncluded": false,
       "rawCaptureIncluded": false
+    },
+    {
+      "id": "sync-live1-faders-startup-gates-2026-11-09",
+      "report": "docs/milestones/2026-11-09-live-faders-startup-gates.md",
+      "evidenceLevel": "project-reported-scoped-device-observation",
+      "candidate": "Sync LIVE1",
+      "scope": "Three correct untouched-fader startups, bounded Main/Phones fader reduction/increase with exact restoration, transport-stop lock and missing-return activation block.",
+      "correctStartupChecks": 3,
+      "initialFaderTouchRequired": false,
+      "boundedNativeFadersTested": [
+        "main",
+        "phones"
+      ],
+      "independentExactRestoreConfirmed": true,
+      "otherGroupUnchangedDuringFaderTests": true,
+      "transportStopLocksControlsObserved": true,
+      "missingReturnPreventsActivationObserved": true,
+      "missingReturnCheckedInWriteCandidate": true,
+      "returnRestorationLeftLevelsUnchanged": true,
+      "testedCopySaved": true,
+      "originalProjectAndSceneRestored": true,
+      "diagnosticProcessesEnded": true,
+      "auxiliaryDisplaysVerified": false,
+      "gainMuteLifecycleVerified": false,
+      "physicalUsbReconnectVerified": false,
+      "longDurationVerified": false,
+      "fullRangeFadersVerified": false,
+      "completeRecoveryMatrixVerified": false,
+      "generalLiveReadinessVerified": false,
+      "promotesHardwareModule": false,
+      "reproducibleProfileIncluded": false,
+      "rawCaptureIncluded": false
     }
   ]
 }

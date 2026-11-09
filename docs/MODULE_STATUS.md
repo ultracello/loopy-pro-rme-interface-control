@@ -52,7 +52,13 @@ The [9 November v09b3 test](milestones/2026-11-09-phones-v09b3-follow-up.md) add
 
 The [later 9 November checkpoint](milestones/2026-11-09-main-phones-steps-gain-mute.md) advances paired Phones and stereo Main step-button evidence: 0.5 / 1 / 2 / 3 / 6 dB reductions with exact restoration, each leaving the other group unchanged. XLR2 was checked separately. One gain-mute/restore toggle per group and the following 0.5-dB checks passed. Complete code and 22 button actions were verified in the saved candidate. Original project/scene restoration and diagnostic cleanup were reported complete.
 
-Gain-mute is level reduction with a saved restore value, not a verified hardware mute bit. Button feedback, free faders and pause/reconnection safety remain open. The table describes **publicly shipped modules/profiles** and therefore remains unverified: no native artifact or reproducible public profile is released here. Older checkpoints above describe their historical limits, not the latest overall test coverage.
+Gain-mute is level reduction with a saved restore value, not a verified hardware mute bit. That checkpoint did not test confirmed button feedback, free faders or pause/reconnection safety. The later fader/gate result is listed below. The table describes **publicly shipped modules/profiles** and therefore remains unverified: no native artifact or reproducible public profile is released here. Older checkpoints above describe their historical limits, not the latest overall test coverage.
+
+### Sync LIVE1 native faders and activation gates
+
+The [later Sync LIVE1 result](milestones/2026-11-09-live-faders-startup-gates.md) confirmed correct current values after three project starts without first touching the faders. Main and Phones were each reduced/increased by native fader and independently restored exactly, with the other group unchanged. Transport stop locked control; a missing return path prevented activation, including in the write-enabled candidate. Restoring the return input left output values unchanged. The tested copy was saved and originals restored.
+
+This advances bounded native-fader and specific gate evidence, not full-range or complete lifecycle validation. Auxiliary displays, gain-mute lifecycle, physical USB reconnect and duration checks remain open. Public hardware-module/profile status remains unchanged because no reproducible native package is released here.
 
 ## Promotion rule
 

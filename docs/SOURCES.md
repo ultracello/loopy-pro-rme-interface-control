@@ -1,6 +1,6 @@
 # Sources and evidence boundaries
 
-Reviewed 2026-11-08. These references support narrow documentation claims, not an end-to-end Loopy integration or a verified device profile.
+Reviewed 2026-11-09. These references support narrow documentation claims, not an end-to-end Loopy integration or a verified device profile.
 
 - [RME TotalMix FX](https://rme-audio.de/totalmix-fx.html): documents remote-control options and distinguishes TotalMix Remote, which controls a host system.
 - [TotalMix FX for iPad, RME's App Store listing](https://apps.apple.com/us/app/totalmix-fx-for-ipad/id739965887): distinguishes the connected-hardware iPad app from TotalMix Remote and excludes MIDI/OSC and TCP/IP remote control. It does not establish an independent standalone path for a specific interface.
@@ -11,6 +11,10 @@ Reviewed 2026-11-08. These references support narrow documentation claims, not a
 - [GitHub issue-form syntax](https://docs.github.com/en/communities/using-templates-to-encourage-useful-issues-and-pull-requests/syntax-for-issue-forms): basis for the included YAML forms. Local parsing is separate from hosted rendering validation.
 
 ## Project evidence
+
+- [Sync LIVE1 fader startup and activation gates, 9 November 2026](milestones/2026-11-09-live-faders-startup-gates.md): three correct untouched-fader starts, bounded Main/Phones writes with independent exact restoration, transport-stop lock and missing-return activation block. Auxiliary feedback, gain-mute lifecycle, physical USB reconnect/duration and full live approval remain open.
+- [Main/Phones step buttons and gain-mute, 9 November 2026](milestones/2026-11-09-main-phones-steps-gain-mute.md): five physical reduction/restore sizes per stereo group, separate XLR2 confirmation and level-based gain-mute restoration. Native hardware mute bits and complete lifecycle behavior are not established.
+- [v09b3 automatic follow-up-read checkpoint, 9 November 2026](milestones/2026-11-09-phones-v09b3-follow-up.md): one paired Phones half-dB reduction/restore after more than 75 seconds of transport runtime, automatic follow-up queries at 101/100 ms and separate confirmation. Not a long-duration or general live-validation result.
 
 - [Native step-selection simulation](milestones/2026-11-08-native-step-simulation.md): separate reported offline preview, native compilation and Loopy-only widget checks. No native StreamByter preview-runtime, sender integration or larger hardware-step pass follows.
 - [Bounded native Phones-fader write/restore](milestones/2026-11-08-phones-fader-write-restore.md): one later native gesture/readback/restore sequence with Main unchanged, exact candidate hashes and reported offline counts. Full-range and live/reconnect readiness remain open.

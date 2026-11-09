@@ -2,6 +2,14 @@
 
 Dates use Europe/Berlin. This records the documentation repository separately from any future application or hardware-module release.
 
+## 2026-11-09 · Sync LIVE1 faders and website 0.2.6
+
+- **Added:** [Sync LIVE1 result](docs/milestones/2026-11-09-live-faders-startup-gates.md): correct current values on three project starts without initial fader contact; bounded Main/Phones fader reductions/increases and independently verified exact restoration with the other group unchanged.
+- **Gate evidence:** transport stop locked controls; missing return input prevented activation, including in the write-enabled candidate. Restored return input left output values unchanged. This is not a physical USB reconnect test.
+- **Preserved:** tested copy saved, original project/scene restored and diagnostic processes ended. No native source projects, private paths or raw captures are published.
+- **Still open:** auxiliary feedback, gain-mute lifecycle, USB reconnect, duration and complete recovery/full-range validation. No general live approval or public hardware-module promotion.
+- **Checks:** 31 local regression tests and TypeScript/production build passed. Exact-commit CI, remote readback and hosted-page verification follow publication.
+
 ## 2026-11-09 · Main/Phones device tests and website 0.2.5
 
 - **Added:** [physical Main/Phones step and gain-mute report](docs/milestones/2026-11-09-main-phones-steps-gain-mute.md). Each stereo group passed 0.5/1/2/3/6-dB reductions with exact restoration and the other group unchanged; XLR2 was checked separately.
