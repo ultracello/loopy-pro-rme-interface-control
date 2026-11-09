@@ -1,7 +1,7 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {EVIDENCE, REPORTS, PUBLIC_REPOSITORY, LAB_STATUS, LATEST_MILESTONE, STEP_SIMULATION, V09B3_CHECKPOINT, MAIN_PHONES_CHECKPOINT, LIVE_FADERS_CHECKPOINT, READ_PATH_CHECKPOINT} from '../src/lib/evidence.ts';
+import {EVIDENCE, REPORTS, PUBLIC_REPOSITORY, LAB_STATUS, LATEST_MILESTONE, STEP_SIMULATION, V09B3_CHECKPOINT, MAIN_PHONES_CHECKPOINT, LIVE_FADERS_CHECKPOINT, READ_PATH_CHECKPOINT, INTEGRATION_CHECKPOINT} from '../src/lib/evidence.ts';
 import {DEFAULT_CONFIG, PROJECT_NAME, INDEPENDENCE_NOTICE, PLAN_FILENAME, PLANNING_STEP_SIZES, VERSION, FEATURES, normalizeConfig, adjustLevel, buildPlan, buildGuide} from '../src/lib/config.ts';
 test('defaults select the headphone controls only',()=>assert.deepEqual(DEFAULT_CONFIG.selected,['phones-fader','phones-steps','phones-mute']));
 test('all 64 selections generate only selected controls and never executable code',()=>{for(let mask=0;mask<64;mask++){const selected=FEATURES.filter((_,i)=>mask&(1<<i)).map(f=>f.id);const p=buildPlan({...DEFAULT_CONFIG,selected});assert.equal(p.selectedControls.length,selected.length);assert.equal(p.executable,false);assert.equal(p.hardwareTested,false);assert.deepEqual(p.selectedControls.map(c=>c.id),selected);}});
@@ -11,7 +11,7 @@ test('unsupported iPad app path is explicit in all artifacts',()=>{const c={...D
 test('guide preserves supplied model and versions but warns about no executable code',()=>{const guide=buildGuide({...DEFAULT_CONFIG,model:'Example model',loopyVersion:'Example version'});assert.match(guide,/Example model/);assert.match(guide,/Example version/);assert.match(guide,/No executable control code/)});
 test('step data is only present on step controls',()=>{const p=buildPlan({...DEFAULT_CONFIG,selected:FEATURES.map(f=>f.id),step:3});assert.equal(p.selectedControls.filter(f=>'requestedStepDb' in f).length,2)});
 
-test('exports carry pinned public evidence and remain nonexecutable',()=>{const p=buildPlan(DEFAULT_CONFIG);assert.equal(p.publicationStatus,'public-planning-release');assert.match(p.projectRepository.url,/github.com\/ultracello\/loopy-pro-rme-interface-control$/);assert.match(p.projectRepository.reviewedCommit,/^[0-9a-f]{40}$/);assert.equal(p.evidence.length,13);assert.equal(p.executable,false);assert.ok(buildGuide(DEFAULT_CONFIG).includes(`Planning release ${VERSION}`))});
+test('exports carry pinned public evidence and remain nonexecutable',()=>{const p=buildPlan(DEFAULT_CONFIG);assert.equal(p.publicationStatus,'public-planning-release');assert.match(p.projectRepository.url,/github.com\/ultracello\/loopy-pro-rme-interface-control$/);assert.match(p.projectRepository.reviewedCommit,/^[0-9a-f]{40}$/);assert.equal(p.evidence.length,15);assert.equal(p.executable,false);assert.ok(buildGuide(DEFAULT_CONFIG).includes(`Planning release ${VERSION}`))});
 test('validation requires reading current state and separate outputs',()=>{const text=buildPlan(DEFAULT_CONFIG).requiredValidation.join(' ');assert.match(text,/current hardware state/);assert.match(text,/headphones and main output independently/);assert.match(text,/restart, reconnect/)});
 
 test('historical evidence stays separate from current scoped checkpoints',()=>{const p=buildPlan(DEFAULT_CONFIG);assert.equal(p.labEvidence.releaseReady,false);const v06=LAB_STATUS.entries.find(e=>e.id==='earlier-v06')!;const v08=LAB_STATUS.entries.find(e=>e.id==='earlier-v08')!;assert.match(v06.result,/output 1 only/);assert.match(v06.boundary,/native TotalMix mute/);assert.match(v08.level,/Historical offline/);assert.match(buildGuide(DEFAULT_CONFIG),/34,304/);assert.equal(p.hardwareTested,false)});
@@ -107,7 +107,7 @@ test('native simulated startup and reload do not imply physical changes or devic
  assert.equal(STEP_SIMULATION.newHardwareTest,false);
  assert.equal(STEP_SIMULATION.largerPhysicalStepsTested,false);
  assert.match(STEP_SIMULATION.boundary,/simulation reference, not a device factory default/);
- assert.equal(LATEST_MILESTONE.id,'read-paths-reply-loss');
+ assert.equal(LATEST_MILESTONE.id,'integrated-interface');
  assert.notEqual(LATEST_MILESTONE.id,STEP_SIMULATION.id);
 });
 test('five browser planning choices remain bounded and six-dB requests round-trip',()=>{
@@ -180,7 +180,7 @@ test('gain-mute is distinct from native mute bits, silence and confirmed indicat
  assert.equal(MAIN_PHONES_CHECKPOINT.nativeHardwareMuteBitsVerified,false);
  assert.equal(MAIN_PHONES_CHECKPOINT.buttonIndicatorsVerified,false);
  assert.match(MAIN_PHONES_CHECKPOINT.boundary,/not a verified hardware mute bit or acoustic silence/);
- assert.match(MAIN_PHONES_CHECKPOINT.boundary,/clear its own gain-mute before lock\/transport stop/);
+ assert.match(MAIN_PHONES_CHECKPOINT.boundary,/Current Restricted gain-mute and old restore are blocked/);
 });
 test('saved button contents do not imply full reload or lifecycle validation',()=>{
  assert.equal(MAIN_PHONES_CHECKPOINT.savedButtonActionCount,22);
@@ -215,7 +215,7 @@ test('specific stop and return-input gates do not become a USB recovery claim',(
 });
 test('fader milestone retains auxiliary feedback, mute lifecycle and duration limits',()=>{
  for(const key of ['auxiliaryDisplaysVerified','gainMuteLifecycleVerified','longDurationVerified','generalLiveReadinessVerified'] as const)assert.equal(LIVE_FADERS_CHECKPOINT[key],false);
- assert.match(LIVE_FADERS_CHECKPOINT.boundary,/clear its own gain-mute before lock\/transport stop/);
+ assert.match(LIVE_FADERS_CHECKPOINT.boundary,/Current Restricted gain-mute and old restore are blocked/);
  assert.equal(LIVE_FADERS_CHECKPOINT.testedCopySaved,true);
  assert.equal(LIVE_FADERS_CHECKPOINT.originalProjectAndSceneRestored,true);
  assert.equal(LAB_STATUS.releaseReady,false);
@@ -229,7 +229,7 @@ test('current fader evidence is exported without native artifacts or release pro
 });
 
 test('latest read gate evidence cannot become USB or mute-restore approval',()=>{
- assert.equal(LATEST_MILESTONE,READ_PATH_CHECKPOINT);
+ assert.equal(LATEST_MILESTONE,INTEGRATION_CHECKPOINT);
  assert.equal(READ_PATH_CHECKPOINT.bothReadPathsCompleteObserved,true);
  assert.equal(READ_PATH_CHECKPOINT.gateCopyGainEnabled,false);
  for(const key of ['prefixFailureCauseResolved','physicalUsbReconnectVerified','safeMuteRestoreVerified','fullProposedF01F12RegressionVerified','generalLiveReadinessVerified'] as const)assert.equal(READ_PATH_CHECKPOINT[key],false);

@@ -1,14 +1,16 @@
 export const PUBLIC_REPOSITORY = {
   url: 'https://github.com/ultracello/loopy-pro-rme-interface-control',
   branch: 'main',
-  reviewedCommit: '3d38aa134935b2504028d2841e95660a60112b8f',
+  reviewedCommit: '2e51b437a18906f60b558b9b54370580bf44e4d5',
   reviewedDate: '2026-11-09',
-  reviewedFile: 'README.md, module status, bounded read-path/reply-loss report and earlier scoped milestones',
+  reviewedFile: 'README.md, module status, Restricted control / Interface integration report and earlier scoped milestones',
   visibility: 'public',
-  status: 'Both prepared read paths returned complete replies in one bounded comparison. A gain-disabled copy blocked activation without return input and required a fresh read plus explicit reactivation. Sporadic USB/hub failure, prefix-loss cause and safe mute restore remain open. Earlier fader and step checks retain their own scope. No finished product or released installable controller is included.',
+  status: 'Restricted Main/Phones gain tests and separate same-project Interface READ/feedback/return checks are confirmed within their stated bounds. Gain-mute and old restore are blocked. Silent USB failures and crash-safe restoration remain open; originals were restored. No installable integration or full live approval.',
 } as const;
 const pinned = (path: string) => `${PUBLIC_REPOSITORY.url}/blob/${PUBLIC_REPOSITORY.reviewedCommit}/${path}`;
 export const REPORTS = {
+  restricted: pinned('docs/milestones/2026-11-09-restricted-control-interface-integration.md#separate-control-copy'),
+  integration: pinned('docs/milestones/2026-11-09-restricted-control-interface-integration.md#same-project-integration'),
   readPaths: pinned('docs/milestones/2026-11-09-read-paths-reply-loss-lock.md'),
   liveFaders: pinned('docs/milestones/2026-11-09-live-faders-startup-gates.md'),
   mainPhones: pinned('docs/milestones/2026-11-09-main-phones-steps-gain-mute.md'),
@@ -21,6 +23,8 @@ export const REPORTS = {
   overview: pinned('docs/PROJECT_OVERVIEW.md'),
 } as const;
 export const EVIDENCE = [
+  {id:'restricted-main-phones', title:'Restricted Main/Phones copy', type:'Project-reported bounded device test', url:REPORTS.restricted, finding:'Both groups passed paired half-dB down/up steps and small fader movements with exact restoration and the other group unchanged. Gain-mute/old restore are blocked.'},
+  {id:'integrated-interface', title:'Same-project Interface copy', type:'Project-reported bounded native integration check', url:REPORTS.integration, finding:'Full READ and matching fader feedback, plus return to the music page with transport continuing. No new gain writes in this integration check. Original project and previous scene restored. Silent USB/crash-safe recovery remain open.'},
   {id:'rme-ipad-app', title:'RME TotalMix FX for iPad', type:'Official product description', url:'https://apps.apple.com/us/app/totalmix-fx-for-ipad/id739965887', finding:'The app excludes MIDI/OSC and TCP/IP remote control. This does not establish whether a separate direct hardware-control path exists.'},
   {id:'rme-midi', title:'RME MIDI remote reference', type:'Official protocol documentation', url:'https://docs.rme-audio.com/aoxm/850-1c_midi_remote_tmfx/', finding:'Desktop TotalMix MIDI remote mappings are documented. Device, operating mode, destination and feedback still need validation.'},
   {id:'loopy-manual', title:'Loopy Pro manual', type:'Official application documentation', url:'https://loopypro.com/manual/', finding:'Loopy provides MIDI actions and custom controls. The receiving hardware path must be established separately.'},
@@ -81,7 +85,7 @@ export const MAIN_PHONES_CHECKPOINT = {
   connectionChangeSafetyVerified:false, savedButtonActionCount:22, fullReloadRecoveryVerified:false,
   originalProjectAndSceneRestored:true, generalLiveReadinessVerified:false,
   result:'Paired Phones and stereo Main each passed 0.5 / 1 / 2 / 3 / 6 dB reductions followed by exact restoration; the other output group stayed unchanged. XLR2 was verified separately. One gain-mute/restore toggle per group and the following 0.5-dB checks passed. Complete code and 22 button actions were checked in the saved candidate. Original project and previous MidiFire scene were restored; diagnostics ended.',
-  boundary:'Gain-mute is level reduction with a saved restore value, not a verified hardware mute bit or acoustic silence. At that checkpoint, button indicators, free faders, transport-stop and connection-change safety were unverified. Saved contents do not prove complete reload recovery. Current candidate: READ → ARM; clear its own gain-mute before lock/transport stop. No general live approval or public installable profile.',
+  boundary:'Gain-mute is level reduction with a saved restore value, not a verified hardware mute bit or acoustic silence. At that checkpoint, button indicators, free faders, transport-stop and connection-change safety were unverified. Saved contents do not prove complete reload recovery. That historical candidate required its own gain-mute to be cleared before lock/stop. Current Restricted gain-mute and old restore are blocked. No general live approval or public installable profile.',
   sourceUrl:REPORTS.mainPhones,
 } as const;
 export const LIVE_FADERS_CHECKPOINT = {
@@ -95,7 +99,7 @@ export const LIVE_FADERS_CHECKPOINT = {
   gainMuteLifecycleVerified:false, physicalUsbReconnectVerified:false, longDurationVerified:false,
   fullRangeFadersVerified:false, completeRecoveryMatrixVerified:false, generalLiveReadinessVerified:false,
   result:'Three project starts showed correct current device values without touching a fader first. Main and Phones were each reduced and increased by native fader, independently checked and restored exactly; the other output group stayed unchanged. Transport stop locked controls. Missing return input blocked activation, including in the write-enabled candidate; restoring that input left levels unchanged. The tested copy was saved, original project/scene restored and diagnostics ended.',
-  boundary:'Bounded gestures and three starts, not a full-range pass or complete recovery matrix. Missing-return blocking is not physical USB reconnect validation. Auxiliary displays, gain-mute lifecycle and USB reconnect/duration remain open. Gain-mute is not a verified hardware mute bit; clear its own gain-mute before lock/transport stop. No full live approval or public installable profile.',
+  boundary:'Bounded gestures and three starts, not a full-range pass or complete recovery matrix. Missing-return blocking is not physical USB reconnect validation. Auxiliary displays, gain-mute lifecycle and USB reconnect/duration remain open. That historical gain-mute was not a verified hardware mute bit. Current Restricted gain-mute and old restore are blocked. No full live approval or public installable profile.',
   sourceUrl:REPORTS.liveFaders,
 } as const;
 export const READ_PATH_CHECKPOINT = {
@@ -110,11 +114,36 @@ export const READ_PATH_CHECKPOINT = {
   boundary:'One comparison per path, not a reliability or causal-acknowledgement guarantee. Sporadic USB/hub failure, historical prefix-loss cause and safe mute restore remain open. No physical USB test, complete F-01–F-12 regression or full live approval. The planner remains browser-only; no installable controller is released.',
   sourceUrl:REPORTS.readPaths,
 } as const;
+export const RESTRICTED_CHECKPOINT = {
+  id:'restricted-main-phones', revision:'Restricted LIVE1 · 9 Nov', level:'Separate bounded native gain-control copy',
+  title:'Restricted Main and Phones. Both directions. Exact return.',
+  ruleSha256:'6d1149cc2e798d3de28426d658b28945af1f671cf8d67493c2ea86635b4639b7',
+  halfDbDownUpBothGroups:true, boundedFadersDownUpBothGroups:true,
+  otherGroupUnchanged:true, exactCurrentSessionRestore:true,
+  gainMuteEnabled:false, oldSavedRestoreEnabled:false, generalLiveReadinessVerified:false,
+  result:'The separate Main/Phones copy passed −0.5/+0.5-dB steps and small native fader movements on the Babyface. Each group was independently read back and restored exactly; the other group stayed unchanged. Original project and previous MidiFire scene were restored.',
+  boundary:'Bounded mapped device/display values, not a new acoustic calibration or full-range test. Gain-mute and old saved-level restore are blocked. Silent USB loss and crash-safe restoration remain open. No installable profile or general live approval.',
+  sourceUrl:REPORTS.restricted,
+} as const;
+export const INTEGRATION_CHECKPOINT = {
+  id:'integrated-interface', revision:'Interface integration · 9 Nov', level:'Separate same-project native READ / feedback / navigation check',
+  title:'Interface page. Complete readback. Return to music.',
+  sameRuleSha256:RESTRICTED_CHECKPOINT.ruleSha256,
+  fullReadAndFaderFeedback:true, sameProjectReturnWithTransportContinuing:true,
+  newGainActions:0, actualLoopAcousticContinuityProven:false,
+  gainMuteEnabled:false, oldSavedRestoreEnabled:false,
+  originalProjectAndPreviousSceneRestored:true, generalLiveReadinessVerified:false,
+  result:'A separate project copy passed the Interface page, full READ and matching Main/Phones fader feedback. Return to the music page kept the running transport going. The successful READ required running transport in this copy. Original project and previous MidiFire scene were restored.',
+  boundary:'No new gain writes in this integration check: the separate copy’s gain tests are distinct evidence. Running transport does not prove acoustic continuity of a playing loop. Gain-mute/old restore remain blocked; silent USB loss and crash-safe restoration remain open. No finished integration for other users or full live approval.',
+  sourceUrl:REPORTS.integration,
+} as const;
 export const LAB_STATUS = {
   reviewedDate: '2026-11-09',
   evidenceType: 'Project-reported scoped experiments, linked to dated public reports. Raw captures and installable controller artifacts are not bundled with this planner.',
   releaseReady: false,
   entries: [
+    INTEGRATION_CHECKPOINT,
+    RESTRICTED_CHECKPOINT,
     READ_PATH_CHECKPOINT,
     LIVE_FADERS_CHECKPOINT,
     MAIN_PHONES_CHECKPOINT,
