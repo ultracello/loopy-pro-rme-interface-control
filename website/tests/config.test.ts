@@ -1,7 +1,7 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {EVIDENCE, REPORTS, PUBLIC_REPOSITORY, LAB_STATUS, LATEST_MILESTONE, STEP_SIMULATION, V09B3_CHECKPOINT, MAIN_PHONES_CHECKPOINT} from '../src/lib/evidence.ts';
+import {EVIDENCE, REPORTS, PUBLIC_REPOSITORY, LAB_STATUS, LATEST_MILESTONE, STEP_SIMULATION, V09B3_CHECKPOINT, MAIN_PHONES_CHECKPOINT, LIVE_FADERS_CHECKPOINT} from '../src/lib/evidence.ts';
 import {DEFAULT_CONFIG, PROJECT_NAME, INDEPENDENCE_NOTICE, PLAN_FILENAME, PLANNING_STEP_SIZES, VERSION, FEATURES, normalizeConfig, adjustLevel, buildPlan, buildGuide} from '../src/lib/config.ts';
 test('defaults select the headphone controls only',()=>assert.deepEqual(DEFAULT_CONFIG.selected,['phones-fader','phones-steps','phones-mute']));
 test('all 64 selections generate only selected controls and never executable code',()=>{for(let mask=0;mask<64;mask++){const selected=FEATURES.filter((_,i)=>mask&(1<<i)).map(f=>f.id);const p=buildPlan({...DEFAULT_CONFIG,selected});assert.equal(p.selectedControls.length,selected.length);assert.equal(p.executable,false);assert.equal(p.hardwareTested,false);assert.deepEqual(p.selectedControls.map(c=>c.id),selected);}});
@@ -11,7 +11,7 @@ test('unsupported iPad app path is explicit in all artifacts',()=>{const c={...D
 test('guide preserves supplied model and versions but warns about no executable code',()=>{const guide=buildGuide({...DEFAULT_CONFIG,model:'Example model',loopyVersion:'Example version'});assert.match(guide,/Example model/);assert.match(guide,/Example version/);assert.match(guide,/No executable control code/)});
 test('step data is only present on step controls',()=>{const p=buildPlan({...DEFAULT_CONFIG,selected:FEATURES.map(f=>f.id),step:3});assert.equal(p.selectedControls.filter(f=>'requestedStepDb' in f).length,2)});
 
-test('exports carry pinned public evidence and remain nonexecutable',()=>{const p=buildPlan(DEFAULT_CONFIG);assert.equal(p.publicationStatus,'public-planning-release');assert.match(p.projectRepository.url,/github.com\/ultracello\/loopy-pro-rme-interface-control$/);assert.match(p.projectRepository.reviewedCommit,/^[0-9a-f]{40}$/);assert.equal(p.evidence.length,11);assert.equal(p.executable,false);assert.ok(buildGuide(DEFAULT_CONFIG).includes(`Planning release ${VERSION}`))});
+test('exports carry pinned public evidence and remain nonexecutable',()=>{const p=buildPlan(DEFAULT_CONFIG);assert.equal(p.publicationStatus,'public-planning-release');assert.match(p.projectRepository.url,/github.com\/ultracello\/loopy-pro-rme-interface-control$/);assert.match(p.projectRepository.reviewedCommit,/^[0-9a-f]{40}$/);assert.equal(p.evidence.length,12);assert.equal(p.executable,false);assert.ok(buildGuide(DEFAULT_CONFIG).includes(`Planning release ${VERSION}`))});
 test('validation requires reading current state and separate outputs',()=>{const text=buildPlan(DEFAULT_CONFIG).requiredValidation.join(' ');assert.match(text,/current hardware state/);assert.match(text,/headphones and main output independently/);assert.match(text,/restart, reconnect/)});
 
 test('historical evidence stays separate from current scoped checkpoints',()=>{const p=buildPlan(DEFAULT_CONFIG);assert.equal(p.labEvidence.releaseReady,false);const v06=LAB_STATUS.entries.find(e=>e.id==='earlier-v06')!;const v08=LAB_STATUS.entries.find(e=>e.id==='earlier-v08')!;assert.match(v06.result,/output 1 only/);assert.match(v06.boundary,/native TotalMix mute/);assert.match(v08.level,/Historical offline/);assert.match(buildGuide(DEFAULT_CONFIG),/34,304/);assert.equal(p.hardwareTested,false)});
@@ -66,7 +66,7 @@ test('display query origin and fixed-button test remain distinct',()=>{
 test('all current milestone links are pinned and exported in both formats',()=>{
  assert.match(PUBLIC_REPOSITORY.reviewedCommit,/^[0-9a-f]{40}$/);
  const json=JSON.stringify(buildPlan(DEFAULT_CONFIG));const guide=buildGuide(DEFAULT_CONFIG);
- for(const url of [REPORTS.mainPhones,REPORTS.v09b3,REPORTS.faderWrite,REPORTS.display,REPORTS.step,REPORTS.mapping,REPORTS.stepSimulation]){
+ for(const url of [REPORTS.liveFaders,REPORTS.mainPhones,REPORTS.v09b3,REPORTS.faderWrite,REPORTS.display,REPORTS.step,REPORTS.mapping,REPORTS.stepSimulation]){
   assert.ok(url.includes(`/blob/${PUBLIC_REPOSITORY.reviewedCommit}/docs/`));
   assert.ok(json.includes(url));assert.ok(guide.includes(url));
  }
@@ -107,7 +107,7 @@ test('native simulated startup and reload do not imply physical changes or devic
  assert.equal(STEP_SIMULATION.newHardwareTest,false);
  assert.equal(STEP_SIMULATION.largerPhysicalStepsTested,false);
  assert.match(STEP_SIMULATION.boundary,/simulation reference, not a device factory default/);
- assert.equal(LATEST_MILESTONE.id,'main-phones-steps-gain-mute');
+ assert.equal(LATEST_MILESTONE.id,'sync-live1-faders');
  assert.notEqual(LATEST_MILESTONE.id,STEP_SIMULATION.id);
 });
 test('five browser planning choices remain bounded and six-dB requests round-trip',()=>{
@@ -161,7 +161,7 @@ test('v09b3 evidence reaches exports without unlocking a hardware release',()=>{
  }
 });
 test('current and historical website release dates stay distinct',()=>{
- assert.equal(VERSION,'0.2.5');
+ assert.equal(VERSION,'0.2.6');
  const app=readFileSync(new URL('../src/App.tsx',import.meta.url),'utf8');
  assert.ok(app.includes('PLANNING RELEASE · 0.2.3'));
  assert.ok(app.includes('2026-11-08: added the send-free'));
@@ -169,7 +169,7 @@ test('current and historical website release dates stay distinct',()=>{
 });
 
 test('Main and Phones physical evidence covers only the reported reduction/restore pattern',()=>{
- assert.equal(LATEST_MILESTONE,MAIN_PHONES_CHECKPOINT);
+ assert.ok(LAB_STATUS.entries.includes(MAIN_PHONES_CHECKPOINT));
  assert.deepEqual(MAIN_PHONES_CHECKPOINT.stepSizesDb,[0.5,1,2,3,6]);
  assert.equal(MAIN_PHONES_CHECKPOINT.testedStepPattern,'reduction then exact restoration');
  for(const key of ['phonesPairStepsPassed','mainStereoStepsPassed','otherGroupUnchangedDuringStepTests','xlr2SeparateHalfDbRestorePassed','postGainMuteHalfDbChecksPassed'] as const)assert.equal(MAIN_PHONES_CHECKPOINT[key],true);
@@ -196,4 +196,34 @@ test('latest Main/Phones evidence is exported while public hardware remains unre
  }
  const registry=JSON.parse(readFileSync(new URL('../../verification/module-status.json',import.meta.url),'utf8'));
  assert.ok(registry.modules.every((m:{hardwareStatus:string;verifiedProfileIds:string[]})=>m.hardwareStatus==='unverified'&&m.verifiedProfileIds.length===0));
+});
+
+test('Sync LIVE1 records three untouched-fader startups and bounded independent writes',()=>{
+ assert.equal(LATEST_MILESTONE,LIVE_FADERS_CHECKPOINT);
+ assert.equal(LIVE_FADERS_CHECKPOINT.correctStartupChecks,3);
+ assert.equal(LIVE_FADERS_CHECKPOINT.initialFaderTouchRequired,false);
+ assert.deepEqual(LIVE_FADERS_CHECKPOINT.boundedNativeFadersTested,['main','phones']);
+ assert.equal(LIVE_FADERS_CHECKPOINT.independentExactRestoreConfirmed,true);
+ assert.equal(LIVE_FADERS_CHECKPOINT.otherGroupUnchangedDuringFaderTests,true);
+ assert.equal(LIVE_FADERS_CHECKPOINT.fullRangeFadersVerified,false);
+});
+test('specific stop and return-input gates do not become a USB recovery claim',()=>{
+ for(const key of ['transportStopLocksControlsObserved','missingReturnPreventsActivationObserved','missingReturnCheckedInWriteCandidate','returnRestorationLeftLevelsUnchanged'] as const)assert.equal(LIVE_FADERS_CHECKPOINT[key],true);
+ assert.equal(LIVE_FADERS_CHECKPOINT.physicalUsbReconnectVerified,false);
+ assert.equal(LIVE_FADERS_CHECKPOINT.completeRecoveryMatrixVerified,false);
+ assert.match(LIVE_FADERS_CHECKPOINT.boundary,/not physical USB reconnect validation/);
+});
+test('fader milestone retains auxiliary feedback, mute lifecycle and duration limits',()=>{
+ for(const key of ['auxiliaryDisplaysVerified','gainMuteLifecycleVerified','longDurationVerified','generalLiveReadinessVerified'] as const)assert.equal(LIVE_FADERS_CHECKPOINT[key],false);
+ assert.match(LIVE_FADERS_CHECKPOINT.boundary,/clear its own gain-mute before lock\/transport stop/);
+ assert.equal(LIVE_FADERS_CHECKPOINT.testedCopySaved,true);
+ assert.equal(LIVE_FADERS_CHECKPOINT.originalProjectAndSceneRestored,true);
+ assert.equal(LAB_STATUS.releaseReady,false);
+});
+test('current fader evidence is exported without native artifacts or release promotion',()=>{
+ const plan=buildPlan(DEFAULT_CONFIG);const guide=buildGuide(DEFAULT_CONFIG);
+ assert.equal(plan.executable,false);assert.equal(plan.hardwareTested,false);
+ for(const text of [JSON.stringify(plan),guide]){
+  for(const marker of [REPORTS.liveFaders,'Three project starts','Transport stop locked controls','not physical USB reconnect validation'])assert.ok(text.includes(marker),marker);
+ }
 });
