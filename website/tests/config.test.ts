@@ -1,7 +1,7 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {EVIDENCE, REPORTS, PUBLIC_REPOSITORY, LAB_STATUS, LATEST_MILESTONE, STEP_SIMULATION, V09B3_CHECKPOINT} from '../src/lib/evidence.ts';
+import {EVIDENCE, REPORTS, PUBLIC_REPOSITORY, LAB_STATUS, LATEST_MILESTONE, STEP_SIMULATION, V09B3_CHECKPOINT, MAIN_PHONES_CHECKPOINT} from '../src/lib/evidence.ts';
 import {DEFAULT_CONFIG, PROJECT_NAME, INDEPENDENCE_NOTICE, PLAN_FILENAME, PLANNING_STEP_SIZES, VERSION, FEATURES, normalizeConfig, adjustLevel, buildPlan, buildGuide} from '../src/lib/config.ts';
 test('defaults select the headphone controls only',()=>assert.deepEqual(DEFAULT_CONFIG.selected,['phones-fader','phones-steps','phones-mute']));
 test('all 64 selections generate only selected controls and never executable code',()=>{for(let mask=0;mask<64;mask++){const selected=FEATURES.filter((_,i)=>mask&(1<<i)).map(f=>f.id);const p=buildPlan({...DEFAULT_CONFIG,selected});assert.equal(p.selectedControls.length,selected.length);assert.equal(p.executable,false);assert.equal(p.hardwareTested,false);assert.deepEqual(p.selectedControls.map(c=>c.id),selected);}});
@@ -11,7 +11,7 @@ test('unsupported iPad app path is explicit in all artifacts',()=>{const c={...D
 test('guide preserves supplied model and versions but warns about no executable code',()=>{const guide=buildGuide({...DEFAULT_CONFIG,model:'Example model',loopyVersion:'Example version'});assert.match(guide,/Example model/);assert.match(guide,/Example version/);assert.match(guide,/No executable control code/)});
 test('step data is only present on step controls',()=>{const p=buildPlan({...DEFAULT_CONFIG,selected:FEATURES.map(f=>f.id),step:3});assert.equal(p.selectedControls.filter(f=>'requestedStepDb' in f).length,2)});
 
-test('exports carry pinned public evidence and remain nonexecutable',()=>{const p=buildPlan(DEFAULT_CONFIG);assert.equal(p.publicationStatus,'public-planning-release');assert.match(p.projectRepository.url,/github.com\/ultracello\/loopy-pro-rme-interface-control$/);assert.match(p.projectRepository.reviewedCommit,/^[0-9a-f]{40}$/);assert.equal(p.evidence.length,10);assert.equal(p.executable,false);assert.ok(buildGuide(DEFAULT_CONFIG).includes(`Planning release ${VERSION}`))});
+test('exports carry pinned public evidence and remain nonexecutable',()=>{const p=buildPlan(DEFAULT_CONFIG);assert.equal(p.publicationStatus,'public-planning-release');assert.match(p.projectRepository.url,/github.com\/ultracello\/loopy-pro-rme-interface-control$/);assert.match(p.projectRepository.reviewedCommit,/^[0-9a-f]{40}$/);assert.equal(p.evidence.length,11);assert.equal(p.executable,false);assert.ok(buildGuide(DEFAULT_CONFIG).includes(`Planning release ${VERSION}`))});
 test('validation requires reading current state and separate outputs',()=>{const text=buildPlan(DEFAULT_CONFIG).requiredValidation.join(' ');assert.match(text,/current hardware state/);assert.match(text,/headphones and main output independently/);assert.match(text,/restart, reconnect/)});
 
 test('historical evidence stays separate from current scoped checkpoints',()=>{const p=buildPlan(DEFAULT_CONFIG);assert.equal(p.labEvidence.releaseReady,false);const v06=LAB_STATUS.entries.find(e=>e.id==='earlier-v06')!;const v08=LAB_STATUS.entries.find(e=>e.id==='earlier-v08')!;assert.match(v06.result,/output 1 only/);assert.match(v06.boundary,/native TotalMix mute/);assert.match(v08.level,/Historical offline/);assert.match(buildGuide(DEFAULT_CONFIG),/34,304/);assert.equal(p.hardwareTested,false)});
@@ -66,7 +66,7 @@ test('display query origin and fixed-button test remain distinct',()=>{
 test('all current milestone links are pinned and exported in both formats',()=>{
  assert.match(PUBLIC_REPOSITORY.reviewedCommit,/^[0-9a-f]{40}$/);
  const json=JSON.stringify(buildPlan(DEFAULT_CONFIG));const guide=buildGuide(DEFAULT_CONFIG);
- for(const url of [REPORTS.v09b3,REPORTS.faderWrite,REPORTS.display,REPORTS.step,REPORTS.mapping,REPORTS.stepSimulation]){
+ for(const url of [REPORTS.mainPhones,REPORTS.v09b3,REPORTS.faderWrite,REPORTS.display,REPORTS.step,REPORTS.mapping,REPORTS.stepSimulation]){
   assert.ok(url.includes(`/blob/${PUBLIC_REPOSITORY.reviewedCommit}/docs/`));
   assert.ok(json.includes(url));assert.ok(guide.includes(url));
  }
@@ -80,7 +80,7 @@ test('planning step choices never become validated native controls',()=>{
   assert.ok(p.selectedControls.every(c=>c.verification==='not-hardware-verified'));
  }
  const remaining=LAB_STATUS.remaining.join(' ');
- for(const boundary of ['Full-range','Native selectable-step UI','mute','Stereo Main','reconnect','TotalMix-independent','iPhone'])assert.ok(remaining.includes(boundary));
+ for(const boundary of ['Full-range','button-state','mute','transport stop','reconnect','TotalMix-independent','iPhone'])assert.ok(remaining.includes(boundary));
  const app=readFileSync(new URL('../src/App.tsx',import.meta.url),'utf8');
  assert.ok(app.includes('Latest development checkpoint'));
  assert.ok(app.includes('Tested code export: not available yet'));
@@ -107,8 +107,8 @@ test('native simulated startup and reload do not imply physical changes or devic
  assert.equal(STEP_SIMULATION.newHardwareTest,false);
  assert.equal(STEP_SIMULATION.largerPhysicalStepsTested,false);
  assert.match(STEP_SIMULATION.boundary,/simulation reference, not a device factory default/);
- assert.equal(LATEST_MILESTONE.id,'phones-v09b3');
- assert.match(LATEST_MILESTONE.result,/-10.5 → -11.0 → -10.5 dB/);
+ assert.equal(LATEST_MILESTONE.id,'main-phones-steps-gain-mute');
+ assert.notEqual(LATEST_MILESTONE.id,STEP_SIMULATION.id);
 });
 test('five browser planning choices remain bounded and six-dB requests round-trip',()=>{
  assert.deepEqual(PLANNING_STEP_SIZES,[0.5,1,2,3,6]);
@@ -132,23 +132,22 @@ test('both exports include send-free boundaries and no simulated hardware promot
  const app=readFileSync(new URL('../src/App.tsx',import.meta.url),'utf8');
  assert.ok(app.includes('SEPARATE CHECKPOINT · SIMULATION ONLY'));
  assert.ok(app.includes('No MIDI sender or larger physical step was tested'));
- assert.ok(app.includes('Planning values only. Native selector simulation does not validate hardware steps.'));
+ assert.ok(app.includes('Planning values only. Scoped device tests do not make this exported plan a verified hardware profile.'));
  assert.ok(app.includes('PLANNING_STEP_SIZES.map'));
 });
 
 test('v09b3 records only the bounded, completed feedback checkpoint',()=>{
- assert.equal(LATEST_MILESTONE,V09B3_CHECKPOINT);
- assert.equal(LATEST_MILESTONE.revision,'v09b3');
- assert.equal(LATEST_MILESTONE.transportRuntimeSecondsGreaterThan,75);
- assert.deepEqual(LATEST_MILESTONE.phonesSequenceDb,[-10.5,-11,-10.5]);
- assert.deepEqual(LATEST_MILESTONE.automaticFollowUpQueryDelaysMs,[101,100]);
- assert.equal(LATEST_MILESTONE.separateConfirmationQueriesPassed,true);
- assert.equal(LATEST_MILESTONE.mainDb,-8);
- assert.equal(LATEST_MILESTONE.originalProjectAndSceneRestored,true);
- assert.equal(LATEST_MILESTONE.generalLiveReadinessVerified,false);
- assert.match(LATEST_MILESTONE.result,/BEREIT \/ AKTIV/);
- assert.match(LATEST_MILESTONE.boundary,/Exactly one reduction and one restoration/);
- assert.match(LATEST_MILESTONE.boundary,/not a latency distribution/);
+ assert.equal(V09B3_CHECKPOINT.revision,'v09b3');
+ assert.equal(V09B3_CHECKPOINT.transportRuntimeSecondsGreaterThan,75);
+ assert.deepEqual(V09B3_CHECKPOINT.phonesSequenceDb,[-10.5,-11,-10.5]);
+ assert.deepEqual(V09B3_CHECKPOINT.automaticFollowUpQueryDelaysMs,[101,100]);
+ assert.equal(V09B3_CHECKPOINT.separateConfirmationQueriesPassed,true);
+ assert.equal(V09B3_CHECKPOINT.mainDb,-8);
+ assert.equal(V09B3_CHECKPOINT.originalProjectAndSceneRestored,true);
+ assert.equal(V09B3_CHECKPOINT.generalLiveReadinessVerified,false);
+ assert.match(V09B3_CHECKPOINT.result,/BEREIT \/ AKTIV/);
+ assert.match(V09B3_CHECKPOINT.boundary,/Exactly one reduction and one restoration/);
+ assert.match(V09B3_CHECKPOINT.boundary,/not a latency distribution/);
  assert.equal(LAB_STATUS.releaseReady,false);
 });
 test('v09b3 evidence reaches exports without unlocking a hardware release',()=>{
@@ -162,9 +161,39 @@ test('v09b3 evidence reaches exports without unlocking a hardware release',()=>{
  }
 });
 test('current and historical website release dates stay distinct',()=>{
- assert.equal(VERSION,'0.2.4');
+ assert.equal(VERSION,'0.2.5');
  const app=readFileSync(new URL('../src/App.tsx',import.meta.url),'utf8');
  assert.ok(app.includes('PLANNING RELEASE · 0.2.3'));
  assert.ok(app.includes('2026-11-08: added the send-free'));
  assert.ok(app.includes('v09b3: bounded feedback confirmed.'));
+});
+
+test('Main and Phones physical evidence covers only the reported reduction/restore pattern',()=>{
+ assert.equal(LATEST_MILESTONE,MAIN_PHONES_CHECKPOINT);
+ assert.deepEqual(MAIN_PHONES_CHECKPOINT.stepSizesDb,[0.5,1,2,3,6]);
+ assert.equal(MAIN_PHONES_CHECKPOINT.testedStepPattern,'reduction then exact restoration');
+ for(const key of ['phonesPairStepsPassed','mainStereoStepsPassed','otherGroupUnchangedDuringStepTests','xlr2SeparateHalfDbRestorePassed','postGainMuteHalfDbChecksPassed'] as const)assert.equal(MAIN_PHONES_CHECKPOINT[key],true);
+ assert.equal(MAIN_PHONES_CHECKPOINT.generalLiveReadinessVerified,false);
+});
+test('gain-mute is distinct from native mute bits, silence and confirmed indicators',()=>{
+ assert.deepEqual(MAIN_PHONES_CHECKPOINT.gainMuteRestorePassed,['main','phones']);
+ assert.equal(MAIN_PHONES_CHECKPOINT.nativeHardwareMuteBitsVerified,false);
+ assert.equal(MAIN_PHONES_CHECKPOINT.buttonIndicatorsVerified,false);
+ assert.match(MAIN_PHONES_CHECKPOINT.boundary,/not a verified hardware mute bit or acoustic silence/);
+ assert.match(MAIN_PHONES_CHECKPOINT.boundary,/clear its own gain-mute before lock\/transport stop/);
+});
+test('saved button contents do not imply full reload or lifecycle validation',()=>{
+ assert.equal(MAIN_PHONES_CHECKPOINT.savedButtonActionCount,22);
+ assert.equal(MAIN_PHONES_CHECKPOINT.originalProjectAndSceneRestored,true);
+ for(const key of ['fullReloadRecoveryVerified','freeFadersVerified','transportStopSafetyVerified','connectionChangeSafetyVerified'] as const)assert.equal(MAIN_PHONES_CHECKPOINT[key],false);
+ assert.equal(LAB_STATUS.releaseReady,false);
+});
+test('latest Main/Phones evidence is exported while public hardware remains unreleased',()=>{
+ const plan=buildPlan(DEFAULT_CONFIG);const guide=buildGuide(DEFAULT_CONFIG);
+ assert.equal(plan.hardwareTested,false);assert.equal(plan.executable,false);
+ for(const text of [JSON.stringify(plan),guide]){
+  for(const marker of [REPORTS.mainPhones,'22 button actions','gain-mute','not a verified hardware mute bit'])assert.ok(text.includes(marker),marker);
+ }
+ const registry=JSON.parse(readFileSync(new URL('../../verification/module-status.json',import.meta.url),'utf8'));
+ assert.ok(registry.modules.every((m:{hardwareStatus:string;verifiedProfileIds:string[]})=>m.hardwareStatus==='unverified'&&m.verifiedProfileIds.length===0));
 });
