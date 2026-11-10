@@ -1,14 +1,15 @@
 export const PUBLIC_REPOSITORY = {
   url: 'https://github.com/ultracello/loopy-pro-rme-interface-control',
   branch: 'main',
-  reviewedCommit: '2e51b437a18906f60b558b9b54370580bf44e4d5',
-  reviewedDate: '2026-11-09',
-  reviewedFile: 'README.md, module status, Restricted control / Interface integration report and earlier scoped milestones',
+  reviewedCommit: 'd16812906045dfbad7ef7453b5179ae221ef2a03',
+  reviewedDate: '2026-11-10',
+  reviewedFile: 'README.md, Restricted step-width follow-up, module status and earlier scoped milestones',
   visibility: 'public',
-  status: 'Restricted Main/Phones gain tests and separate same-project Interface READ/feedback/return checks are confirmed within their stated bounds. Gain-mute and old restore are blocked. Silent USB failures and crash-safe restoration remain open; originals were restored. No installable integration or full live approval.',
+  status: 'Restricted Main and fresh-identity Phones cohorts passed 1/2/3/6-dB reduction/return pairs within their stated bounds. An earlier Phones return remains failed. Gain-mute and old restore are blocked; silent USB and crash-safe restoration remain open. Original project/scene restored. No public installable integration or full live approval.',
 } as const;
 const pinned = (path: string) => `${PUBLIC_REPOSITORY.url}/blob/${PUBLIC_REPOSITORY.reviewedCommit}/${path}`;
 export const REPORTS = {
+  restrictedSteps: pinned('docs/milestones/2026-11-10-restricted-step-widths.md'),
   restricted: pinned('docs/milestones/2026-11-09-restricted-control-interface-integration.md#separate-control-copy'),
   integration: pinned('docs/milestones/2026-11-09-restricted-control-interface-integration.md#same-project-integration'),
   readPaths: pinned('docs/milestones/2026-11-09-read-paths-reply-loss-lock.md'),
@@ -137,11 +138,28 @@ export const INTEGRATION_CHECKPOINT = {
   boundary:'No new gain writes in this integration check: the separate copy’s gain tests are distinct evidence. Running transport does not prove acoustic continuity of a playing loop. Gain-mute/old restore remain blocked; silent USB loss and crash-safe restoration remain open. No finished integration for other users or full live approval.',
   sourceUrl:REPORTS.integration,
 } as const;
+export const RESTRICTED_STEPS_CHECKPOINT = {
+  id:'restricted-step-widths', revision:'Restricted step widths · 10 Nov', level:'Bounded native Main and fresh-identity Phones cohorts',
+  title:'Four larger steps per group. Distinct cohorts. Exact return.',
+  ruleSha256:RESTRICTED_CHECKPOINT.ruleSha256,
+  mainStepSizesDb:[1,2,3,6], mainReductionAndExactReturnPassed:true,
+  earlierPhonesOneDbReturnPassed:false, earlierRestoreAuthorityRevoked:true,
+  oldFailedCaseReclassified:false, freshIdentityNormalTargetVerified:true,
+  freshPhonesStepSizesDb:[1,2,3,6], freshPhonesReductionAndExactReturnPassed:true,
+  otherGroupUnchangedInPassedCases:true, freshPhonesCohortFinalized:true,
+  finalRestorationAndCleanupVerified:true, finalRawValues:[227,227,222,222],
+  readAgeExpiryCauseProven:false, silentUsbContinuityProven:false, crashSafeRecoveryProven:false,
+  gainMuteEnabled:false, oldSavedRestoreEnabled:false, generalLiveReadinessVerified:false,
+  result:'Main passed 1/2/3/6-dB reduction-and-return pairs. A distinct fresh-identity Phones cohort passed the same four sizes after a separately requested normal target. Each passed case returned exactly and left the other group unchanged. Original project and previous scene were restored, a final fixed read confirmed Main/Phones values, and temporary diagnostics were stopped.',
+  boundary:'An earlier Phones return remains failed with its authority revoked; a probable READ-age expiry is not a proven cause. Later new intent and passes do not reinstate that authority or turn the interrupted batch into a pass. No half-dB/fader repeat or arbitrary-sequence, acoustic, full-range, USB/crash-safety, installable-profile or general live approval. Gain-mute/old restore remain blocked.',
+  sourceUrl:REPORTS.restrictedSteps,
+} as const;
 export const LAB_STATUS = {
-  reviewedDate: '2026-11-09',
+  reviewedDate: '2026-11-10',
   evidenceType: 'Project-reported scoped experiments, linked to dated public reports. Raw captures and installable controller artifacts are not bundled with this planner.',
   releaseReady: false,
   entries: [
+    RESTRICTED_STEPS_CHECKPOINT,
     INTEGRATION_CHECKPOINT,
     RESTRICTED_CHECKPOINT,
     READ_PATH_CHECKPOINT,
