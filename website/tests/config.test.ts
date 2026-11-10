@@ -1,7 +1,7 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {EVIDENCE, REPORTS, PUBLIC_REPOSITORY, LAB_STATUS, LATEST_MILESTONE, STEP_SIMULATION, V09B3_CHECKPOINT, MAIN_PHONES_CHECKPOINT, LIVE_FADERS_CHECKPOINT, READ_PATH_CHECKPOINT, INTEGRATION_CHECKPOINT, RESTRICTED_STEPS_CHECKPOINT, MIGRATED_READ_CHECKPOINT, SESSION_MUTE_CHECKPOINT, INTERFACE_MUTE_CHECKPOINT} from '../src/lib/evidence.ts';
+import {EVIDENCE, REPORTS, PUBLIC_REPOSITORY, LAB_STATUS, LATEST_MILESTONE, STEP_SIMULATION, V09B3_CHECKPOINT, MAIN_PHONES_CHECKPOINT, LIVE_FADERS_CHECKPOINT, READ_PATH_CHECKPOINT, INTEGRATION_CHECKPOINT, RESTRICTED_STEPS_CHECKPOINT, MIGRATED_READ_CHECKPOINT, SESSION_MUTE_CHECKPOINT, INTERFACE_MUTE_CHECKPOINT, HAND_OPERATION_CHECKPOINT} from '../src/lib/evidence.ts';
 import {DEFAULT_CONFIG, PROJECT_NAME, INDEPENDENCE_NOTICE, PLAN_FILENAME, PLANNING_STEP_SIZES, VERSION, FEATURES, normalizeConfig, adjustLevel, buildPlan, buildGuide} from '../src/lib/config.ts';
 test('defaults select the headphone controls only',()=>assert.deepEqual(DEFAULT_CONFIG.selected,['phones-fader','phones-steps','phones-mute']));
 test('all 64 selections generate only selected controls and never executable code',()=>{for(let mask=0;mask<64;mask++){const selected=FEATURES.filter((_,i)=>mask&(1<<i)).map(f=>f.id);const p=buildPlan({...DEFAULT_CONFIG,selected});assert.equal(p.selectedControls.length,selected.length);assert.equal(p.executable,false);assert.equal(p.hardwareTested,false);assert.deepEqual(p.selectedControls.map(c=>c.id),selected);}});
@@ -107,7 +107,7 @@ test('native simulated startup and reload do not imply physical changes or devic
  assert.equal(STEP_SIMULATION.newHardwareTest,false);
  assert.equal(STEP_SIMULATION.largerPhysicalStepsTested,false);
  assert.match(STEP_SIMULATION.boundary,/simulation reference, not a device factory default/);
- assert.equal(LATEST_MILESTONE.id,'interface-copy-mute-switches');
+ assert.equal(LATEST_MILESTONE.id,'hand-operation-loop-transport-phones-route');
  assert.notEqual(LATEST_MILESTONE.id,STEP_SIMULATION.id);
 });
 test('five browser planning choices remain bounded and six-dB requests round-trip',()=>{
@@ -229,7 +229,8 @@ test('current fader evidence is exported without native artifacts or release pro
 });
 
 test('latest read gate evidence cannot become USB or mute-restore approval',()=>{
- assert.equal(LATEST_MILESTONE,INTERFACE_MUTE_CHECKPOINT);
+ assert.equal(LATEST_MILESTONE,HAND_OPERATION_CHECKPOINT);
+ assert.ok(LAB_STATUS.entries.includes(INTERFACE_MUTE_CHECKPOINT));
  assert.ok(LAB_STATUS.entries.includes(SESSION_MUTE_CHECKPOINT));
  assert.ok(LAB_STATUS.entries.includes(MIGRATED_READ_CHECKPOINT));
  assert.equal(SESSION_MUTE_CHECKPOINT.transferCopyDispatchedPresses,4);
@@ -268,7 +269,7 @@ test('read-path result and unresolved recovery limits reach both exports',()=>{
 });
 
 test('the Interface copy with mute switches stays one bounded pass and no release',()=>{
- assert.equal(LAB_STATUS.entries[0],INTERFACE_MUTE_CHECKPOINT);
+ assert.equal(LAB_STATUS.entries[1],INTERFACE_MUTE_CHECKPOINT);
  assert.equal(INTERFACE_MUTE_CHECKPOINT.candidateRuleSha256,SESSION_MUTE_CHECKPOINT.sessionMuteCandidateRuleSha256);
  assert.equal(INTERFACE_MUTE_CHECKPOINT.routingSceneModules,15);
  assert.equal(INTERFACE_MUTE_CHECKPOINT.cleanReadsInARow,6);
@@ -281,4 +282,25 @@ test('the Interface copy with mute switches stays one bounded pass and no releas
  assert.match(INTERFACE_MUTE_CHECKPOINT.boundary,/not a release/);
  assert.match(INTERFACE_MUTE_CHECKPOINT.boundary,/offline only/);
  assert.ok(INTERFACE_MUTE_CHECKPOINT.sourceUrl.endsWith('/docs/milestones/2026-11-10-interface-copy-mute-switches.md'));
+});
+
+test('the hand-operation checkpoint stays Phones only, names its open causes and is no release',()=>{
+ assert.equal(LAB_STATUS.entries[0],HAND_OPERATION_CHECKPOINT);
+ assert.notEqual(HAND_OPERATION_CHECKPOINT.candidateRuleSha256,INTERFACE_MUTE_CHECKPOINT.candidateRuleSha256);
+ assert.match(HAND_OPERATION_CHECKPOINT.candidateRuleSha256,/^[0-9a-f]{64}$/);
+ assert.match(HAND_OPERATION_CHECKPOINT.outboundFilterSha256,/^[0-9a-f]{64}$/);
+ assert.equal(HAND_OPERATION_CHECKPOINT.phonesStepsWithoutNewRead,8);
+ assert.equal(HAND_OPERATION_CHECKPOINT.phonesMutesWithExactReturn,3);
+ assert.equal(HAND_OPERATION_CHECKPOINT.phonesRouteMixerLevelsWritten,2);
+ assert.equal(HAND_OPERATION_CHECKPOINT.otherMixerLevelsWritten,0);
+ assert.equal(HAND_OPERATION_CHECKPOINT.newOfflineTests,33);
+ assert.deepEqual(HAND_OPERATION_CHECKPOINT.phonesRawAfterFourDownAndFourUp,[[224,224],[228,228]]);
+ for(const key of ['hostTransportPositionJumpMeasuredOnDevice','usbLossCauseKnown','mainOperated','faderWritesInAnAutomatedRun','fixedLevelFromForeignMuteTestedOnDevice','lateCheckReadSeenOnDevice','existingRoutesTestedInPlayingUse','operationAlongsideTotalMixVerified','raw59MeasuredAsSilence','candidateReleased','silentUsbContinuityProven','crashSafeRecoveryProven','generalLiveReadinessVerified'] as const)assert.equal(HAND_OPERATION_CHECKPOINT[key],false,key);
+ assert.equal(HAND_OPERATION_CHECKPOINT.returnAfterUsbLossNeededManualRestarts,true);
+ assert.match(HAND_OPERATION_CHECKPOINT.boundary,/Main was not operated/);
+ assert.match(HAND_OPERATION_CHECKPOINT.boundary,/not measured on the device/);
+ assert.match(HAND_OPERATION_CHECKPOINT.boundary,/third-party protocol notes/);
+ assert.match(HAND_OPERATION_CHECKPOINT.boundary,/not a release/);
+ assert.ok(HAND_OPERATION_CHECKPOINT.sourceUrl.endsWith('/docs/milestones/2026-11-10-hand-operation-loop-transport-phones-route.md'));
+ assert.ok(HAND_OPERATION_CHECKPOINT.sourceUrl.includes(PUBLIC_REPOSITORY.reviewedCommit));
 });

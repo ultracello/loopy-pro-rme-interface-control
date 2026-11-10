@@ -1,7 +1,7 @@
 export const PUBLIC_REPOSITORY = {
   url: 'https://github.com/ultracello/loopy-pro-rme-interface-control',
   branch: 'main',
-  reviewedCommit: 'e4292359adf85da35f13b28c13a8d5ef2d7d3646',
+  reviewedCommit: 'ec968a9137464f2e56bdf4f07ad9ea1e476c109e',
   reviewedDate: '2026-11-10',
   reviewedFile: 'README.md, transfer-copy write pair and session gain-mute check, other-project Interface READ transfer and earlier scoped milestones',
   visibility: 'public',
@@ -9,6 +9,7 @@ export const PUBLIC_REPOSITORY = {
 } as const;
 const pinned = (path: string) => `${PUBLIC_REPOSITORY.url}/blob/${PUBLIC_REPOSITORY.reviewedCommit}/${path}`;
 export const REPORTS = {
+  handOperation: pinned('docs/milestones/2026-11-10-hand-operation-loop-transport-phones-route.md'),
   interfaceMute: pinned('docs/milestones/2026-11-10-interface-copy-mute-switches.md'),
   sessionMute: pinned('docs/milestones/2026-11-10-transfer-write-pair-session-mute.md'),
   migratedRead: pinned('docs/milestones/2026-11-10-other-project-interface-transfer.md'),
@@ -219,11 +220,31 @@ export const INTERFACE_MUTE_CHECKPOINT = {
   boundary:'One pass, every step once, TotalMix closed. Main was not touched because the device held it at raw 59 from outside. Step buttons and fader writes under this rule were checked offline only. The level before a mute lives only in the running controller. This is a private working copy, not a release.',
   sourceUrl:REPORTS.interfaceMute,
 } as const;
+export const HAND_OPERATION_CHECKPOINT = {
+  id:'hand-operation-loop-transport-phones-route', revision:'Hand operation · looping clip · 10 Nov evening', level:'Several bounded native runs and offline tests after the first use by hand: revised rule in the project of the operator, Phones only',
+  title:'A looping clip showed what the automated runs missed.',
+  candidateRuleSha256:'71a6e23841fedf7432d002f8566a28188e5172d60874e9a2c60624a5f8568985', outboundFilterSha256:'f88bf42a411269d8448b37255a41a0226f5a1b48f258cf473d91cb5d6e686457',
+  ruleRevisionsBuiltOfflineTheSameEvening:3, newOfflineTests:33, earlierOfflineTestsStillPassing:38, falsificationsNoticed:32,
+  clipLoopSeconds:4, hostTransportPositionJumpMeasuredOnDevice:false,
+  phonesStepsWithoutNewRead:8, phonesStepSeriesSeconds:29, phonesRawAfterFourDownAndFourUp:[[224,224],[228,228]],
+  phonesMutesWithExactReturn:3, ownMuteShownWhileLocked:true, refusedOperationsKeepThePageArmed:true,
+  phonesRouteMixerLevelsWritten:2, phonesOutputPeakZeroBeforeAndPresentAfter:true, mainOutputPeakStayedZero:true, levelsUnchangedByTheRouteControl:true, totalMixClosedForTheRouteCheck:true,
+  mixerMessageFromThirdPartyProtocolNotes:true, otherMixerLevelsWritten:0,
+  usbLossObservedWithExternalPowerSupply:true, usbLossCauseKnown:false, returnAfterUsbLossNeededManualRestarts:true,
+  mainOperated:false, faderWritesInAnAutomatedRun:false, fixedLevelFromForeignMuteTestedOnDevice:false, lateCheckReadSeenOnDevice:false, existingRoutesTestedInPlayingUse:false,
+  operationAlongsideTotalMixVerified:false, raw59MeasuredAsSilence:false,
+  candidateReleased:false, silentUsbContinuityProven:false, crashSafeRecoveryProven:false, generalLiveReadinessVerified:false,
+  result:'The first use by hand, with a clip looping, failed in ways no automated run had shown: READ and ARM were demanded again and again, and one Phones mute never completed. The rule had compared the host transport position, which goes backwards when a clip loops. Revised three times the same evening and built into the project of the operator, it then took eight Phones steps in 29 seconds without a new READ and three mutes with exact return. A new control writes the two mixer levels that put playback on Phones: after a USB loss the Phones output peak went from zero to the expected level, with TotalMix closed.',
+  boundary:'Phones only: Main was not operated. The position jump was reproduced offline, not measured on the device. The mixer message comes from third-party protocol notes and was seen to work for these two levels on one unit. The cause of the USB losses is open, and after a loss MidiFire had to be restarted and the project loaded again by hand. This is a private working copy, not a release.',
+  sourceUrl:REPORTS.handOperation,
+} as const;
+
 export const LAB_STATUS = {
   reviewedDate: '2026-11-10',
   evidenceType: 'Project-reported scoped experiments, linked to dated public reports. Raw captures and installable controller artifacts are not bundled with this planner.',
   releaseReady: false,
   entries: [
+    HAND_OPERATION_CHECKPOINT,
     INTERFACE_MUTE_CHECKPOINT,
     SESSION_MUTE_CHECKPOINT,
     MIGRATED_READ_CHECKPOINT,
