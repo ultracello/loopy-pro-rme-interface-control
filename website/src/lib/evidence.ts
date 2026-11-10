@@ -1,7 +1,7 @@
 export const PUBLIC_REPOSITORY = {
   url: 'https://github.com/ultracello/loopy-pro-rme-interface-control',
   branch: 'main',
-  reviewedCommit: '526e4e703985ed56e7af5026a31084ae90cb39cb',
+  reviewedCommit: 'e4292359adf85da35f13b28c13a8d5ef2d7d3646',
   reviewedDate: '2026-11-10',
   reviewedFile: 'README.md, transfer-copy write pair and session gain-mute check, other-project Interface READ transfer and earlier scoped milestones',
   visibility: 'public',
@@ -9,6 +9,7 @@ export const PUBLIC_REPOSITORY = {
 } as const;
 const pinned = (path: string) => `${PUBLIC_REPOSITORY.url}/blob/${PUBLIC_REPOSITORY.reviewedCommit}/${path}`;
 export const REPORTS = {
+  interfaceMute: pinned('docs/milestones/2026-11-10-interface-copy-mute-switches.md'),
   sessionMute: pinned('docs/milestones/2026-11-10-transfer-write-pair-session-mute.md'),
   migratedRead: pinned('docs/milestones/2026-11-10-other-project-interface-transfer.md'),
   restrictedSteps: pinned('docs/milestones/2026-11-10-restricted-step-widths.md'),
@@ -200,11 +201,30 @@ export const SESSION_MUTE_CHECKPOINT = {
   boundary:'One pass for Phones from one level, on the third attempt of the day; the gate before the mute was changed during the run. Main was not touched because the device held it at raw 59 from outside. Raw 59 was not measured as silence. The controller route was silent for some minutes; a same-day follow-up did not reproduce that by waiting seven minutes or by a short replug, and the port notice shown by MidiFire indicates the interface had dropped off USB by itself, cause open. The first reply after loading the routing scene was lost or incomplete in three of four cases. Checks ran with TotalMix closed. The candidate is a test rig, not a release; gain-mute stays blocked in the Restricted copy. No endurance, USB/crash-safety, installable-profile or general live approval.',
   sourceUrl:REPORTS.sessionMute,
 } as const;
+export const INTERFACE_MUTE_CHECKPOINT = {
+  id:'interface-copy-mute-switches', revision:'Interface copy · mute switches · 10 Nov', level:'One bounded native run: load, read, display and one own Phones gain-mute with exact return in a copy of a real music project',
+  title:'Faders, dB display and a mute switch on one page.',
+  candidateRuleSha256:SESSION_MUTE_CHECKPOINT.sessionMuteCandidateRuleSha256,
+  copyByteEqualAfterUpload:true, routingSceneModules:15, sceneFileMovedByAutomationInFilesApp:true,
+  cleanReadsInARow:6, readsRepeated:0, firstReplyAfterSceneLoadComplete:true,
+  phonesFaderAndDbDisplayMatchedTheLevelRead:true, phonesRawBeforeMutedAfter:[[222,222],[59,59],[222,222]],
+  referenceKeptThroughLockTransportAndPressWithoutRead:true, independentFinalReadConfirmed:true,
+  dispatchedLevelPresses:2, repeatedPresses:0, offlineTestsPassed:69,
+  mainSkippedBecauseExternallyAtRaw59:true, mainMuteSwitchTested:false,
+  stepButtonsUnderThisRuleTestedOnDevice:false, faderWritesUnderThisRuleTestedOnDevice:false, existingRoutesTestedInPlayingUse:false,
+  totalMixClosedDuringTheRun:true, operationAlongsideTotalMixVerified:false, raw59MeasuredAsSilence:false,
+  finalRestorationAndCleanupVerified:true, finalRawValues:[59,59,222,222],
+  candidateReleased:false, silentUsbContinuityProven:false, crashSafeRecoveryProven:false, generalLiveReadinessVerified:false,
+  result:'A copy of a real music project now holds the whole operating page: per output group one fader, one dB display, step buttons, a status row and a mute switch. In one run the copy and a 15-module routing scene were loaded, six of six reads were clean, the Phones fader and dB display matched the level read, and the Phones switch muted (raw 222/222 to 59/59) and returned exactly, confirmed by an independent query.',
+  boundary:'One pass, every step once, TotalMix closed. Main was not touched because the device held it at raw 59 from outside. Step buttons and fader writes under this rule were checked offline only. The level before a mute lives only in the running controller. This is a private working copy, not a release.',
+  sourceUrl:REPORTS.interfaceMute,
+} as const;
 export const LAB_STATUS = {
   reviewedDate: '2026-11-10',
   evidenceType: 'Project-reported scoped experiments, linked to dated public reports. Raw captures and installable controller artifacts are not bundled with this planner.',
   releaseReady: false,
   entries: [
+    INTERFACE_MUTE_CHECKPOINT,
     SESSION_MUTE_CHECKPOINT,
     MIGRATED_READ_CHECKPOINT,
     RESTRICTED_STEPS_CHECKPOINT,
