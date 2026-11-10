@@ -1,14 +1,15 @@
 export const PUBLIC_REPOSITORY = {
   url: 'https://github.com/ultracello/loopy-pro-rme-interface-control',
   branch: 'main',
-  reviewedCommit: 'd16812906045dfbad7ef7453b5179ae221ef2a03',
+  reviewedCommit: 'e8277be900911db643353f303039047ffc000574',
   reviewedDate: '2026-11-10',
-  reviewedFile: 'README.md, Restricted step-width follow-up, module status and earlier scoped milestones',
+  reviewedFile: 'README.md, other-project Interface READ transfer, step-width follow-up and earlier scoped milestones',
   visibility: 'public',
   status: 'Restricted Main and fresh-identity Phones cohorts passed 1/2/3/6-dB reduction/return pairs within their stated bounds. An earlier Phones return remains failed. Gain-mute and old restore are blocked; silent USB and crash-safe restoration remain open. Original project/scene restored. No public installable integration or full live approval.',
 } as const;
 const pinned = (path: string) => `${PUBLIC_REPOSITORY.url}/blob/${PUBLIC_REPOSITORY.reviewedCommit}/${path}`;
 export const REPORTS = {
+  migratedRead: pinned('docs/milestones/2026-11-10-other-project-interface-transfer.md'),
   restrictedSteps: pinned('docs/milestones/2026-11-10-restricted-step-widths.md'),
   restricted: pinned('docs/milestones/2026-11-09-restricted-control-interface-integration.md#separate-control-copy'),
   integration: pinned('docs/milestones/2026-11-09-restricted-control-interface-integration.md#same-project-integration'),
@@ -154,11 +155,31 @@ export const RESTRICTED_STEPS_CHECKPOINT = {
   boundary:'An earlier Phones return remains failed with its authority revoked; a probable READ-age expiry is not a proven cause. Later new intent and passes do not reinstate that authority or turn the interrupted batch into a pass. No half-dB/fader repeat or arbitrary-sequence, acoustic, full-range, USB/crash-safety, installable-profile or general live approval. Gain-mute/old restore remain blocked.',
   sourceUrl:REPORTS.restrictedSteps,
 } as const;
+export const MIGRATED_READ_CHECKPOINT = {
+  id:'other-project-interface-transfer', revision:'Other-project transfer · 10 Nov', level:'Bounded native READ / feedback / navigation in a different target',
+  title:'A different project. Full readback. Transport continues.',
+  ruleSha256:RESTRICTED_CHECKPOINT.ruleSha256,
+  differentMidiSourceStructureMapped:true,
+  nativePageAndShowCreatedBeforeMapping:true, fullStateReadPassed:true,
+  faderFeedbackMatches:true, returnWithTransportContinuing:true,
+  newActivationActions:0, newGainActions:0, repeatedStepWidthTests:0,
+  targetAudioTrackCount:0, acousticContinuityProven:false, fullProjectImporter:false,
+  sourceArchivesUnchanged:true, targetProtectedAudioRecordCount:9,
+  targetProtectedAudioRecordsRawEqual:true, targetMusicPageRawEqual:true,
+  allOriginalTargetResourcesUnchanged:true, sourceAudioCopied:false,
+  originalProjectAndPreviousSceneRestored:true, finalRestorationAndCleanupVerified:true,
+  finalRawValues:[227,227,222,222], sceneByteIdentityClaimed:false,
+  gainMuteEnabled:false, oldSavedRestoreEnabled:false, generalLiveReadinessVerified:false,
+  result:'A separate copy of another test project passed complete READ, GELESEN, matching Main/Phones fader feedback and same-project return with transport continuing. Its older MIDI-source structure and widget references were explicitly mapped around the unchanged Restricted rule. Protected target audio records, music page and resources were preserved; original project/previous scene were restored, outputs stayed unchanged and temporary diagnostics stopped.',
+  boundary:'Zero activation, gain actions or repeated step tests: this is not transfer-write validation. The target had no audio tracks; running transport does not prove acoustic or multitrack continuity. Gain-mute/old restore remain blocked; silent USB/crash-safe recovery remain open. No general importer, controller-source/license release, public installer or full live approval.',
+  sourceUrl:REPORTS.migratedRead,
+} as const;
 export const LAB_STATUS = {
   reviewedDate: '2026-11-10',
   evidenceType: 'Project-reported scoped experiments, linked to dated public reports. Raw captures and installable controller artifacts are not bundled with this planner.',
   releaseReady: false,
   entries: [
+    MIGRATED_READ_CHECKPOINT,
     RESTRICTED_STEPS_CHECKPOINT,
     INTEGRATION_CHECKPOINT,
     RESTRICTED_CHECKPOINT,
