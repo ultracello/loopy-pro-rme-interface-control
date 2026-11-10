@@ -19,7 +19,7 @@ Issues, pull requests and their attachments are public. Remove private data befo
 5. Update [module status](docs/MODULE_STATUS.md), its [machine-readable registry](verification/module-status.json), and [the changelog](CHANGELOG.md) when behavior or evidence changes.
 6. Submit a **draft** pull request for review. Approval and merging are separate from release or deployment.
 
-No contributor license agreement or software license is imposed by this draft. Propose and resolve the appropriate licensing before substantial code contributions. Third-party code requires compatible rights and attribution; a public repository alone does not supply them.
+Project-authored material in this repository is public domain under [the Unlicense](LICENSE). Contributions are accepted on the same terms: by contributing you dedicate your contribution to the public domain. Third-party code requires compatible rights and attribution; a public repository alone does not supply them.
 
 See [the developer/test setup](docs/DEVELOPMENT_SETUP.md) for Mac/iPad automation roles, version inventory, reproduction, and the separate end-user requirements.
 

@@ -158,7 +158,7 @@ Issues and attachments are public. Do not post credentials, private messages, re
 
 A control module needs a documented profile, verified mappings and feedback, independent-output tests, measured level behavior where relevant, reconnect/restart checks, and a novice-friendly installation and removal guide. Claims must stay within the tested profile and revision.
 
-This repository is independent of RME and Loopy Pro. No software license has been selected yet, and no rights to third-party material are granted. Resolve licensing and attribution before incorporating or distributing code.
+This repository is independent of RME and Loopy Pro. Everything the project authored here is public domain under [the Unlicense](LICENSE): do whatever you want with it. That dedication covers only project-authored material. Third-party software, names and trademarks keep their own terms, and no rights to them are granted here.
 
 _Last reviewed: 9 November 2026._
 

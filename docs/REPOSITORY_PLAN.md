@@ -24,6 +24,6 @@ Those directories are suggestions, not modules currently shipped. Do not add pla
 
 Repository visibility is public. That does not make private previews, recordings or working projects public, and does not grant access to those sources. The repository contains no credentials or configuration for private services.
 
-The existing website deployment is separate from hardware-module releases. This documentation structure does not require new collaborator invitations, third-party integrations or credential creation. Select licensing before code reuse or substantial contributions.
+The existing website deployment is separate from hardware-module releases. This documentation structure does not require new collaborator invitations, third-party integrations or credential creation. Project-authored material is public domain under [the Unlicense](../LICENSE); third-party material keeps its own terms.
 
 A `.gitignore` can reduce accidental additions; it does not remove tracked secrets or make an attachment private. Public posts and attachments must be reviewed before submission.

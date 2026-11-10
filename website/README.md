@@ -35,4 +35,4 @@ The site is public. User-entered model/version labels and selections remain in t
 
 Keep `src/lib/evidence.ts` scoped and dated. Protocol documentation, offline tests and hardware observations are different evidence levels. Do not promote a module without its exact reproducible device profile. Update the changelog, tests and generated-plan wording together.
 
-This project has not selected a source-code license. Adding source here does not grant rights to third-party material.
+Project-authored source here is public domain under [the Unlicense](../LICENSE). Dependencies keep their own licenses, and adding source here does not grant rights to third-party material.
