@@ -237,10 +237,11 @@ test('latest read gate evidence cannot become USB or mute-restore approval',()=>
  assert.equal(SESSION_MUTE_CHECKPOINT.sessionMuteRepeatedPresses,0);
  assert.deepEqual(SESSION_MUTE_CHECKPOINT.phonesRawBeforeMutedAfter,[[222,222],[59,59],[222,222]]);
  assert.notEqual(SESSION_MUTE_CHECKPOINT.sessionMuteCandidateRuleSha256,SESSION_MUTE_CHECKPOINT.restrictedRuleSha256);
- for(const key of ['transferCopyOtherStepSizesTested','transferCopyFaderWritesTested','operationAlongsideTotalMixVerified','raw59MeasuredAsSilence','mainOwnMuteTested','earlierAttemptsSentGain','routerAppBackgroundBehaviourResolved','gainMuteEnabledInRestrictedCopy','sessionMuteCandidateReleased','silentUsbContinuityProven','crashSafeRecoveryProven','generalLiveReadinessVerified'] as const)assert.equal(SESSION_MUTE_CHECKPOINT[key],false);
+ for(const key of ['transferCopyOtherStepSizesTested','transferCopyFaderWritesTested','operationAlongsideTotalMixVerified','raw59MeasuredAsSilence','mainOwnMuteTested','earlierAttemptsSentGain','routeSilenceReproducedByWaitingSevenMinutes','routeSilenceReproducedByShortReplug','causeOfInterfaceDropsResolved','gainMuteEnabledInRestrictedCopy','sessionMuteCandidateReleased','silentUsbContinuityProven','crashSafeRecoveryProven','generalLiveReadinessVerified'] as const)assert.equal(SESSION_MUTE_CHECKPOINT[key],false);
  assert.match(SESSION_MUTE_CHECKPOINT.boundary,/test rig, not a release/);
  assert.match(SESSION_MUTE_CHECKPOINT.boundary,/Main was not touched/);
- for(const item of ['Router app staying awake in the background','Complete first reply after loading the routing scene','Own gain-mute of Main and from other levels'])assert.ok(LAB_STATUS.remaining.join(' | ').includes(item));
+ assert.equal(SESSION_MUTE_CHECKPOINT.interfaceDroppedOffUsbByItself,true);
+ for(const item of ['Cause of the interface dropping off USB at times','Complete first reply after loading the routing scene','Own gain-mute of Main and from other levels'])assert.ok(LAB_STATUS.remaining.join(' | ').includes(item));
  assert.equal(MIGRATED_READ_CHECKPOINT.newGainActions,0);
  assert.equal(MIGRATED_READ_CHECKPOINT.newActivationActions,0);
  assert.equal(MIGRATED_READ_CHECKPOINT.repeatedStepWidthTests,0);

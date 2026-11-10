@@ -1,11 +1,11 @@
 export const PUBLIC_REPOSITORY = {
   url: 'https://github.com/ultracello/loopy-pro-rme-interface-control',
   branch: 'main',
-  reviewedCommit: '625384df68a196ebb12929a99896aa5ace243f03',
+  reviewedCommit: '526e4e703985ed56e7af5026a31084ae90cb39cb',
   reviewedDate: '2026-11-10',
   reviewedFile: 'README.md, transfer-copy write pair and session gain-mute check, other-project Interface READ transfer and earlier scoped milestones',
   visibility: 'public',
-  status: 'The transferred Interface copy passed one 0.5-dB reduction/return pair per group on the unchanged Restricted rule. A separate session gain-mute candidate muted Phones and returned it exactly once; Main was not touched. Earlier Restricted cohorts passed 1/2/3/6-dB pairs within their stated bounds; an earlier Phones return remains failed. Gain-mute stays blocked in the Restricted copy and the candidate is not released. The MidiFire route went silent after minutes in the background; silent USB and crash-safe restoration remain open. Original project/scene restored. No public installable integration or full live approval.',
+  status: 'The transferred Interface copy passed one 0.5-dB reduction/return pair per group on the unchanged Restricted rule. A separate session gain-mute candidate muted Phones and returned it exactly once; Main was not touched. Earlier Restricted cohorts passed 1/2/3/6-dB pairs within their stated bounds; an earlier Phones return remains failed. Gain-mute stays blocked in the Restricted copy and the candidate is not released. The controller route was silent for some minutes while the interface had dropped off USB by itself; waiting and a short replug did not reproduce it. Silent USB and crash-safe restoration remain open. Original project/scene restored. No public installable integration or full live approval.',
 } as const;
 const pinned = (path: string) => `${PUBLIC_REPOSITORY.url}/blob/${PUBLIC_REPOSITORY.reviewedCommit}/${path}`;
 export const REPORTS = {
@@ -190,13 +190,14 @@ export const SESSION_MUTE_CHECKPOINT = {
   sessionMuteDispatchedPresses:2, sessionMuteRepeatedPresses:0,
   mainSkippedBecauseExternallyAtRaw59:true, mainOwnMuteTested:false,
   attemptsBeforeThePass:2, earlierAttemptsSentGain:false, gateChangedDuringTheRun:true,
-  routerAppWentSilentInBackground:true, routerAppBackgroundBehaviourResolved:false,
+  routeSilentForMinutesObserved:true, routeSilenceReproducedByWaitingSevenMinutes:false, routeSilenceReproducedByShortReplug:false,
+  interfaceDroppedOffUsbByItself:true, causeOfInterfaceDropsResolved:false,
   firstReplyAfterSceneLoadIncomplete:true,
   finalRestorationAndCleanupVerified:true, finalRawValues:[59,59,222,222],
   gainMuteEnabledInRestrictedCopy:false, sessionMuteCandidateReleased:false,
   silentUsbContinuityProven:false, crashSafeRecoveryProven:false, generalLiveReadinessVerified:false,
   result:'On the unchanged Restricted rule, the transferred Interface copy lowered Main and Phones by 0.5 dB once each and returned exactly, with the other group unchanged. In a separate candidate rule the controller muted Phones itself (raw 222/222 to 59/59) and returned it exactly after a lock, a transport stop and start, and a press without a preceding read; a separate fixed read confirmed the values. Original project and previous scene were restored and temporary diagnostics stopped.',
-  boundary:'One pass for Phones from one level, on the third attempt of the day; the gate before the mute was changed during the run. Main was not touched because the device held it at raw 59 from outside. Raw 59 was not measured as silence. The MidiFire route went silent after minutes in the background until MidiFire was brought to the foreground, and the first reply after loading the routing scene arrived incomplete. Checks ran with TotalMix closed. The candidate is a test rig, not a release; gain-mute stays blocked in the Restricted copy. No endurance, USB/crash-safety, installable-profile or general live approval.',
+  boundary:'One pass for Phones from one level, on the third attempt of the day; the gate before the mute was changed during the run. Main was not touched because the device held it at raw 59 from outside. Raw 59 was not measured as silence. The controller route was silent for some minutes; a same-day follow-up did not reproduce that by waiting seven minutes or by a short replug, and the port notice shown by MidiFire indicates the interface had dropped off USB by itself, cause open. The first reply after loading the routing scene was lost or incomplete in three of four cases. Checks ran with TotalMix closed. The candidate is a test rig, not a release; gain-mute stays blocked in the Restricted copy. No endurance, USB/crash-safety, installable-profile or general live approval.',
   sourceUrl:REPORTS.sessionMute,
 } as const;
 export const LAB_STATUS = {
@@ -220,6 +221,6 @@ export const LAB_STATUS = {
     {id:'earlier-v06',revision:'Earlier v06',level:'Historical scoped iPad observation',title:'Earlier step and custom mute experiments.',result:'Relative 0.5 dB steps and custom mute/restore were reported tested. Headphones addressed left and right together; the XLR control addressed output 1 only.',boundary:'This does not verify stereo main-output control or native TotalMix mute synchronization, and does not validate the later receiver or v09 candidate.',sourceUrl:REPORTS.overview},
     {id:'earlier-v08',revision:'Earlier v08',level:'Historical offline tests only',title:'Earlier software checks, not device proof.',result:'Eleven offline test groups covering 34,304 fader cases were recorded in the earlier website evidence snapshot.',boundary:'Those counts alone did not establish native widget or hardware behavior. Later scoped device observations are listed separately; none is a released reusable profile.',sourceUrl:`${PUBLIC_REPOSITORY.url}/blob/dfd5dc10a32f4ba5dcb4e837b1c4a6cd024df9e9/website/src/lib/evidence.ts`},
   ],
-  remaining:['Sporadic USB/hub failure and historical prefix-loss cause','Safe mute restore across interruptions','Complete proposed F-01–F-12 regression with a defined freshness rule','Full-range native faders and pickup','Auxiliary displays and confirmed button-state feedback','Arbitrary or rapid step sequences beyond the tested reduction/restore pairs','Native hardware mute bits and TotalMix mute synchronization','Gain-mute recovery across lock or transport stop','Broad freshness, query-correlation and feedback-separation guarantees','Physical USB reconnect and long-duration behavior','TotalMix-independent operation','Router app staying awake in the background','Complete first reply after loading the routing scene','Own gain-mute of Main and from other levels','Full iPhone workflow','Exact reproducible profile and installable release'],
+  remaining:['Sporadic USB/hub failure and historical prefix-loss cause','Safe mute restore across interruptions','Complete proposed F-01–F-12 regression with a defined freshness rule','Full-range native faders and pickup','Auxiliary displays and confirmed button-state feedback','Arbitrary or rapid step sequences beyond the tested reduction/restore pairs','Native hardware mute bits and TotalMix mute synchronization','Gain-mute recovery across lock or transport stop','Broad freshness, query-correlation and feedback-separation guarantees','Physical USB reconnect and long-duration behavior','TotalMix-independent operation','Cause of the interface dropping off USB at times','Complete first reply after loading the routing scene','Own gain-mute of Main and from other levels','Full iPhone workflow','Exact reproducible profile and installable release'],
 } as const;
 export const LATEST_MILESTONE = LAB_STATUS.entries[0];
