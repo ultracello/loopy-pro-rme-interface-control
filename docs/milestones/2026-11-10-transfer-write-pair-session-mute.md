@@ -46,6 +46,19 @@ This was the third attempt of the day. Two earlier attempts ended before any gai
 - **First reply after loading the routing scene.** In two of two cases the first complete-state reply after loading the scene lacked its first 9 bytes. In the case where the display was recorded, the controller missed that reply as well. The next 53 replies were complete. The candidate gives up after one second without a complete reply; while a pair is muted, that would discard the reference.
 - **Loopy's unsaved mark.** Loopy marked a loaded project as unsaved when it did not find the audio interface stored in the project. Reloading the saved project in a healthy state cleared the mark.
 
+## Follow-up later the same day
+
+Three further read-only runs looked for the cause of the silent route. No gain message was sent in any of them.
+
+- **MidiFire's Setup** shows "background idle timeout (when on battery)" set to one hour. The iPad was on mains power.
+- **Waiting did not silence the route.** After 2.5, 4.5 and 7 minutes without any use, the first read was answered at once and completely.
+- **A short unplug and replug of the interface did not silence it either.** The first read after the replug, before MidiFire had been in the foreground, was answered completely. MidiFire then showed a notice that the interface's MIDI port had been added.
+- **That same notice had been on screen earlier**, when bringing MidiFire to the foreground appeared to restore the route, although nobody had touched a cable. So the interface had dropped off USB and come back on its own at about that time, and around midday the iPad had not seen the interface at all for a while.
+
+The statement above that the route went silent "after some minutes in the background" therefore describes when it was seen, not why. MidiFire did not go to sleep. The more likely reading is that the interface itself was off USB during the silent stretch. Whether bringing MidiFire to the foreground did anything, or merely coincided with the interface coming back, cannot be told from the data. Why the iPad loses the interface at times is open; cable, hub and power supply are candidates.
+
+The count for the first reply after loading the routing scene is now three of four cases lost or incomplete for the controller; later replies were complete.
+
 ## Closeout and remaining boundaries
 
 After every run the original project and the previous MidiFire scene were restored and the loaded original was checked against its saved baseline; in the one run that began with Loopy's unsaved mark, that mark was the only difference before the reload. Diagnostic services were stopped and temporary access was retired. The last read showed Main raw 59/59, set from outside, and Phones raw 222/222.
