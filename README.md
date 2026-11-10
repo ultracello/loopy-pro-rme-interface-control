@@ -22,6 +22,8 @@ The [public planning website](https://ultracello.github.io/loopy-pro-rme-interfa
 
 ## Latest development milestones
 
+The [Restricted step-width follow-up](docs/milestones/2026-11-10-restricted-step-widths.md) records Main 1 / 2 / 3 / 6 dB reduction-and-return pairs and a distinct fresh-identity Phones cohort passing the same four sizes, each with exact return and the other group unchanged. An earlier Phones return remains failed with its restore authority revoked; a separate new normal target did not reinstate that authority. The unchanged rule, original-project/scene restoration and final output values were checked, and temporary diagnostics were stopped. Gain-mute and old saved-level restore remain blocked; no USB/crash-safety, arbitrary-sequence or general live approval is added.
+
 The [Restricted control and Interface integration checkpoint](docs/milestones/2026-11-09-restricted-control-interface-integration.md) records two distinct results on the same rule revision: a separate Main/Phones copy passed ±0.5-dB steps and small fader movements with exact restoration and the other group unchanged; a separate integration copy passed full READ, matching fader feedback and return to its music page while transport continued.
 
 **Current Restricted policy: gain-mute and old saved-level restore are blocked.** Silent USB/receiver failures and crash-safe automatic restoration remain open. The original project and previous MidiFire scene were restored. These are bounded observations, not complete live approval or an installable integration for other users.
