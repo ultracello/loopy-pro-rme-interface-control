@@ -1,7 +1,7 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {EVIDENCE, REPORTS, PUBLIC_REPOSITORY, LAB_STATUS, LATEST_MILESTONE, STEP_SIMULATION, V09B3_CHECKPOINT, MAIN_PHONES_CHECKPOINT, LIVE_FADERS_CHECKPOINT, READ_PATH_CHECKPOINT, INTEGRATION_CHECKPOINT, RESTRICTED_STEPS_CHECKPOINT, MIGRATED_READ_CHECKPOINT} from '../src/lib/evidence.ts';
+import {EVIDENCE, REPORTS, PUBLIC_REPOSITORY, LAB_STATUS, LATEST_MILESTONE, STEP_SIMULATION, V09B3_CHECKPOINT, MAIN_PHONES_CHECKPOINT, LIVE_FADERS_CHECKPOINT, READ_PATH_CHECKPOINT, INTEGRATION_CHECKPOINT, RESTRICTED_STEPS_CHECKPOINT, MIGRATED_READ_CHECKPOINT, SESSION_MUTE_CHECKPOINT} from '../src/lib/evidence.ts';
 import {DEFAULT_CONFIG, PROJECT_NAME, INDEPENDENCE_NOTICE, PLAN_FILENAME, PLANNING_STEP_SIZES, VERSION, FEATURES, normalizeConfig, adjustLevel, buildPlan, buildGuide} from '../src/lib/config.ts';
 test('defaults select the headphone controls only',()=>assert.deepEqual(DEFAULT_CONFIG.selected,['phones-fader','phones-steps','phones-mute']));
 test('all 64 selections generate only selected controls and never executable code',()=>{for(let mask=0;mask<64;mask++){const selected=FEATURES.filter((_,i)=>mask&(1<<i)).map(f=>f.id);const p=buildPlan({...DEFAULT_CONFIG,selected});assert.equal(p.selectedControls.length,selected.length);assert.equal(p.executable,false);assert.equal(p.hardwareTested,false);assert.deepEqual(p.selectedControls.map(c=>c.id),selected);}});
@@ -107,7 +107,7 @@ test('native simulated startup and reload do not imply physical changes or devic
  assert.equal(STEP_SIMULATION.newHardwareTest,false);
  assert.equal(STEP_SIMULATION.largerPhysicalStepsTested,false);
  assert.match(STEP_SIMULATION.boundary,/simulation reference, not a device factory default/);
- assert.equal(LATEST_MILESTONE.id,'other-project-interface-transfer');
+ assert.equal(LATEST_MILESTONE.id,'transfer-write-pair-session-mute');
  assert.notEqual(LATEST_MILESTONE.id,STEP_SIMULATION.id);
 });
 test('five browser planning choices remain bounded and six-dB requests round-trip',()=>{
@@ -229,7 +229,18 @@ test('current fader evidence is exported without native artifacts or release pro
 });
 
 test('latest read gate evidence cannot become USB or mute-restore approval',()=>{
- assert.equal(LATEST_MILESTONE,MIGRATED_READ_CHECKPOINT);
+ assert.equal(LATEST_MILESTONE,SESSION_MUTE_CHECKPOINT);
+ assert.ok(LAB_STATUS.entries.includes(MIGRATED_READ_CHECKPOINT));
+ assert.equal(SESSION_MUTE_CHECKPOINT.transferCopyDispatchedPresses,4);
+ assert.equal(SESSION_MUTE_CHECKPOINT.transferCopyRepeatedPresses,0);
+ assert.equal(SESSION_MUTE_CHECKPOINT.sessionMuteDispatchedPresses,2);
+ assert.equal(SESSION_MUTE_CHECKPOINT.sessionMuteRepeatedPresses,0);
+ assert.deepEqual(SESSION_MUTE_CHECKPOINT.phonesRawBeforeMutedAfter,[[222,222],[59,59],[222,222]]);
+ assert.notEqual(SESSION_MUTE_CHECKPOINT.sessionMuteCandidateRuleSha256,SESSION_MUTE_CHECKPOINT.restrictedRuleSha256);
+ for(const key of ['transferCopyOtherStepSizesTested','transferCopyFaderWritesTested','operationAlongsideTotalMixVerified','raw59MeasuredAsSilence','mainOwnMuteTested','earlierAttemptsSentGain','routerAppBackgroundBehaviourResolved','gainMuteEnabledInRestrictedCopy','sessionMuteCandidateReleased','silentUsbContinuityProven','crashSafeRecoveryProven','generalLiveReadinessVerified'] as const)assert.equal(SESSION_MUTE_CHECKPOINT[key],false);
+ assert.match(SESSION_MUTE_CHECKPOINT.boundary,/test rig, not a release/);
+ assert.match(SESSION_MUTE_CHECKPOINT.boundary,/Main was not touched/);
+ for(const item of ['Router app staying awake in the background','Complete first reply after loading the routing scene','Own gain-mute of Main and from other levels'])assert.ok(LAB_STATUS.remaining.join(' | ').includes(item));
  assert.equal(MIGRATED_READ_CHECKPOINT.newGainActions,0);
  assert.equal(MIGRATED_READ_CHECKPOINT.newActivationActions,0);
  assert.equal(MIGRATED_READ_CHECKPOINT.repeatedStepWidthTests,0);
