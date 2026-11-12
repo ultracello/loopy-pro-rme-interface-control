@@ -1,14 +1,15 @@
 export const PUBLIC_REPOSITORY = {
   url: 'https://github.com/ultracello/loopy-pro-rme-interface-control',
   branch: 'main',
-  reviewedCommit: 'ec968a9137464f2e56bdf4f07ad9ea1e476c109e',
-  reviewedDate: '2026-11-10',
+  reviewedCommit: '9afc948b14e78fcc4b87b7bb951c4bfaec144806',
+  reviewedDate: '2026-11-12',
   reviewedFile: 'README.md, transfer-copy write pair and session gain-mute check, other-project Interface READ transfer and earlier scoped milestones',
   visibility: 'public',
   status: 'The transferred Interface copy passed one 0.5-dB reduction/return pair per group on the unchanged Restricted rule. A separate session gain-mute candidate muted Phones and returned it exactly once; Main was not touched. Earlier Restricted cohorts passed 1/2/3/6-dB pairs within their stated bounds; an earlier Phones return remains failed. Gain-mute stays blocked in the Restricted copy and the candidate is not released. The controller route was silent for some minutes while the interface had dropped off USB by itself; waiting and a short replug did not reproduce it. Silent USB and crash-safe restoration remain open. Original project/scene restored. No public installable integration or full live approval.',
 } as const;
 const pinned = (path: string) => `${PUBLIC_REPOSITORY.url}/blob/${PUBLIC_REPOSITORY.reviewedCommit}/${path}`;
 export const REPORTS = {
+  reasonRow: pinned('docs/milestones/2026-11-12-reason-row-and-usb-chain.md'),
   handOperation: pinned('docs/milestones/2026-11-10-hand-operation-loop-transport-phones-route.md'),
   interfaceMute: pinned('docs/milestones/2026-11-10-interface-copy-mute-switches.md'),
   sessionMute: pinned('docs/milestones/2026-11-10-transfer-write-pair-session-mute.md'),
@@ -220,6 +221,22 @@ export const INTERFACE_MUTE_CHECKPOINT = {
   boundary:'One pass, every step once, TotalMix closed. Main was not touched because the device held it at raw 59 from outside. Step buttons and fader writes under this rule were checked offline only. The level before a mute lives only in the running controller. This is a private working copy, not a release.',
   sourceUrl:REPORTS.interfaceMute,
 } as const;
+export const REASON_ROW_CHECKPOINT = {
+  id:'reason-row-and-usb-chain', revision:'Reason row · USB chain · 12 Nov', level:'Two bounded native runs and offline tests: a status row that says why the controller locked, and a 20-minute watch of a rebuilt USB chain',
+  title:'The page now says why.',
+  candidateRuleSha256:'ea12c79f408df6454b56a874e41e12b3b34370cbf0213eb9e4713792870b8d77',
+  reasonFields:7, reasonFieldsSeenOnDevice:4, reasonFieldsShownOfflineOnly:3, decisionsOrInterfaceMessagesChanged:false,
+  newOfflineTests:11, earlierOfflineTestsStillPassing:46, falsificationsNoticed:6,
+  usbWatchMinutes:20, usbWatchReadQueries:120, usbWatchQueriesAnswered:120, usbWatchSamplesWithPhonesSignal:120, pressesDuringTheWatch:0,
+  phonesRouteControlRestoredTheRouteASecondTime:true, fastAutomatedStepSeriesWithoutLock:72,
+  enduranceVerified:false, eveningOfPlayingObserved:false, causeOfEarlierUsbLossesKnown:false, causeOfOperatorLocksKnown:false,
+  mainOperated:false, faderWritesInAnAutomatedRun:false, operationAlongsideTotalMixVerified:false,
+  candidateReleased:false, silentUsbContinuityProven:false, crashSafeRecoveryProven:false, generalLiveReadinessVerified:false,
+  result:'A new status row on the operating page shows why the controller locked or refused: ok, minute over, read first, no answer, level differs, refused or fault. On the interface, with a clip looping, the fields ok, refused, read first and minute over appeared as intended. On a rebuilt USB chain, a hub with its own power input instead of the earlier charging adapter, a 20-minute watch saw 120 of 120 read queries answered with signal at the Phones output each time.',
+  boundary:'Twenty minutes are not an endurance test, and an evening of playing was not observed. Three of the seven reason fields were shown offline only. Main was not operated. What failed in the earlier chain was not determined. This is a private working copy, not a release.',
+  sourceUrl:REPORTS.reasonRow,
+} as const;
+
 export const HAND_OPERATION_CHECKPOINT = {
   id:'hand-operation-loop-transport-phones-route', revision:'Hand operation · looping clip · 10 Nov evening', level:'Several bounded native runs and offline tests after the first use by hand: revised rule in the project of the operator, Phones only',
   title:'A looping clip showed what the automated runs missed.',
@@ -240,10 +257,11 @@ export const HAND_OPERATION_CHECKPOINT = {
 } as const;
 
 export const LAB_STATUS = {
-  reviewedDate: '2026-11-10',
+  reviewedDate: '2026-11-12',
   evidenceType: 'Project-reported scoped experiments, linked to dated public reports. Raw captures and installable controller artifacts are not bundled with this planner.',
   releaseReady: false,
   entries: [
+    REASON_ROW_CHECKPOINT,
     HAND_OPERATION_CHECKPOINT,
     INTERFACE_MUTE_CHECKPOINT,
     SESSION_MUTE_CHECKPOINT,
