@@ -1,14 +1,15 @@
 export const PUBLIC_REPOSITORY = {
   url: 'https://github.com/ultracello/loopy-pro-rme-interface-control',
   branch: 'main',
-  reviewedCommit: '9afc948b14e78fcc4b87b7bb951c4bfaec144806',
-  reviewedDate: '2026-11-12',
+  reviewedCommit: 'e9b8d4c68d8e1fedb9843089a84e35aae909f1aa',
+  reviewedDate: '2026-11-13',
   reviewedFile: 'README.md, transfer-copy write pair and session gain-mute check, other-project Interface READ transfer and earlier scoped milestones',
   visibility: 'public',
   status: 'The transferred Interface copy passed one 0.5-dB reduction/return pair per group on the unchanged Restricted rule. A separate session gain-mute candidate muted Phones and returned it exactly once; Main was not touched. Earlier Restricted cohorts passed 1/2/3/6-dB pairs within their stated bounds; an earlier Phones return remains failed. Gain-mute stays blocked in the Restricted copy and the candidate is not released. The controller route was silent for some minutes while the interface had dropped off USB by itself; waiting and a short replug did not reproduce it. Silent USB and crash-safe restoration remain open. Original project/scene restored. No public installable integration or full live approval.',
 } as const;
 const pinned = (path: string) => `${PUBLIC_REPOSITORY.url}/blob/${PUBLIC_REPOSITORY.reviewedCommit}/${path}`;
 export const REPORTS = {
+  freeSteps: pinned('docs/milestones/2026-11-13-free-step-width-and-main.md'),
   reasonRow: pinned('docs/milestones/2026-11-12-reason-row-and-usb-chain.md'),
   handOperation: pinned('docs/milestones/2026-11-10-hand-operation-loop-transport-phones-route.md'),
   interfaceMute: pinned('docs/milestones/2026-11-10-interface-copy-mute-switches.md'),
@@ -221,6 +222,22 @@ export const INTERFACE_MUTE_CHECKPOINT = {
   boundary:'One pass, every step once, TotalMix closed. Main was not touched because the device held it at raw 59 from outside. Step buttons and fader writes under this rule were checked offline only. The level before a mute lives only in the running controller. This is a private working copy, not a release.',
   sourceUrl:REPORTS.interfaceMute,
 } as const;
+export const FREE_STEPS_CHECKPOINT = {
+  id:'free-step-width-and-main', revision:'Any step width · Main · 13 Nov', level:'One bounded native run and offline tests: a freely chosen step width, and the first operation of Main with nothing connected to it',
+  title:'Any step width. And Main, at last.',
+  candidateRuleSha256:'642050a0bf23e0c689a644877eae2022e533b84741e2b9d8e2b0ea82caf4a57a',
+  stepWidthMinDb:0.5, stepWidthMaxDb:30, stepWidthResolutionDb:0.5, directHalfDbCountsAccepted:[1,125], stepsBeyondTheRangeAreRefusedNotClamped:true,
+  newOfflineTests:11, earlierOfflineTestsStillPassing:56, falsificationsNoticed:8,
+  chosenWidthOnDeviceDb:10.5, phonesRawDownAndBack:[[214,214],[193,193],[214,214]], pageStayedArmedWhileTheSliderMoved:true,
+  mainRawSequence:[59,183,184,185,184,183,59,183,59], mainFixedLevelOutOfForeignMuteDb:-30, mainOutputPeakFollowedEachStep:true, phonesUnchangedDuringMain:true, mainLeftMutedWithReference:true,
+  nothingConnectedToMain:true, mainHeardThroughSpeakers:false, largeStepsUpwardRun:false, faderWritesInAnAutomatedRun:false,
+  operationAlongsideTotalMixVerified:false, enduranceVerified:false,
+  candidateReleased:false, silentUsbContinuityProven:false, crashSafeRecoveryProven:false, generalLiveReadinessVerified:false,
+  result:'A slider on the operating page now chooses any step width from 0.5 to 30 dB, and two buttons per output apply it. On the interface a chosen 10.5 dB went down and exactly back on Phones. With nothing connected to it, Main was operated for the first time: out of a foreign mute to minus 30 dB, half-dB steps up and down, an own mute and the exact return, with the peak at the Main output following each step.',
+  boundary:'Large steps upward were not run. Main was not heard through speakers. Fader writes were not part of an automated run. This is a private working copy, not a release.',
+  sourceUrl:REPORTS.freeSteps,
+} as const;
+
 export const REASON_ROW_CHECKPOINT = {
   id:'reason-row-and-usb-chain', revision:'Reason row · USB chain · 12 Nov', level:'Two bounded native runs and offline tests: a status row that says why the controller locked, and a 20-minute watch of a rebuilt USB chain',
   title:'The page now says why.',
@@ -257,10 +274,11 @@ export const HAND_OPERATION_CHECKPOINT = {
 } as const;
 
 export const LAB_STATUS = {
-  reviewedDate: '2026-11-12',
+  reviewedDate: '2026-11-13',
   evidenceType: 'Project-reported scoped experiments, linked to dated public reports. Raw captures and installable controller artifacts are not bundled with this planner.',
   releaseReady: false,
   entries: [
+    FREE_STEPS_CHECKPOINT,
     REASON_ROW_CHECKPOINT,
     HAND_OPERATION_CHECKPOINT,
     INTERFACE_MUTE_CHECKPOINT,
