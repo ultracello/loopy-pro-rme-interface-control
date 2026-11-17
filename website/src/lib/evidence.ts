@@ -1,7 +1,7 @@
 export const PUBLIC_REPOSITORY = {
   url: 'https://github.com/ultracello/loopy-pro-rme-interface-control',
   branch: 'main',
-  reviewedCommit: 'b211ff07ec030ad2da85a3c22ac8d3ad2ae89868',
+  reviewedCommit: '74026c98bce0293b3ff3c806fe5f5e1173acac0b',
   reviewedDate: '2026-11-17',
   reviewedFile: 'README.md, transfer-copy write pair and session gain-mute check, other-project Interface READ transfer and earlier scoped milestones',
   visibility: 'public',
@@ -226,7 +226,7 @@ export const INTERFACE_MUTE_CHECKPOINT = {
   sourceUrl:REPORTS.interfaceMute,
 } as const;
 export const MONITORING_CHECKPOINT = {
-  id:'monitoring-inputs-on-phones', revision:'Monitoring · four inputs · 17 Nov', level:'One bounded native run and offline tests: each analog input on the headphones with a level of its own, measured at the headphone output with a cable from an output into an input',
+  id:'monitoring-inputs-on-phones', revision:'Monitoring · four inputs · 17 Nov', level:'Two bounded native runs and offline tests: each analog input and the playback on the headphones with a level of their own, measured at the headphone output',
   title:'Hear the inputs. Measured, because the unit does not report it.',
   candidateRuleSha256:'ad45c86275a008fb695b9f78dd191630125344e7b6e2d68caefed3d02b1e85fa', outboundFilterSha256:'2cb14e440c06ddb49644a5bcf70593ae8c9da1c5dfacf8b29329e854c4a5a902',
   inputs:4, destination:'headphones, left and right', levelMinDb:-60, levelMaxDb:0, levelStepDb:0.5, levelKeptAfterLoadingDb:-12, levelAboveUnityPossible:false,
@@ -236,10 +236,14 @@ export const MONITORING_CHECKPOINT = {
   monitoringLevelsMeasuredDb:[-12,-6,0], expectedPeakAtTheHeadphoneOutputDbfs:[-53.1,-47.1,-41.1], measuredPeakAtTheHeadphoneOutputDbfs:[-53.1,-47.1,-41.1],
   silentWhenOff:true, otherInputsBringNothingFromInputOne:true, stepWhileOffSendsNothing:true, pressesOnDevice:19, pressesAsExpected:19,
   playbackOnTheHeadphonesDuringTheMeasurement:false, microphoneOrInstrumentConnected:false, levelsBelowMinusTwelveDbMeasured:false, monitoringOnMainBuilt:false, latencyMeasured:false,
+  playbackRuleSha256:'58428a64e447d3f01297a5c994cbed07f68de103691555c9620cf8b587aaaa8c', playbackFilterSha256:'cd09357bc0975a22af2da6a69373cbb62ee262599ee36ec4babac14094b2f4ab',
+  playbackOnTheHeadphonesSwitchable:true, playbackLevelsMeasuredDb:[0,-6,-12,-9], playbackExpectedPeakDbfs:[-20.5,-26.5,-32.5,-29.5], playbackMeasuredPeakDbfs:[-20.5,-26.5,-32.5,-29.5], playbackPeakDbfs:-6.0, playbackSilentWhenOff:true, mainMutedDuringThePlaybackMeasurement:true,
+  playbackNewOfflineTests:18, playbackEarlierOfflineTestsStillPassing:123, playbackFalsificationsNoticed:21,
+  regressionRunsCorrectedAndRepeated:true, inputAndPlaybackOnTheHeadphonesAtTheSameTimeMeasured:false,
   operationAlongsideTotalMixVerified:false, enduranceVerified:false,
   candidateReleased:false, silentUsbContinuityProven:false, crashSafeRecoveryProven:false, generalLiveReadinessVerified:false,
-  result:'Each of the four analog inputs can now be put on the headphones with a level of its own, through the mixer of the unit and without TotalMix. The unit does not report its mixer, so the rule keeps its own picture and a measurement had to decide. With a cable from an output into an input, the headphone output carried exactly the expected peak at -12, -6 and 0 dB, nothing when the way was off, and nothing of input 1 when the other inputs were on.',
-  boundary:'The unit does not report its mixer: a change from outside goes unnoticed until a way is switched again. No microphone or instrument was connected, playback was not on the headphones during the measurement, and levels below -12 dB were not measured. Monitoring on Main is deliberately not built. This is a private working copy, not a release.',
+  result:'Each of the four analog inputs can now be put on the headphones with a level of its own, through the mixer of the unit and without TotalMix. The unit does not report its mixer, so the rule keeps its own picture and a measurement had to decide. With a cable from an output into an input, the headphone output carried exactly the expected peak at -12, -6 and 0 dB, nothing when the way was off, and nothing of input 1 when the other inputs were on. The playback then got the same controls, so that the balance between what is played and the loops can be set in the headphones; measured the same way, it arrived exactly as well.',
+  boundary:'The unit does not report its mixer: a change from outside goes unnoticed until a way is switched again. No microphone or instrument was connected, an input and the playback were not measured on the headphones at the same time, and levels below -12 dB were not measured. Monitoring on Main is deliberately not built. This is a private working copy, not a release.',
   sourceUrl:REPORTS.monitoring,
 } as const;
 

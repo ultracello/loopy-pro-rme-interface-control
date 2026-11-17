@@ -398,8 +398,13 @@ test('the monitoring checkpoint says that the unit does not report its mixer, an
  assert.deepEqual(MONITORING_CHECKPOINT.measuredPeakAtTheHeadphoneOutputDbfs,MONITORING_CHECKPOINT.expectedPeakAtTheHeadphoneOutputDbfs);
  MONITORING_CHECKPOINT.monitoringLevelsMeasuredDb.forEach((level,i)=>assert.ok(Math.abs(MONITORING_CHECKPOINT.peakAtInputOneDbfs+level+MONITORING_CHECKPOINT.headphoneOutputLevelDb-MONITORING_CHECKPOINT.expectedPeakAtTheHeadphoneOutputDbfs[i])<0.05,String(level)));
  assert.ok(MONITORING_CHECKPOINT.levelMaxDb<=0);
+ assert.match(MONITORING_CHECKPOINT.playbackRuleSha256,/^[0-9a-f]{64}$/);
+ assert.match(MONITORING_CHECKPOINT.playbackFilterSha256,/^[0-9a-f]{64}$/);
+ assert.notEqual(MONITORING_CHECKPOINT.playbackRuleSha256,MONITORING_CHECKPOINT.candidateRuleSha256);
+ assert.deepEqual(MONITORING_CHECKPOINT.playbackMeasuredPeakDbfs,MONITORING_CHECKPOINT.playbackExpectedPeakDbfs);
+ MONITORING_CHECKPOINT.playbackLevelsMeasuredDb.forEach((level,i)=>assert.ok(Math.abs(MONITORING_CHECKPOINT.playbackPeakDbfs+level+MONITORING_CHECKPOINT.headphoneOutputLevelDb-MONITORING_CHECKPOINT.playbackExpectedPeakDbfs[i])<0.05,String(level)));
  assert.ok(Math.min(...MONITORING_CHECKPOINT.monitoringLevelsMeasuredDb)>=-12);
- for(const key of ['levelAboveUnityPossible','unitReportsItsMixer','ruleNoticesAChangeFromOutside','playbackOnTheHeadphonesDuringTheMeasurement','microphoneOrInstrumentConnected','levelsBelowMinusTwelveDbMeasured','monitoringOnMainBuilt','latencyMeasured','operationAlongsideTotalMixVerified','enduranceVerified','candidateReleased','silentUsbContinuityProven','crashSafeRecoveryProven','generalLiveReadinessVerified'] as const)assert.equal(MONITORING_CHECKPOINT[key],false,key);
+ for(const key of ['levelAboveUnityPossible','unitReportsItsMixer','ruleNoticesAChangeFromOutside','playbackOnTheHeadphonesDuringTheMeasurement','microphoneOrInstrumentConnected','levelsBelowMinusTwelveDbMeasured','monitoringOnMainBuilt','latencyMeasured','inputAndPlaybackOnTheHeadphonesAtTheSameTimeMeasured','operationAlongsideTotalMixVerified','enduranceVerified','candidateReleased','silentUsbContinuityProven','crashSafeRecoveryProven','generalLiveReadinessVerified'] as const)assert.equal(MONITORING_CHECKPOINT[key],false,key);
  assert.match(MONITORING_CHECKPOINT.boundary,/does not report its mixer/);
  assert.match(MONITORING_CHECKPOINT.boundary,/Monitoring on Main is deliberately not built/);
  assert.match(MONITORING_CHECKPOINT.boundary,/not a release/);
