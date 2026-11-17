@@ -1,7 +1,7 @@
 export const PUBLIC_REPOSITORY = {
   url: 'https://github.com/ultracello/loopy-pro-rme-interface-control',
   branch: 'main',
-  reviewedCommit: 'b44d59ca451b3b29210738aa5064b42fe22d7f95',
+  reviewedCommit: '24d8a3f698535564251701a487733f3cedad9873',
   reviewedDate: '2026-11-18',
   reviewedFile: 'README.md, transfer-copy write pair and session gain-mute check, other-project Interface READ transfer and earlier scoped milestones',
   visibility: 'public',
@@ -9,6 +9,7 @@ export const PUBLIC_REPOSITORY = {
 } as const;
 const pinned = (path: string) => `${PUBLIC_REPOSITORY.url}/blob/${PUBLIC_REPOSITORY.reviewedCommit}/${path}`;
 export const REPORTS = {
+  replugCorrection: pinned('docs/milestones/2026-11-18-correction-after-a-replug-the-control-works.md'),
   phase: pinned('docs/milestones/2026-11-18-phase-of-each-way.md'),
   referenceLevel: pinned('docs/milestones/2026-11-17-reference-level-of-the-line-inputs.md'),
   arming: pinned('docs/milestones/2026-11-17-arming-restores-the-mixer.md'),
@@ -231,6 +232,24 @@ export const INTERFACE_MUTE_CHECKPOINT = {
   boundary:'One pass, every step once, TotalMix closed. Main was not touched because the device held it at raw 59 from outside. Step buttons and fader writes under this rule were checked offline only. The level before a mute lives only in the running controller. This is a private working copy, not a release.',
   sourceUrl:REPORTS.interfaceMute,
 } as const;
+export const REPLUG_CORRECTION_CHECKPOINT = {
+  id:'correction-after-a-replug-the-control-works', revision:'Correction · replug · 18 Nov', level:'One bounded native run after one replug, a watch that changed nothing, and an offline reproduction: an earlier conclusion of the project is withdrawn',
+  title:'Correction: after a replug the control works at once.',
+  earlierClaimThatTheHostInputStaysDeadWithdrawn:true, earlierProbeDiscardedItsOwnRead:true, faultWasInTheProjectsProbe:true, faultOfTheHostShown:false,
+  reportForTheDeveloperOfTheHostSent:false, reportForTheDeveloperOfTheHostWithdrawn:true,
+  routingAppSuspendedByTheReplug:true, routingAppTouchedBeforeTheChecks:false,
+  readReachedTheUnit:true, armingBroughtTheSignalBackToTheHeadphones:true, stepArrivedAndWentBack:true, pageShowedReadOrArmed:false, pageShowedEverythingAfterTheRoutingAppWasBroughtToTheFront:true,
+  offlineReproductionOfTheEarlierProbe:{readFlagAfterTheAnswer:1, readFlagAfterTheLock:0, armedAfterwards:false, stepSent:false},
+  replugsMeasuredWithTheCorrectedProbe:1, earlierRoundsReread:5,
+  powerDropOfTheWholeChainTheSameNight:true, routingAppSuspendedByThatDrop:false, pageReadAtTheFirstTryAfterThatDrop:true,
+  whyTheSystemSuspendsTheRoutingAppAtAReplugKnown:false, displaysIndependentOfTheRoutingApp:false, setupNeedsNoTouchAfterAReplug:false, microphoneOrInstrumentConnected:false,
+  operationAlongsideTotalMixVerified:false, enduranceVerified:false,
+  candidateReleased:false, silentUsbContinuityProven:false, crashSafeRecoveryProven:false, generalLiveReadinessVerified:false,
+  result:'Earlier reports said that after a replug of the interface the input of the host stays dead until the separate routing app wakes, and called it a fault of the host. That was wrong. Measured with a corrected probe after a replug, with the routing app suspended and untouched: a READ reached the unit, arming brought the signal back to the headphone output, and a step arrived and went back. Only the page showed nothing, because the displays pass through the routing app. The earlier probe had pressed the lock whenever the page did not show a read, which discards the read; run offline, that sequence sends nothing. The report drafted for the developer of the host was never sent and is withdrawn.',
+  boundary:'One replug was measured with the corrected probe; the offline reproduction and the five earlier rounds, read again, support it. Why the system suspends the routing app at a replug is not known, and the displays still depend on that app. After a replug the page still has to be read and armed. This is a private working copy, not a release.',
+  sourceUrl:REPORTS.replugCorrection,
+} as const;
+
 export const PHASE_CHECKPOINT = {
   id:'phase-of-each-way', revision:'Phase of each way · 18 Nov', level:'Offline tests and two bounded native runs of one session each, with a loop cable: the sixteenth revision inverts the phase of each way to the headphones',
   title:'Each way to the headphones can be inverted in phase.',
@@ -246,7 +265,7 @@ export const PHASE_CHECKPOINT = {
   operationAlongsideTotalMixVerified:false, enduranceVerified:false,
   candidateReleased:false, silentUsbContinuityProven:false, crashSafeRecoveryProven:false, generalLiveReadinessVerified:false,
   result:'The sixteenth revision can invert the phase of each of the five ways to the headphones; an inverted level is sent as its negative, as the protocol notes describe. Measured on the unit with the same signal on two ways: a way alone keeps its level exactly, also with a pan; the sum of the two ways stood at −35.8 dBFS for equal signs and at −44.6 dBFS for unequal ones, every combination twice with the same value, and unchanged after locking and arming again. The routing app that carries the displays now passes a wider range of feedback numbers; page and control worked with it as before.',
-  boundary:'Measured on the unit for input 1 and the playback; the other three inputs were tested offline only. How it sounds with a microphone or an instrument is not established: none was connected. The routing app still has to be brought to the front once after a replug. This is a private working copy, not a release.',
+  boundary:'Measured on the unit for input 1 and the playback; the other three inputs were tested offline only. How it sounds with a microphone or an instrument is not established: none was connected. After a replug the routing app has to be brought to the front once for the displays; the control works without it (corrected on 18 November). This is a private working copy, not a release.',
   sourceUrl:REPORTS.phase,
 } as const;
 
@@ -265,7 +284,7 @@ export const REFERENCE_LEVEL_CHECKPOINT = {
   operationAlongsideTotalMixVerified:false, enduranceVerified:false,
   candidateReleased:false, silentUsbContinuityProven:false, crashSafeRecoveryProven:false, generalLiveReadinessVerified:false,
   result:'The fifteenth revision switches the reference level of line input 3 and 4 from the page, in the guarded course of the pad: fresh read, one message that changes exactly one setting bit, check read. On the unit, eight of eight switches were reported back and shown, a gain step and a pad beside them arrived, and a press on the locked page was refused. At the end the unit stood as at the start. The same afternoon the routing app that carries the displays was still running after at least 92 minutes untouched in the background, and the displays followed at once.',
-  boundary:'What the switch does to a signal is not established: nothing was connected, and the idle noise of the two inputs did not move with it. Which position is +4 dBu and which is −10 dBV rests on the naming of the Linux driver alone. The refusal while phantom power is on was tested offline only. The routing app was not observed on battery, and it still has to be brought to the front once after a replug. This is a private working copy, not a release.',
+  boundary:'What the switch does to a signal is not established: nothing was connected, and the idle noise of the two inputs did not move with it. Which position is +4 dBu and which is −10 dBV rests on the naming of the Linux driver alone. The refusal while phantom power is on was tested offline only. The routing app was not observed on battery; after a replug it has to be brought to the front once for the displays, while the control works without it (corrected on 18 November). This is a private working copy, not a release.',
   sourceUrl:REPORTS.referenceLevel,
 } as const;
 
@@ -285,7 +304,7 @@ export const ARMING_CHECKPOINT = {
   operationAlongsideTotalMixVerified:false, enduranceVerified:false,
   candidateReleased:false, silentUsbContinuityProven:false, crashSafeRecoveryProven:false, generalLiveReadinessVerified:false,
   result:'The unit forgets its mixer whenever its USB connection is built anew. The fourteenth revision sends again, on arming, every way to the headphones whose state it knows, with its level and pan. Measured across a replug: before arming the headphone output was silent; after reading and arming, with nothing else pressed, it stood exactly where it had stood before, and each of the two ways alone was exact. A soak of 400 presses, each read back from the meters of the unit, lost no message.',
-  boundary:'The measuring block failed once on this revision and passed afterwards; the meters of the unit take up to about two seconds to show a new level, which is the likely cause but not proven. The routing app still has to be brought to the front once after a replug. Two ways were restored on the unit, all five only offline. The twelve presses without effect of the checkpoint before remain unexplained. This is a private working copy, not a release.',
+  boundary:'The measuring block failed once on this revision and passed afterwards; the meters of the unit take up to about two seconds to show a new level, which is the likely cause but not proven. After a replug the routing app has to be brought to the front once for the displays; the control works without it (corrected on 18 November). Two ways were restored on the unit, all five only offline. The twelve presses without effect of the checkpoint before remain unexplained. This is a private working copy, not a release.',
   sourceUrl:REPORTS.arming,
 } as const;
 
@@ -301,12 +320,12 @@ export const HOST_WAYS_CHECKPOINT = {
   levelDisplayReadings:147, panDisplayReadings:22, gainDisplayReadings:130, displayReadingsWrong:0,
   measurementsJudged:11, measurementsPassed:11, largestDifferenceFromExpectedDb:0.1, pressesInTheMeasuringBlock:48, pressesAsExpected:48,
   pressesInARowWithoutEffectInTheFirstAttempt:12, somethingWasSentDuringThem:false, watchedPressesWithoutADrop:150, causeOfThePressesWithoutEffectKnown:false, testScriptFaultFoundAndCorrected:true,
-  replugWithThisSetupTested:true, replugRounds:5, handlesInsideTheHostTried:6, handlesInsideTheHostThatWokeItsInput:0, openingTheRoutingAppWokeItEveryTime:true, reportForTheDeveloperOfTheHostDrafted:true, reportForTheDeveloperOfTheHostSent:false, wayToTheUnitCameBackByItself:true, hostInputCameBackByItself:false, hostInputCameBackWhenTheRoutingAppWokeOrStarted:true, leavingAndReenteringTheHostHelped:false, appRestartNeededAfterAReplug:false, routingAppSuspendedByTheReplug:true, routingAppCarriesTheHostInput:false, whatWakesTheHostInputKnown:false, setupRecoversFromAReplugWithoutATouch:false,
+  replugWithThisSetupTested:true, replugRounds:5, handlesInsideTheHostTried:6, pageShowedAgainOnlyAfterTheRoutingAppWokeOrStarted:true, conclusionThatTheHostInputStaysDeadWithdrawn:true, probeOfTheseRoundsDiscardedItsOwnRead:true, correctedOn:'2026-11-18', reportForTheDeveloperOfTheHostDrafted:true, reportForTheDeveloperOfTheHostSent:false, reportForTheDeveloperOfTheHostWithdrawn:true, wayToTheUnitCameBackByItself:true, appRestartNeededAfterAReplug:false, routingAppSuspendedByTheReplug:true, routingAppCarriesTheHostInput:false, displaysNeedTheRoutingAppAwake:true, setupRecoversFromAReplugWithoutATouch:false,
   feedbackWithoutTheRoutingAppBuilt:false, existingRoutesOfTheOperatorCheckedInPlayingUse:false, microphoneOrInstrumentConnected:false,
   operationAlongsideTotalMixVerified:false, enduranceVerified:false,
   candidateReleased:false, silentUsbContinuityProven:false, crashSafeRecoveryProven:false, generalLiveReadinessVerified:false,
-  result:'The host now listens to the interface itself, and a second plugin instance inside the host carries the strict filter before it. With the separate routing app ended, a READ on the page still reached the unit and a step on the headphones arrived and went back. With the app running only for the displays, nine of nine checks passed, including steps that arrived while the app was ended midway. All displays were read again without a difference and all measurements at the headphone output were repeated within 0.1 dB. Replugged five times, the setup needed one touch on the routing app and no restart; no handle inside the host woke its input.',
-  boundary:'In the first of two acceptance attempts twelve presses in a row changed nothing; nothing was being sent at the time, it went on by itself, and the cause is not known. The check for doubled messages is not conclusive. After a replug the way to the unit comes back by itself, but the input of the host only once the routing app is brought to the front; what exactly wakes it is not known. The feedback to the page still needs the routing app. This is a private working copy, not a release.',
+  result:'The host now listens to the interface itself, and a second plugin instance inside the host carries the strict filter before it. With the separate routing app ended, a READ on the page still reached the unit and a step on the headphones arrived and went back. With the app running only for the displays, nine of nine checks passed, including steps that arrived while the app was ended midway. All displays were read again without a difference and all measurements at the headphone output were repeated within 0.1 dB. Replugged five times, no app had to be restarted. The conclusion first drawn from these rounds, that the input of the host stays dead until the routing app wakes, was withdrawn on 18 November: the probe had discarded its own read.',
+  boundary:'In the first of two acceptance attempts twelve presses in a row changed nothing; nothing was being sent at the time, it went on by itself, and the cause is not known. The check for doubled messages is not conclusive. After a replug the control works at once, but the displays stay where they were until the routing app is brought to the front, because the system suspends it and the displays pass through it (corrected on 18 November). The feedback to the page still needs the routing app. This is a private working copy, not a release.',
   sourceUrl:REPORTS.hostWays,
 } as const;
 
@@ -463,6 +482,7 @@ export const LAB_STATUS = {
   evidenceType: 'Project-reported scoped experiments, linked to dated public reports. Raw captures and installable controller artifacts are not bundled with this planner.',
   releaseReady: false,
   entries: [
+    REPLUG_CORRECTION_CHECKPOINT,
     PHASE_CHECKPOINT,
     REFERENCE_LEVEL_CHECKPOINT,
     ARMING_CHECKPOINT,
