@@ -1,6 +1,6 @@
 # Pad of the microphone inputs, and input steps that keep the page armed
 
-Completed 17 November 2026, 02:06 to 02:21 (Europe/Berlin). Evidence: project-reported, one bounded native iPad/Babyface Pro FS run and offline tests. This is not a live approval.
+Completed 17 November 2026, 02:06 to 02:38 (Europe/Berlin). Evidence: project-reported, two bounded native iPad/Babyface Pro FS runs and offline tests. This is not a live approval.
 
 ## What the earlier run had shown
 
@@ -39,8 +39,23 @@ Nothing was connected to the inputs. After each press the unit was read directly
 
 All 14 checks passed. The assumption holds on this unit: it reports the pad of input 1 in bit 4 and of input 2 in bit 5 of the first state word, and it accepts the write the notes describe. The 48 V displays stayed off throughout, the output gains did not change, and every setting and gain ended where it started.
 
+## Measured with a loop cable
+
+The operator then suggested a cable from an output into an input, and connected XLR output 1 to XLR input 1. With a clip looping and Main at −30 dB, the peak meters of the unit showed what pad and gain do to a signal. Each value is the highest peak of eight readings over a little more than one loop of the clip.
+
+| State of input 1 | Peak at input 1 | Against pad off, gain 0 |
+|---|---|---|
+| Pad off, gain 0 dB | −26.6 dBFS | |
+| Pad on | −36.8 dBFS | −10.2 dB |
+| Pad off again | −26.6 dBFS | 0.0 dB |
+| Gain 3 dB | −23.6 dBFS | +3.0 dB |
+| Gain 6 dB | −20.6 dBFS | +6.0 dB |
+| Gain back at 0 dB | −26.6 dBFS | 0.0 dB |
+
+The pad attenuates by 10.2 dB on this unit (the manual says 11 dB), and the gain steps arrive as displayed. Main stayed at −30 dB and the gain at 6 dB or below, so that the loop could not feed back. Main was muted again afterwards.
+
 ## Remaining boundaries
 
-Not established: the attenuation of the pad on a signal, since nothing was connected; the refusal of a pad press while 48 V is on, which was shown offline only because 48 V is not switched on for a test; the meaning of two further setting bits that stand set and are sent back as read; an evening of playing; operation alongside TotalMix; crash-safe recovery. Phantom power is deliberately not reachable.
+Not established: the refusal of a pad press while 48 V is on, which was shown offline only because 48 V is not switched on for a test; the meaning of two further setting bits that stand set and are sent back as read; an evening of playing; operation alongside TotalMix; crash-safe recovery. Phantom power is deliberately not reachable.
 
 Private native projects, scenes, identity maps, captures and access material are not distributed. This facts-only report includes no controller source, native archive or public installation package. The [acceptance gates](../ACCEPTANCE.md) continue to apply.
