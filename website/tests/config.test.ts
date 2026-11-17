@@ -348,10 +348,14 @@ test('the input-gain checkpoint states what was not run, keeps phantom power out
  assert.equal(INPUT_GAIN_CHECKPOINT.checksPassedOnDevice,INPUT_GAIN_CHECKPOINT.checksOnDevice);
  assert.deepEqual(INPUT_GAIN_CHECKPOINT.inputsAtEnd,INPUT_GAIN_CHECKPOINT.inputsAtStart);
  assert.equal(INPUT_GAIN_CHECKPOINT.writesInTheReadOnlyRun,0);
- assert.ok(INPUT_GAIN_CHECKPOINT.microphoneMaxDbSeenOnDevice<INPUT_GAIN_CHECKPOINT.microphoneMaxDbPerManual);
+ assert.ok(INPUT_GAIN_CHECKPOINT.microphoneMaxDbSeenInTheReadOnlyRun<INPUT_GAIN_CHECKPOINT.microphoneMaxDbPerManual);
+ assert.equal(INPUT_GAIN_CHECKPOINT.microphoneMaxDbWrittenAndReadBack,INPUT_GAIN_CHECKPOINT.microphoneMaxDbPerManual);
+ assert.equal(INPUT_GAIN_CHECKPOINT.checksOnDevice,INPUT_GAIN_CHECKPOINT.firstAcceptanceChecks+INPUT_GAIN_CHECKPOINT.wholeRangeAcceptanceChecks);
+ assert.equal(INPUT_GAIN_CHECKPOINT.microphoneStepOfThatWidthDb,Math.ceil(INPUT_GAIN_CHECKPOINT.widthOfThePageOnDeviceDb));
  assert.ok(INPUT_GAIN_CHECKPOINT.largestMicrophoneGainWrittenDb<=INPUT_GAIN_CHECKPOINT.microphonePackingConfirmedUpToDb);
- for(const key of ['outputGainsChangedByAnInputStep','inputStepsLockThePage','phantomPowerReachable','phantomPowerMessagePassesTheFilter','microphoneGainsAboveThreeDbRun','upperEndOfMicrophoneGainMeasured','errorOutcomesOfAnInputStepSeenOnDevice','padAndInstrumentSwitchesCovered','operationAlongsideTotalMixVerified','enduranceVerified','candidateReleased','silentUsbContinuityProven','crashSafeRecoveryProven','generalLiveReadinessVerified'] as const)assert.equal(INPUT_GAIN_CHECKPOINT[key],false,key);
- assert.match(INPUT_GAIN_CHECKPOINT.boundary,/above 3 dB and the upper end were not run/);
+ for(const key of ['outputGainsChangedByAnInputStep','inputStepsLockThePage','phantomPowerReachable','phantomPowerMessagePassesTheFilter','levelDiffersAndNoAnswerSeenOnDevice','sourceConnectedToAnInputDuringTheRuns','inputStepRenewsTheArmedMinute','padAndInstrumentSwitchesCovered','operationAlongsideTotalMixVerified','enduranceVerified','candidateReleased','silentUsbContinuityProven','crashSafeRecoveryProven','generalLiveReadinessVerified'] as const)assert.equal(INPUT_GAIN_CHECKPOINT[key],false,key);
+ assert.match(INPUT_GAIN_CHECKPOINT.boundary,/Nothing was connected to the inputs/);
+ assert.match(INPUT_GAIN_CHECKPOINT.boundary,/shown offline only/);
  assert.match(INPUT_GAIN_CHECKPOINT.boundary,/phantom power is deliberately out of reach/);
  assert.match(INPUT_GAIN_CHECKPOINT.boundary,/not a release/);
  assert.ok(INPUT_GAIN_CHECKPOINT.sourceUrl.endsWith('/docs/milestones/2026-11-17-input-gain-all-four-inputs.md'));

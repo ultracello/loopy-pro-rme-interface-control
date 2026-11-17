@@ -1,7 +1,7 @@
 export const PUBLIC_REPOSITORY = {
   url: 'https://github.com/ultracello/loopy-pro-rme-interface-control',
   branch: 'main',
-  reviewedCommit: 'ebeaffa28523fafd1407cce5851d7f6c7707d00d',
+  reviewedCommit: '07e981502a592dcc7abd293041d07438c3d65ac3',
   reviewedDate: '2026-11-17',
   reviewedFile: 'README.md, transfer-copy write pair and session gain-mute check, other-project Interface READ transfer and earlier scoped milestones',
   visibility: 'public',
@@ -224,20 +224,21 @@ export const INTERFACE_MUTE_CHECKPOINT = {
   sourceUrl:REPORTS.interfaceMute,
 } as const;
 export const INPUT_GAIN_CHECKPOINT = {
-  id:'input-gain-all-four-inputs', revision:'Input gain · four inputs · 17 Nov', level:'Two bounded native runs and offline tests: a read-only run that showed how the unit reports its input gains, then the first writes of the gain of all four analog inputs',
+  id:'input-gain-all-four-inputs', revision:'Input gain · four inputs · 17 Nov', level:'Three bounded native runs and offline tests: a read-only run that showed how the unit reports its input gains, the first writes of the gain of all four analog inputs, and an acceptance of the whole range',
   title:'All four inputs. Read first, then written.',
   candidateRuleSha256:'9b315a4adcf01613d34522c7327aa782e42a78645f0650387bea6045d096c40d', outboundFilterSha256:'f65d0d679958fb892556049b8de1af4bf474b675bf2b95a1b31f57df67f11aad',
-  inputs:4, microphoneInputs:2, lineInputs:2, microphoneStepDb:1, lineStepDb:0.5, lineMaxDb:9, microphoneMaxDbPerManual:65, microphoneMaxDbSeenOnDevice:59,
+  inputs:4, microphoneInputs:2, lineInputs:2, microphoneStepDb:1, lineStepDb:0.5, lineMaxDb:9, microphoneMaxDbPerManual:65, microphoneMaxDbSeenInTheReadOnlyRun:59, microphoneMaxDbWrittenAndReadBack:65,
   readOnlyRunSeconds:900, stateChangesRecordedInTheReadOnlyRun:196, writesInTheReadOnlyRun:0, knobTurnShowsInTheStateAtOnce:true,
   newOfflineTests:32, earlierOfflineTestsStillPassing:66, falsificationsNoticed:31,
-  checksOnDevice:12, checksPassedOnDevice:12, inputsAtStart:[0,0,12,0], inputsAtEnd:[0,0,12,0], outputGainsChangedByAnInputStep:false,
-  largestMicrophoneGainWrittenDb:3, microphonePackingConfirmedUpToDb:3, lineHalfDbCountConfirmed:true, refusalAtTheLowerEndSeen:true,
+  firstAcceptanceChecks:12, wholeRangeAcceptanceChecks:36, checksOnDevice:48, checksPassedOnDevice:48, inputsAtStart:[0,0,12,0], inputsAtEnd:[0,0,12,0], outputGainsChangedByAnInputStep:false,
+  largestMicrophoneGainWrittenDb:65, microphonePackingConfirmedUpToDb:65, lineHalfDbCountConfirmed:true, lineInputsRunToBothEnds:true, refusalAtBothEndsSeen:true, readFirstSeenOnALockedPage:true,
+  widthOfThePageOnDeviceDb:10.5, microphoneStepOfThatWidthDb:11,
   everyStepReadsFirstAndReadsBack:true, inputStepsLockThePage:false, phantomPowerReachable:false, phantomPowerMessagePassesTheFilter:false,
-  microphoneGainsAboveThreeDbRun:false, upperEndOfMicrophoneGainMeasured:false, errorOutcomesOfAnInputStepSeenOnDevice:false, padAndInstrumentSwitchesCovered:false,
+  levelDiffersAndNoAnswerSeenOnDevice:false, sourceConnectedToAnInputDuringTheRuns:false, inputStepRenewsTheArmedMinute:false, padAndInstrumentSwitchesCovered:false,
   operationAlongsideTotalMixVerified:false, enduranceVerified:false,
   candidateReleased:false, silentUsbContinuityProven:false, crashSafeRecoveryProven:false, generalLiveReadinessVerified:false,
-  result:'The gain of all four analog inputs can now be set from the operating page. A read-only run came first: the operator turned two gains on the unit while its state was read, which showed where and how the unit reports them. A seventh rule revision then reads, writes and reads back each step. On the interface twelve of twelve checks passed, from half a dB on a line input to the packed microphone values up to 3 dB, and every input ended where it started.',
-  boundary:'Microphone gains above 3 dB and the upper end were not run. The error outcomes of an input step were shown offline only. Pad and instrument switches are not covered, and phantom power is deliberately out of reach. This is a private working copy, not a release.',
+  result:'The gain of all four analog inputs can now be set from the operating page. A read-only run came first: the operator turned two gains on the unit while its state was read, which showed where and how the unit reports them. A seventh rule revision then reads, writes and reads back each step. On the interface twelve of twelve checks passed with small values. A second acceptance then ran the whole range, 36 of 36 checks: the microphone gain up to its upper end of 65 dB and back, the line inputs to both ends, and every input ended where it started.',
+  boundary:'Nothing was connected to the inputs during the runs. The outcomes level differs and no answer of an input step were shown offline only. Pad and instrument switches are not covered, and phantom power is deliberately out of reach. This is a private working copy, not a release.',
   sourceUrl:REPORTS.inputGain,
 } as const;
 
