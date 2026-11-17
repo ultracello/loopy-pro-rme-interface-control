@@ -1,7 +1,7 @@
 export const PUBLIC_REPOSITORY = {
   url: 'https://github.com/ultracello/loopy-pro-rme-interface-control',
   branch: 'main',
-  reviewedCommit: '07e981502a592dcc7abd293041d07438c3d65ac3',
+  reviewedCommit: '9c7860ae921df4783bdf23fde942bca7cb7723fd',
   reviewedDate: '2026-11-17',
   reviewedFile: 'README.md, transfer-copy write pair and session gain-mute check, other-project Interface READ transfer and earlier scoped milestones',
   visibility: 'public',
@@ -9,6 +9,7 @@ export const PUBLIC_REPOSITORY = {
 } as const;
 const pinned = (path: string) => `${PUBLIC_REPOSITORY.url}/blob/${PUBLIC_REPOSITORY.reviewedCommit}/${path}`;
 export const REPORTS = {
+  pad: pinned('docs/milestones/2026-11-17-pad-and-renewed-minute.md'),
   inputGain: pinned('docs/milestones/2026-11-17-input-gain-all-four-inputs.md'),
   freeSteps: pinned('docs/milestones/2026-11-13-free-step-width-and-main.md'),
   reasonRow: pinned('docs/milestones/2026-11-12-reason-row-and-usb-chain.md'),
@@ -223,6 +224,23 @@ export const INTERFACE_MUTE_CHECKPOINT = {
   boundary:'One pass, every step once, TotalMix closed. Main was not touched because the device held it at raw 59 from outside. Step buttons and fader writes under this rule were checked offline only. The level before a mute lives only in the running controller. This is a private working copy, not a release.',
   sourceUrl:REPORTS.interfaceMute,
 } as const;
+export const PAD_CHECKPOINT = {
+  id:'pad-and-renewed-minute', revision:'Pad · renewed minute · 17 Nov', level:'One bounded native run and offline tests: the pad of the two microphone inputs, and input steps that keep the page armed',
+  title:'The pad, with phantom power kept out of reach.',
+  candidateRuleSha256:'db79bf4ae544fbd1b5a48c93c2def05fd42ff26042392647447aca2b3c35b9fe', outboundFilterSha256:'9ac2f209163c42b89e51d258eafff06eb88e7366247c48f169a6d3a37843eac6',
+  padInputs:2, padSharesItsMessageWithPhantomPower:true, ruleEverSetsAPhantomPowerBit:false, filterPassesAPhantomPowerBit:false, phantomPowerReachable:false, phantomPowerShownOnThePage:true,
+  whereTheUnitReportsThePadWasInTheSources:false, assumedStateWord:0, assumedPadBits:[4,5], assumptionDecidedByTheFirstPressOnDevice:true, stateWordZeroBeforeAndAfterTheFirstPress:['009B000C','009B001C'],
+  newOfflineTests:25, earlierOfflineTestsStillPassing:89, falsificationsTried:29, falsificationsNoticed:27, falsificationsWithoutEffectOnBehaviour:2,
+  checksOnDevice:14, checksPassedOnDevice:14, settingsAtStart:'000C', settingsAtEnd:'000C', outputGainsChanged:false,
+  inputStepRenewsTheArmedMinute:true, stepAcceptedSecondsAfterArmingWithoutANewRead:97,
+  sourceConnectedToAnInput:false, padAttenuationMeasured:false, refusalWhilePhantomPowerIsOnSeenOnDevice:false, meaningOfTheTwoFurtherSettingBitsKnown:false,
+  operationAlongsideTotalMixVerified:false, enduranceVerified:false,
+  candidateReleased:false, silentUsbContinuityProven:false, crashSafeRecoveryProven:false, generalLiveReadinessVerified:false,
+  result:'The pad of both microphone inputs can now be switched from the operating page. The pad shares its message with phantom power, so the rule and the filter were built never to set a 48 V bit. Where the unit reports the pad was not in the sources; the first press on the interface decided it, and 14 of 14 checks passed. An input step now keeps the page armed like an output step: a step 97 seconds after arming was accepted without a new read.',
+  boundary:'Nothing was connected to the inputs, so the attenuation of the pad was not measured. The refusal of a pad press while 48 V is on was shown offline only. Phantom power is deliberately out of reach. This is a private working copy, not a release.',
+  sourceUrl:REPORTS.pad,
+} as const;
+
 export const INPUT_GAIN_CHECKPOINT = {
   id:'input-gain-all-four-inputs', revision:'Input gain · four inputs · 17 Nov', level:'Three bounded native runs and offline tests: a read-only run that showed how the unit reports its input gains, the first writes of the gain of all four analog inputs, and an acceptance of the whole range',
   title:'All four inputs. Read first, then written.',
@@ -298,6 +316,7 @@ export const LAB_STATUS = {
   evidenceType: 'Project-reported scoped experiments, linked to dated public reports. Raw captures and installable controller artifacts are not bundled with this planner.',
   releaseReady: false,
   entries: [
+    PAD_CHECKPOINT,
     INPUT_GAIN_CHECKPOINT,
     FREE_STEPS_CHECKPOINT,
     REASON_ROW_CHECKPOINT,
