@@ -462,7 +462,11 @@ test('the host-ways checkpoint keeps its open questions open',()=>{
  for(const key of ['ruleChanged','filterChanged','doublesCheckIsConclusive','somethingWasSentDuringThem','causeOfThePressesWithoutEffectKnown','hostInputCameBackByItself','leavingAndReenteringTheHostHelped','appRestartNeededAfterAReplug','routingAppCarriesTheHostInput','whatWakesTheHostInputKnown','setupRecoversFromAReplugWithoutATouch','feedbackWithoutTheRoutingAppBuilt','existingRoutesOfTheOperatorCheckedInPlayingUse','microphoneOrInstrumentConnected','operationAlongsideTotalMixVerified','enduranceVerified','candidateReleased','silentUsbContinuityProven','crashSafeRecoveryProven','generalLiveReadinessVerified'] as const)assert.equal(HOST_WAYS_CHECKPOINT[key],false,key);
  assert.match(HOST_WAYS_CHECKPOINT.boundary,/cause is not known/);
  assert.match(HOST_WAYS_CHECKPOINT.boundary,/what exactly wakes it is not known/);
- assert.equal(HOST_WAYS_CHECKPOINT.replugRounds,3);
+ assert.equal(HOST_WAYS_CHECKPOINT.replugRounds,5);
+ assert.equal(HOST_WAYS_CHECKPOINT.handlesInsideTheHostThatWokeItsInput,0);
+ assert.ok(HOST_WAYS_CHECKPOINT.handlesInsideTheHostTried>0);
+ assert.equal(HOST_WAYS_CHECKPOINT.openingTheRoutingAppWokeItEveryTime,true);
+ assert.equal(HOST_WAYS_CHECKPOINT.reportForTheDeveloperOfTheHostSent,false);
  assert.match(HOST_WAYS_CHECKPOINT.boundary,/not a release/);
  assert.ok(HOST_WAYS_CHECKPOINT.sourceUrl.endsWith('/docs/milestones/2026-11-17-control-ways-inside-the-host.md'));
 });
