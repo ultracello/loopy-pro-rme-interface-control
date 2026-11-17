@@ -1,6 +1,6 @@
 # Hearing the inputs on the headphones, measured with a loop cable
 
-Completed 17 November 2026, 02:53 to 03:01 (Europe/Berlin). Evidence: project-reported, one bounded native iPad/Babyface Pro FS run and offline tests. This is not a live approval.
+Completed 17 November 2026, 02:53 to 03:20 (Europe/Berlin). Evidence: project-reported, two bounded native iPad/Babyface Pro FS runs and offline tests. This is not a live approval.
 
 ## A function the unit does not report back
 
@@ -37,8 +37,34 @@ Each value is the highest peak of several readings over a little more than one l
 
 This establishes on this unit that the mixer message puts an input on the headphones with a freely chosen level, and that the four inputs are addressed as the notes say. Main stayed at −30 dB and was muted again afterwards; every monitoring way was left off.
 
+## The playback gets the same controls
+
+Until then the playback reached the headphones through a control that wrote two mixer levels fixed at unity and could not take them back. A tenth revision of the rule, SHA-256 `58428a64e447d3f01297a5c994cbed07f68de103691555c9620cf8b587aaaa8c`, gives that way what the inputs got: on, off and a level from −60 to 0 dB. With it the balance between what is played and the loops can be set in the headphones. The filter, SHA-256 `cd09357bc0975a22af2da6a69373cbb62ee262599ee36ec4babac14094b2f4ab`, now passes these two mixer places with any level up to unity.
+
+Offline, 18 new tests passed and the 123 tests of the earlier revisions still pass. All 21 deliberate falsifications were noticed.
+
+On the interface the clip played with a peak of −6.0 dBFS and the headphone output stood at −14.5 dB. Main stayed muted throughout.
+
+| State | Peak at the headphone output, left and right | Expected | Difference |
+|---|---|---|---|
+| Before | no signal | | |
+| Playback on at 0 dB | −20.5 dBFS | −20.5 dBFS | 0.0 dB |
+| At −6 dB | −26.5 dBFS | −26.5 dBFS | 0.0 dB |
+| At −12 dB | −32.5 dBFS | −32.5 dBFS | 0.0 dB |
+| Off | no signal | no signal | |
+| One step up while off | no signal | no signal | |
+| On again, at the −9 dB kept | −29.5 dBFS | −29.5 dBFS | 0.0 dB |
+| Back at 0 dB | −20.5 dBFS | −20.5 dBFS | 0.0 dB |
+| One more step up at 0 dB | refused; unchanged | | |
+
+All 12 presses showed the expected reason and displays. The run ended with the playback on the headphones at 0 dB.
+
+## A flaw in the project's own regression runs, found and corrected
+
+While this revision was prepared, a flaw showed in the runs that repeat earlier tests against a newer rule: for the eighth and ninth revision, the tests written for the seventh had in fact still run against the seventh, because a helper had its rule file fixed as a default value. The statements "the 89 tests of the earlier revisions still pass" and "the 106 tests ... still pass" in the two reports of this night rested partly on that. The helper now looks the file up when it is called, and the runs were repeated: 89 against the eighth, 106 against the ninth and 123 against the tenth revision, all passing. The statements hold; the way they had been reached did not.
+
 ## Remaining boundaries
 
-Not established: monitoring with a microphone or an instrument connected, and its latency; monitoring together with playback on the headphones; levels below −12 dB on the interface; monitoring on Main, which is deliberately not built because with a microphone and speakers it is the way to feedback. If TotalMix or a loss of power changes the mixer, the rule does not notice: its picture stands until a way is switched again.
+Not established: monitoring with a microphone or an instrument connected, and its latency; an input and the playback on the headphones at the same time; levels below −12 dB on the interface; monitoring on Main, which is deliberately not built because with a microphone and speakers it is the way to feedback. If TotalMix or a loss of power changes the mixer, the rule does not notice: its picture stands until a way is switched again.
 
 Private native projects, scenes, identity maps, captures and access material are not distributed. This facts-only report includes no controller source, native archive or public installation package. The [acceptance gates](../ACCEPTANCE.md) continue to apply.
