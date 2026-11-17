@@ -44,6 +44,8 @@ A second fault was the test script's own: its measuring block assumed that the r
 
 ## Later the same day: replugged three times
 
+> **Correction, 18 November 2026.** The conclusion drawn below, that the input of the host stays dead after a replug until the routing app wakes, was wrong: the project's probe discarded its own read. The control works at once after a replug; only the displays wait for the routing app. See [the correction](2026-11-18-correction-after-a-replug-the-control-works.md). The report for the developer of the host was not sent and is withdrawn.
+
 Completed 11:41 to 11:58. The operator pulled the cable of the interface at the hub, waited five seconds and plugged it in again, three times. Before, the page read at the first attempt and a step arrived.
 
 | Round | Routing app when the cable went back in | Stage | READ reaches the unit | Step arrives |

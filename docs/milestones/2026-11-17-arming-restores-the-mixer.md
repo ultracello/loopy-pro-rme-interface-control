@@ -14,7 +14,7 @@ Offline, 13 new tests passed, the 151 tests of the earlier revisions still pass,
 
 ## Measured across a replug
 
-A picture was set: the playback on the headphones at −6 dB, four positions right; input 1 monitored at −12 dB, two positions left. Then the operator pulled the cable of the interface and plugged it in again. The routing app was brought to the front once, as the earlier report found necessary; the page was read and armed. Nothing else was pressed.
+A picture was set: the playback on the headphones at −6 dB, four positions right; input 1 monitored at −12 dB, two positions left. Then the operator pulled the cable of the interface and plugged it in again. The routing app was brought to the front once, as the earlier report found necessary (it is not: see [the correction of 18 November](2026-11-18-correction-after-a-replug-the-control-works.md); only the displays need it); the page was read and armed. Nothing else was pressed.
 
 | Measurement at the headphone output | left | right |
 |---|---|---|
