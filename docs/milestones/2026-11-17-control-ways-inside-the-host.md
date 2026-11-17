@@ -42,8 +42,31 @@ The first of two acceptance attempts on the new copy stopped because twelve pres
 
 A second fault was the test script's own: its measuring block assumed that the rule did not yet know whether the playback was on the headphones. After the first attempt it did. The block was corrected and run on its own.
 
+## Later the same day: replugged three times
+
+Completed 11:41 to 11:58. The operator pulled the cable of the interface at the hub, waited five seconds and plugged it in again, three times. Before, the page read at the first attempt and a step arrived.
+
+| Round | Routing app when the cable went back in | Stage | READ reaches the unit | Step arrives |
+|---|---|---|---|---|
+| 1 | suspended by the system | as it is | yes | no |
+| | | 20 seconds later | yes | no |
+| | | routing app brought to the front once | yes | yes |
+| 2 | suspended | as it is | yes | no |
+| | | home screen and back to the host | yes | no |
+| | | routing app brought to the front once | yes | yes |
+| 3 | ended beforehand | as it is | yes | no |
+| | | home screen and back | yes | no |
+| | | 45 seconds later | yes | no |
+| | | routing app opened | yes | yes |
+
+Between rounds 2 and 3 the routing app was ended after the recovery, and a step still arrived: the answers of the unit reach the controller through the input of the host, not through the routing app.
+
+What this shows. The way to the unit comes back by itself. The input of the host from the interface stays dead after a replug, also after two minutes and after leaving and re-entering the host, so the controller never sees the answer and writes nothing. It works again the moment the routing app wakes or starts, although that app does not carry the input. A likely reason, not established: the host binds its input again only on a later change in the MIDI service of the system, and the routing app causes one when it wakes. The replug itself suspended the routing app, which had been running in the background before.
+
+No app had to be restarted in any round; with the earlier setup both had to be. The way of the playback to the headphones was lost each time, as after every loss of power, and its button restored it.
+
 ## Remaining boundaries
 
-Not established: whether this setup survives the interface being replugged without a restart; the cause of the twelve presses without effect; feedback to the page without the routing app; the operator's seven existing routes of the scene in playing use. No microphone or instrument was connected.
+Not established: what exactly wakes the input of the host after a replug, and a setup that recovers without any touch; the cause of the twelve presses without effect; feedback to the page without the routing app; the operator's seven existing routes of the scene in playing use. No microphone or instrument was connected.
 
 Private native projects, scenes, identity maps, captures and access material are not distributed. This facts-only report includes no controller source, native archive or public installation package. The [acceptance gates](../ACCEPTANCE.md) continue to apply.

@@ -6,7 +6,7 @@ be84d8011c96594589c4a6a6d6a329f5e8e2d9630a5fc9f32c34175032b8ff1b  .github/ISSUE_
 9417c917783d059c2b6460f8a5f5289b7878e035cfc7f1e1da3d32189fa4c13f  CHANGELOG.md
 0df13e0b4e3308eb028604bb2899db39f91ad2c93612050b50a68d37fde5dd41  CONTRIBUTING.md
 6b0382b16279f26ff69014300541967a356a666eb0b91b422f6862f6b7dad17e  LICENSE
-26b6445ded35ff92a43bd7c1a12393a2485dbab6ef5d6990886bf19c0e17bdc7  README.md
+f5f80283a3a0025187ce0031b22faaaa0dd81ddca8b9ea255602c30e732878b0  README.md
 6b3aa6638d7f9cc8a43415d2cc657c3544468eca5579d2ba6d9da849ca847220  docs/ACCEPTANCE.md
 48523b8667f9f4416c95412f1ac9ab475670c6df181ea497100861b19a9c9a6e  docs/DEVELOPMENT_SETUP.md
 fa2522d42176ae6b11c582c202b387b3d974d1434323fa45715d8660632b3d15  docs/MODULE_STATUS.md
@@ -32,7 +32,7 @@ afdd4e0964019c91ac285267e8b6f93d528dae75d7b616c0641921b8a13a1ab1  docs/milestone
 7ae88c6fa12f9746918e61f71a4d4e451406ebc972c949e809809abc4e5597b4  docs/milestones/2026-11-10-transfer-write-pair-session-mute.md
 b9453cb639a04ef764cc1addf1e37290c3bc6f653a8ad074b0ee67269576a6b7  docs/milestones/2026-11-12-reason-row-and-usb-chain.md
 d682af4ecde442a2ca2dd502aca2986a9d1b69cfd228cb6df55b827c03001824  docs/milestones/2026-11-13-free-step-width-and-main.md
-de8e61b9c7231c2891560fd998bff32235f2395e67247d0e115fd1d22e6d187b  docs/milestones/2026-11-17-control-ways-inside-the-host.md
+491c219f27e132e0e5cf5c1c7dda369b0ee2b5f9da21cdfdc1512465f060cdaf  docs/milestones/2026-11-17-control-ways-inside-the-host.md
 03d9029a6a32fe8987f331606a42b8c152518c97cb6de0bb495eb184445d4f0a  docs/milestones/2026-11-17-displays-read-field-by-field.md
 71022ba60ed449b37f9b43a74990f96e086b0dc04298af23f011b22658d28291  docs/milestones/2026-11-17-input-gain-all-four-inputs.md
 e2880aee99a6f0fd9a48fed92492eeb656d3e42fab3f6c39b9476731fc445dfe  docs/milestones/2026-11-17-monitoring-inputs-on-phones.md
