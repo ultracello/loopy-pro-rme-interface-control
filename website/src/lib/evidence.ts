@@ -1,7 +1,7 @@
 export const PUBLIC_REPOSITORY = {
   url: 'https://github.com/ultracello/loopy-pro-rme-interface-control',
   branch: 'main',
-  reviewedCommit: '409c0d383f8b5d5d46e21c14d5b52c7f427840c9',
+  reviewedCommit: 'c55b7c20f2bf763f35693637777b8986e5b23045',
   reviewedDate: '2026-11-17',
   reviewedFile: 'README.md, transfer-copy write pair and session gain-mute check, other-project Interface READ transfer and earlier scoped milestones',
   visibility: 'public',
@@ -9,6 +9,7 @@ export const PUBLIC_REPOSITORY = {
 } as const;
 const pinned = (path: string) => `${PUBLIC_REPOSITORY.url}/blob/${PUBLIC_REPOSITORY.reviewedCommit}/${path}`;
 export const REPORTS = {
+  arming: pinned('docs/milestones/2026-11-17-arming-restores-the-mixer.md'),
   hostWays: pinned('docs/milestones/2026-11-17-control-ways-inside-the-host.md'),
   displays: pinned('docs/milestones/2026-11-17-displays-read-field-by-field.md'),
   pan: pinned('docs/milestones/2026-11-17-pan-and-two-findings.md'),
@@ -228,6 +229,26 @@ export const INTERFACE_MUTE_CHECKPOINT = {
   boundary:'One pass, every step once, TotalMix closed. Main was not touched because the device held it at raw 59 from outside. Step buttons and fader writes under this rule were checked offline only. The level before a mute lives only in the running controller. This is a private working copy, not a release.',
   sourceUrl:REPORTS.interfaceMute,
 } as const;
+export const ARMING_CHECKPOINT = {
+  id:'arming-restores-the-mixer', revision:'Arming restores the mixer · 17 Nov', level:'Offline tests and one bounded native run in four sessions with one replug: the fourteenth revision sends again, on arming, every way to the headphones whose state it knows',
+  title:'After a replug, arming brings the mixer back.',
+  candidateRuleSha256:'2a9cc28d2b29761113e202b39aac13af92352fc8eb94936904381d7aa527f23a', filterChanged:false,
+  unitForgetsItsMixerWhenItsUsbConnectionIsBuiltAnew:true, waysWithAKnownStateAreSentAgainOnArming:true, waysWithAnUnknownStateAreTouched:false, newKindOfMessage:false,
+  newOfflineTests:13, earlierOfflineTestsStillPassing:151, falsificationsNoticed:18,
+  togetherBeforeTheReplugDbfs:[-31.9,-26.3], afterTheReplugBeforeArmingDbfs:[null,null], afterArmingNothingElsePressedDbfs:[-31.9,-26.3],
+  inputAloneBeforeDbfs:[-53.1,-56.1], inputAloneAfterDbfs:[-53.1,-56.1], playbackAloneBeforeDbfs:[-32.5,-26.5], playbackAloneAfterDbfs:[-32.5,-26.5],
+  phonesWayButtonPressed:false, routingAppBroughtToTheFrontOnce:true,
+  measuringBlockFailedOnce:true, deviationRepeatedInTenTargetedTries:0, measuringBlockPassedAfterwards:true,
+  soakPresses:400, soakPressesThatArrived:400, meterLagSecondsLeastMedianMost:[0.65,1.38,2.19], meterReadingsLaterThanTwoSeconds:24, causeOfTheOneDeviationProven:false,
+  waysRestoredOnTheUnit:2, waysRestoredOffline:5,
+  causeOfTheEarlierPressesWithoutEffectKnown:false, setupRecoversFromAReplugWithoutATouch:false, microphoneOrInstrumentConnected:false,
+  operationAlongsideTotalMixVerified:false, enduranceVerified:false,
+  candidateReleased:false, silentUsbContinuityProven:false, crashSafeRecoveryProven:false, generalLiveReadinessVerified:false,
+  result:'The unit forgets its mixer whenever its USB connection is built anew. The fourteenth revision sends again, on arming, every way to the headphones whose state it knows, with its level and pan. Measured across a replug: before arming the headphone output was silent; after reading and arming, with nothing else pressed, it stood exactly where it had stood before, and each of the two ways alone was exact. A soak of 400 presses, each read back from the meters of the unit, lost no message.',
+  boundary:'The measuring block failed once on this revision and passed afterwards; the meters of the unit take up to about two seconds to show a new level, which is the likely cause but not proven. The routing app still has to be brought to the front once after a replug. Two ways were restored on the unit, all five only offline. The twelve presses without effect of the checkpoint before remain unexplained. This is a private working copy, not a release.',
+  sourceUrl:REPORTS.arming,
+} as const;
+
 export const HOST_WAYS_CHECKPOINT = {
   id:'control-ways-inside-the-host', revision:'Ways inside the host · 17 Nov', level:'One bounded native run in three sessions: the two ways to and from the interface moved from the separate routing app into the host, checked with that app ended, then displays and measurements repeated',
   title:'The control no longer needs the routing app.',
@@ -402,6 +423,7 @@ export const LAB_STATUS = {
   evidenceType: 'Project-reported scoped experiments, linked to dated public reports. Raw captures and installable controller artifacts are not bundled with this planner.',
   releaseReady: false,
   entries: [
+    ARMING_CHECKPOINT,
     HOST_WAYS_CHECKPOINT,
     DISPLAYS_CHECKPOINT,
     PAN_CHECKPOINT,
