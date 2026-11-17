@@ -1,6 +1,6 @@
 # Input gain of all four analog inputs
 
-Completed 17 November 2026, 00:46 to 01:28 (Europe/Berlin). Evidence: project-reported, two bounded native iPad/Babyface Pro FS runs and offline tests. This is not a live approval.
+Completed 17 November 2026, 00:46 to 01:46 (Europe/Berlin). Evidence: project-reported, three bounded native iPad/Babyface Pro FS runs and offline tests. This is not a live approval.
 
 ## Reading first
 
@@ -54,10 +54,27 @@ After each press the unit was read directly.
 
 All twelve checks passed. The displays on the page showed the same values. The output gains did not change at any point, and every input ended where it started.
 
-This establishes on this unit the write of the input gains: the channel numbers, the count of half dB for the line inputs, and the packed form for the microphone inputs up to 3 dB.
+This established on this unit the write of the input gains: the channel numbers, the count of half dB for the line inputs, and the packed form for the microphone inputs up to 3 dB.
+
+## The whole range
+
+A second acceptance followed the same night, with nothing connected to the inputs. It ran the large values, again with a direct read of the unit after every press.
+
+| Check | Result |
+|---|---|
+| A press while the page is locked | nothing changes; the reason row says "read first" |
+| Step width of the page dragged to 10.5 dB | a microphone input moves 11 dB per press (rounded up to whole dB), a line input 10.5 dB |
+| Input 1 upwards | 11, 22, 33, 44, 55, 58, then every value from 59 to 65 dB |
+| Input 1, one more step at 65 dB | refused; the gain stays |
+| Input 1 downwards by the width of the page | 54, 43, 32, 21, 10, 0 dB; one more step at 0 refused |
+| Input 2 | 11, 22, 11, 0 dB |
+| Inputs 3 and 4 | to 9 dB and to 0 dB, held at both ends |
+| Return | every input where it started |
+
+All 36 checks passed, and the displays on the page showed the values the unit reported. The upper end of the microphone gain is 65 dB on this unit, as the manual says, and the special case of the packing from 60 dB is as the sources describe it. The output gains did not change.
 
 ## Remaining boundaries
 
-Not established: microphone gains above 3 dB, the upper end and the special case of the packing from 60 dB; the outcomes "level differs", "no answer" and "read first" of an input step on the interface; the pad and instrument switches; an evening of playing; operation alongside TotalMix; crash-safe recovery. Phantom power is deliberately not reachable.
+Not established: the outcomes "level differs" and "no answer" of an input step on the interface, which need a disturbance from outside; a microphone or instrument actually connected while the gain is set; the pad and instrument switches; an evening of playing; operation alongside TotalMix; crash-safe recovery. Phantom power is deliberately not reachable.
 
 Private native projects, scenes, identity maps, captures and access material are not distributed. This facts-only report includes no controller source, native archive or public installation package. The [acceptance gates](../ACCEPTANCE.md) continue to apply.
