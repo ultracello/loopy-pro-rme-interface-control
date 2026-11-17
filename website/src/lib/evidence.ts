@@ -1,7 +1,7 @@
 export const PUBLIC_REPOSITORY = {
   url: 'https://github.com/ultracello/loopy-pro-rme-interface-control',
   branch: 'main',
-  reviewedCommit: '9d10080c283eb390968a32ef00e7fc8e71726293',
+  reviewedCommit: '6742e5c3bd5a3f028271cd7ba89984dfe6512135',
   reviewedDate: '2026-11-17',
   reviewedFile: 'README.md, transfer-copy write pair and session gain-mute check, other-project Interface READ transfer and earlier scoped milestones',
   visibility: 'public',
@@ -240,11 +240,12 @@ export const HOST_WAYS_CHECKPOINT = {
   levelDisplayReadings:147, panDisplayReadings:22, gainDisplayReadings:130, displayReadingsWrong:0,
   measurementsJudged:11, measurementsPassed:11, largestDifferenceFromExpectedDb:0.1, pressesInTheMeasuringBlock:48, pressesAsExpected:48,
   pressesInARowWithoutEffectInTheFirstAttempt:12, somethingWasSentDuringThem:false, watchedPressesWithoutADrop:150, causeOfThePressesWithoutEffectKnown:false, testScriptFaultFoundAndCorrected:true,
-  replugWithThisSetupTested:false, feedbackWithoutTheRoutingAppBuilt:false, existingRoutesOfTheOperatorCheckedInPlayingUse:false, microphoneOrInstrumentConnected:false,
+  replugWithThisSetupTested:true, replugRounds:3, wayToTheUnitCameBackByItself:true, hostInputCameBackByItself:false, hostInputCameBackWhenTheRoutingAppWokeOrStarted:true, leavingAndReenteringTheHostHelped:false, appRestartNeededAfterAReplug:false, routingAppSuspendedByTheReplug:true, routingAppCarriesTheHostInput:false, whatWakesTheHostInputKnown:false, setupRecoversFromAReplugWithoutATouch:false,
+  feedbackWithoutTheRoutingAppBuilt:false, existingRoutesOfTheOperatorCheckedInPlayingUse:false, microphoneOrInstrumentConnected:false,
   operationAlongsideTotalMixVerified:false, enduranceVerified:false,
   candidateReleased:false, silentUsbContinuityProven:false, crashSafeRecoveryProven:false, generalLiveReadinessVerified:false,
-  result:'The host now listens to the interface itself, and a second plugin instance inside the host carries the strict filter before it. With the separate routing app ended, a READ on the page still reached the unit and a step on the headphones arrived and went back. With the app running only for the displays, nine of nine checks passed, including steps that arrived while the app was ended midway. All displays were read again without a difference and all measurements at the headphone output were repeated within 0.1 dB.',
-  boundary:'In the first of two acceptance attempts twelve presses in a row changed nothing; nothing was being sent at the time, it went on by itself, and the cause is not known. The check for doubled messages is not conclusive. Replugging the interface with this setup is not tested, and the feedback to the page still needs the routing app. This is a private working copy, not a release.',
+  result:'The host now listens to the interface itself, and a second plugin instance inside the host carries the strict filter before it. With the separate routing app ended, a READ on the page still reached the unit and a step on the headphones arrived and went back. With the app running only for the displays, nine of nine checks passed, including steps that arrived while the app was ended midway. All displays were read again without a difference and all measurements at the headphone output were repeated within 0.1 dB. Replugged three times, the setup needed one touch on the routing app and no restart.',
+  boundary:'In the first of two acceptance attempts twelve presses in a row changed nothing; nothing was being sent at the time, it went on by itself, and the cause is not known. The check for doubled messages is not conclusive. After a replug the way to the unit comes back by itself, but the input of the host only once the routing app is brought to the front; what exactly wakes it is not known. The feedback to the page still needs the routing app. This is a private working copy, not a release.',
   sourceUrl:REPORTS.hostWays,
 } as const;
 
