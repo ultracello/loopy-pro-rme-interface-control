@@ -1,7 +1,7 @@
 export const PUBLIC_REPOSITORY = {
   url: 'https://github.com/ultracello/loopy-pro-rme-interface-control',
   branch: 'main',
-  reviewedCommit: '93c608994336b9ef87280af55d47fa400018fa33',
+  reviewedCommit: 'ca4189a403f6c5ac17e81719269b02d661a52d30',
   reviewedDate: '2026-11-17',
   reviewedFile: 'README.md, transfer-copy write pair and session gain-mute check, other-project Interface READ transfer and earlier scoped milestones',
   visibility: 'public',
@@ -9,6 +9,7 @@ export const PUBLIC_REPOSITORY = {
 } as const;
 const pinned = (path: string) => `${PUBLIC_REPOSITORY.url}/blob/${PUBLIC_REPOSITORY.reviewedCommit}/${path}`;
 export const REPORTS = {
+  displays: pinned('docs/milestones/2026-11-17-displays-read-field-by-field.md'),
   pan: pinned('docs/milestones/2026-11-17-pan-and-two-findings.md'),
   monitoring: pinned('docs/milestones/2026-11-17-monitoring-inputs-on-phones.md'),
   pad: pinned('docs/milestones/2026-11-17-pad-and-renewed-minute.md'),
@@ -226,6 +227,25 @@ export const INTERFACE_MUTE_CHECKPOINT = {
   boundary:'One pass, every step once, TotalMix closed. Main was not touched because the device held it at raw 59 from outside. Step buttons and fader writes under this rule were checked offline only. The level before a mute lives only in the running controller. This is a private working copy, not a release.',
   sourceUrl:REPORTS.interfaceMute,
 } as const;
+export const DISPLAYS_CHECKPOINT = {
+  id:'displays-read-field-by-field', revision:'Displays · field by field · 17 Nov', level:'One bounded native run with a diagnosis in the middle: the revision that scales no display is on the interface, every dial read from the page, monitoring measured further down, and a finding about replugging the interface',
+  title:'Every display read. Replugging needed both apps restarted.',
+  candidateRuleSha256:'30abe4be9d27f50a555e062b5ff22020ff277ef03ee2ba2c622fe436a99c530c',
+  revisionOnTheInterface:true, dialsConverted:16, fieldsPerDial:128, ruleSendsFieldNumbers:true,
+  levelDisplayReadings:140, levelsSeen:121, levelDisplayWrong:0, panDisplayReadings:22, panDisplayWrong:0,
+  gainDisplayReadings:130, microphoneGainValuesSeen:66, lineGainValuesSeen:19, gainDisplayWrong:0, stepWidthShownAsExecuted:true,
+  monitoringLevelsMeasuredDb:[-12,-30,-48], monitoringExpectedPeakDbfs:[-53.1,-71.1,-89.1], monitoringMeasuredPeakDbfs:[-53.1,-71.1,-89.2],
+  panOfThePlaybackMeasured:true, inputAndPlaybackOnTheHeadphonesAtTheSameTimeMeasured:true, pressesOnDevice:49, pressesAsExpected:49, everythingBackWhereItStood:true,
+  pageDidNotReadAfterTheInterfaceWasReplugged:true, helperReadTheUnitDirectly:true, earlierRevisionBehavedTheSame:true, controllerInTheHostTookThePresses:true, portIdentifiersMatched:true, reloadingTheSceneHelped:false, restartingBothAppsHelped:true,
+  whichAppHeldTheStaleConnectionKnown:false, setupWithoutTheRoutingAppBuilt:false, causeOfTheInterfaceDisappearingKnown:false, causeOfTheAppBeingEndedKnown:false,
+  microphoneOrInstrumentConnected:false, monitoringAtMinusSixtyDbMeasured:false,
+  operationAlongsideTotalMixVerified:false, enduranceVerified:false,
+  candidateReleased:false, silentUsbContinuityProven:false, crashSafeRecoveryProven:false, generalLiveReadinessVerified:false,
+  result:'The revision that no longer scales any display is on the interface. Every dial of the page was read after every step and compared with the unit: all 121 levels of a way, 22 pan positions, all 66 values of a microphone gain and all 19 of a line gain, without a single difference. Monitoring was measured down to -48 dB, the pan of the playback as well, and an input together with the playback. The same run found that after the interface had been replugged, MIDI between the host and the separate routing app stayed dead in both directions; loading the scene again did not help, starting both apps anew did.',
+  boundary:'Which of the two apps held the stale connection is not known, and a setup without the routing app is not built. Why the interface disappeared in the night and why the system ended the routing app in the background are not known. No microphone or instrument was connected, and monitoring at -60 dB was not measured. This is a private working copy, not a release.',
+  sourceUrl:REPORTS.displays,
+} as const;
+
 export const PAN_CHECKPOINT = {
   id:'pan-and-two-findings', revision:'Pan · two faults · 17 Nov', level:'Three bounded native runs and offline tests: pan of the five ways to the headphones measured, a display fault of the project found, and the separate routing app ended by the system in the background',
   title:'Pan measured. Two faults written down.',
@@ -360,6 +380,7 @@ export const LAB_STATUS = {
   evidenceType: 'Project-reported scoped experiments, linked to dated public reports. Raw captures and installable controller artifacts are not bundled with this planner.',
   releaseReady: false,
   entries: [
+    DISPLAYS_CHECKPOINT,
     PAN_CHECKPOINT,
     MONITORING_CHECKPOINT,
     PAD_CHECKPOINT,
