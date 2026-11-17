@@ -1,14 +1,15 @@
 export const PUBLIC_REPOSITORY = {
   url: 'https://github.com/ultracello/loopy-pro-rme-interface-control',
   branch: 'main',
-  reviewedCommit: '22f526016a5a1a1a6e4ba2ed1526ed95befe085c',
-  reviewedDate: '2026-11-17',
+  reviewedCommit: 'b44d59ca451b3b29210738aa5064b42fe22d7f95',
+  reviewedDate: '2026-11-18',
   reviewedFile: 'README.md, transfer-copy write pair and session gain-mute check, other-project Interface READ transfer and earlier scoped milestones',
   visibility: 'public',
   status: 'The transferred Interface copy passed one 0.5-dB reduction/return pair per group on the unchanged Restricted rule. A separate session gain-mute candidate muted Phones and returned it exactly once; Main was not touched. Earlier Restricted cohorts passed 1/2/3/6-dB pairs within their stated bounds; an earlier Phones return remains failed. Gain-mute stays blocked in the Restricted copy and the candidate is not released. The controller route was silent for some minutes while the interface had dropped off USB by itself; waiting and a short replug did not reproduce it. Silent USB and crash-safe restoration remain open. Original project/scene restored. No public installable integration or full live approval.',
 } as const;
 const pinned = (path: string) => `${PUBLIC_REPOSITORY.url}/blob/${PUBLIC_REPOSITORY.reviewedCommit}/${path}`;
 export const REPORTS = {
+  phase: pinned('docs/milestones/2026-11-18-phase-of-each-way.md'),
   referenceLevel: pinned('docs/milestones/2026-11-17-reference-level-of-the-line-inputs.md'),
   arming: pinned('docs/milestones/2026-11-17-arming-restores-the-mixer.md'),
   hostWays: pinned('docs/milestones/2026-11-17-control-ways-inside-the-host.md'),
@@ -230,6 +231,25 @@ export const INTERFACE_MUTE_CHECKPOINT = {
   boundary:'One pass, every step once, TotalMix closed. Main was not touched because the device held it at raw 59 from outside. Step buttons and fader writes under this rule were checked offline only. The level before a mute lives only in the running controller. This is a private working copy, not a release.',
   sourceUrl:REPORTS.interfaceMute,
 } as const;
+export const PHASE_CHECKPOINT = {
+  id:'phase-of-each-way', revision:'Phase of each way · 18 Nov', level:'Offline tests and two bounded native runs of one session each, with a loop cable: the sixteenth revision inverts the phase of each way to the headphones',
+  title:'Each way to the headphones can be inverted in phase.',
+  candidateRuleSha256:'1c1b2ab8af47c08d268e99f6e8f5f3abef971449cf7daa0c461ef8a56c50e40f', filterSha256:'d86ef258fc00da6d9fb672eaa0819762e86e2ba0563a355c11fa9ebc0084cff2', filterChanged:true,
+  waysThatCanBeInverted:5, newKindOfMessage:false, invertedLevelIsTwoToTheTwentyMinusTheLevel:true,
+  newOfflineTests:17, earlierOfflineTestsStillPassing:177, falsificationsNoticed:26, sendsTheBytesOfTheRevisionBeforeWithoutAPhasePress:true,
+  inputAloneNormalDbfs:[-53.1,-53.1], inputAloneInvertedDbfs:[-53.1,-53.1], inputInvertedFourPositionsRightDbfs:[-59.1,-53.1],
+  sumEqualSignsDbfs:[-35.8,-35.8], sumUnequalSignsDbfs:[-44.6,-44.6], differenceBetweenTheTwoCasesDb:8.8, combinationsMeasured:4, everyCombinationTwiceWithTheSameValue:true,
+  signKeptAcrossLockAndArming:true, pressOnAWayThatIsNotOnChangesNoLevel:true, unitAsAtTheStartAtTheEnd:true,
+  pageFilterOfTheRoutingAppWidened:true, pageAndControlAsBeforeWithTheNewScene:true,
+  waysMeasuredOnTheUnit:2, waysTestedOffline:5,
+  setupRecoversFromAReplugWithoutATouch:false, microphoneOrInstrumentConnected:false,
+  operationAlongsideTotalMixVerified:false, enduranceVerified:false,
+  candidateReleased:false, silentUsbContinuityProven:false, crashSafeRecoveryProven:false, generalLiveReadinessVerified:false,
+  result:'The sixteenth revision can invert the phase of each of the five ways to the headphones; an inverted level is sent as its negative, as the protocol notes describe. Measured on the unit with the same signal on two ways: a way alone keeps its level exactly, also with a pan; the sum of the two ways stood at −35.8 dBFS for equal signs and at −44.6 dBFS for unequal ones, every combination twice with the same value, and unchanged after locking and arming again. The routing app that carries the displays now passes a wider range of feedback numbers; page and control worked with it as before.',
+  boundary:'Measured on the unit for input 1 and the playback; the other three inputs were tested offline only. How it sounds with a microphone or an instrument is not established: none was connected. The routing app still has to be brought to the front once after a replug. This is a private working copy, not a release.',
+  sourceUrl:REPORTS.phase,
+} as const;
+
 export const REFERENCE_LEVEL_CHECKPOINT = {
   id:'reference-level-of-the-line-inputs', revision:'Reference level of the line inputs · 17 Nov', level:'Offline tests and one bounded native run in one session, nothing connected: the fifteenth revision switches the sensitivity of the two line inputs from the page',
   title:'The reference level of the line inputs switches from the page.',
@@ -439,10 +459,11 @@ export const HAND_OPERATION_CHECKPOINT = {
 } as const;
 
 export const LAB_STATUS = {
-  reviewedDate: '2026-11-17',
+  reviewedDate: '2026-11-18',
   evidenceType: 'Project-reported scoped experiments, linked to dated public reports. Raw captures and installable controller artifacts are not bundled with this planner.',
   releaseReady: false,
   entries: [
+    PHASE_CHECKPOINT,
     REFERENCE_LEVEL_CHECKPOINT,
     ARMING_CHECKPOINT,
     HOST_WAYS_CHECKPOINT,
