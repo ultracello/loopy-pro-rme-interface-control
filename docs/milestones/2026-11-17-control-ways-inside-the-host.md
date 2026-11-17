@@ -63,10 +63,12 @@ Between rounds 2 and 3 the routing app was ended after the recovery, and a step 
 
 What this shows. The way to the unit comes back by itself. The input of the host from the interface stays dead after a replug, also after two minutes and after leaving and re-entering the host, so the controller never sees the answer and writes nothing. It works again the moment the routing app wakes or starts, although that app does not carry the input. A likely reason, not established: the host binds its input again only on a later change in the MIDI service of the system, and the routing app causes one when it wakes. The replug itself suspended the routing app, which had been running in the background before.
 
+Two more rounds followed at 12:03 to 12:16, with the routing app ended beforehand, to find a handle inside the host that would wake its input. None did: opening and closing the mixer, the control settings (which listed the interface again), the synchronization settings, MIDI learn and the Bluetooth MIDI panel, and stopping and starting the transport all left the input dead; opening the routing app restored it at once, both times. So the host knows the device again and sends to it, but does not connect the input of its mixer source again by itself. This is being written up as a report for the developer of the host.
+
 No app had to be restarted in any round; with the earlier setup both had to be. The way of the playback to the headphones was lost each time, as after every loss of power, and its button restored it.
 
 ## Remaining boundaries
 
-Not established: what exactly wakes the input of the host after a replug, and a setup that recovers without any touch; the cause of the twelve presses without effect; feedback to the page without the routing app; the operator's seven existing routes of the scene in playing use. No microphone or instrument was connected.
+Not established: why opening the routing app wakes the input of the host after a replug, and a setup that recovers without any touch; the cause of the twelve presses without effect; feedback to the page without the routing app; the operator's seven existing routes of the scene in playing use. No microphone or instrument was connected.
 
 Private native projects, scenes, identity maps, captures and access material are not distributed. This facts-only report includes no controller source, native archive or public installation package. The [acceptance gates](../ACCEPTANCE.md) continue to apply.
