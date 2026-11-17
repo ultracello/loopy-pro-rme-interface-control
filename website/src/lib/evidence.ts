@@ -1,7 +1,7 @@
 export const PUBLIC_REPOSITORY = {
   url: 'https://github.com/ultracello/loopy-pro-rme-interface-control',
   branch: 'main',
-  reviewedCommit: 'c55b7c20f2bf763f35693637777b8986e5b23045',
+  reviewedCommit: '22f526016a5a1a1a6e4ba2ed1526ed95befe085c',
   reviewedDate: '2026-11-17',
   reviewedFile: 'README.md, transfer-copy write pair and session gain-mute check, other-project Interface READ transfer and earlier scoped milestones',
   visibility: 'public',
@@ -9,6 +9,7 @@ export const PUBLIC_REPOSITORY = {
 } as const;
 const pinned = (path: string) => `${PUBLIC_REPOSITORY.url}/blob/${PUBLIC_REPOSITORY.reviewedCommit}/${path}`;
 export const REPORTS = {
+  referenceLevel: pinned('docs/milestones/2026-11-17-reference-level-of-the-line-inputs.md'),
   arming: pinned('docs/milestones/2026-11-17-arming-restores-the-mixer.md'),
   hostWays: pinned('docs/milestones/2026-11-17-control-ways-inside-the-host.md'),
   displays: pinned('docs/milestones/2026-11-17-displays-read-field-by-field.md'),
@@ -229,6 +230,25 @@ export const INTERFACE_MUTE_CHECKPOINT = {
   boundary:'One pass, every step once, TotalMix closed. Main was not touched because the device held it at raw 59 from outside. Step buttons and fader writes under this rule were checked offline only. The level before a mute lives only in the running controller. This is a private working copy, not a release.',
   sourceUrl:REPORTS.interfaceMute,
 } as const;
+export const REFERENCE_LEVEL_CHECKPOINT = {
+  id:'reference-level-of-the-line-inputs', revision:'Reference level of the line inputs · 17 Nov', level:'Offline tests and one bounded native run in one session, nothing connected: the fifteenth revision switches the sensitivity of the two line inputs from the page',
+  title:'The reference level of the line inputs switches from the page.',
+  candidateRuleSha256:'a8613ca02967ff6ac681c78a470c4104f390c7a372ccdf522f9fe8af82b1d49a', filterSha256:'22f3e2c323cfb9131abb68d10f50a24b3e08ee92b55cf84f47884f3b5a5de9bd', filterChanged:true,
+  meaningOfTheBitsTakenFrom:'the naming of the Linux driver of the interface', settingBitSetMeansPlus4Dbu:true,
+  newOfflineTests:19, earlierOfflineTestsStillPassing:163, falsificationsNoticed:23, padMessagesByteForByteAsBefore:true,
+  switchesOnTheUnit:8, switchesReportedBackAndShown:8, settingBitsAtTheStart:'000c', settingBitsAtTheEnd:'000c',
+  gainStepBesideAClearBitArrived:true, pressOnTheLockedPageRefused:true, anythingToBringBackAtTheEnd:false,
+  idleNoiseInput3DbfsLeastMost:[-100.1,-98.1], idleNoiseInput4DbfsLeastMost:[-105.6,-104.5], idleNoiseMovedWithTheSwitch:false,
+  effectOnASignalEstablished:false, phantomPowerEverSent:false, refusalWhilePhantomPowerIsOnTestedOnTheUnit:false,
+  routingAppMinutesUntouchedInTheBackgroundAtLeast:92, routingAppStillRunningThen:true, displaysFollowedWithoutATouch:true, routingAppObservedOnBattery:false, routingAppNextToTheHostPossible:false,
+  setupRecoversFromAReplugWithoutATouch:false, microphoneOrInstrumentConnected:false,
+  operationAlongsideTotalMixVerified:false, enduranceVerified:false,
+  candidateReleased:false, silentUsbContinuityProven:false, crashSafeRecoveryProven:false, generalLiveReadinessVerified:false,
+  result:'The fifteenth revision switches the reference level of line input 3 and 4 from the page, in the guarded course of the pad: fresh read, one message that changes exactly one setting bit, check read. On the unit, eight of eight switches were reported back and shown, a gain step and a pad beside them arrived, and a press on the locked page was refused. At the end the unit stood as at the start. The same afternoon the routing app that carries the displays was still running after at least 92 minutes untouched in the background, and the displays followed at once.',
+  boundary:'What the switch does to a signal is not established: nothing was connected, and the idle noise of the two inputs did not move with it. Which position is +4 dBu and which is −10 dBV rests on the naming of the Linux driver alone. The refusal while phantom power is on was tested offline only. The routing app was not observed on battery, and it still has to be brought to the front once after a replug. This is a private working copy, not a release.',
+  sourceUrl:REPORTS.referenceLevel,
+} as const;
+
 export const ARMING_CHECKPOINT = {
   id:'arming-restores-the-mixer', revision:'Arming restores the mixer · 17 Nov', level:'Offline tests and one bounded native run in four sessions with one replug: the fourteenth revision sends again, on arming, every way to the headphones whose state it knows',
   title:'After a replug, arming brings the mixer back.',
@@ -423,6 +443,7 @@ export const LAB_STATUS = {
   evidenceType: 'Project-reported scoped experiments, linked to dated public reports. Raw captures and installable controller artifacts are not bundled with this planner.',
   releaseReady: false,
   entries: [
+    REFERENCE_LEVEL_CHECKPOINT,
     ARMING_CHECKPOINT,
     HOST_WAYS_CHECKPOINT,
     DISPLAYS_CHECKPOINT,
