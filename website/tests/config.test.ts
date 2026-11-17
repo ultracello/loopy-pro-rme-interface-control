@@ -377,8 +377,11 @@ test('the pad checkpoint keeps phantom power out, says what was assumed and is n
  assert.ok(PAD_CHECKPOINT.stepAcceptedSecondsAfterArmingWithoutANewRead>60);
  assert.equal(INPUT_GAIN_CHECKPOINT.inputStepRenewsTheArmedMinute,false);
  assert.equal(PAD_CHECKPOINT.inputStepRenewsTheArmedMinute,true);
- for(const key of ['ruleEverSetsAPhantomPowerBit','filterPassesAPhantomPowerBit','phantomPowerReachable','whereTheUnitReportsThePadWasInTheSources','outputGainsChanged','sourceConnectedToAnInput','padAttenuationMeasured','refusalWhilePhantomPowerIsOnSeenOnDevice','meaningOfTheTwoFurtherSettingBitsKnown','operationAlongsideTotalMixVerified','enduranceVerified','candidateReleased','silentUsbContinuityProven','crashSafeRecoveryProven','generalLiveReadinessVerified'] as const)assert.equal(PAD_CHECKPOINT[key],false,key);
- assert.match(PAD_CHECKPOINT.boundary,/Nothing was connected to the inputs/);
+ for(const key of ['ruleEverSetsAPhantomPowerBit','filterPassesAPhantomPowerBit','phantomPowerReachable','whereTheUnitReportsThePadWasInTheSources','outputGainsChanged','microphoneOrInstrumentConnected','refusalWhilePhantomPowerIsOnSeenOnDevice','meaningOfTheTwoFurtherSettingBitsKnown','operationAlongsideTotalMixVerified','enduranceVerified','candidateReleased','silentUsbContinuityProven','crashSafeRecoveryProven','generalLiveReadinessVerified'] as const)assert.equal(PAD_CHECKPOINT[key],false,key);
+ assert.match(PAD_CHECKPOINT.boundary,/no microphone or instrument was connected/);
+ assert.ok(Math.abs(PAD_CHECKPOINT.padAttenuationMeasuredDb-PAD_CHECKPOINT.padAttenuationPerManualDb)<=1);
+ assert.deepEqual(PAD_CHECKPOINT.gainStepsMeasuredDb,PAD_CHECKPOINT.gainStepsDisplayedDb);
+ assert.ok(PAD_CHECKPOINT.mainHeldAtDbDuringTheMeasurement+PAD_CHECKPOINT.largestGainDuringTheMeasurementDb<0);
  assert.match(PAD_CHECKPOINT.boundary,/Phantom power is deliberately out of reach/);
  assert.match(PAD_CHECKPOINT.boundary,/not a release/);
  assert.ok(PAD_CHECKPOINT.sourceUrl.endsWith('/docs/milestones/2026-11-17-pad-and-renewed-minute.md'));
