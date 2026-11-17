@@ -1,7 +1,7 @@
 export const PUBLIC_REPOSITORY = {
   url: 'https://github.com/ultracello/loopy-pro-rme-interface-control',
   branch: 'main',
-  reviewedCommit: '8d97810c1ee77038c08646e9b670440fef1fcb76',
+  reviewedCommit: 'b211ff07ec030ad2da85a3c22ac8d3ad2ae89868',
   reviewedDate: '2026-11-17',
   reviewedFile: 'README.md, transfer-copy write pair and session gain-mute check, other-project Interface READ transfer and earlier scoped milestones',
   visibility: 'public',
@@ -9,6 +9,7 @@ export const PUBLIC_REPOSITORY = {
 } as const;
 const pinned = (path: string) => `${PUBLIC_REPOSITORY.url}/blob/${PUBLIC_REPOSITORY.reviewedCommit}/${path}`;
 export const REPORTS = {
+  monitoring: pinned('docs/milestones/2026-11-17-monitoring-inputs-on-phones.md'),
   pad: pinned('docs/milestones/2026-11-17-pad-and-renewed-minute.md'),
   inputGain: pinned('docs/milestones/2026-11-17-input-gain-all-four-inputs.md'),
   freeSteps: pinned('docs/milestones/2026-11-13-free-step-width-and-main.md'),
@@ -224,6 +225,24 @@ export const INTERFACE_MUTE_CHECKPOINT = {
   boundary:'One pass, every step once, TotalMix closed. Main was not touched because the device held it at raw 59 from outside. Step buttons and fader writes under this rule were checked offline only. The level before a mute lives only in the running controller. This is a private working copy, not a release.',
   sourceUrl:REPORTS.interfaceMute,
 } as const;
+export const MONITORING_CHECKPOINT = {
+  id:'monitoring-inputs-on-phones', revision:'Monitoring · four inputs · 17 Nov', level:'One bounded native run and offline tests: each analog input on the headphones with a level of its own, measured at the headphone output with a cable from an output into an input',
+  title:'Hear the inputs. Measured, because the unit does not report it.',
+  candidateRuleSha256:'ad45c86275a008fb695b9f78dd191630125344e7b6e2d68caefed3d02b1e85fa', outboundFilterSha256:'2cb14e440c06ddb49644a5bcf70593ae8c9da1c5dfacf8b29329e854c4a5a902',
+  inputs:4, destination:'headphones, left and right', levelMinDb:-60, levelMaxDb:0, levelStepDb:0.5, levelKeptAfterLoadingDb:-12, levelAboveUnityPossible:false,
+  unitReportsItsMixer:false, ruleKeepsItsOwnPicture:true, stateAfterLoadingIsUnknown:true, ruleNoticesAChangeFromOutside:false,
+  newOfflineTests:26, earlierOfflineTestsStillPassing:106, falsificationsNoticed:30,
+  loopCableFromOutputOneToInputOne:true, peakAtInputOneDbfs:-26.6, headphoneOutputLevelDb:-14.5, mainHeldAtDbDuringTheMeasurement:-30,
+  monitoringLevelsMeasuredDb:[-12,-6,0], expectedPeakAtTheHeadphoneOutputDbfs:[-53.1,-47.1,-41.1], measuredPeakAtTheHeadphoneOutputDbfs:[-53.1,-47.1,-41.1],
+  silentWhenOff:true, otherInputsBringNothingFromInputOne:true, stepWhileOffSendsNothing:true, pressesOnDevice:19, pressesAsExpected:19,
+  playbackOnTheHeadphonesDuringTheMeasurement:false, microphoneOrInstrumentConnected:false, levelsBelowMinusTwelveDbMeasured:false, monitoringOnMainBuilt:false, latencyMeasured:false,
+  operationAlongsideTotalMixVerified:false, enduranceVerified:false,
+  candidateReleased:false, silentUsbContinuityProven:false, crashSafeRecoveryProven:false, generalLiveReadinessVerified:false,
+  result:'Each of the four analog inputs can now be put on the headphones with a level of its own, through the mixer of the unit and without TotalMix. The unit does not report its mixer, so the rule keeps its own picture and a measurement had to decide. With a cable from an output into an input, the headphone output carried exactly the expected peak at -12, -6 and 0 dB, nothing when the way was off, and nothing of input 1 when the other inputs were on.',
+  boundary:'The unit does not report its mixer: a change from outside goes unnoticed until a way is switched again. No microphone or instrument was connected, playback was not on the headphones during the measurement, and levels below -12 dB were not measured. Monitoring on Main is deliberately not built. This is a private working copy, not a release.',
+  sourceUrl:REPORTS.monitoring,
+} as const;
+
 export const PAD_CHECKPOINT = {
   id:'pad-and-renewed-minute', revision:'Pad · renewed minute · 17 Nov', level:'Two bounded native runs and offline tests: the pad of the two microphone inputs, input steps that keep the page armed, and a measurement of pad and gain with a cable from an output into an input',
   title:'The pad, with phantom power kept out of reach.',
@@ -317,6 +336,7 @@ export const LAB_STATUS = {
   evidenceType: 'Project-reported scoped experiments, linked to dated public reports. Raw captures and installable controller artifacts are not bundled with this planner.',
   releaseReady: false,
   entries: [
+    MONITORING_CHECKPOINT,
     PAD_CHECKPOINT,
     INPUT_GAIN_CHECKPOINT,
     FREE_STEPS_CHECKPOINT,
