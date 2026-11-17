@@ -1,14 +1,15 @@
 export const PUBLIC_REPOSITORY = {
   url: 'https://github.com/ultracello/loopy-pro-rme-interface-control',
   branch: 'main',
-  reviewedCommit: 'e9b8d4c68d8e1fedb9843089a84e35aae909f1aa',
-  reviewedDate: '2026-11-13',
+  reviewedCommit: 'ebeaffa28523fafd1407cce5851d7f6c7707d00d',
+  reviewedDate: '2026-11-17',
   reviewedFile: 'README.md, transfer-copy write pair and session gain-mute check, other-project Interface READ transfer and earlier scoped milestones',
   visibility: 'public',
   status: 'The transferred Interface copy passed one 0.5-dB reduction/return pair per group on the unchanged Restricted rule. A separate session gain-mute candidate muted Phones and returned it exactly once; Main was not touched. Earlier Restricted cohorts passed 1/2/3/6-dB pairs within their stated bounds; an earlier Phones return remains failed. Gain-mute stays blocked in the Restricted copy and the candidate is not released. The controller route was silent for some minutes while the interface had dropped off USB by itself; waiting and a short replug did not reproduce it. Silent USB and crash-safe restoration remain open. Original project/scene restored. No public installable integration or full live approval.',
 } as const;
 const pinned = (path: string) => `${PUBLIC_REPOSITORY.url}/blob/${PUBLIC_REPOSITORY.reviewedCommit}/${path}`;
 export const REPORTS = {
+  inputGain: pinned('docs/milestones/2026-11-17-input-gain-all-four-inputs.md'),
   freeSteps: pinned('docs/milestones/2026-11-13-free-step-width-and-main.md'),
   reasonRow: pinned('docs/milestones/2026-11-12-reason-row-and-usb-chain.md'),
   handOperation: pinned('docs/milestones/2026-11-10-hand-operation-loop-transport-phones-route.md'),
@@ -222,6 +223,24 @@ export const INTERFACE_MUTE_CHECKPOINT = {
   boundary:'One pass, every step once, TotalMix closed. Main was not touched because the device held it at raw 59 from outside. Step buttons and fader writes under this rule were checked offline only. The level before a mute lives only in the running controller. This is a private working copy, not a release.',
   sourceUrl:REPORTS.interfaceMute,
 } as const;
+export const INPUT_GAIN_CHECKPOINT = {
+  id:'input-gain-all-four-inputs', revision:'Input gain · four inputs · 17 Nov', level:'Two bounded native runs and offline tests: a read-only run that showed how the unit reports its input gains, then the first writes of the gain of all four analog inputs',
+  title:'All four inputs. Read first, then written.',
+  candidateRuleSha256:'9b315a4adcf01613d34522c7327aa782e42a78645f0650387bea6045d096c40d', outboundFilterSha256:'f65d0d679958fb892556049b8de1af4bf474b675bf2b95a1b31f57df67f11aad',
+  inputs:4, microphoneInputs:2, lineInputs:2, microphoneStepDb:1, lineStepDb:0.5, lineMaxDb:9, microphoneMaxDbPerManual:65, microphoneMaxDbSeenOnDevice:59,
+  readOnlyRunSeconds:900, stateChangesRecordedInTheReadOnlyRun:196, writesInTheReadOnlyRun:0, knobTurnShowsInTheStateAtOnce:true,
+  newOfflineTests:32, earlierOfflineTestsStillPassing:66, falsificationsNoticed:31,
+  checksOnDevice:12, checksPassedOnDevice:12, inputsAtStart:[0,0,12,0], inputsAtEnd:[0,0,12,0], outputGainsChangedByAnInputStep:false,
+  largestMicrophoneGainWrittenDb:3, microphonePackingConfirmedUpToDb:3, lineHalfDbCountConfirmed:true, refusalAtTheLowerEndSeen:true,
+  everyStepReadsFirstAndReadsBack:true, inputStepsLockThePage:false, phantomPowerReachable:false, phantomPowerMessagePassesTheFilter:false,
+  microphoneGainsAboveThreeDbRun:false, upperEndOfMicrophoneGainMeasured:false, errorOutcomesOfAnInputStepSeenOnDevice:false, padAndInstrumentSwitchesCovered:false,
+  operationAlongsideTotalMixVerified:false, enduranceVerified:false,
+  candidateReleased:false, silentUsbContinuityProven:false, crashSafeRecoveryProven:false, generalLiveReadinessVerified:false,
+  result:'The gain of all four analog inputs can now be set from the operating page. A read-only run came first: the operator turned two gains on the unit while its state was read, which showed where and how the unit reports them. A seventh rule revision then reads, writes and reads back each step. On the interface twelve of twelve checks passed, from half a dB on a line input to the packed microphone values up to 3 dB, and every input ended where it started.',
+  boundary:'Microphone gains above 3 dB and the upper end were not run. The error outcomes of an input step were shown offline only. Pad and instrument switches are not covered, and phantom power is deliberately out of reach. This is a private working copy, not a release.',
+  sourceUrl:REPORTS.inputGain,
+} as const;
+
 export const FREE_STEPS_CHECKPOINT = {
   id:'free-step-width-and-main', revision:'Any step width · Main · 13 Nov', level:'One bounded native run and offline tests: a freely chosen step width, and the first operation of Main with nothing connected to it',
   title:'Any step width. And Main, at last.',
@@ -274,10 +293,11 @@ export const HAND_OPERATION_CHECKPOINT = {
 } as const;
 
 export const LAB_STATUS = {
-  reviewedDate: '2026-11-13',
+  reviewedDate: '2026-11-17',
   evidenceType: 'Project-reported scoped experiments, linked to dated public reports. Raw captures and installable controller artifacts are not bundled with this planner.',
   releaseReady: false,
   entries: [
+    INPUT_GAIN_CHECKPOINT,
     FREE_STEPS_CHECKPOINT,
     REASON_ROW_CHECKPOINT,
     HAND_OPERATION_CHECKPOINT,
