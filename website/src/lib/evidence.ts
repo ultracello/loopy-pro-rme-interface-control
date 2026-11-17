@@ -1,7 +1,7 @@
 export const PUBLIC_REPOSITORY = {
   url: 'https://github.com/ultracello/loopy-pro-rme-interface-control',
   branch: 'main',
-  reviewedCommit: '74026c98bce0293b3ff3c806fe5f5e1173acac0b',
+  reviewedCommit: '93c608994336b9ef87280af55d47fa400018fa33',
   reviewedDate: '2026-11-17',
   reviewedFile: 'README.md, transfer-copy write pair and session gain-mute check, other-project Interface READ transfer and earlier scoped milestones',
   visibility: 'public',
@@ -9,6 +9,7 @@ export const PUBLIC_REPOSITORY = {
 } as const;
 const pinned = (path: string) => `${PUBLIC_REPOSITORY.url}/blob/${PUBLIC_REPOSITORY.reviewedCommit}/${path}`;
 export const REPORTS = {
+  pan: pinned('docs/milestones/2026-11-17-pan-and-two-findings.md'),
   monitoring: pinned('docs/milestones/2026-11-17-monitoring-inputs-on-phones.md'),
   pad: pinned('docs/milestones/2026-11-17-pad-and-renewed-minute.md'),
   inputGain: pinned('docs/milestones/2026-11-17-input-gain-all-four-inputs.md'),
@@ -225,6 +226,25 @@ export const INTERFACE_MUTE_CHECKPOINT = {
   boundary:'One pass, every step once, TotalMix closed. Main was not touched because the device held it at raw 59 from outside. Step buttons and fader writes under this rule were checked offline only. The level before a mute lives only in the running controller. This is a private working copy, not a release.',
   sourceUrl:REPORTS.interfaceMute,
 } as const;
+export const PAN_CHECKPOINT = {
+  id:'pan-and-two-findings', revision:'Pan · two faults · 17 Nov', level:'Three bounded native runs and offline tests: pan of the five ways to the headphones measured, a display fault of the project found, and the separate routing app ended by the system in the background',
+  title:'Pan measured. Two faults written down.',
+  candidateRuleSha256:'ad324ba0739252d4526e2fab4bda04b62b02814fcdf581efc9c959660c25099b', correctedDisplayRuleSha256:'30abe4be9d27f50a555e062b5ff22020ff277ef03ee2ba2c622fe436a99c530c',
+  waysWithPan:5, panPositions:41, farSideLoweredPerPositionDb:1.5, farSideOffAtTheEnd:true, filterChanged:false,
+  newOfflineTests:15, earlierOfflineTestsStillPassing:135, falsificationsNoticed:20,
+  panMeasuredLeftRightDbfs:[[-53.1,-53.1],[-59.1,-53.1],[null,-53.1],[-53.1,-59.1]], panExpectedLeftRightDbfs:[[-53.1,-53.1],[-59.1,-53.1],[null,-53.1],[-53.1,-59.1]], monitoringAtMinusThirtyDbMeasuredDbfs:-71.1, pressesAsExpected:30,
+  levelSentWasRight:true, levelDisplayFields:121, levelDisplayOneFieldOffAtLevels:21, firstCorrectionWasWrongToo:true, hostSpreadsValuesEvenlyOverFields:false, valueMinusFieldGrowsAtValues:[9,25,41,57,75,96,117],
+  correctedRevisionSendsFieldNumbers:true, correctedRevisionOfflineTests:8, correctedRevisionOnTheInterface:false, otherDialsReadValueByValue:false,
+  routingAppEndedInTheBackground:true, pageStillShowedArmed:true, controllerInTheHostKeptRunning:true, pageAnsweredAgainAfterTheAppWasBroughtToTheFront:true, mainStoodAtMinusThirtyInsteadOfMutedMeanwhile:true, mainMutedAgainAndReadBack:true,
+  hostAcceptsControlFromAPluginDirectly:false, interfaceDisappearedLaterTheSameNight:true,
+  causeOfTheAppBeingEndedKnown:false, setupWithoutTheRoutingAppBuilt:false, causeOfTheInterfaceDisappearingKnown:false,
+  operationAlongsideTotalMixVerified:false, enduranceVerified:false,
+  candidateReleased:false, silentUsbContinuityProven:false, crashSafeRecoveryProven:false, generalLiveReadinessVerified:false,
+  result:'Each of the five ways to the headphones now has a pan, measured left and right without a difference from the expected level. The same runs found two faults. The level display of the page was one field off at 21 of 121 levels, because the project had scaled values on a wrong assumption about the host; a first correction was wrong as well, and a revision that no longer scales anything is built and waits for its run. And the system ended the separate MIDI routing app in the background: the page stopped answering while still showing armed, until the app was brought to the front.',
+  boundary:'The corrected revision is not on the interface yet. The displays with fewer fields were never read value by value. Why the system ended the routing app is not known, and a setup without that app is not built. Later the same night the interface disappeared for the iPad; the cause was not determined. This is a private working copy, not a release.',
+  sourceUrl:REPORTS.pan,
+} as const;
+
 export const MONITORING_CHECKPOINT = {
   id:'monitoring-inputs-on-phones', revision:'Monitoring · four inputs · 17 Nov', level:'Two bounded native runs and offline tests: each analog input and the playback on the headphones with a level of their own, measured at the headphone output',
   title:'Hear the inputs. Measured, because the unit does not report it.',
@@ -340,6 +360,7 @@ export const LAB_STATUS = {
   evidenceType: 'Project-reported scoped experiments, linked to dated public reports. Raw captures and installable controller artifacts are not bundled with this planner.',
   releaseReady: false,
   entries: [
+    PAN_CHECKPOINT,
     MONITORING_CHECKPOINT,
     PAD_CHECKPOINT,
     INPUT_GAIN_CHECKPOINT,
