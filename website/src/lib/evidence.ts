@@ -1,7 +1,7 @@
 export const PUBLIC_REPOSITORY = {
   url: 'https://github.com/ultracello/loopy-pro-rme-interface-control',
   branch: 'main',
-  reviewedCommit: 'ca4189a403f6c5ac17e81719269b02d661a52d30',
+  reviewedCommit: '9d10080c283eb390968a32ef00e7fc8e71726293',
   reviewedDate: '2026-11-17',
   reviewedFile: 'README.md, transfer-copy write pair and session gain-mute check, other-project Interface READ transfer and earlier scoped milestones',
   visibility: 'public',
@@ -9,6 +9,7 @@ export const PUBLIC_REPOSITORY = {
 } as const;
 const pinned = (path: string) => `${PUBLIC_REPOSITORY.url}/blob/${PUBLIC_REPOSITORY.reviewedCommit}/${path}`;
 export const REPORTS = {
+  hostWays: pinned('docs/milestones/2026-11-17-control-ways-inside-the-host.md'),
   displays: pinned('docs/milestones/2026-11-17-displays-read-field-by-field.md'),
   pan: pinned('docs/milestones/2026-11-17-pan-and-two-findings.md'),
   monitoring: pinned('docs/milestones/2026-11-17-monitoring-inputs-on-phones.md'),
@@ -227,6 +228,26 @@ export const INTERFACE_MUTE_CHECKPOINT = {
   boundary:'One pass, every step once, TotalMix closed. Main was not touched because the device held it at raw 59 from outside. Step buttons and fader writes under this rule were checked offline only. The level before a mute lives only in the running controller. This is a private working copy, not a release.',
   sourceUrl:REPORTS.interfaceMute,
 } as const;
+export const HOST_WAYS_CHECKPOINT = {
+  id:'control-ways-inside-the-host', revision:'Ways inside the host · 17 Nov', level:'One bounded native run in three sessions: the two ways to and from the interface moved from the separate routing app into the host, checked with that app ended, then displays and measurements repeated',
+  title:'The control no longer needs the routing app.',
+  candidateRuleSha256:'30abe4be9d27f50a555e062b5ff22020ff277ef03ee2ba2c622fe436a99c530c', outboundFilterSha256:'cd09357bc0975a22af2da6a69373cbb62ee262599ee36ec4babac14094b2f4ab',
+  ruleChanged:false, filterChanged:false, filterNowInASecondPluginInstanceInsideTheHost:true, hostListensToTheInterfaceItself:true, interfaceReachableOnlyBehindTheFilter:true, builtOfflineAndLoadedAsBuilt:true,
+  routingAppStillCarriesTheDisplays:true, routingAppSceneFilterPassesNothing:true,
+  withTheRoutingAppEnded:{readReachedTheUnit:true, stepDownArrived:true, stepUpArrived:true, pageShowedAnything:false},
+  checksWithTheAppOnlyForDisplays:9, checksPassed:9, stepsArrivedWhileTheAppWasEndedMidway:true, pageShowedAgainAfterTheAppWasReopened:true,
+  doublesCheckIsConclusive:false,
+  levelDisplayReadings:147, panDisplayReadings:22, gainDisplayReadings:130, displayReadingsWrong:0,
+  measurementsJudged:11, measurementsPassed:11, largestDifferenceFromExpectedDb:0.1, pressesInTheMeasuringBlock:48, pressesAsExpected:48,
+  pressesInARowWithoutEffectInTheFirstAttempt:12, somethingWasSentDuringThem:false, watchedPressesWithoutADrop:150, causeOfThePressesWithoutEffectKnown:false, testScriptFaultFoundAndCorrected:true,
+  replugWithThisSetupTested:false, feedbackWithoutTheRoutingAppBuilt:false, existingRoutesOfTheOperatorCheckedInPlayingUse:false, microphoneOrInstrumentConnected:false,
+  operationAlongsideTotalMixVerified:false, enduranceVerified:false,
+  candidateReleased:false, silentUsbContinuityProven:false, crashSafeRecoveryProven:false, generalLiveReadinessVerified:false,
+  result:'The host now listens to the interface itself, and a second plugin instance inside the host carries the strict filter before it. With the separate routing app ended, a READ on the page still reached the unit and a step on the headphones arrived and went back. With the app running only for the displays, nine of nine checks passed, including steps that arrived while the app was ended midway. All displays were read again without a difference and all measurements at the headphone output were repeated within 0.1 dB.',
+  boundary:'In the first of two acceptance attempts twelve presses in a row changed nothing; nothing was being sent at the time, it went on by itself, and the cause is not known. The check for doubled messages is not conclusive. Replugging the interface with this setup is not tested, and the feedback to the page still needs the routing app. This is a private working copy, not a release.',
+  sourceUrl:REPORTS.hostWays,
+} as const;
+
 export const DISPLAYS_CHECKPOINT = {
   id:'displays-read-field-by-field', revision:'Displays · field by field · 17 Nov', level:'One bounded native run with a diagnosis in the middle: the revision that scales no display is on the interface, every dial read from the page, monitoring measured further down, and a finding about replugging the interface',
   title:'Every display read. Replugging needed both apps restarted.',
@@ -380,6 +401,7 @@ export const LAB_STATUS = {
   evidenceType: 'Project-reported scoped experiments, linked to dated public reports. Raw captures and installable controller artifacts are not bundled with this planner.',
   releaseReady: false,
   entries: [
+    HOST_WAYS_CHECKPOINT,
     DISPLAYS_CHECKPOINT,
     PAN_CHECKPOINT,
     MONITORING_CHECKPOINT,
