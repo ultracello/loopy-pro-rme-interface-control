@@ -6,7 +6,7 @@ be84d8011c96594589c4a6a6d6a329f5e8e2d9630a5fc9f32c34175032b8ff1b  .github/ISSUE_
 bed20e75c8f07097a738fddf443286ccf0326977d1a97b54d45c105c012b847e  CHANGELOG.md
 0df13e0b4e3308eb028604bb2899db39f91ad2c93612050b50a68d37fde5dd41  CONTRIBUTING.md
 6b0382b16279f26ff69014300541967a356a666eb0b91b422f6862f6b7dad17e  LICENSE
-7a80024af4c5070097c97633342e4e7939d9e1950cd4838b13effa3194b6c156  README.md
+488310e66a9d17d8101d9afcf6e92e1716002934bd942c08464d1ca7cc5efdd8  README.md
 6b3aa6638d7f9cc8a43415d2cc657c3544468eca5579d2ba6d9da849ca847220  docs/ACCEPTANCE.md
 48523b8667f9f4416c95412f1ac9ab475670c6df181ea497100861b19a9c9a6e  docs/DEVELOPMENT_SETUP.md
 fa2522d42176ae6b11c582c202b387b3d974d1434323fa45715d8660632b3d15  docs/MODULE_STATUS.md
@@ -44,7 +44,7 @@ ce7a15cdc2d2a566816cf73c4248b3451e4bd3f7b0372c40aefe51d38f3e5088  docs/milestone
 f3a69f1e025241469d792c8930123bb5b16284ebec8fc1a48fed1c426fc58f20  docs/milestones/2026-11-18-equaliser-across-a-rate-change-and-eq-for-record.md
 ade5d8c98ae58397e054fefdfb74f931a1cba7e4791db9d1571724f50b239018  docs/milestones/2026-11-18-equaliser-and-low-cut-measured.md
 1eda64b5c03b8051057f60163c0e13dc5091acfaa210c702648a18eec11acd49  docs/milestones/2026-11-18-equaliser-curves-with-sine-tones.md
-fbce26844661a1f2cc85be18a3514ba551cbe60612e926ae53c2c47b0965afff  docs/milestones/2026-11-18-level-of-the-as-outputs-and-inputs-on-the-digital-outputs.md
+a0a7c62eda6bc236646134340bdc32738326ff24e0a2ba8443230d8c6d8d7d93  docs/milestones/2026-11-18-level-of-the-as-outputs-and-inputs-on-the-digital-outputs.md
 7454b4c504b9afbe737a3020c9a2216c1c1c4215ad24765c60c62ef1410e55be  docs/milestones/2026-11-18-line-input-headphone-output-and-a-second-sample-rate.md
 e5af787199a9495c7925228076cbcd241d4eae3a6a0eef724958fa9fb1531bc1  docs/milestones/2026-11-18-loopback-and-the-exact-level-law.md
 b8dd765ca00dbb1424c14b5259cfba46fe3e971bc2a201b53bf21d6fe098abfe  docs/milestones/2026-11-18-main-cells-and-levels-above-unity.md

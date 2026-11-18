@@ -44,7 +44,7 @@ So the index of a cell, 26 × output + source, holds for the AS and ADAT outputs
 
 ## The reference
 
-The [protocol reference](../protocol/BABYFACE-PRO-FS-CC-REFERENCE.md) carries the results; two rows of its coverage table changed, and the share of functions measured rose from 12 to 13 of 18. The [level table](../protocol/reference/output-level-law-measured.json) now holds all 244 values for AS1 and AS2 as well, and the tests of the [codec](../protocol/reference/babyface_cc.py) compare each of them with the law. Eleven of the 208 [test vectors](../protocol/reference/test-vectors.json) are messages of this run.
+The [protocol reference](../protocol/BABYFACE-PRO-FS-CC-REFERENCE.md) carries the results; two rows of its coverage table changed, and the share of functions measured rose from 12 to 13 of 18. The [level table](../protocol/reference/output-level-law-measured.json) now holds all 244 values for AS1 and AS2 as well, and the tests of the [codec](../protocol/reference/babyface_cc.py) compare each of them with the law. Eleven of the 208 [test vectors](../protocol/reference/test-vectors.json) carry results of this run; nine of them are new.
 
 At the end every cell and loopback of the run was off, the AS outputs muted as found and the headphones back at their level; Loopy Pro was opened again with the same project.
 
