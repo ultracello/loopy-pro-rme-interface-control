@@ -10,6 +10,7 @@ import { TEXT } from './site/text.mjs';
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(HERE, '..');
 export const REPO = 'https://github.com/ultracello/loopy-pro-rme-interface-control';
+export const SITE = 'https://ultracello.github.io/loopy-pro-rme-interface-control/';
 const blob = (path) => `${REPO}/blob/main/${path}`;
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 export const MARKS = ['measured', 'reported', 'notes', 'unknown'];
@@ -91,6 +92,17 @@ export function render(c, t = TEXT) {
 <title>${esc(t.title)}</title>
 <meta name="description" content="${esc(t.description)}">
 <meta name="referrer" content="strict-origin-when-cross-origin">
+<link rel="canonical" href="${SITE}">
+<meta property="og:type" content="website">
+<meta property="og:url" content="${SITE}">
+<meta property="og:title" content="${esc(t.title)}">
+<meta property="og:description" content="${esc(t.description)}">
+<meta property="og:image" content="${SITE}${t.share.file}">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="${t.share.width}">
+<meta property="og:image:height" content="${t.share.height}">
+<meta property="og:image:alt" content="${esc(t.share.alt)}">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="./favicon.svg">
 <link rel="stylesheet" href="./styles.css">
 </head>

@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import { readFileSync, readdirSync, existsSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { collect, render, inline, stamp, readmeBlock, readmeWith, REPO, MARKS } from '../build.mjs';
+import { collect, render, inline, stamp, readmeBlock, readmeWith, REPO, SITE, MARKS } from '../build.mjs';
 import { TEXT } from '../site/text.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
@@ -68,6 +68,20 @@ test('the picture is there and described', () => {
   assert.equal(file.readUInt32BE(20), Number(m[3]));
   assert.ok(file.length < 600000);
   assert.ok(html.includes('<figcaption>'));
+});
+
+test('a shared link gets a title, a description and a picture', () => {
+  const meta = Object.fromEntries([...html.matchAll(/<meta (?:property|name)="((?:og|twitter):[^"]+)" content="([^"]*)"/g)].map((m) => [m[1], m[2]]));
+  assert.equal(meta['og:url'], SITE);
+  assert.ok(html.includes(`<link rel="canonical" href="${SITE}">`) && readFileSync(join(ROOT, 'README.md'), 'utf8').includes(SITE));
+  assert.ok(html.includes(`<title>${meta['og:title']}</title>`) && html.includes(`<meta name="description" content="${meta['og:description']}">`));
+  assert.equal(meta['twitter:card'], 'summary_large_image');
+  assert.ok(meta['og:image'].startsWith(SITE) && meta['og:image:alt'].length > 40);   // networks want the full address
+  const file = readFileSync(join(ROOT, 'website/public', meta['og:image'].slice(SITE.length)));
+  assert.equal(file.toString('latin1', 1, 4), 'PNG');
+  assert.deepEqual([file.readUInt32BE(16), file.readUInt32BE(20)], [1200, 630]);
+  assert.deepEqual([meta['og:image:width'], meta['og:image:height']], ['1200', '630']);
+  assert.ok(file.length < 600000);
 });
 
 test('the page is one plain document', () => {

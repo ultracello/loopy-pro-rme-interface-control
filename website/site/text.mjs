@@ -2,6 +2,8 @@
 export const TEXT = {
   title: 'RME Babyface Pro FS, controlled from Loopy Pro',
   description: 'Controlling an RME Babyface Pro FS from Loopy Pro on the iPad without TotalMix FX: what works, what is measured, and a protocol reference for native support.',
+  // The picture a social network shows next to a link to the page. It carries the title above: draw it again with tools/share-image.swift when the title or the screenshot changes.
+  share: { file: 'share-preview-babyface-pro-fs-loopy-pro.png', width: 1200, height: 630, alt: 'The title of the page next to the controller page in Loopy Pro: faders for main and headphone level and rows of buttons for steps in dB.' },
   project: 'Babyface Pro FS · Loopy Pro',
   heading: 'Controlling an RME Babyface Pro FS from Loopy Pro',
   intro: [
