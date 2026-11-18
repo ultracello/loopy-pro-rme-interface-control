@@ -60,14 +60,18 @@ test('links lead somewhere', () => {
   }
 });
 
-test('the picture is there and described', () => {
-  const m = html.match(/<img src="\.\/([^"]+)" width="(\d+)" height="(\d+)" alt="([^"]+)"/);
-  assert.ok(m && m[4].length > 40);
-  const file = readFileSync(join(ROOT, 'website/public', m[1]));
-  assert.equal(file.readUInt32BE(16), Number(m[2]));   // PNG: width and height stand in the header
-  assert.equal(file.readUInt32BE(20), Number(m[3]));
-  assert.ok(file.length < 600000);
-  assert.ok(html.includes('<figcaption>'));
+test('the pictures are there and described', () => {
+  const all = [...html.matchAll(/<img src="\.\/([^"]+)" width="(\d+)" height="(\d+)" alt="([^"]+)"/g)];
+  assert.equal(all.length, TEXT.figures.length);
+  assert.equal(html.split('<img').length - 1, all.length);
+  assert.equal(html.split('<figcaption>').length - 1, all.length);
+  for (const m of all) {
+    assert.ok(m[4].length > 40, m[1]);
+    const file = readFileSync(join(ROOT, 'website/public', m[1]));
+    assert.equal(file.readUInt32BE(16), Number(m[2]), m[1]);   // PNG: width and height stand in the header
+    assert.equal(file.readUInt32BE(20), Number(m[3]), m[1]);
+    assert.ok(file.length < 600000, m[1]);
+  }
 });
 
 test('a shared link gets a title, a description and a picture', () => {

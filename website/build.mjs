@@ -152,10 +152,10 @@ ${c.coverage.map((r) => `<tr><th scope="row">${inline(r.name)}</th><td>${inline(
 <h2 id="h-page">${esc(t.pageHeading)}</h2>
 ${p(t.page)}
 ${ul(t.pageList)}
-<figure>
-<img src="./${t.figure.file}" width="${t.figure.width}" height="${t.figure.height}" alt="${esc(t.figure.alt)}" loading="lazy">
-<figcaption>${inline(t.figure.caption)}</figcaption>
-</figure>
+${t.figures.map((f) => `<figure>
+<img src="./${f.file}" width="${f.width}" height="${f.height}" alt="${esc(f.alt)}" loading="lazy">
+<figcaption>${inline(f.caption)}</figcaption>
+</figure>`).join('\n')}
 ${p(t.pageAfter)}
 </section>
 

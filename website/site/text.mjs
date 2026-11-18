@@ -38,11 +38,17 @@ export const TEXT = {
     'Monitoring on the headphones: each input and the playback with its own level, pan and phase.',
     'After the interface was unplugged it sends the mixer again, because the unit forgets it.',
   ],
-  figure: {
-    file: 'controller-interface-page.png', width: 1600, height: 1050,
-    alt: 'The controller page in Loopy Pro: a row of status lamps, faders and dB displays for the main and the headphone output, step buttons from 0.5 to 6 dB for each, and a mute switch for each.',
-    caption: 'The first of the three pages on 18 November 2026, armed. READ reads the unit, ARM arms the page, LOCK locks it. Under the faders, one row names the reason when a press is refused; the round lamps show the state of each output. The other two pages hold the input gains and the monitoring.',
-  },
+  figures: [
+    { file: 'controller-interface-page.png', width: 1600, height: 1050,
+      alt: 'The controller page in Loopy Pro: a row of status lamps, faders and dB displays for the main and the headphone output, step buttons from 0.5 to 6 dB for each, and a mute switch for each.',
+      caption: 'The first of the three pages on 18 November 2026, armed. READ reads the unit, ARM arms the page, LOCK locks it. Under the faders, one row names the reason when a press is refused; the round lamps show the state of each output.' },
+    { file: 'controller-inputs-page.png', width: 1600, height: 1050,
+      alt: 'The inputs page: a gain display and six step buttons for each of the four inputs, a pad switch with lamps for the two microphone inputs, and a switch between +4 dBu and −10 dBV for the two line inputs.',
+      caption: 'The second page: gain of the four inputs, pad of inputs 1 and 2, reference level of inputs 3 and 4. The lamps for 48 V only show what the unit reports; the page has no button for it.' },
+    { file: 'controller-monitoring-page.png', width: 1600, height: 1050,
+      alt: 'The monitoring page: five columns, one for each input and one for the playback, each with a level display, an on/off switch, step buttons, a pan display with left, mid and right, and a phase button.',
+      caption: 'The third page: what is heard on the headphones. MON1 to MON4 are the four inputs, PB is the playback from the iPad. Each has level, on/off, pan and phase.' },
+  ],
   pageAfter: [
     'Equaliser and low cut are not on the page: the scripting plug-in it is built with cannot send a message of that length in one piece. Phantom power is left out on purpose.',
     'How it is wired: a StreamByter plug-in inside Loopy Pro builds the messages and checks every answer of the unit. A second one in front of the unit lets only known messages pass. The answers reach the displays on the page through the app MidiFire.',
