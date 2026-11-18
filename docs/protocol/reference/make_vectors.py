@@ -63,6 +63,22 @@ for name,frame,meaning in (
     ('equaliser: slot 1 on input 1 off',b.set_eq(1,0,False,False),'0.00 dB')):
     add(name,frame,meaning,'measured')
 add('equaliser: slot 2 on output Phones left, flat bands, overall gain 0.5',b.set_eq(2,2,True,True,overall_gain=0.5),'sent; the unit\'s own headphone meter does not show the EQ, so the effect could not be read','notes')
+# equaliser and low cut, as sent in run T1 on 18 November 2026 with sine tones; the whole measured curves stand in eq-curves-measured.json
+PKT=lambda f,g,q:b.biquad('peak',f,g,q,FS);lx=lambda f,p:dict(low_cut_poles=p,low_cut=b.low_cut_coefficient_exact(f,p,FS))
+T1=[('low cut 100 Hz, 1 pole',lc(100,1)),('low cut 100 Hz, 2 poles',lc(100,2)),('low cut 100 Hz, 3 poles',lc(100,3)),('low cut 100 Hz, 4 poles',lc(100,4)),('low cut 20 Hz, 2 poles',lc(20,2)),('low cut 500 Hz, 4 poles',lc(500,4)),
+    ('peak +6 dB at 1 kHz, Q 1, band 2',dict(bands=(FLAT,PKT(1000,6,1),FLAT))),('peak -12 dB at 1 kHz, Q 5, band 2',dict(bands=(FLAT,PKT(1000,-12,5),FLAT))),('peak +12 dB at 100 Hz, Q 0.7, band 1',dict(bands=(PKT(100,12,0.7),FLAT,FLAT))),
+    ('low shelf +6 dB at 200 Hz, Q 0.7, band 1',dict(bands=(b.biquad('lowshelf',200,6,0.7,FS),FLAT,FLAT))),('high shelf -9 dB at 4 kHz, Q 0.7, band 3',dict(bands=(FLAT,FLAT,b.biquad('highshelf',4000,-9,0.7,FS)))),
+    ('peak +6 dB at 12 kHz, Q 2, band 3',dict(bands=(FLAT,FLAT,PKT(12000,6,2)))),('low pass 2 kHz, Q 0.707, band 3 (a filter TotalMix does not offer there)',dict(bands=(FLAT,FLAT,b.biquad('lowpass',2000,0,0.7071,FS)))),
+    ('all at once: low cut 80 Hz 2 poles, low shelf +4 dB 150 Hz, peak -6 dB 800 Hz Q 2, high shelf +3 dB 6 kHz',dict(bands=(b.biquad('lowshelf',150,4,0.7,FS),PKT(800,-6,2),b.biquad('highshelf',6000,3,0.7,FS)),**lc(80,2)))]
+TX=[('exact low cut 100 Hz, 4 poles',lx(100,4)),('exact low cut 500 Hz, 4 poles',lx(500,4)),('exact low cut 100 Hz, 2 poles',lx(100,2)),('exact low cut 250 Hz, 1 pole',lx(250,1))]
+CURVES={c['name']:c for c in json.load(open('eq-curves-measured.json'))['settings']}
+def sine(where,label,frame):
+    c=CURVES['sine: %s, %s'%(where,label)];assert bytes.fromhex(c['hex'])==bytes(frame),'the codec does not build the message that was sent: '+label
+    add(c['name'],frame,'curve of 67 frequencies in eq-curves-measured.json; %d points compared, largest deviation from the calculation %.3f dB (in the stop band), rms %.4f dB'%(c['points_counted'],c['largest_deviation_db'],c['rms_deviation_db']),'measured')
+for label,kw in T1:sine('output Main left, slot 0',label,b.set_eq(0,0,True,True,**kw))
+for label,kw in (T1[1],T1[6],T1[10]):sine('input 1, slot 1',label,b.set_eq(1,0,False,True,**kw))
+for label,kw in TX:sine('output Main left, slot 0',label,b.set_eq(0,0,True,True,**kw))
+assert len(CURVES)==len(T1)+3+len(TX)
 # one synthetic state message: Main muted by raw 59, Phones -14.5 dB, mic gains 0, line gains 6.0 and 0 dB, both sensitivity bits set
 w=[0]*44;w[0]=0x0090000C;w[1]=59|(59<<9);w[2]=(214<<14)|(214<<23);w[3]=(12<<19)
 add('state (built for this file from the values our unit reported)',b.frame(0,w),'word 0 0x0090000C, Main raw 59/59, Phones raw 214/214, gains 0, 0, 12 half dB, 0','reported')

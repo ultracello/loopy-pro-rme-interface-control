@@ -8,6 +8,7 @@ The payload is a sequence of 32-bit words, each packed least significant bits fi
 What each part rests on (measured on a unit, reported back by the unit, or taken from other people's notes) is
 stated in BABYFACE-PRO-FS-CC-REFERENCE.md. The doc strings below repeat the status in one word.
 """
+import cmath
 import math
 
 HEADER = bytes([0xF0, 0x00, 0x20, 0x0D, 0x10])
@@ -163,7 +164,9 @@ def fixed_5_27(x):
 
 def biquad(kind, f0, gain_db, q, fs):
     """One band after the Audio EQ Cookbook, normalised as the unit wants it: (a1/a0, a2/a0, b1/b0, b2/b0, b0/a0).
-    kind: 'peak', 'lowshelf' or 'highshelf'."""
+    kind: 'peak', 'lowshelf', 'highshelf' (the types TotalMix FX offers) or 'lowpass' (gain_db is not used there; it shows
+    that a band takes any biquad whose b0 is not zero). fs: the sample rate the unit runs at. (measured with sine tones at
+    48 kHz, 10 Hz to 20 kHz: the unit follows these coefficients to 0.03 dB wherever the curve lies above -20 dB)"""
     A = 10 ** (gain_db / 40); w = 2 * math.pi * f0 / fs; cw, sw = math.cos(w), math.sin(w); alpha = sw / (2 * q)
     if kind == 'peak':
         b0, b1, b2 = 1 + alpha * A, -2 * cw, 1 - alpha * A; a0, a1, a2 = 1 + alpha / A, -2 * cw, 1 - alpha / A
@@ -175,6 +178,8 @@ def biquad(kind, f0, gain_db, q, fs):
         r = 2 * math.sqrt(A) * alpha
         b0, b1, b2 = A * ((A + 1) + (A - 1) * cw + r), -2 * A * ((A - 1) + (A + 1) * cw), A * ((A + 1) + (A - 1) * cw - r)
         a0, a1, a2 = (A + 1) - (A - 1) * cw + r, 2 * ((A - 1) - (A + 1) * cw), (A + 1) - (A - 1) * cw - r
+    elif kind == 'lowpass':
+        b0, b1, b2 = (1 - cw) / 2, 1 - cw, (1 - cw) / 2; a0, a1, a2 = 1 + alpha, -2 * cw, 1 - alpha
     else:
         raise ValueError('kind')
     return a1 / a0, a2 / a0, b1 / b0, b2 / b0, b0 / a0
@@ -184,17 +189,57 @@ FLAT_BAND = (0.0, 0.0, 0.0, 0.0, 1.0)
 
 
 def low_cut_coefficient(f0, poles, fs):
-    """The word for the low cut: 1 - k with k = 1 / (2*pi*c*f0/fs + 1), c by the number of poles."""
+    """The word for the low cut as the notes give it: 1 - k with k = 1 / (2*pi*c*f0/fs + 1), c by the number of poles.
+    With this k the -3 dB point lies a little above f0 (measured at 48 kHz: 100 Hz gives 100.7 / 103.0 / 105.2 / 107.1 Hz
+    with 1 / 2 / 3 / 4 poles, 500 Hz with 4 poles gives 573 Hz). low_cut_coefficient_exact() puts it at f0."""
     k = 1 / (2 * math.pi * LOW_CUT_CORRECTION[poles - 1] * f0 / fs + 1)
     return 1 - k
+
+
+def low_cut_coefficient_exact(f0, poles, fs):
+    """The word for a low cut whose -3.01 dB point lies at f0: 1 - k, with k solved from the filter the unit applies,
+    k(1 - z^-1)/(1 - k z^-1) once per pole. (measured: 100 Hz with 4 and with 2 poles, 250 Hz with 1 pole and 500 Hz
+    with 4 poles came out at 100.1, 100.1, 250.2 and 500.6 Hz, read off a sixth-octave grid)"""
+    g2 = 2 ** (-1 / poles); cw = math.cos(2 * math.pi * f0 / fs)
+    a, b, c = 2 * (1 - cw) - g2, 2 * g2 * cw, -g2
+    r = math.sqrt(b * b - 4 * a * c)
+    k = [x for x in ((-b + r) / (2 * a), (-b - r) / (2 * a)) if 0 < x < 1]
+    if len(k) != 1:
+        raise ValueError('no low cut for these values')
+    return 1 - k[0]
+
+
+def eq_response_db(f, fs, bands=(FLAT_BAND, FLAT_BAND, FLAT_BAND), low_cut_poles=0, low_cut=0.0, overall_gain=None):
+    """Gain in dB at the frequency f of what set_eq() sends with the same arguments: the three biquads
+    (1 + b1 z^-1 + b2 z^-2)/(1 + a1 z^-1 + a2 z^-2), the overall gain, and the low cut k(1 - z^-1)/(1 - k z^-1) with
+    k = 1 - low_cut once per pole. (measured: this is what the unit does, see biquad(); note that the low cut also
+    takes a little level in the pass band, 0.06 dB for 100 Hz with 1 pole and 0.52 dB for 500 Hz with 4 poles)"""
+    z = cmath.exp(-2j * math.pi * f / fs)
+    h = overall_gain if overall_gain is not None else bands[0][4] * bands[1][4] * bands[2][4]
+    for a1, a2, b1, b2 in (band[:4] for band in bands):
+        h *= (1 + b1 * z + b2 * z * z) / (1 + a1 * z + a2 * z * z)
+    if low_cut_poles:
+        k = 1 - low_cut
+        h *= (k * (1 - z) / (1 - k * z)) ** low_cut_poles
+    return 20 * math.log10(abs(h))
+
+
+def eq_from_words(words):
+    """The arguments of set_eq() and eq_response_db() back from the 16 words of an equaliser message:
+    (eq_index, channel, is_output, enabled, keywords)."""
+    signed = lambda w: (w - (1 << 32) if w & 0x80000000 else w) / (1 << 27)
+    control = words[0]
+    bands = tuple(tuple(signed(x) for x in words[1 + 4 * i:5 + 4 * i]) + (1.0,) for i in range(3))
+    keywords = dict(bands=bands, low_cut_poles=bin((control >> 8) & 0xF).count('1'), low_cut=signed(words[14]), overall_gain=signed(words[13]))
+    return control & 0xFF, (control >> 16) & 0xF, bool(control >> 20 & 1), bool(control >> 31), keywords
 
 
 def set_eq(eq_index, channel, is_output, enabled, bands=(FLAT_BAND, FLAT_BAND, FLAT_BAND), low_cut_poles=0, low_cut=0.0, overall_gain=None):
     """Equaliser and low cut of one channel: 16 words, to be sent in one piece. eq_index 0..20 is a slot, a memory for one
     set of coefficients: two channels on the same slot share it, so give every channel its own. bands: three tuples as
     biquad() returns them. overall_gain: product of the three b0/a0 unless given. enabled=False switches EQ and low cut
-    of the channel off, whatever the slot. (measured on output Main left and on input 1: overall gain to 0.01 dB, low
-    shelf in each of the three bands, low cut by poles and frequency; corner frequencies not verified with sine tones)"""
+    of the channel off, whatever the slot. (measured on output Main left and on input 1: overall gain to 0.01 dB, and
+    with sine tones at 48 kHz the whole curve of peak, shelf, low pass and low cut settings, see eq_response_db())"""
     if not (0 <= eq_index <= 20 and 0 <= channel <= 11 and 0 <= low_cut_poles <= 4 and len(bands) == 3):
         raise ValueError('eq_index 0..20, channel 0..11, poles 0..4, three bands')
     gain = overall_gain if overall_gain is not None else bands[0][4] * bands[1][4] * bands[2][4]

@@ -650,6 +650,132 @@
    "status": "notes"
   },
   {
+   "name": "sine: output Main left, slot 0, low cut 100 Hz, 1 pole",
+   "hex": "F000200D1006000240000800000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040003D6C6900000000000000F7",
+   "meaning": "curve of 67 frequencies in eq-curves-measured.json; 67 points compared, largest deviation from the calculation 0.066 dB (in the stop band), rms 0.0124 dB",
+   "status": "measured"
+  },
+  {
+   "name": "sine: output Main left, slot 0, low cut 100 Hz, 2 poles",
+   "hex": "F000200D1006000640000800000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040007F514500000000000000F7",
+   "meaning": "curve of 67 frequencies in eq-curves-measured.json; 67 points compared, largest deviation from the calculation 0.030 dB (in the stop band), rms 0.0053 dB",
+   "status": "measured"
+  },
+  {
+   "name": "sine: output Main left, slot 0, low cut 100 Hz, 3 poles",
+   "hex": "F000200D1006000E40000800000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040003F1D3800000000000000F7",
+   "meaning": "curve of 67 frequencies in eq-curves-measured.json; 64 points compared, largest deviation from the calculation 0.089 dB (in the stop band), rms 0.0173 dB",
+   "status": "measured"
+  },
+  {
+   "name": "sine: output Main left, slot 0, low cut 100 Hz, 4 poles",
+   "hex": "F000200D1006001E4000080000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004000345B3000000000000000F7",
+   "meaning": "curve of 67 frequencies in eq-curves-measured.json; 62 points compared, largest deviation from the calculation 0.129 dB (in the stop band), rms 0.0204 dB",
+   "status": "measured"
+  },
+  {
+   "name": "sine: output Main left, slot 0, low cut 20 Hz, 2 poles",
+   "hex": "F000200D10060006400008000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000400001030E00000000000000F7",
+   "meaning": "curve of 67 frequencies in eq-curves-measured.json; 67 points compared, largest deviation from the calculation 0.073 dB (in the stop band), rms 0.0125 dB",
+   "status": "measured"
+  },
+  {
+   "name": "sine: output Main left, slot 0, low cut 500 Hz, 4 poles",
+   "hex": "F000200D1006001E400008000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000400054746D01000000000000F7",
+   "meaning": "curve of 67 frequencies in eq-curves-measured.json; 48 points compared, largest deviation from the calculation 0.139 dB (in the stop band), rms 0.0241 dB",
+   "status": "measured"
+  },
+  {
+   "name": "sine: output Main left, slot 0, peak +6 dB at 1 kHz, Q 1, band 2",
+   "hex": "F000200D100600004000080000000000000000000000000000000000000000174459060F75382C3A00231E670B0F660C1935000000000000000000000000000000000000000000130868420000000000000000000000F7",
+   "meaning": "curve of 67 frequencies in eq-curves-measured.json; 67 points compared, largest deviation from the calculation 0.022 dB (in the stop band), rms 0.0028 dB",
+   "status": "measured"
+  },
+  {
+   "name": "sine: output Main left, slot 0, peak -12 dB at 1 kHz, Q 5, band 2",
+   "hex": "F000200D100600004000080000000000000000000000000000000000000000583C28040F2C11603C00695E75010F0042153F0000000000000000000000000000000000000000001226643E0000000000000000000000F7",
+   "meaning": "curve of 67 frequencies in eq-curves-measured.json; 67 points compared, largest deviation from the calculation 0.016 dB (in the stop band), rms 0.0022 dB",
+   "status": "measured"
+  },
+  {
+   "name": "sine: output Main left, slot 0, peak +12 dB at 100 Hz, Q 0.7, band 1",
+   "hex": "F000200D1006000040000814684D000F564A333F0045362D020F6B79533D0000000000000000000000000000000000000000000000000000000000000000000000000000000000367371400000000000000000000000F7",
+   "meaning": "curve of 67 frequencies in eq-curves-measured.json; 67 points compared, largest deviation from the calculation 0.026 dB (in the stop band), rms 0.0034 dB",
+   "status": "measured"
+  },
+  {
+   "name": "sine: output Main left, slot 0, low shelf +6 dB at 200 Hz, Q 0.7, band 1",
+   "hex": "F000200D10060000400008365801020F3E1C023E0038746B020F446C1B3D00000000000000000000000000000000000000000000000000000000000000000000000000000000007C2835400000000000000000000000F7",
+   "meaning": "curve of 67 frequencies in eq-curves-measured.json; 67 points compared, largest deviation from the calculation 0.008 dB (in the stop band), rms 0.0013 dB",
+   "status": "measured"
+  },
+  {
+   "name": "sine: output Main left, slot 0, high shelf -9 dB at 4 kHz, Q 0.7, band 3",
+   "hex": "F000200D10060000400008000000000000000000000000000000000000000000000000000000000000000000000000000000004C2138240F53795E23007D172E3A0F660F5D1800720F371B0000000000000000000000F7",
+   "meaning": "curve of 67 frequencies in eq-curves-measured.json; 67 points compared, largest deviation from the calculation 0.015 dB (in the stop band), rms 0.0024 dB",
+   "status": "measured"
+  },
+  {
+   "name": "sine: output Main left, slot 0, peak +6 dB at 12 kHz, Q 2, band 3",
+   "hex": "F000200D100600004000080000000000000000000000000000000000000000000000000000000000000000000000000000000000000000007625602C00000000000045174C1E0002024A490000000000000000000000F7",
+   "meaning": "curve of 67 frequencies in eq-curves-measured.json; 67 points compared, largest deviation from the calculation 0.048 dB (in the stop band), rms 0.0063 dB",
+   "status": "measured"
+  },
+  {
+   "name": "sine: output Main left, slot 0, low pass 2 kHz, Q 0.707, band 3 (a filter TotalMix does not offer there)",
+   "hex": "F000200D10060000400008000000000000000000000000000000000000000000000000000000000000000000000000000000000D453E170F6A2E192C00000000000100000040007E7C75000000000000000000000000F7",
+   "meaning": "curve of 67 frequencies in eq-curves-measured.json; 63 points compared, largest deviation from the calculation 0.123 dB (in the stop band), rms 0.0227 dB",
+   "status": "measured"
+  },
+  {
+   "name": "sine: output Main left, slot 0, all at once: low cut 80 Hz 2 poles, low shelf +4 dB 150 Hz, peak -6 dB 800 Hz Q 2, high shelf +3 dB 6 kHz",
+   "hex": "F000200D10060006400008265E4C010F6D5E353E00205C01020F6318023E0005671D050F3460383B004B5C01030F1433563D00637771480F4D682B13005F670A3F0F1D7E681600404E2451002B673700000000000000F7",
+   "meaning": "curve of 67 frequencies in eq-curves-measured.json; 67 points compared, largest deviation from the calculation 0.059 dB (in the stop band), rms 0.0083 dB",
+   "status": "measured"
+  },
+  {
+   "name": "sine: input 1, slot 1, low cut 100 Hz, 2 poles",
+   "hex": "F000200D1006010600000800000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040007F514500000000000000F7",
+   "meaning": "curve of 67 frequencies in eq-curves-measured.json; 67 points compared, largest deviation from the calculation 0.037 dB (in the stop band), rms 0.0063 dB",
+   "status": "measured"
+  },
+  {
+   "name": "sine: input 1, slot 1, peak +6 dB at 1 kHz, Q 1, band 2",
+   "hex": "F000200D100601000000080000000000000000000000000000000000000000174459060F75382C3A00231E670B0F660C1935000000000000000000000000000000000000000000130868420000000000000000000000F7",
+   "meaning": "curve of 67 frequencies in eq-curves-measured.json; 67 points compared, largest deviation from the calculation 0.028 dB (in the stop band), rms 0.0036 dB",
+   "status": "measured"
+  },
+  {
+   "name": "sine: input 1, slot 1, high shelf -9 dB at 4 kHz, Q 0.7, band 3",
+   "hex": "F000200D10060100000008000000000000000000000000000000000000000000000000000000000000000000000000000000004C2138240F53795E23007D172E3A0F660F5D1800720F371B0000000000000000000000F7",
+   "meaning": "curve of 67 frequencies in eq-curves-measured.json; 67 points compared, largest deviation from the calculation 0.011 dB (in the stop band), rms 0.0017 dB",
+   "status": "measured"
+  },
+  {
+   "name": "sine: output Main left, slot 0, exact low cut 100 Hz, 4 poles",
+   "hex": "F000200D1006001E40000800000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040003A582D00000000000000F7",
+   "meaning": "curve of 67 frequencies in eq-curves-measured.json; 63 points compared, largest deviation from the calculation 0.167 dB (in the stop band), rms 0.0254 dB",
+   "status": "measured"
+  },
+  {
+   "name": "sine: output Main left, slot 0, exact low cut 500 Hz, 4 poles",
+   "hex": "F000200D1006001E40000800000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040007B5D5201000000000000F7",
+   "meaning": "curve of 67 frequencies in eq-curves-measured.json; 50 points compared, largest deviation from the calculation 0.139 dB (in the stop band), rms 0.0272 dB",
+   "status": "measured"
+  },
+  {
+   "name": "sine: output Main left, slot 0, exact low cut 100 Hz, 2 poles",
+   "hex": "F000200D1006000640000800000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040000D604300000000000000F7",
+   "meaning": "curve of 67 frequencies in eq-curves-measured.json; 67 points compared, largest deviation from the calculation 0.169 dB (in the stop band), rms 0.0213 dB",
+   "status": "measured"
+  },
+  {
+   "name": "sine: output Main left, slot 0, exact low cut 250 Hz, 1 pole",
+   "hex": "F000200D100600024000080000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004000343F7F01000000000000F7",
+   "meaning": "curve of 67 frequencies in eq-curves-measured.json; 67 points compared, largest deviation from the calculation 0.047 dB (in the stop band), rms 0.0063 dB",
+   "status": "measured"
+  },
+  {
    "name": "state (built for this file from the values our unit reported)",
    "hex": "F000200D10000C004004003B6C010000000056590600000003000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000F7",
    "meaning": "word 0 0x0090000C, Main raw 59/59, Phones raw 214/214, gains 0, 0, 12 half dB, 0",

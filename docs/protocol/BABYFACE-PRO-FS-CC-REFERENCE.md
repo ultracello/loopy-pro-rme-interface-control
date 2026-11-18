@@ -8,12 +8,12 @@ Each statement carries one of four marks, so that nothing has to be taken on tru
 
 | Mark | Meaning |
 |---|---|
-| **measured** | The effect was measured at the unit's own meters, usually with a loop cable from XLR output 1 to XLR input 1 (what leaves output 1 is then read at the meter of input 1). |
+| **measured** | The effect was measured at the unit's own meters, usually with a loop cable from XLR output 1 to XLR input 1 (what leaves output 1 is then read at the meter of input 1). The test signal was a music loop, or, for the frequency responses in 2.5, a sine tone from the iPad. |
 | **reported** | The message was sent and the unit reported the new value back in its state. The effect on audio was not measured. |
 | **notes** | Taken from other people's notes and not tried on our unit. Sources: the protocol notes on the oscmix wiki by Michael Forney (github.com/michaelforney/oscmix/wiki/Babyface-Pro) and the Babyface Pro part of the Linux kernel driver (`sound/usb/mixer_quirks.c`). |
 | **unknown** | We found no source and no way to observe it. |
 
-The folder `reference/` holds a small codec in Python (`babyface_cc.py`), 109 test vectors (`test-vectors.json`) and tests. The codec was checked against 1871 messages of the controller that was used on the unit: byte for byte the same.
+The folder `reference/` holds a small codec in Python (`babyface_cc.py`), 130 test vectors (`test-vectors.json`), the equaliser curves measured with sine tones (`eq-curves-measured.json`) and tests. The codec was checked against 1871 messages of the controller that was used on the unit: byte for byte the same.
 
 ## 1. Transport
 
@@ -103,9 +103,9 @@ Sixteen words (87 bytes), for one channel. The layout is from the oscmix **notes
 - **Word 0, control:** bits 0-7 slot (0 to 20), bits 8-11 low cut, one bit per pole (1 pole `0001`, 2 poles `0011`, 3 poles `0111`, 4 poles `1111`), bits 16-19 channel 0-11, bit 20 channel type (0 input, 1 output), bit 31 EQ and low cut of that channel on.
 - **Words 1-12:** three bands, four coefficients each in the order a1/a0, a2/a0, b1/b0, b2/b0, as signed 5.27 fixed point (−2.375 is `0xED000000`). The bands are biquads after the Audio EQ Cookbook; TotalMix FX uses its peaking, low-shelf and high-shelf types. A flat band is four zeros.
 - **Word 13:** the product of b0/a0 of the three bands, the overall gain, in the same fixed point (1.0 is `0x08000000`).
-- **Word 14:** the low cut, stored as 1 − k with k = 1 / (2π·c·f0/fs + 1); c = 1, 0.655, 0.528, 0.457 for 1 to 4 poles. The filter (k − k·z⁻¹) / (1 − k·z⁻¹) is applied once per pole. **Word 15:** 0.
+- **Word 14:** the low cut, stored as 1 − k. The filter (k − k·z⁻¹) / (1 − k·z⁻¹) is applied once per pole. **measured** The notes give k = 1 / (2π·c·f0/fs + 1) with c = 1, 0.655, 0.528, 0.457 for 1 to 4 poles; with that k the −3 dB point lies a little above f0 (see below). **Word 15:** 0.
 
-How it was measured: the message went to the output channel Main left (type 1, channel 0) with the Main output at −30 dB, and the result was read behind the unit, at input 1 over the loop cable. The test signal was a music loop with most of its content below 2 kHz. Changes are from the peak values, to 0.01 dB.
+**Levels, with music.** The message went to the output channel Main left (type 1, channel 0) with the Main output at −30 dB, and the result was read behind the unit, at input 1 over the loop cable. The test signal was a music loop with most of its content below 2 kHz. Changes are from the peak values, to 0.01 dB.
 
 | Setting on Main left | Expected | Measured |
 |---|---|---|
@@ -128,10 +128,36 @@ What follows for a host:
 - **The slot is a shared memory.** Main left was given slot 5 with gain 0.5; then Main right was given the same slot with gain 0.25, and Main left went to −12.04 dB. So every channel with EQ or low cut on needs a slot of its own, 0 to 20 (slot 20 works). The host has to keep the list of slots in use. **measured**
 - **Switching off goes by channel, not by slot.** A message for Main left with bit 31 clear switched its EQ off although it named another slot than the one in use. **measured**
 - **The unit's own meters do not show the EQ.** The meter of an output stayed where it was while the level behind the output fell by 6 and 12 dB; the meter of input 1 did not move when the EQ of input 1 was on. **measured** For the headphone outputs we therefore could send the message but not see its effect (no cable there).
-- **The coefficients depend on the sample rate.** We computed them for 48 kHz and did not read the rate of the unit. Corner frequencies and slopes were not measured (that needs sine tones); the table shows direction and size with music.
+- **The coefficients depend on the sample rate.** Our unit ran at 48 kHz (see the next part); we did not try another rate.
 - We found no word of the state message that reports the EQ, and did not test whether the unit keeps it when its USB connection is built anew. **unknown**
 
-The codec builds this message (`set_eq`, `biquad`, `low_cut_coefficient`).
+**Frequency responses, with sine tones.** A sine at half of full scale went from the iPad to USB playback 1 and through the output channel Main left (Main at −30 dB); the level was read behind the unit at input 1 over the loop cable, at 67 frequencies from 10 Hz to 20 kHz, once with the setting and once without. The difference is the measured curve. The calculated curve comes from the words of the message that was sent: three biquads, the overall gain, and the low cut filter above once per pole (`eq_response_db` in the codec). All curves are in `reference/eq-curves-measured.json`. **measured**
+
+| Setting on Main left | Measured | Calculated |
+|---|---|---|
+| low cut 100 Hz with 1 / 2 / 3 / 4 poles, k of the notes | −3 dB at 100.7 / 103.0 / 105.2 / 107.1 Hz; at 20 Hz −14.17 / −21.38 / −27.02 / −31.71 dB | 100.7 / 103.0 / 105.2 / 107.1 Hz; −14.15 / −21.39 / −27.05 / −31.77 dB |
+| low cut 20 Hz, 2 poles, k of the notes | −3 dB at 20.5 Hz | 20.4 Hz |
+| low cut 500 Hz, 4 poles, k of the notes | −3 dB at 572.8 Hz; −0.52 dB at 20 kHz | 572.8 Hz; −0.52 dB |
+| low cut with k solved for the corner: 100 Hz 4 poles / 100 Hz 2 poles / 250 Hz 1 pole / 500 Hz 4 poles | −3 dB at 100.1 / 100.1 / 250.2 / 500.6 Hz | 100.1 / 100.1 / 250.2 / 500.6 Hz (read off the same grid of frequencies) |
+| peak +6 dB at 1 kHz, Q 1 | +5.99 dB at 1016 Hz, +0.27 dB at 202 Hz, +0.39 dB at 4064 Hz | +5.99, +0.27, +0.39 dB |
+| peak −12 dB at 1 kHz, Q 5 | −11.61 dB at 1016 Hz, −0.03 dB at 202 Hz | −11.61, −0.03 dB |
+| peak +12 dB at 100 Hz, Q 0.7, in band 1 | +12.00 dB at 101 Hz, +5.81 dB at 50 Hz, +5.68 dB at 202 Hz | +12.00, +5.82, +5.68 dB |
+| low shelf +6 dB at 200 Hz, Q 0.7 | +6.00 dB at 20 Hz, +2.96 dB at 202 Hz, +0.01 dB at 1016 Hz | +6.00, +2.96, +0.01 dB |
+| high shelf −9 dB at 4 kHz, Q 0.7 | −4.63 dB at 4064 Hz, −9.00 dB at 20 kHz | −4.64, −9.00 dB |
+| peak +6 dB at 12 kHz, Q 2, in band 3 | +5.58 dB at 11.5 kHz, +0.13 dB at 20 kHz | +5.58, +0.13 dB |
+| low pass 2 kHz, Q 0.707, in band 3 | −0.28 dB at 1016 Hz, −12.86 dB at 4064 Hz, −34.00 dB at 11.5 kHz | −0.28, −12.86, −34.07 dB |
+| low cut 80 Hz 2 poles, low shelf +4 dB 150 Hz, peak −6 dB 800 Hz Q 2 and high shelf +3 dB 6 kHz together | −13.93 dB at 20 Hz, +1.14 dB at 101 Hz, −3.17 dB at 1016 Hz, +2.81 dB at 11.5 kHz | −13.93, +1.14, −3.17, +2.81 dB |
+
+Of the 1407 points of the 21 curves, 1355 lay at least 30 dB above the noise and were compared. From 20 Hz up and where the curve lies above −20 dB (1219 points) every point is within 0.02 dB of the calculation, except one at 50.4 Hz with 0.05 dB (next to the mains frequency). Deeper in the stop band and below 20 Hz the difference grows to 0.17 dB at most, which is noise and the short reading time there. Three settings were also measured on input 1 (heard alone on the left headphone channel, read at the headphone meter): low cut 100 Hz with 2 poles, the peak at 1 kHz and the high shelf at 4 kHz gave the same curves as on the output. **measured**
+
+What follows for a host:
+
+- **The unit does what the coefficients say.** A host can compute the curve it draws from the same numbers it sends.
+- **The unit ran at 48 kHz.** The iPad reported 48,000 Hz for the connection, and the measured curves fit the calculation for 48 kHz (deviation 0.001 to 0.03 dB rms per curve) and not the one for 44.1 kHz (0.15 to 1.06 dB). The coefficients have to be computed for the rate the unit runs at.
+- **The low cut of the notes sits a little high and takes some level.** With the k of the notes the −3 dB point is 0.7 % above f0 with one pole at 100 Hz, 7 % with four poles at 100 Hz, and 15 % with four poles at 500 Hz. The filter also stays below 0 dB in the pass band: −0.06 dB for 100 Hz with one pole, −0.10 dB for 100 Hz with four poles, −0.52 dB for 500 Hz with four poles. Whether TotalMix FX sends the same k we do not know. A host that wants the corner exactly at f0 solves k from the filter (`low_cut_coefficient_exact`); the level in the pass band can be made up with the overall gain (word 13).
+- **A band takes any biquad** whose b0 is not zero, not only the three types TotalMix FX offers: a low pass was sent in band 3 and came out as calculated.
+
+The codec builds this message (`set_eq`, `biquad`, `low_cut_coefficient`, `low_cut_coefficient_exact`) and calculates its curve (`eq_response_db`, `eq_from_words`).
 
 ### 2.6 Not tried: loopback, device settings
 
@@ -191,7 +217,7 @@ Forty words. Full scale is `0x08000000`; `dBFS = 20 × log10(word / 0x08000000)`
 | 28-29 | Headphone output left, right | **measured** |
 | others | Further inputs, playback channels and outputs in the same order | **notes** |
 
-The output meters sit behind the output level and before the EQ of the output. **measured**
+The output meters sit behind the output level and before the EQ of the output. **measured** The meters read the digital peak exactly: a sine sent at 0.5, 0.25 and 0.125 of full scale read 0.50000, 0.25000 and 0.12501 at the playback meter (within 0.0004 dB), and with the Main output at −30 dB the Main meter read 30.00 dB below the playback meter. Over 67 frequencies from 10 Hz to 20 kHz the playback reading of one tone stayed within 0.0002 dB. **measured**
 
 **Each answer carries the peak since the previous request.** The unit holds the highest value until it is asked, and starts anew after every answer. **measured**: after pauses of 2.0 to 5.2 seconds without a request, the first answer showed the loudest spot of a 2-second test loop every time (8 of 8), while the answers 0.3 seconds later lay up to 6.5 dB lower; and after a source was switched off, the first answer four seconds later still showed signal from before, the next one silence. Three things follow:
 
@@ -231,7 +257,7 @@ These are the rules our controller follows. Several hundred writes went through 
 | Level of the ADAT outputs | **unknown** (channel numbers) |
 | Output levels above 0 dB | **reported**, effect not measured |
 | Phantom power | **notes**, never sent |
-| EQ and low cut on inputs and outputs | **measured** (corner frequencies not verified with sine tones) |
+| EQ and low cut on inputs and outputs | **measured**, whole curves with sine tones at 48 kHz (not on the headphone outputs: no cable there) |
 | Loopback, clock source, optical format, EQ for record | **notes** |
 | Dim, mono, global mute, solo, stereo link, cue, talkback | reading of dim and global mute **reported**; writing **unknown** |
 | Snapshots, layouts | belong to TotalMix FX, not to the unit |
@@ -243,7 +269,7 @@ These are the rules our controller follows. Several hundred writes went through 
 - Inputs to the Main output (with the loop cable removed, to avoid a feedback path).
 - Phantom power on an input with nothing connected.
 - Loopback, with the loop cable removed.
-- Corner frequencies and slopes of EQ and low cut, with sine tones; the sample rate the unit runs at; whether the unit keeps the EQ across a reconnect.
+- Whether the unit keeps the EQ across a reconnect; EQ at a sample rate other than 48 kHz; the EQ of the headphone outputs (needs a cable from a headphone output to an input).
 - Whether a state part with phantom power bits left at zero switches phantom power off.
 
 ## 7. Sources
