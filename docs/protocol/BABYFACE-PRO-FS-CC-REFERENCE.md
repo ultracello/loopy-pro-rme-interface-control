@@ -96,7 +96,7 @@ There is no pan parameter. A stereo position is two cells with two levels; the h
 Two properties a host must build around:
 
 1. **The unit never reports its mixer.** There is no message that returns a cell. **measured** (nothing in the state changes when a cell is written).
-2. **The unit forgets its mixer whenever its USB connection is built anew** (replug, loss of power). Gains, output levels and input settings survive. After such a loss the playback reaches the Main output only, and the headphones are silent. **measured**, many times.
+2. **The unit forgets its mixer whenever it loses power.** Gains, output levels and input settings survive. After such a loss the playback reaches the Main output only, and the headphones are silent. **measured**, many times. Our unit was powered over its USB cable alone in these runs, so every replug was also a loss of power; a replug with the unit kept alive by a power supply of its own was not tried. Loopback (2.6) and the EQ (2.5) are forgotten in the same way. **measured**
 
 So the host has to keep its own picture of every cell it has set and send it again after the unit reappears. Ours does that when the page is armed; across a real replug the headphone output came back exactly to the levels before.
 
@@ -133,7 +133,7 @@ What follows for a host:
 - **Switching off goes by channel, not by slot.** A message for Main left with bit 31 clear switched its EQ off although it named another slot than the one in use. **measured**
 - **The unit's own meters do not show the EQ.** The meter of an output stayed where it was while the level behind the output fell by 6 and 12 dB; the meter of input 1 did not move when the EQ of input 1 was on. **measured** The EQ of the headphone output was therefore measured behind the output, over a cable into line input 3 (next part).
 - **The coefficients depend on the sample rate,** and the rate is the host's: our unit ran at 48 kHz while Loopy Pro was open and at 44.1 kHz when no other audio app was (see the next part).
-- We found no word of the state message that reports the EQ, and did not test whether the unit keeps it when its USB connection is built anew. **unknown**
+- **The unit forgets the EQ when it loses power.** An EQ that made +12 dB was read through loopback, the USB cable (the unit's only supply) was pulled and plugged in again: afterwards the level stood at 0.0 dB until the EQ message was sent again. **measured** We found no word of the state message that reports the EQ. **unknown**
 
 **Frequency responses, with sine tones.** A sine at half of full scale went from the iPad to USB playback 1 and through the output channel Main left (Main at −30 dB); the level was read behind the unit at input 1 over the loop cable, at 67 frequencies from 10 Hz to 20 kHz, once with the setting and once without. The difference is the measured curve. The calculated curve comes from the words of the message that was sent: three biquads, the overall gain, and the low cut filter above once per pole (`eq_response_db` in the codec). All curves are in `reference/eq-curves-measured.json`. **measured**
 
@@ -176,7 +176,7 @@ The codec builds this message (`set_eq`, `biquad`, `low_cut_coefficient`, `low_c
 - **It is taken behind the output EQ.** An overall gain of 0.5 on the EQ of the output lowered the recorded level by 6.02 dB; EQ off brought it back.
 - The unit's own peak meters did not show loopback when it was tried for AS1: no peak word changed.
 
-By RME's manual the hardware input still reaches the mixer of the unit while loopback is on. A host that passes a recorded input on to an output must not switch on loopback of that same output: that is a way round with no cable. Whether the state message reports loopback, and whether the unit keeps it when its USB connection is built anew, was not tested. The codec builds the message (`set_loopback`).
+By RME's manual the hardware input still reaches the mixer of the unit while loopback is on. A host that passes a recorded input on to an output must not switch on loopback of that same output: that is a way round with no cable. **Loopback is forgotten when the unit loses power**: after the same replug the input channel was silent with the mixer cell sent again, and carried the tone once loopback had been sent again. **measured** We found no word of the state message that reports loopback. The codec builds the message (`set_loopback`).
 
 **Device settings.** Sub ID `00`, one word: mask in bits 0-15 and state in bits 16-30, as in 2.3. The oscmix **notes** name bit 0 clock source, bit 6 "eq for record" and bit 10 optical output ADAT or S/PDIF; notes on the unit's other USB mode say that bit 0 set means the internal clock.
 
@@ -266,34 +266,35 @@ These are the rules our controller follows. Several hundred writes went through 
 
 ## 5. Coverage against what TotalMix FX offers
 
-| Function | Status here |
-|---|---|
-| Main and headphone level, mute by level | **measured**, the law for every raw value |
-| Microphone gain, line gain | **reported**; line gain of input 3 **measured** step by step, microphone gain at three values |
-| Pad | **measured** |
-| Line sensitivity (+4 dBu / −10 dBV) | **measured** on input 3 (8.74 dB) |
-| Monitoring of inputs and playback to the headphones: level, pan, phase | **measured** |
-| Playback to the Main output: level, off | **measured** |
-| Mixer levels above 0 dB, up to +6 dB | **measured** |
-| Inputs to the Main output | **measured** (input 3 to Main left and right) |
-| Cells of the AS and ADAT outputs | playback 1 to each of them **measured** through loopback; inputs to them **notes** |
-| Level of the AS outputs | **reported**; AS1 at 0 dB **measured** at its meter |
-| Level of the ADAT outputs | setting it: **unknown** (channel numbers); they stood at 0 dB, **measured** |
-| Output levels above 0 dB | **measured** behind the headphone output (+0.5 to +6 dB) |
-| Phantom power | **notes**, never sent |
-| EQ and low cut on inputs and outputs | **measured**, whole curves with sine tones: input 1 and Main left at 48 kHz; both headphone channels, Main right, AS1 and ADAT3 at 44.1 kHz |
-| Loopback | **measured** for all twelve outputs |
-| EQ for Record | **measured** for the EQ of an output in loopback (bit 6 of the device settings); for the EQ of an input **notes** |
-| Clock source, optical format | **notes** |
-| Dim, mono, global mute, solo, stereo link, cue, talkback | reading of dim and global mute **reported**; writing **unknown** |
-| Snapshots, layouts | belong to TotalMix FX, not to the unit |
-| Reading the mixer back | not possible, the unit does not report it |
+The last column says whether the controller page this project uses in Loopy Pro offers the function today.
+
+| Function | Status here | On our controller page |
+|---|---|---|
+| Main and headphone level, mute by level | **measured**, the law for every raw value | yes |
+| Microphone gain, line gain | **reported**; line gain of input 3 **measured** step by step, microphone gain at three values | yes |
+| Pad | **measured** | yes |
+| Line sensitivity (+4 dBu / −10 dBV) | **measured** on input 3 (8.74 dB) | yes |
+| Monitoring of inputs and playback to the headphones: level, pan, phase | **measured** | yes |
+| Playback to the Main output: level, off | **measured** | no |
+| Mixer levels above 0 dB, up to +6 dB | **measured** | no |
+| Inputs to the Main output | **measured** (input 3 to Main left and right) | no |
+| Cells of the AS and ADAT outputs | playback 1 to each of them **measured** through loopback; inputs to them **notes** | no |
+| Level of the AS outputs | **reported**; AS1 at 0 dB **measured** at its meter | no |
+| Level of the ADAT outputs | setting it: **unknown** (channel numbers); they stood at 0 dB, **measured** | no |
+| Output levels above 0 dB | **measured** behind the headphone output (+0.5 to +6 dB) | no |
+| Phantom power | **notes**, never sent | no |
+| EQ and low cut on inputs and outputs | **measured**, whole curves with sine tones: input 1 and Main left at 48 kHz; both headphone channels, Main right, AS1 and ADAT3 at 44.1 kHz | no |
+| Loopback | **measured** for all twelve outputs | no |
+| EQ for Record | **measured** for the EQ of an output in loopback (bit 6 of the device settings); for the EQ of an input **notes** | no |
+| Clock source, optical format | **notes** | no |
+| Dim, mono, global mute, solo, stereo link, cue, talkback | reading of dim and global mute **reported**; writing **unknown** | no |
+| Snapshots, layouts | belong to TotalMix FX, not to the unit |  |
+| Reading the mixer back | not possible, the unit does not report it |  |
 
 ## 6. Open points we can still close on our unit
 
 - Phantom power on an input with nothing connected.
-- Whether the unit reports loopback and keeps it across a reconnect.
-- Whether the unit keeps the EQ across a reconnect.
+- A replug with the unit kept alive by a power supply of its own: does it keep mixer, loopback and EQ then?
 - EQ for Record with a signal at an input; where the unit reports its device settings, if it does.
 - Whether a state part with phantom power bits left at zero switches phantom power off.
 

@@ -9,6 +9,14 @@ export const TEXT = {
     'So the interface is controlled from inside Loopy Pro, over the MIDI port the unit offers in class-compliant mode. Two things have come out of it: a controller page that is in use, and a protocol reference with measured values, written so that Loopy Pro or any other host could support the interface natively.',
     'There is nothing to download and install yet. The controller is a private working copy.',
   ],
+  progress: [
+    'Three figures say how far the work is. The first two are counted from the table below every time the page is built; nobody types them.',
+  ],
+  nativePercent: 'Not started:',
+  native: 'native support in Loopy Pro. That is the aim. It is in the hands of the developer of Loopy Pro; what he needs is in the protocol reference.',
+  progressAfter: [
+    'A function counts as measured when its effect was read at the unit. Functions the unit only reported back, or that are known from other people\'s notes alone, do not count yet. Two entries of the table are left out because they are not functions of the unit.',
+  ],
   status: [
     'The table follows the functions TotalMix FX offers. Each entry says how far it is established on the one unit all of this was done with.',
   ],

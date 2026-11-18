@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import { readFileSync, readdirSync, existsSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { collect, render, inline, stamp, REPO, MARKS } from '../build.mjs';
+import { collect, render, inline, stamp, readmeBlock, readmeWith, REPO, MARKS } from '../build.mjs';
 import { TEXT } from '../site/text.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
@@ -85,4 +85,22 @@ test('inline markdown: code, bold, marks, links, and nothing else gets through',
 test('the stamp is current: the documents did not change without the page', () => {
   const kept = JSON.parse(readFileSync(join(ROOT, 'website/site/stamp.json'), 'utf8'));
   assert.deepEqual(kept, stamp(c), 'The documents changed. Run "npm run stamp" in website/ and commit site/stamp.json with them.');
+});
+
+test('the progress figures are counted from the coverage table', () => {
+  const rows = between('## 5. ', '## 6. ').split('\n').filter((l) => l.startsWith('|')).slice(2).map((l) => l.split('|').slice(1, -1).map((x) => x.trim()));
+  const unit = rows.filter((r) => /\*\*(measured|reported|notes|unknown)\*\*/.test(r[1]));
+  const measured = unit.filter((r) => (r[1].match(/\*\*(measured|reported|notes|unknown)\*\*/) || [])[1] === 'measured').length;
+  const onPage = unit.filter((r) => r[2] === 'yes').length;
+  assert.deepEqual([c.progress.functions, c.progress.measured, c.progress.onPage], [unit.length, measured, onPage]);
+  assert.equal(c.progress.measuredPercent, Math.round((100 * measured) / unit.length));
+  assert.ok(html.includes(`<strong>${c.progress.measuredPercent} %</strong> measured on the unit: ${measured} of ${unit.length} functions`));
+  assert.ok(html.includes(`<strong>${c.progress.onPagePercent} %</strong> usable today from the controller page: ${onPage} of ${unit.length} functions`));
+  assert.ok(c.progress.onPage <= c.progress.functions && c.progress.measured <= c.progress.functions);
+});
+
+test('the README carries the same figures', () => {
+  const readme = readFileSync(join(ROOT, 'README.md'), 'utf8');
+  assert.equal(readme, readmeWith(readme, readmeBlock(c)), 'Run "npm run stamp" in website/: the progress in the README is not current.');
+  assert.ok(readme.includes(`**${c.progress.measuredPercent} %**, ${c.progress.measured} of ${c.progress.functions} functions`));
 });

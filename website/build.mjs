@@ -41,7 +41,7 @@ export function collect(root = ROOT) {
   const coverage = section(reference, 5).lines.filter((l) => l.startsWith('|')).slice(2).map((l) => {
     const cells = l.split('|').slice(1, -1).map((c) => c.trim());
     const mark = (cells[1].match(/\*\*(measured|reported|notes|unknown)\*\*/) || [])[1] || 'other';
-    return { name: cells[0], status: cells[1], mark };
+    return { name: cells[0], status: cells[1], mark, page: cells[2] || '' };
   });
   // rules for a host: the numbered list of section 4, lead sentence and rest
   const rules = section(reference, 4).lines.filter((l) => /^\d+\. /.test(l)).map((l) => {
@@ -64,8 +64,14 @@ export function collect(root = ROOT) {
   const vectors = JSON.parse(readFileSync(join(root, 'docs/protocol/reference/test-vectors.json'), 'utf8')).vectors;
   const curves = JSON.parse(readFileSync(join(root, 'docs/protocol/reference/eq-curves-measured.json'), 'utf8')).settings;
   const law = JSON.parse(readFileSync(join(root, 'docs/protocol/reference/output-level-law-measured.json'), 'utf8')).rows;
+  // progress: of the functions that belong to the unit, how many are measured, and how many the controller page offers
+  const unit = coverage.filter((r) => r.mark !== 'other');
+  const share = (n) => Math.round((100 * n) / unit.length);
+  const progress = { functions: unit.length, measured: unit.filter((r) => r.mark === 'measured').length, onPage: unit.filter((r) => r.page === 'yes').length };
+  progress.measuredPercent = share(progress.measured); progress.onPagePercent = share(progress.onPage);
+  for (const r of unit) if (!['yes', 'no'].includes(r.page)) throw new Error('The coverage table does not say yes or no for the controller page: ' + r.name);
   const counts = Object.fromEntries([...MARKS, 'other'].map((m) => [m, coverage.filter((r) => r.mark === m).length]));
-  return { coverage, counts, rules, open, tested, reports, vectors: vectors.length, vectorsMeasured: vectors.filter((v) => v.status === 'measured').length,
+  return { coverage, counts, progress, rules, open, tested, reports, vectors: vectors.length, vectorsMeasured: vectors.filter((v) => v.status === 'measured').length,
     levelValues: law.length, lawUrl: blob('docs/protocol/reference/output-level-law-measured.json'), curves: curves.length, curvePoints: curves.reduce((n, c) => n + c.points.length, 0), referenceUrl: blob(referencePath),
     codecUrl: blob('docs/protocol/reference/babyface_cc.py'), vectorsUrl: blob('docs/protocol/reference/test-vectors.json'), curvesUrl: blob('docs/protocol/reference/eq-curves-measured.json') };
 }
@@ -93,7 +99,7 @@ export function render(c, t = TEXT) {
 <header class="top">
 <div class="wrap">
 <p class="project">${esc(t.project)}</p>
-<nav aria-label="Sections"><a href="#status">Status</a><a href="#page">Controller</a><a href="#questions">Questions</a><a href="#developers">For developers</a><a href="#open">Open points</a><a href="#reports">Reports</a><a href="${REPO}">GitHub</a></nav>
+<nav aria-label="Sections"><a href="#progress">Progress</a><a href="#status">Status</a><a href="#page">Controller</a><a href="#questions">Questions</a><a href="#developers">For developers</a><a href="#open">Open points</a><a href="#reports">Reports</a><a href="${REPO}">GitHub</a></nav>
 </div>
 </header>
 <main id="main" class="wrap">
@@ -101,6 +107,17 @@ export function render(c, t = TEXT) {
 <h1>${esc(t.heading)}</h1>
 ${p(t.intro)}
 <p class="updated">Last report: <a href="${latest.url}">${esc(latest.title)}</a>, <time datetime="${latest.date}">${latest.day}</time>. This page is built from the documents in the repository.</p>
+</section>
+
+<section id="progress" aria-labelledby="h-progress">
+<h2 id="h-progress">How far it is</h2>
+${p(t.progress)}
+<div class="meters">
+<div class="meter"><p><strong>${c.progress.measuredPercent} %</strong> measured on the unit: ${c.progress.measured} of ${c.progress.functions} functions</p><div class="bar" role="img" aria-label="${c.progress.measuredPercent} percent"><span style="width:${c.progress.measuredPercent}%"></span></div></div>
+<div class="meter"><p><strong>${c.progress.onPagePercent} %</strong> usable today from the controller page: ${c.progress.onPage} of ${c.progress.functions} functions</p><div class="bar" role="img" aria-label="${c.progress.onPagePercent} percent"><span style="width:${c.progress.onPagePercent}%"></span></div></div>
+<div class="meter"><p><strong>${esc(t.nativePercent)}</strong> ${inline(t.native)}</p><div class="bar" role="img" aria-label="${esc(t.nativePercent)}"><span style="width:0%"></span></div></div>
+</div>
+${p(t.progressAfter)}
 </section>
 
 <section id="status" aria-labelledby="h-status">
@@ -111,9 +128,9 @@ ${t.marks.map(([m, text]) => `<div><dt><span class="mark ${m}">${m}</span></dt><
 </dl>
 <p class="count">${c.coverage.length} functions of TotalMix FX are listed: ${summary}${c.counts.other ? `, ${c.counts.other} that do not belong to the unit or cannot be read` : ''}.</p>
 <table>
-<thead><tr><th scope="col">Function</th><th scope="col">Status</th></tr></thead>
+<thead><tr><th scope="col">Function</th><th scope="col">Status</th><th scope="col">On the controller page</th></tr></thead>
 <tbody>
-${c.coverage.map((r) => `<tr><th scope="row">${inline(r.name)}</th><td>${inline(r.status)}</td></tr>`).join('\n')}
+${c.coverage.map((r) => `<tr><th scope="row">${inline(r.name)}</th><td>${inline(r.status)}</td><td class="page">${esc(r.page)}</td></tr>`).join('\n')}
 </tbody>
 </table>
 <p class="source">Source: <a href="${c.referenceUrl}">protocol reference</a>, section 5.</p>
@@ -183,6 +200,27 @@ export function stamp(c = collect()) {
   return { content: createHash('sha256').update(JSON.stringify(c)).digest('hex'), reports: c.reports.length, latest: c.reports[0].file };
 }
 
+// The same figures for the README of the repository, between two marker lines.
+export function readmeBlock(c = collect()) {
+  const bar = (percent) => '█'.repeat(Math.round(percent / 5)) + '░'.repeat(20 - Math.round(percent / 5));
+  const latest = c.reports[0];
+  return [
+    '| | | |',
+    '|---|---|---|',
+    `| Measured on the unit | \`${bar(c.progress.measuredPercent)}\` | **${c.progress.measuredPercent} %**, ${c.progress.measured} of ${c.progress.functions} functions |`,
+    `| Usable today from the controller page | \`${bar(c.progress.onPagePercent)}\` | **${c.progress.onPagePercent} %**, ${c.progress.onPage} of ${c.progress.functions} functions |`,
+    `| Native support in Loopy Pro | \`${bar(0)}\` | not started |`,
+    '',
+    `Counted from the [coverage table](docs/protocol/BABYFACE-PRO-FS-CC-REFERENCE.md#5-coverage-against-what-totalmix-fx-offers) of the protocol reference. Last report: [${latest.title}](docs/milestones/${latest.file}), ${latest.day}.`,
+  ].join('\n');
+}
+const START = '<!-- progress:start (written by website/build.mjs --stamp; do not edit by hand) -->', END = '<!-- progress:end -->';
+export function readmeWith(text, block) {
+  const a = text.indexOf(START), b = text.indexOf(END);
+  if (a < 0 || b < a) throw new Error('The README has no progress markers');
+  return text.slice(0, a + START.length) + '\n' + block + '\n' + text.slice(b);
+}
+
 export function build(out = join(HERE, 'dist')) {
   const html = render(collect());
   mkdirSync(out, { recursive: true });
@@ -194,5 +232,8 @@ export function build(out = join(HERE, 'dist')) {
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const html = build();
   console.log(`dist/index.html written, ${html.length} characters`);
-  if (process.argv.includes('--stamp')) { writeFileSync(join(HERE, 'site/stamp.json'), JSON.stringify(stamp(), null, 1) + '\n'); console.log('site/stamp.json written'); }
+  if (process.argv.includes('--stamp')) {
+    writeFileSync(join(HERE, 'site/stamp.json'), JSON.stringify(stamp(), null, 1) + '\n'); console.log('site/stamp.json written');
+    const readme = join(ROOT, 'README.md'); writeFileSync(readme, readmeWith(readFileSync(readme, 'utf8'), readmeBlock())); console.log('README.md: progress written');
+  }
 }

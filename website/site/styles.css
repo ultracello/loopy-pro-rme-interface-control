@@ -54,13 +54,19 @@ code { font: 0.9em ui-monospace, SFMono-Regular, Menlo, monospace; background: v
 table { width: 100%; border-collapse: collapse; background: var(--card); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; font-size: 0.95rem; margin: 0.5rem 0 0.9rem; }
 th, td { text-align: left; vertical-align: top; padding: 0.6rem 0.85rem; border-top: 1px solid var(--line); }
 thead th { border-top: 0; font-size: 0.82rem; color: var(--soft); font-weight: 600; }
-tbody th { font-weight: 550; width: 44%; }
+tbody th { font-weight: 550; width: 38%; }
 
 .qa { margin: 0; }
 .qa div { padding: 0.85rem 0; border-top: 1px solid var(--line); }
 .qa div:first-child { border-top: 0; padding-top: 0; }
 .qa dt { font-weight: 650; margin-bottom: 0.2rem; }
 .qa dd { margin: 0; }
+.meters { display: grid; gap: 1.1rem; margin: 1.25rem 0; }
+.meter p { margin: 0 0 0.35rem; }
+.meter strong { font-size: 1.15rem; }
+.bar { height: 0.6rem; background: var(--unknown-bg); border-radius: 999px; overflow: hidden; }
+.bar span { display: block; height: 100%; background: var(--measured); border-radius: 999px; }
+td.page { white-space: nowrap; color: var(--soft); }
 figure { margin: 1.5rem 0; }
 figure img { display: block; width: 100%; height: auto; border-radius: 8px; border: 1px solid var(--line); }
 figcaption { color: var(--soft); font-size: 0.92rem; margin-top: 0.6rem; }

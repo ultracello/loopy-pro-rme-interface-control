@@ -6,6 +6,20 @@ This repository documents how an RME Babyface Pro FS is controlled from inside L
 
 The website shows what can be controlled and how far each function is measured, the open points and the list of all reports. It is built from the documents in this repository, and its tests fail when it falls behind them, so it is the place to look for the current state.
 
+## How far it is
+
+<!-- progress:start (written by website/build.mjs --stamp; do not edit by hand) -->
+| | | |
+|---|---|---|
+| Measured on the unit | `█████████████░░░░░░░` | **67 %**, 12 of 18 functions |
+| Usable today from the controller page | `██████░░░░░░░░░░░░░░` | **28 %**, 5 of 18 functions |
+| Native support in Loopy Pro | `░░░░░░░░░░░░░░░░░░░░` | not started |
+
+Counted from the [coverage table](docs/protocol/BABYFACE-PRO-FS-CC-REFERENCE.md#5-coverage-against-what-totalmix-fx-offers) of the protocol reference. Last report: [What the unit forgets when it loses power](docs/milestones/2026-11-18-what-the-unit-forgets-when-it-loses-power.md), 18 November 2026.
+<!-- progress:end -->
+
+A function counts as measured when its effect was read at the unit. Native support in Loopy Pro is the aim; it is in the hands of the developer of Loopy Pro, and what he needs is in the protocol reference.
+
 ## What is here
 
 - [Protocol reference](docs/protocol/BABYFACE-PRO-FS-CC-REFERENCE.md): every message byte for byte, with the formulas for the dB values. Each statement is marked as measured on the unit, reported back by the unit, taken from other people's notes, or unknown. It is written for anyone who wants to build native support into a host application.
