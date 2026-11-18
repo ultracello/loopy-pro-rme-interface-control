@@ -1,7 +1,7 @@
 export const PUBLIC_REPOSITORY = {
   url: 'https://github.com/ultracello/loopy-pro-rme-interface-control',
   branch: 'main',
-  reviewedCommit: '244fb85a5afa2d99d4aa0338a246bad2d344e887',
+  reviewedCommit: 'b2778821301468ac5afb286e92c81e55554abc92',
   reviewedDate: '2026-11-18',
   reviewedFile: 'README.md, transfer-copy write pair and session gain-mute check, other-project Interface READ transfer and earlier scoped milestones',
   visibility: 'public',
@@ -9,6 +9,7 @@ export const PUBLIC_REPOSITORY = {
 } as const;
 const pinned = (path: string) => `${PUBLIC_REPOSITORY.url}/blob/${PUBLIC_REPOSITORY.reviewedCommit}/${path}`;
 export const REPORTS = {
+  sineCurves: pinned('docs/milestones/2026-11-18-equaliser-curves-with-sine-tones.md'),
   equaliser: pinned('docs/milestones/2026-11-18-equaliser-and-low-cut-measured.md'),
   testRig: pinned('docs/milestones/2026-11-18-main-cells-and-levels-above-unity.md'),
   replugCorrection: pinned('docs/milestones/2026-11-18-correction-after-a-replug-the-control-works.md'),
@@ -524,11 +525,37 @@ export const HAND_OPERATION_CHECKPOINT = {
   sourceUrl:REPORTS.handOperation,
 } as const;
 
+export const SINE_CURVES_CHECKPOINT = {
+  id:'equaliser-curves-with-sine-tones', revision:'Equaliser curves · sine tones · 18 Nov', level:'Offline tests and bounded native runs of one session, with a loop cable: a sine from the project\'s diagnostic app, each curve read at the unit\'s own meters next to curves without equaliser',
+  title:'Equaliser curves match the calculation to 0.02 dB.',
+  generatorOfflineChecks:81, generatorLimitCases:7948, counterCheckFaults:30, counterCheckFaultsNoticed:30,
+  toneLargestPartOfFullScale:0.5, toneLimitsCanBeLifted:false, toneStartsWhileAnotherAppIsInFront:false,
+  playbackMeterForHalfQuarterEighth:[0.5,0.25,0.12501], mainMeterBelowPlaybackDb:30,
+  sampleRateReportedHz:48000, curves:21, frequenciesPerCurve:67, lowestHz:10, highestHz:20000,
+  pointsMeasured:1407, pointsCompared:1355, pointsFrom20HzAboveMinus20Db:1219, pointsOfThoseBeyond002Db:1, largestOfThoseDb:0.05, largestDeviationAnywhereDb:0.17,
+  rmsPerCurveAt48000Db:[0.001,0.03], rmsPerCurveIfAt44100Db:[0.15,1.06],
+  lowCut100HzMinus3DbByPolesHz:[100.7,103.0,105.2,107.1], lowCut500Hz4PolesMinus3DbHz:572.8, lowCutPassBandLossDb:[0.06,0.52],
+  exactCornerAskedHz:[100,100,250,500], exactCornerMeasuredHz:[100.1,100.1,250.2,500.6],
+  peakPlus6At1kHzMeasuredDb:5.99, peakPlus6At1kHzCalculatedDb:5.99, lowPassAt4kHzMeasuredDb:-12.86, lowPassAt4kHzCalculatedDb:-12.86,
+  unitFollowsTheCoefficients:true, bandTakesAnyBiquad:true, inputEqualiserLikeOutput:true, curvesOnTheInput:3,
+  referenceTestVectors:130, newVectorsSentByteForByte:21, measuredCurvesPublished:true,
+  firstTrialStoppedItself:true, lastStepRefusedAfterTheSessionEnded:true, unitAlreadyPutBackThen:true,
+  equaliserOfTheHeadphoneOutputsMeasured:false, otherSampleRatesTried:false, equaliserAcrossAReconnectTested:false, externalMeasuringInstrumentUsed:false, whetherTotalMixSendsTheSameLowCutKnown:false,
+  inputsToTheMainOutputTried:false, loopbackTried:false, phantomPowerTried:false, deviceSettingsTried:false,
+  unitAsAtTheStartAtTheEnd:true, microphoneOrInstrumentConnected:false,
+  operationAlongsideTotalMixVerified:false, enduranceVerified:false,
+  candidateReleased:false, silentUsbContinuityProven:false, crashSafeRecoveryProven:false, generalLiveReadinessVerified:false,
+  result:'The project\'s diagnostic app on the iPad was given a sine generator of its own, and with it whole frequency responses of equaliser and low cut were measured behind the main output over the loop cable: 21 curves of 67 frequencies from 10 Hz to 20 kHz. From 20 Hz up and above −20 dB every one of 1219 points lies within 0.02 dB of the calculation from the coefficients that were sent, except one at 50.4 Hz with 0.05 dB. The unit ran at 48 kHz. The low cut formula of the protocol notes puts the −3 dB point up to 15 % above the nominal frequency and costs up to 0.5 dB in the pass band; a corner solved from the filter itself came out where it was asked for. A band takes any biquad, and the equaliser of an input behaves like that of an output.',
+  boundary:'The readings come from the unit\'s own peak meters, through its converters and one cable; no external measuring instrument was used. The equaliser of the headphone outputs is not measured, and no sample rate other than 48 kHz was tried. Whether the unit keeps the equaliser across a reconnect is not tested. Inputs to the main output and loopback were left out while the loop cable is in place; phantom power and the device settings were not tried. The diagnostic app is a test tool and is not distributed. This is a private working copy, not a release.',
+  sourceUrl:REPORTS.sineCurves,
+} as const;
+
 export const LAB_STATUS = {
   reviewedDate: '2026-11-18',
   evidenceType: 'Project-reported scoped experiments, linked to dated public reports. Raw captures and installable controller artifacts are not bundled with this planner.',
   releaseReady: false,
   entries: [
+    SINE_CURVES_CHECKPOINT,
     EQUALISER_CHECKPOINT,
     TEST_RIG_CHECKPOINT,
     REPLUG_CORRECTION_CHECKPOINT,
