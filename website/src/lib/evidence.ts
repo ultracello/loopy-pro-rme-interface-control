@@ -1,7 +1,7 @@
 export const PUBLIC_REPOSITORY = {
   url: 'https://github.com/ultracello/loopy-pro-rme-interface-control',
   branch: 'main',
-  reviewedCommit: '07dd0ac6a33bc47834b007446946f9825cb573e6',
+  reviewedCommit: '244fb85a5afa2d99d4aa0338a246bad2d344e887',
   reviewedDate: '2026-11-18',
   reviewedFile: 'README.md, transfer-copy write pair and session gain-mute check, other-project Interface READ transfer and earlier scoped milestones',
   visibility: 'public',
@@ -9,6 +9,7 @@ export const PUBLIC_REPOSITORY = {
 } as const;
 const pinned = (path: string) => `${PUBLIC_REPOSITORY.url}/blob/${PUBLIC_REPOSITORY.reviewedCommit}/${path}`;
 export const REPORTS = {
+  equaliser: pinned('docs/milestones/2026-11-18-equaliser-and-low-cut-measured.md'),
   testRig: pinned('docs/milestones/2026-11-18-main-cells-and-levels-above-unity.md'),
   replugCorrection: pinned('docs/milestones/2026-11-18-correction-after-a-replug-the-control-works.md'),
   phase: pinned('docs/milestones/2026-11-18-phase-of-each-way.md'),
@@ -233,6 +234,32 @@ export const INTERFACE_MUTE_CHECKPOINT = {
   boundary:'One pass, every step once, TotalMix closed. Main was not touched because the device held it at raw 59 from outside. Step buttons and fader writes under this rule were checked offline only. The level before a mute lives only in the running controller. This is a private working copy, not a release.',
   sourceUrl:REPORTS.interfaceMute,
 } as const;
+export const EQUALISER_CHECKPOINT = {
+  id:'equaliser-and-low-cut-measured', revision:'Equaliser · low cut · 18 Nov', level:'Offline tests and bounded native runs of two sessions, with a loop cable: whole messages sent through a gate, each setting measured behind the output and switched off again',
+  title:'Equaliser and low cut, measured to 0.01 dB.',
+  messageLengthBytes:87, messageInPiecesTaken:false, wholeMessageTaken:true,
+  gateRefusalsOnTheDevice:7, gateRefusalsExpected:7, phantomPowerCanBeLifted:false, limitsLiftedInThisRun:0,
+  gateOfflineCases:71562, gateOfflineDifferences:0, counterCheckFaults:40, counterCheckFaultsNoticed:40, sendPathCasesOnVirtualPorts:9,
+  firstBuildSentNothing:true, anythingReachedTheUnitFromTheFirstBuild:false,
+  overallGainExpectedDb:[-6.02,-12.04,0], overallGainMeasuredDb:[-6.02,-12.04,0],
+  lowShelfMinus12InBands1To3Db:[-12.01,-12.01,-12.02], lowShelfInTwoBandsDb:-23.93,
+  lowCutAt2kHzByPolesDb:[-13.89,-19.07,-19.96,-20.42], lowCut4PolesAt500HzDb:-8.56, lowCut4PolesAt100HzDb:-0.71,
+  lowCutAndGainExpectedDb:-19.91, lowCutAndGainMeasuredDb:-19.9, equaliserOffDb:0,
+  inputChannelOverallGainHalfDb:-6.02, inputChannelLowCut4PolesDb:-20.43, inputChannelOffDb:0,
+  slotIsASharedMemory:true, slotsThatExist:21, switchingOffGoesByChannel:true, unitsOwnMetersShowTheEqualiser:false,
+  meterCarriesThePeakSinceThePreviousRequest:true, pausesTried:8, firstAnswersAtTheLoudestSpot:8, earlierLagOfTheMetersExplained:true, earlierMeasuredValuesStand:true,
+  mixerLevelCountsToItsLowestBit:true, messagesCloseTogetherTaken:true, smallestGapTriedMs:5,
+  referenceTestVectors:109, newVectorsSentByteForByte:25,
+  cornerFrequenciesVerifiedWithSineTones:false, sampleRateOfTheUnitRead:false, effectOnTheHeadphoneOutputsMeasured:false, equaliserAcrossAReconnectTested:false,
+  inputsToTheMainOutputTried:false, loopbackTried:false, phantomPowerTried:false, deviceSettingsTried:false,
+  unitAsAtTheStartAtTheEnd:true, microphoneOrInstrumentConnected:false,
+  operationAlongsideTotalMixVerified:false, enduranceVerified:false,
+  candidateReleased:false, silentUsbContinuityProven:false, crashSafeRecoveryProven:false, generalLiveReadinessVerified:false,
+  result:'The equaliser message of the unit is 87 bytes long and has to arrive in one piece. The project\'s diagnostic app on the iPad can now send it, behind a gate that refused all seven test requests on the device and never passes phantom power. Measured behind the main output over the loop cable: an overall gain of 0.5 and 0.25 gave −6.02 and −12.04 dB, a low shelf of −12 dB gave −12.0 dB in each of the three bands, the low cut fell with every pole, low cut and gain together came out within 0.01 dB of their sum, and off returned to 0.00 dB. The slot number in the message is a shared memory, so every channel needs a slot of its own. The run also showed that each meter answer carries the peak since the previous request, which is what earlier reports called a lag of the meters, and that the level of a mixer cell counts down to its lowest bit.',
+  boundary:'Corner frequencies and slopes are not verified with sine tones; the figures are with music, and the coefficients were computed for 48 kHz without reading the rate of the unit. On the headphone outputs the message was sent but its effect could not be read. Whether the unit keeps the equaliser across a reconnect is not tested. Inputs to the main output and loopback were left out while the loop cable is in place; phantom power and the device settings were not tried. The diagnostic app is a test tool and is not distributed. This is a private working copy, not a release.',
+  sourceUrl:REPORTS.equaliser,
+} as const;
+
 export const TEST_RIG_CHECKPOINT = {
   id:'main-cells-and-levels-above-unity', revision:'Test rig · single messages · 18 Nov', level:'Offline tests and one bounded native run of one session, with a loop cable: a test rig sends single prepared messages, each measured and restored',
   title:'Sixteen single messages, every value exact.',
@@ -502,6 +529,7 @@ export const LAB_STATUS = {
   evidenceType: 'Project-reported scoped experiments, linked to dated public reports. Raw captures and installable controller artifacts are not bundled with this planner.',
   releaseReady: false,
   entries: [
+    EQUALISER_CHECKPOINT,
     TEST_RIG_CHECKPOINT,
     REPLUG_CORRECTION_CHECKPOINT,
     PHASE_CHECKPOINT,
