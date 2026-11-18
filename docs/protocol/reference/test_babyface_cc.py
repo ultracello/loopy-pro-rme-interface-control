@@ -5,6 +5,7 @@ import babyface_cc as b
 V={v['name']:bytes.fromhex(v['hex']) for v in json.loads((Path(__file__).resolve().parent/'test-vectors.json').read_text())['vectors']}
 class Codec(unittest.TestCase):
     def test_framing(self):
+        self.assertEqual(len(V),len(json.loads((Path(__file__).resolve().parent/'test-vectors.json').read_text())['vectors']))   # every vector has a name of its own
         for word in (0,1,0x7F,0x80,0x20000000,0xE0000034,0xFFFFFFFF):self.assertEqual(b.unpack_word(b.pack_word(word)),word)
         self.assertEqual(b.pack_word(0x20000040),bytes([0x40,0,0,0,2]));self.assertEqual(V['request state'],bytes.fromhex('F000200D1010F7'))
         self.assertEqual(b.parse_frame(V['mixer: playback 1 to Phones left at 0 dB']),(1,[0x20000040]))
@@ -60,7 +61,8 @@ class Codec(unittest.TestCase):
     def test_output_level_law(self):
         """Every raw value from 243 down to 0, as measured through loopback, lies on the law of the codec."""
         L=json.loads((Path(__file__).resolve().parent/'output-level-law-measured.json').read_text());self.assertEqual([r for r,d in L['rows']],list(range(243,-1,-1)))
-        for raw,db in L['rows']:
+        self.assertEqual([[r for r,d in L[k]] for k in ('as1_rows','as2_rows')],[list(range(243,-1,-1))]*2)   # AS1 and AS2 follow the same law
+        for raw,db in L['rows']+L['as1_rows']+L['as2_rows']:
             g=b.output_gain_from_raw(raw)
             if db is None:self.assertEqual(g,0.0,raw)
             else:self.assertAlmostEqual(20*math.log10(g),db,delta=0.003,msg=raw)

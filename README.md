@@ -11,11 +11,11 @@ The website shows what can be controlled and how far each function is measured, 
 <!-- progress:start (written by website/build.mjs --stamp; do not edit by hand) -->
 | | | |
 |---|---|---|
-| Measured on the unit | `█████████████░░░░░░░` | **67 %**, 12 of 18 functions |
+| Measured on the unit | `██████████████░░░░░░` | **72 %**, 13 of 18 functions |
 | Usable today from the controller page | `██████░░░░░░░░░░░░░░` | **28 %**, 5 of 18 functions |
 | Native support in Loopy Pro | `░░░░░░░░░░░░░░░░░░░░` | not started |
 
-Counted from the [coverage table](docs/protocol/BABYFACE-PRO-FS-CC-REFERENCE.md#5-coverage-against-what-totalmix-fx-offers) of the protocol reference. Last report: [What the unit forgets when it loses power](docs/milestones/2026-11-18-what-the-unit-forgets-when-it-loses-power.md), 18 November 2026.
+Counted from the [coverage table](docs/protocol/BABYFACE-PRO-FS-CC-REFERENCE.md#5-coverage-against-what-totalmix-fx-offers) of the protocol reference. Last report: [Level of the AS outputs, and inputs on the digital outputs](docs/milestones/2026-11-18-level-of-the-as-outputs-and-inputs-on-the-digital-outputs.md), 18 November 2026.
 <!-- progress:end -->
 
 A function counts as measured when its effect was read at the unit. Native support in Loopy Pro is the aim; it is in the hands of the developer of Loopy Pro, and what he needs is in the protocol reference.

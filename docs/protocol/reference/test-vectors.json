@@ -490,14 +490,68 @@
   {
    "name": "output level AS1 raw 183 (-30 dB)",
    "hex": "F000200D100408005C0500F7",
-   "meaning": "channel 8",
-   "status": "reported"
+   "meaning": "channel 8; read through loopback: 30.00 dB below raw 243",
+   "status": "measured"
   },
   {
    "name": "output level AS2 raw 59",
    "hex": "F000200D100409006C0100F7",
-   "meaning": "channel 9",
-   "status": "reported"
+   "meaning": "channel 9; read through loopback: silent",
+   "status": "measured"
+  },
+  {
+   "name": "output level AS2 raw 163",
+   "hex": "F000200D100409000C0500F7",
+   "meaning": "channel 9; read through loopback: 40.02 dB below raw 243, the law of the headphone output",
+   "status": "measured"
+  },
+  {
+   "name": "output level AS1 raw 62",
+   "hex": "F000200D10040800780100F7",
+   "meaning": "channel 8; read through loopback: silent, as on the headphone output",
+   "status": "measured"
+  },
+  {
+   "name": "mixer: input 1 to AS1 at 0 dB",
+   "hex": "F000200D10016800000002F7",
+   "meaning": "index 104; read through loopback of AS1 with the noise of the open input: the same RMS level as on the input channel itself, within 0.002 dB",
+   "status": "measured"
+  },
+  {
+   "name": "mixer: input 2 to AS1 at 0 dB",
+   "hex": "F000200D10016900000002F7",
+   "meaning": "index 105; read through loopback of AS1 with the noise of the open input: the same RMS level as on the input channel itself, within 0.002 dB",
+   "status": "measured"
+  },
+  {
+   "name": "mixer: input 3 to AS1 at 0 dB",
+   "hex": "F000200D10016A00000002F7",
+   "meaning": "index 106; read through loopback of AS1 with the noise of the open input: the same RMS level as on the input channel itself, within 0.002 dB",
+   "status": "measured"
+  },
+  {
+   "name": "mixer: input 4 to AS1 at 0 dB",
+   "hex": "F000200D10016B00000002F7",
+   "meaning": "index 107; read through loopback of AS1 with the noise of the open input: the same RMS level as on the input channel itself, within 0.002 dB",
+   "status": "measured"
+  },
+  {
+   "name": "mixer: input 3 to AS1 at half level",
+   "hex": "F000200D10016A00000001F7",
+   "meaning": "index 106, level 0x10000; read through loopback with the noise of the open input: 6.20 dB below the input channel",
+   "status": "measured"
+  },
+  {
+   "name": "mixer: input 3 to ADAT3 at 0 dB",
+   "hex": "F000200D10011E01000002F7",
+   "meaning": "index 158; read through loopback of ADAT3 with the noise of the open input: the same RMS level as on the input channel",
+   "status": "measured"
+  },
+  {
+   "name": "mixer: input 3 to ADAT8 at 0 dB",
+   "hex": "F000200D10012002000002F7",
+   "meaning": "index 288; read through loopback of ADAT8 with the noise of the open input: the same RMS level as on the input channel",
+   "status": "measured"
   },
   {
    "name": "mixer: playback 1 to Main left, level field 0x10000",
@@ -1112,9 +1166,9 @@
    "status": "measured"
   },
   {
-   "name": "output level Phones left raw 59",
+   "name": "output level Phones left raw 59, read through loopback",
    "hex": "F000200D100406006C0100F7",
-   "meaning": "the mute value of TotalMix FX: silent, read through loopback",
+   "meaning": "the mute value of TotalMix FX: silent",
    "status": "measured"
   },
   {

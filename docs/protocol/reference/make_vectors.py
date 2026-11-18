@@ -31,8 +31,14 @@ add('mixer: playback 1 to Phones left at +6 dB',b.set_mixer(2,12,2*b.UNITY),'ind
 add('mixer: playback 1 to Phones left at +3 dB',b.set_mixer(2,12,185144),'index 64, level 185144','measured')
 add('mixer: input 1 to Main left at -12 dB',b.set_mixer(0,0,b.mixer_level_from_db(-12)),'index 0; same message as for the headphones, other output','notes')
 add('output level Phones left raw 255 (+6 dB)',b.set_output_level(6,255),'channel 6, raw 255; measured behind the output: +6.00 dB above raw 243','measured')
-add('output level AS1 raw 183 (-30 dB)',b.set_output_level(8,183),'channel 8','reported')
-add('output level AS2 raw 59',b.set_output_level(9,59),'channel 9','reported')
+add('output level AS1 raw 183 (-30 dB)',b.set_output_level(8,183),'channel 8; read through loopback: 30.00 dB below raw 243','measured')
+add('output level AS2 raw 59',b.set_output_level(9,59),'channel 9; read through loopback: silent','measured')
+add('output level AS2 raw 163',b.set_output_level(9,163),'channel 9; read through loopback: 40.02 dB below raw 243, the law of the headphone output','measured')
+add('output level AS1 raw 62',b.set_output_level(8,62),'channel 8; read through loopback: silent, as on the headphone output','measured')
+for src,name,index in ((0,'input 1',104),(1,'input 2',105),(2,'input 3',106),(3,'input 4',107)):add('mixer: %s to AS1 at 0 dB'%name,b.set_mixer(4,src,b.UNITY),'index %d; read through loopback of AS1 with the noise of the open input: the same RMS level as on the input channel itself, within 0.002 dB'%index,'measured')
+add('mixer: input 3 to AS1 at half level',b.set_mixer(4,2,b.UNITY//2),'index 106, level 0x10000; read through loopback with the noise of the open input: 6.20 dB below the input channel','measured')
+add('mixer: input 3 to ADAT3 at 0 dB',b.set_mixer(6,2,b.UNITY),'index 158; read through loopback of ADAT3 with the noise of the open input: the same RMS level as on the input channel','measured')
+add('mixer: input 3 to ADAT8 at 0 dB',b.set_mixer(11,2,b.UNITY),'index 288; read through loopback of ADAT8 with the noise of the open input: the same RMS level as on the input channel','measured')
 add('mixer: playback 1 to Main left, level field 0x10000',b.set_mixer(0,12,0x10000),'index 12; the Main peak value was exactly half of the one at 0x20000','measured')
 add('mixer: playback 1 to Main left, level field 0x1009C',b.set_mixer(0,12,0x1009C),'a level that is no multiple of 8; read one meter step above 0x10098','measured')
 add('mixer: playback 1 to Main left, level field 8',b.set_mixer(0,12,8),'-84.4 dB below the level at 0x20000','measured')
@@ -102,7 +108,7 @@ for k in range(12):
     if k not in (0,2,4):add('mixer: playback 1 to %s at 0 dB'%name,b.set_mixer(k,12,b.UNITY),'index %d; read through loopback of that output'%(26*k+12),'measured')
 for raw,db in ((163,'-40.02'),(123,'-60.21'),(116,'-63.87'),(83,'-80.77'),(71,'-90.31'),(63,'-90.31')):add('output level Phones left raw %d'%raw,b.set_output_level(6,raw),'read through loopback: %s dB below raw 243; the law is floor(2^15 * 10^(dB/20)) / 2^15'%db,'measured')
 add('output level Phones left raw 62',b.set_output_level(6,62),'read through loopback: silent, not one sample differed from zero; so is every lower value','measured')
-add('output level Phones left raw 59',b.set_output_level(6,59),'the mute value of TotalMix FX: silent, read through loopback','measured')
+add('output level Phones left raw 59, read through loopback',b.set_output_level(6,59),'the mute value of TotalMix FX: silent','measured')
 FLAT2=b.FLAT_BAND
 for out,ch,slot in (('Main right',1,3),('headphones right',3,4),('AS1',4,5),('ADAT3',6,6)):
     for label,kw in (('low cut 80 Hz 2 poles (corner solved), low shelf +4 dB 150 Hz, peak -6 dB 800 Hz Q 2, high shelf +3 dB 6 kHz',dict(bands=(b.biquad('lowshelf',150,4,0.7,FS2),b.biquad('peak',800,-6,2,FS2),b.biquad('highshelf',6000,3,0.7,FS2)),low_cut_poles=2,low_cut=b.low_cut_coefficient_exact(80,2,FS2))),
