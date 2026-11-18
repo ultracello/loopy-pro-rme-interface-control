@@ -18,6 +18,11 @@ class Codec(unittest.TestCase):
     def test_gains(self):
         self.assertEqual([b.pack_mic_gain(x) for x in (0,1,2,3,59,60,61,65)],[0,32,64,1,83,20,52,180])
         for db in range(66):self.assertEqual(b.unpack_mic_gain(b.pack_mic_gain(db)),db)
+        # the gain of input 1 as measured with a tone, every value: within 0.12 dB of the number written; inside a group of three the steps are 1 dB
+        G=json.loads((Path(__file__).resolve().parent/'mic-gain-measured.json').read_text())['rows'];self.assertEqual([g for g,d in G],list(range(66)));m=dict(G)
+        for g in range(66):self.assertAlmostEqual(m[g],g,delta=0.12,msg=g)
+        for g in range(1,66):
+            if g%3 or g>60:self.assertAlmostEqual(m[g]-m[g-1],1.0,delta=0.011,msg=g)
         self.assertEqual(b.parse_frame(V['mic gain input 1 3 dB']),(4,[0|(1<<16)]));self.assertEqual(b.parse_frame(V['line gain input 3 6.0 dB']),(4,[2|(12<<16)]))
     def test_input_settings(self):
         self.assertEqual(b.parse_frame(V['input setting: pad of input 1 on (settings before 0C)']),(3,[0x10|(0x1C<<16)]))

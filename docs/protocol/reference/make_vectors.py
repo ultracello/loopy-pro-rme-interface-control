@@ -8,8 +8,9 @@ add('request state',b.request_state(),'ask the unit for its state; it answers wi
 for name,ch in (('Main left',4),('Main right',5),('Phones left',6),('Phones right',7)):
     for db in (0,-0.5,-14.5,-30,-63.5):add('output level %s %.1f dB'%(name,db),b.set_output_level(ch,b.output_raw_from_db(db)),'channel %d, raw %d'%(ch,b.output_raw_from_db(db)),'measured' if db in (-30,-14.5) else 'reported')
     add('output level %s raw 59'%name,b.set_output_level(ch,59),'the value TotalMix FX writes for a muted output (-92 dB by the formula)','reported')
+GAIN=dict(json.load(open('mic-gain-measured.json'))['rows'])
 for i in (1,2):
-    for db in (0,1,2,3,6,30,59,60,61,65):add('mic gain input %d %d dB'%(i,db),b.set_mic_gain(i,db),'channel %d, packed value %d'%(i-1,b.pack_mic_gain(db)),'measured' if db in (0,3,6) and i==1 else 'reported')
+    for db in (0,1,2,3,6,30,59,60,61,65):add('mic gain input %d %d dB'%(i,db),b.set_mic_gain(i,db),'channel %d, packed value %d'%(i-1,b.pack_mic_gain(db))+('; measured with a tone over a cable: %.2f dB above gain 0'%GAIN[db] if i==1 else ''),'measured' if i==1 else 'reported')
 for i in (3,4):
     for k in (0,1,12,18):add('line gain input %d %.1f dB'%(i,k/2),b.set_line_gain(i,k),'channel %d, %d half dB'%(i-1,k)+('; measured with a tone at the input: %.2f dB above step 0'%{0:0,1:0.50,12:6.00,18:9.00}[k] if i==3 else ''),'measured' if i==3 else 'reported')
 for settings,bit,on,what,status in ((0x0C,4,True,'pad of input 1 on','measured'),(0x1C,4,False,'pad of input 1 off','measured'),(0x0C,5,True,'pad of input 2 on','reported'),(0x0C,2,False,'sensitivity bit of input 3 cleared','measured'),(0x08,2,True,'sensitivity bit of input 3 set','measured'),(0x0C,3,False,'sensitivity bit of input 4 cleared','reported'),(0x08,4,True,'pad of input 1 on while the sensitivity bit of input 3 is clear','reported')):
@@ -118,6 +119,7 @@ for out,ch,slot in (('Main right',1,3),('headphones right',3,4),('AS1',4,5),('AD
 # runs S1 and S2 on 18 November 2026: "EQ for Record", and one equaliser message before and after the sample rate changed
 add('device settings: equaliser in the recording (bit 6 clear, clock bit set)',b.set_eq_in_recording(True),'read through loopback of an output with a peak of +12 dB: the recorded tone stood 12.0 dB higher than without equaliser','measured')
 add('device settings: equaliser not in the recording (bit 6 set, clock bit set)',b.set_eq_in_recording(False),'the recorded tone stood at 0.0 dB, the equaliser of the output still on','measured')
+add('equaliser: slot 1 on input 1, peak +12 dB at 1 kHz, Q 2 (44.1 kHz)',b.set_eq(1,0,False,True,bands=(b.FLAT_BAND,b.biquad('peak',1000,12,2,44100),b.FLAT_BAND)),'with a tone over a cable into input 1: +12.00 dB in the recording with bit 6 of the device settings clear, 0.00 dB with it set','measured')
 for tag in ('coefficients for 44.1 kHz, read at 44.1 kHz','coefficients for 44.1 kHz, read at 48 kHz after the rate had changed'):
     c=CURVES['sine through loopback: output AS1, slot 5, peak +12 dB at 1 kHz, Q 2 (%s)'%tag];frame=b.set_eq(5,4,True,True,bands=(FLAT2,b.biquad('peak',1000,12,2,FS2),FLAT2));assert bytes.fromhex(c['hex'])==bytes(frame)
     add(c['name'],frame,'one message, sent once; curve of 66 frequencies in eq-curves-measured.json; %d points compared, largest deviation %.3f dB, rms %.4f dB'%(c['points_counted'],c['largest_deviation_db'],c['rms_deviation_db']),'measured')

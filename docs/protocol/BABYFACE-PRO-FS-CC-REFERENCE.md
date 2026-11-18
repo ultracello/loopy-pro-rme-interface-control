@@ -13,7 +13,7 @@ Each statement carries one of four marks, so that nothing has to be taken on tru
 | **notes** | Taken from other people's notes and not tried on our unit. Sources: the protocol notes on the oscmix wiki by Michael Forney (github.com/michaelforney/oscmix/wiki/Babyface-Pro) and the Babyface Pro part of the Linux kernel driver (`sound/usb/mixer_quirks.c`). |
 | **unknown** | We found no source and no way to observe it. |
 
-The folder `reference/` holds a small codec in Python (`babyface_cc.py`), 208 test vectors (`test-vectors.json`), the equaliser curves measured with sine tones (`eq-curves-measured.json`), the level of an output for every raw value (`output-level-law-measured.json`) and tests. The codec was checked against 1871 messages of the controller that was used on the unit: byte for byte the same.
+The folder `reference/` holds a small codec in Python (`babyface_cc.py`), 209 test vectors (`test-vectors.json`), the equaliser curves measured with sine tones (`eq-curves-measured.json`), the level of an output for every raw value (`output-level-law-measured.json`), the gain of a microphone input for every value (`mic-gain-measured.json`) and tests. The codec was checked against 1871 messages of the controller that was used on the unit: byte for byte the same.
 
 ## 1. Transport
 
@@ -38,7 +38,7 @@ One word: bits 0-15 channel, bits 16-23 value.
 
 | Channel | What | Value | Status |
 |---|---|---|---|
-| 0, 1 | Gain of microphone input 1, 2 | 0 to 65 dB in whole dB, packed (see below) | **reported** for all 66 values; **measured** at 0, 3 and 6 dB (3.0 and 6.0 dB at the input meter) |
+| 0, 1 | Gain of microphone input 1, 2 | 0 to 65 dB in whole dB, packed (see below) | **measured** on input 1 with a tone for every one of the 66 values (below); input 2 **reported** for all 66 values |
 | 2, 3 | Gain of line input 3, 4 | count of half dB, 0 to 18 (0 to 9 dB) | **reported** for all 19 values; **measured** on input 3 with a tone: every step 0.50 dB, 9.00 dB at step 18 |
 | 4, 5 | Main output left, right | raw level, see below | **measured** |
 | 6, 7 | Headphone output left, right | raw level | **measured** |
@@ -52,6 +52,8 @@ One word: bits 0-15 channel, bits 16-23 value.
 **The exact law.** Read digitally through loopback of the headphone output left, for every raw value from 243 down to 0: the gain is `floor(2^15 × 10^(dB/20)) / 2^15` with `dB = (raw − 243) / 2`. Every one of the 244 values lies within 0.003 dB of it. The steps are therefore half a dB only near the top: raw 183 gives −30.00 dB, raw 163 −40.02, raw 143 −50.05, raw 123 −60.21, raw 116 −63.87, raw 83 −80.77 dB; raw 63 to 74 all give −90.31 dB (the coefficient is 1 of 32768), and raw 62 and below are silent: not one sample differs from zero. On Main left raw 163, 143, 123 and 116 gave the same values relative to raw 183. AS1 and AS2, read the same way for every raw value, follow the same law: all 244 values of each lie within 0.002 dB of it, and raw 62 and below are silent. **measured** The table is in `reference/output-level-law-measured.json`, the law in the codec (`output_gain_from_raw`). A host that shows dB at low levels should compute them from this law.
 
 **Mute.** There is no mute bit per output. TotalMix FX mutes an output by writing raw 59 to both of its channels and restores the fader value on unmute. **reported** Raw 59 is true silence, like every value up to 62. **measured** (watched on the same unit while TotalMix FX on a Mac was operated). A host that mutes should do the same and keep the previous value itself.
+
+**Microphone gain, measured.** A sine left the unit on XLR output 1 and came back over a cable on XLR input 1; the level was read in what the host records, for every gain from 0 to 65 dB (the output 20.6 dB lower for the upper half, so the input stayed more than 10 dB under full scale; the two halves overlap over 26 values and agree within 0.011 dB). Every value lies within 0.11 dB of its nominal gain, 64.98 dB at 65. The steps inside a group of three (and from 60 to 65) are 0.99 to 1.01 dB; the steps onto a multiple of 3 dB are between 0.91 and 1.21 dB. The state reported every value as written. **measured** The table is in `reference/mic-gain-measured.json`. The step of the output between the two halves came out at 20.565 dB, where the law above gives 20.561 dB: the level law holds at the socket too.
 
 **Microphone gain packing.** The value written is not the dB number:
 
@@ -186,7 +188,7 @@ Bit 6 was tried, with mask `0x0040` and bit 0 set in the state: **measured** thr
 - State `0x0041` (bit 6 set): 0.0 dB, with the EQ of the output still on. The EQ is not in what the host records.
 - Each was sent twice in changing order; the message sets the state and does not toggle it. So in this mode a set bit 6 takes the EQ out of the recording.
 
-By RME's manual the same setting decides whether the EQ of an input is recorded; that was not measured (it needs a signal at an input). We found no word of the state message that reports these settings, so the state part could not be read first: both messages carried bit 10 as zero, and whether that changed the optical format of our unit we cannot tell. Clock source and optical format were never switched on purpose. The codec builds the two messages (`set_eq_in_recording`).
+The same setting decides whether the EQ of an input is recorded. **measured** with a tone over a cable into input 1 and an EQ on that input making +12 dB at the tone: with bit 6 clear the recorded tone stood 12.00 dB higher than without EQ, with bit 6 set at 0.00 dB, each state three and two times in turn. We found no word of the state message that reports these settings, so the state part could not be read first: both messages carried bit 10 as zero, and whether that changed the optical format of our unit we cannot tell. Clock source and optical format were never switched on purpose. The codec builds the two messages (`set_eq_in_recording`).
 
 ### 2.7 Resolution: which values exist
 
@@ -271,7 +273,7 @@ The last column says whether the controller page this project uses in Loopy Pro 
 | Function | Status here | On our controller page |
 |---|---|---|
 | Main and headphone level, mute by level | **measured**, the law for every raw value | yes |
-| Microphone gain, line gain | **reported**; line gain of input 3 **measured** step by step, microphone gain at three values | yes |
+| Microphone gain, line gain | **measured**: microphone gain of input 1 for every value 0 to 65 dB, line gain of input 3 step by step; inputs 2 and 4 **reported** | yes |
 | Pad | **measured** | yes |
 | Line sensitivity (+4 dBu / −10 dBV) | **measured** on input 3 (8.74 dB) | yes |
 | Monitoring of inputs and playback to the headphones: level, pan, phase | **measured** | yes |
@@ -285,7 +287,7 @@ The last column says whether the controller page this project uses in Loopy Pro 
 | Phantom power | **notes**, never sent | no |
 | EQ and low cut on inputs and outputs | **measured**, whole curves with sine tones: input 1 and Main left at 48 kHz; both headphone channels, Main right, AS1 and ADAT3 at 44.1 kHz | no |
 | Loopback | **measured** for all twelve outputs | no |
-| EQ for Record | **measured** for the EQ of an output in loopback (bit 6 of the device settings); for the EQ of an input **notes** | no |
+| EQ for Record | **measured** for the EQ of an output in loopback and for the EQ of an input (bit 6 of the device settings) | no |
 | Clock source, optical format | **notes** | no |
 | Dim, mono, global mute, solo, stereo link, cue, talkback | reading of dim and global mute **reported**; writing **unknown** | no |
 | Snapshots, layouts | belong to TotalMix FX, not to the unit |  |
@@ -295,7 +297,7 @@ The last column says whether the controller page this project uses in Loopy Pro 
 
 - Phantom power on an input with nothing connected.
 - A replug with the unit kept alive by a power supply of its own: does it keep mixer, loopback and EQ then?
-- EQ for Record with a signal at an input; where the unit reports its device settings, if it does.
+- Where the unit reports its device settings, if it does.
 - Whether a state part with phantom power bits left at zero switches phantom power off.
 
 ## 7. Sources
