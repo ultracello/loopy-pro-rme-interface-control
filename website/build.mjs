@@ -1,7 +1,7 @@
 // Builds the project page from the documents of this repository. No dependencies.
 // The page has little text of its own (site/text.mjs); status table, rules for a host, open points, the list of reports
 // and all counts are read from ../docs at build time, so the page cannot fall behind the documents.
-import { readFileSync, readdirSync, writeFileSync, mkdirSync, copyFileSync, existsSync } from 'node:fs';
+import { readFileSync, readdirSync, writeFileSync, mkdirSync, copyFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
@@ -122,6 +122,10 @@ ${c.coverage.map((r) => `<tr><th scope="row">${inline(r.name)}</th><td>${inline(
 <h2 id="h-page">${esc(t.pageHeading)}</h2>
 ${p(t.page)}
 ${ul(t.pageList)}
+<figure>
+<img src="./${t.figure.file}" width="${t.figure.width}" height="${t.figure.height}" alt="${esc(t.figure.alt)}" loading="lazy">
+<figcaption>${inline(t.figure.caption)}</figcaption>
+</figure>
 ${p(t.pageAfter)}
 </section>
 
@@ -182,7 +186,7 @@ export function build(out = join(HERE, 'dist')) {
   mkdirSync(out, { recursive: true });
   writeFileSync(join(out, 'index.html'), html);
   copyFileSync(join(HERE, 'site/styles.css'), join(out, 'styles.css'));
-  if (existsSync(join(HERE, 'public/favicon.svg'))) copyFileSync(join(HERE, 'public/favicon.svg'), join(out, 'favicon.svg'));
+  for (const file of readdirSync(join(HERE, 'public'))) copyFileSync(join(HERE, 'public', file), join(out, file));
   return html;
 }
 if (process.argv[1] === fileURLToPath(import.meta.url)) {

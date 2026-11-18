@@ -60,6 +60,16 @@ test('links lead somewhere', () => {
   }
 });
 
+test('the picture is there and described', () => {
+  const m = html.match(/<img src="\.\/([^"]+)" width="(\d+)" height="(\d+)" alt="([^"]+)"/);
+  assert.ok(m && m[4].length > 40);
+  const file = readFileSync(join(ROOT, 'website/public', m[1]));
+  assert.equal(file.readUInt32BE(16), Number(m[2]));   // PNG: width and height stand in the header
+  assert.equal(file.readUInt32BE(20), Number(m[3]));
+  assert.ok(file.length < 600000);
+  assert.ok(html.includes('<figcaption>'));
+});
+
 test('the page is one plain document', () => {
   assert.equal(html.split('<h1').length - 1, 1);
   assert.ok(html.startsWith('<!doctype html>\n<html lang="en">'));
