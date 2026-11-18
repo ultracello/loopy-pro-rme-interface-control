@@ -854,18 +854,6 @@
    "status": "measured"
   },
   {
-   "name": "loopback of output AS1 on",
-   "hex": "F000200D10020400040000F7",
-   "meaning": "sent; no peak meter changed. The effect needs a recording host to be seen and was not verified",
-   "status": "notes"
-  },
-  {
-   "name": "loopback of output AS1 off",
-   "hex": "F000200D10020400000000F7",
-   "meaning": "sent; no peak meter changed",
-   "status": "notes"
-  },
-  {
    "name": "sine: output Phones left, slot 2, low cut 100 Hz, 2 poles, corner solved (44.1 kHz)",
    "hex": "F000200D1006020648000800000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040005B4F4900000000000000F7",
    "meaning": "coefficients for 44.1 kHz; curve of 66 frequencies in eq-curves-measured.json, read at line input 3; 66 points compared, largest deviation 0.047 dB, rms 0.0088 dB",
@@ -881,6 +869,300 @@
    "name": "sine: output Phones left, slot 2, high shelf -9 dB at 4 kHz, Q 0.7, band 3 (44.1 kHz)",
    "hex": "F000200D10060200480008000000000000000000000000000000000000000000000000000000000000000000000000000000007F614D270F4A097521001B2B033F0F07716B16002C7C6E1B0000000000000000000000F7",
    "meaning": "coefficients for 44.1 kHz; curve of 66 frequencies in eq-curves-measured.json, read at line input 3; 66 points compared, largest deviation 0.020 dB, rms 0.0036 dB",
+   "status": "measured"
+  },
+  {
+   "name": "loopback of output 0 (AN1) on",
+   "hex": "F000200D10020000040000F7",
+   "meaning": "input channel 1 then carried playback 1 as that output sends it: -30.00 dB (Main at raw 183) relative to the tone; no other input channel changed",
+   "status": "measured"
+  },
+  {
+   "name": "loopback of output 0 (AN1) off",
+   "hex": "F000200D10020000000000F7",
+   "meaning": "input channel 1 back to what its hardware input carries",
+   "status": "measured"
+  },
+  {
+   "name": "loopback of output 1 (AN2) on",
+   "hex": "F000200D10020100040000F7",
+   "meaning": "input channel 2 then carried playback 1 as that output sends it: -30.00 dB (Main at raw 183) relative to the tone; no other input channel changed",
+   "status": "measured"
+  },
+  {
+   "name": "loopback of output 1 (AN2) off",
+   "hex": "F000200D10020100000000F7",
+   "meaning": "input channel 2 back to what its hardware input carries",
+   "status": "measured"
+  },
+  {
+   "name": "mixer: playback 1 to AN2 at 0 dB",
+   "hex": "F000200D10012600000002F7",
+   "meaning": "index 38; read through loopback of that output",
+   "status": "measured"
+  },
+  {
+   "name": "loopback of output 2 (PH3) on",
+   "hex": "F000200D10020200040000F7",
+   "meaning": "input channel 3 then carried playback 1 as that output sends it: -14.50 dB (headphones at raw 214) relative to the tone; no other input channel changed",
+   "status": "measured"
+  },
+  {
+   "name": "loopback of output 2 (PH3) off",
+   "hex": "F000200D10020200000000F7",
+   "meaning": "input channel 3 back to what its hardware input carries",
+   "status": "measured"
+  },
+  {
+   "name": "loopback of output 3 (PH4) on",
+   "hex": "F000200D10020300040000F7",
+   "meaning": "input channel 4 then carried playback 1 as that output sends it: -14.50 dB (headphones at raw 214) relative to the tone; no other input channel changed",
+   "status": "measured"
+  },
+  {
+   "name": "loopback of output 3 (PH4) off",
+   "hex": "F000200D10020300000000F7",
+   "meaning": "input channel 4 back to what its hardware input carries",
+   "status": "measured"
+  },
+  {
+   "name": "mixer: playback 1 to PH4 at 0 dB",
+   "hex": "F000200D10015A00000002F7",
+   "meaning": "index 90; read through loopback of that output",
+   "status": "measured"
+  },
+  {
+   "name": "loopback of output 4 (AS1) on",
+   "hex": "F000200D10020400040000F7",
+   "meaning": "input channel 5 then carried playback 1 as that output sends it: 0.00 dB (AS at raw 243) relative to the tone; no other input channel changed",
+   "status": "measured"
+  },
+  {
+   "name": "loopback of output 4 (AS1) off",
+   "hex": "F000200D10020400000000F7",
+   "meaning": "input channel 5 back to what its hardware input carries",
+   "status": "measured"
+  },
+  {
+   "name": "loopback of output 5 (AS2) on",
+   "hex": "F000200D10020500040000F7",
+   "meaning": "input channel 6 then carried playback 1 as that output sends it: 0.00 dB (AS at raw 243) relative to the tone; no other input channel changed",
+   "status": "measured"
+  },
+  {
+   "name": "loopback of output 5 (AS2) off",
+   "hex": "F000200D10020500000000F7",
+   "meaning": "input channel 6 back to what its hardware input carries",
+   "status": "measured"
+  },
+  {
+   "name": "mixer: playback 1 to AS2 at 0 dB",
+   "hex": "F000200D10010E01000002F7",
+   "meaning": "index 142; read through loopback of that output",
+   "status": "measured"
+  },
+  {
+   "name": "loopback of output 6 (ADAT3) on",
+   "hex": "F000200D10020600040000F7",
+   "meaning": "input channel 7 then carried playback 1 as that output sends it: 0.00 dB (the ADAT outputs stood at 0 dB) relative to the tone; no other input channel changed",
+   "status": "measured"
+  },
+  {
+   "name": "loopback of output 6 (ADAT3) off",
+   "hex": "F000200D10020600000000F7",
+   "meaning": "input channel 7 back to what its hardware input carries",
+   "status": "measured"
+  },
+  {
+   "name": "mixer: playback 1 to ADAT3 at 0 dB",
+   "hex": "F000200D10012801000002F7",
+   "meaning": "index 168; read through loopback of that output",
+   "status": "measured"
+  },
+  {
+   "name": "loopback of output 7 (ADAT4) on",
+   "hex": "F000200D10020700040000F7",
+   "meaning": "input channel 8 then carried playback 1 as that output sends it: 0.00 dB (the ADAT outputs stood at 0 dB) relative to the tone; no other input channel changed",
+   "status": "measured"
+  },
+  {
+   "name": "loopback of output 7 (ADAT4) off",
+   "hex": "F000200D10020700000000F7",
+   "meaning": "input channel 8 back to what its hardware input carries",
+   "status": "measured"
+  },
+  {
+   "name": "mixer: playback 1 to ADAT4 at 0 dB",
+   "hex": "F000200D10014201000002F7",
+   "meaning": "index 194; read through loopback of that output",
+   "status": "measured"
+  },
+  {
+   "name": "loopback of output 8 (ADAT5) on",
+   "hex": "F000200D10020800040000F7",
+   "meaning": "input channel 9 then carried playback 1 as that output sends it: 0.00 dB (the ADAT outputs stood at 0 dB) relative to the tone; no other input channel changed",
+   "status": "measured"
+  },
+  {
+   "name": "loopback of output 8 (ADAT5) off",
+   "hex": "F000200D10020800000000F7",
+   "meaning": "input channel 9 back to what its hardware input carries",
+   "status": "measured"
+  },
+  {
+   "name": "mixer: playback 1 to ADAT5 at 0 dB",
+   "hex": "F000200D10015C01000002F7",
+   "meaning": "index 220; read through loopback of that output",
+   "status": "measured"
+  },
+  {
+   "name": "loopback of output 9 (ADAT6) on",
+   "hex": "F000200D10020900040000F7",
+   "meaning": "input channel 10 then carried playback 1 as that output sends it: 0.00 dB (the ADAT outputs stood at 0 dB) relative to the tone; no other input channel changed",
+   "status": "measured"
+  },
+  {
+   "name": "loopback of output 9 (ADAT6) off",
+   "hex": "F000200D10020900000000F7",
+   "meaning": "input channel 10 back to what its hardware input carries",
+   "status": "measured"
+  },
+  {
+   "name": "mixer: playback 1 to ADAT6 at 0 dB",
+   "hex": "F000200D10017601000002F7",
+   "meaning": "index 246; read through loopback of that output",
+   "status": "measured"
+  },
+  {
+   "name": "loopback of output 10 (ADAT7) on",
+   "hex": "F000200D10020A00040000F7",
+   "meaning": "input channel 11 then carried playback 1 as that output sends it: 0.00 dB (the ADAT outputs stood at 0 dB) relative to the tone; no other input channel changed",
+   "status": "measured"
+  },
+  {
+   "name": "loopback of output 10 (ADAT7) off",
+   "hex": "F000200D10020A00000000F7",
+   "meaning": "input channel 11 back to what its hardware input carries",
+   "status": "measured"
+  },
+  {
+   "name": "mixer: playback 1 to ADAT7 at 0 dB",
+   "hex": "F000200D10011002000002F7",
+   "meaning": "index 272; read through loopback of that output",
+   "status": "measured"
+  },
+  {
+   "name": "loopback of output 11 (ADAT8) on",
+   "hex": "F000200D10020B00040000F7",
+   "meaning": "input channel 12 then carried playback 1 as that output sends it: 0.00 dB (the ADAT outputs stood at 0 dB) relative to the tone; no other input channel changed",
+   "status": "measured"
+  },
+  {
+   "name": "loopback of output 11 (ADAT8) off",
+   "hex": "F000200D10020B00000000F7",
+   "meaning": "input channel 12 back to what its hardware input carries",
+   "status": "measured"
+  },
+  {
+   "name": "mixer: playback 1 to ADAT8 at 0 dB",
+   "hex": "F000200D10012A02000002F7",
+   "meaning": "index 298; read through loopback of that output",
+   "status": "measured"
+  },
+  {
+   "name": "output level Phones left raw 163",
+   "hex": "F000200D100406000C0500F7",
+   "meaning": "read through loopback: -40.02 dB below raw 243; the law is floor(2^15 * 10^(dB/20)) / 2^15",
+   "status": "measured"
+  },
+  {
+   "name": "output level Phones left raw 123",
+   "hex": "F000200D100406006C0300F7",
+   "meaning": "read through loopback: -60.21 dB below raw 243; the law is floor(2^15 * 10^(dB/20)) / 2^15",
+   "status": "measured"
+  },
+  {
+   "name": "output level Phones left raw 116",
+   "hex": "F000200D10040600500300F7",
+   "meaning": "read through loopback: -63.87 dB below raw 243; the law is floor(2^15 * 10^(dB/20)) / 2^15",
+   "status": "measured"
+  },
+  {
+   "name": "output level Phones left raw 83",
+   "hex": "F000200D100406004C0200F7",
+   "meaning": "read through loopback: -80.77 dB below raw 243; the law is floor(2^15 * 10^(dB/20)) / 2^15",
+   "status": "measured"
+  },
+  {
+   "name": "output level Phones left raw 71",
+   "hex": "F000200D100406001C0200F7",
+   "meaning": "read through loopback: -90.31 dB below raw 243; the law is floor(2^15 * 10^(dB/20)) / 2^15",
+   "status": "measured"
+  },
+  {
+   "name": "output level Phones left raw 63",
+   "hex": "F000200D100406007C0100F7",
+   "meaning": "read through loopback: -90.31 dB below raw 243; the law is floor(2^15 * 10^(dB/20)) / 2^15",
+   "status": "measured"
+  },
+  {
+   "name": "output level Phones left raw 62",
+   "hex": "F000200D10040600780100F7",
+   "meaning": "read through loopback: silent, not one sample differed from zero; so is every lower value",
+   "status": "measured"
+  },
+  {
+   "name": "output level Phones left raw 59",
+   "hex": "F000200D100406006C0100F7",
+   "meaning": "the mute value of TotalMix FX: silent, read through loopback",
+   "status": "measured"
+  },
+  {
+   "name": "sine through loopback: output Main right, slot 3, low cut 80 Hz 2 poles (corner solved), low shelf +4 dB 150 Hz, peak -6 dB 800 Hz Q 2, high shelf +3 dB 6 kHz (44.1 kHz)",
+   "hex": "F000200D10060306440008026B5E010F250C243E00054018020F5A106C3D007C6A5E050F442F073B0069402B030F4D5A3C3D006832594E0F256549110036732D440F06366F14007A1B4A500017113B00000000000000F7",
+   "meaning": "coefficients for 44.1 kHz; curve of 66 frequencies in eq-curves-measured.json, read digitally through loopback; 66 points compared, largest deviation 0.044 dB (below 20 Hz), rms 0.0092 dB",
+   "status": "measured"
+  },
+  {
+   "name": "sine through loopback: output Main right, slot 3, peak +12 dB at 100 Hz, Q 0.7, band 1 (44.1 kHz)",
+   "hex": "F000200D10060300440008556554000F0D6E2C3F00385747020F1779393D000000000000000000000000000000000000000000000000000000000000000000000000000000000010767B400000000000000000000000F7",
+   "meaning": "coefficients for 44.1 kHz; curve of 66 frequencies in eq-curves-measured.json, read digitally through loopback; 66 points compared, largest deviation 0.002 dB (below 20 Hz), rms 0.0004 dB",
+   "status": "measured"
+  },
+  {
+   "name": "sine through loopback: output headphones right, slot 4, low cut 80 Hz 2 poles (corner solved), low shelf +4 dB 150 Hz, peak -6 dB 800 Hz Q 2, high shelf +3 dB 6 kHz (44.1 kHz)",
+   "hex": "F000200D100604064C0008026B5E010F250C243E00054018020F5A106C3D007C6A5E050F442F073B0069402B030F4D5A3C3D006832594E0F256549110036732D440F06366F14007A1B4A500017113B00000000000000F7",
+   "meaning": "coefficients for 44.1 kHz; curve of 66 frequencies in eq-curves-measured.json, read digitally through loopback; 66 points compared, largest deviation 0.044 dB (below 20 Hz), rms 0.0092 dB",
+   "status": "measured"
+  },
+  {
+   "name": "sine through loopback: output headphones right, slot 4, peak +12 dB at 100 Hz, Q 0.7, band 1 (44.1 kHz)",
+   "hex": "F000200D100604004C0008556554000F0D6E2C3F00385747020F1779393D000000000000000000000000000000000000000000000000000000000000000000000000000000000010767B400000000000000000000000F7",
+   "meaning": "coefficients for 44.1 kHz; curve of 66 frequencies in eq-curves-measured.json, read digitally through loopback; 66 points compared, largest deviation 0.002 dB (below 20 Hz), rms 0.0004 dB",
+   "status": "measured"
+  },
+  {
+   "name": "sine through loopback: output AS1, slot 5, low cut 80 Hz 2 poles (corner solved), low shelf +4 dB 150 Hz, peak -6 dB 800 Hz Q 2, high shelf +3 dB 6 kHz (44.1 kHz)",
+   "hex": "F000200D10060506500008026B5E010F250C243E00054018020F5A106C3D007C6A5E050F442F073B0069402B030F4D5A3C3D006832594E0F256549110036732D440F06366F14007A1B4A500017113B00000000000000F7",
+   "meaning": "coefficients for 44.1 kHz; curve of 66 frequencies in eq-curves-measured.json, read digitally through loopback; 66 points compared, largest deviation 0.044 dB (below 20 Hz), rms 0.0089 dB",
+   "status": "measured"
+  },
+  {
+   "name": "sine through loopback: output AS1, slot 5, peak +12 dB at 100 Hz, Q 0.7, band 1 (44.1 kHz)",
+   "hex": "F000200D10060500500008556554000F0D6E2C3F00385747020F1779393D000000000000000000000000000000000000000000000000000000000000000000000000000000000010767B400000000000000000000000F7",
+   "meaning": "coefficients for 44.1 kHz; curve of 66 frequencies in eq-curves-measured.json, read digitally through loopback; 66 points compared, largest deviation 0.002 dB (below 20 Hz), rms 0.0004 dB",
+   "status": "measured"
+  },
+  {
+   "name": "sine through loopback: output ADAT3, slot 6, low cut 80 Hz 2 poles (corner solved), low shelf +4 dB 150 Hz, peak -6 dB 800 Hz Q 2, high shelf +3 dB 6 kHz (44.1 kHz)",
+   "hex": "F000200D10060606580008026B5E010F250C243E00054018020F5A106C3D007C6A5E050F442F073B0069402B030F4D5A3C3D006832594E0F256549110036732D440F06366F14007A1B4A500017113B00000000000000F7",
+   "meaning": "coefficients for 44.1 kHz; curve of 66 frequencies in eq-curves-measured.json, read digitally through loopback; 66 points compared, largest deviation 0.044 dB (below 20 Hz), rms 0.0091 dB",
+   "status": "measured"
+  },
+  {
+   "name": "sine through loopback: output ADAT3, slot 6, peak +12 dB at 100 Hz, Q 0.7, band 1 (44.1 kHz)",
+   "hex": "F000200D10060600580008556554000F0D6E2C3F00385747020F1779393D000000000000000000000000000000000000000000000000000000000000000000000000000000000010767B400000000000000000000000F7",
+   "meaning": "coefficients for 44.1 kHz; curve of 66 frequencies in eq-curves-measured.json, read digitally through loopback; 66 points compared, largest deviation 0.004 dB (below 20 Hz), rms 0.0007 dB",
    "status": "measured"
   },
   {

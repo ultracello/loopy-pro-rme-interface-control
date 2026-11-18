@@ -119,6 +119,28 @@ def set_input_setting(bit, on, current_settings):
     return frame(SUB_INPUT_SETTINGS, [(1 << bit) | (new << 16)])
 
 
+def output_gain_from_raw(raw):
+    """Linear gain of an output at a raw level: floor(2^15 * 10^(dB/20)) / 2^15 with dB = (raw - 243) / 2. So the steps are
+    0.5 dB only near the top; raw 163 is -40.02 dB, raw 123 -60.21 dB, raw 63 to 74 all -90.31 dB, and raw 62 and below
+    are silent, TotalMix's mute value 59 among them. (measured digitally through loopback for every raw value from 243
+    down to 0: within 0.003 dB; above 243 measured over a cable at four values)"""
+    if not 0 <= raw <= 255:
+        raise ValueError('raw 0..255')
+    return math.floor((1 << 15) * 10 ** ((raw - 243) / 40) + 1e-9) / (1 << 15)
+
+
+SUB_LOOPBACK = 0x02
+
+
+def set_loopback(output, on):
+    """Loopback of one output, 0..11 (the list OUTPUTS): while it is on, the host records the signal of that output,
+    taken behind its level and its equaliser, on the input channel of the same number, instead of the hardware input.
+    (measured for all twelve outputs with a test app that reads the input levels of the iPad)"""
+    if not 0 <= output <= 11:
+        raise ValueError('output 0..11')
+    return frame(SUB_LOOPBACK, [output | ((1 if on else 0) << 16)])
+
+
 def mixer_level_from_db(db):
     """Linear level of the mixer for a gain in dB; 0 dB is 0x20000, +6 dB is 0x40000. (measured between -48 and +6 dB)"""
     return int(round(UNITY * 10 ** (db / 20)))

@@ -78,7 +78,7 @@ def sine(where,label,frame):
 for label,kw in T1:sine('output Main left, slot 0',label,b.set_eq(0,0,True,True,**kw))
 for label,kw in (T1[1],T1[6],T1[10]):sine('input 1, slot 1',label,b.set_eq(1,0,False,True,**kw))
 for label,kw in TX:sine('output Main left, slot 0',label,b.set_eq(0,0,True,True,**kw))
-assert len(CURVES)==len(T1)+3+len(TX)+3
+assert len(CURVES)==len(T1)+3+len(TX)+3+8
 # run K1 on 18 November 2026: a cable from the 6.3 mm headphone socket to line input 3, a sine tone on playback 1, no other audio app open
 for raw,db in ((244,0.5),(245,1.0),(249,3.0)):add('output level Phones left raw %d (+%.1f dB)'%(raw,db),b.set_output_level(6,raw),'measured behind the output: +%.2f dB above raw 243'%db,'measured')
 add('output level Phones left raw 203 (-20 dB)',b.set_output_level(6,203),'measured behind the output: -20.00 dB below raw 243 and +10.00 dB above raw 183','measured')
@@ -89,12 +89,26 @@ for out,name in ((0,'left'),(1,'right')):
     add('mixer: input 3 off Main %s'%name,b.set_mixer(out,2,0),'the Main meter read 0','measured')
 add('mixer: playback 1 to AS1 at 0 dB',b.set_mixer(4,12,b.UNITY),'index 116; peak word 30 then read the level of playback 1 (with AS1 at raw 243)','measured')
 add('output level AS1 raw 243 (0 dB)',b.set_output_level(8,243),'peak word 30 read the level of playback 1 exactly','measured')
-add('loopback of output AS1 on',b.frame(2,[4|(1<<16)]),'sent; no peak meter changed. The effect needs a recording host to be seen and was not verified','notes')
-add('loopback of output AS1 off',b.frame(2,[4]),'sent; no peak meter changed','notes')
 FS2=44100
 for label,kw in (('low cut 100 Hz, 2 poles, corner solved',dict(low_cut_poles=2,low_cut=b.low_cut_coefficient_exact(100,2,FS2))),('peak +6 dB at 1 kHz, Q 1, band 2',dict(bands=(FLAT,b.biquad('peak',1000,6,1,FS2),FLAT))),('high shelf -9 dB at 4 kHz, Q 0.7, band 3',dict(bands=(FLAT,FLAT,b.biquad('highshelf',4000,-9,0.7,FS2))))):
     c=CURVES['sine: output Phones left, slot 2, %s (44.1 kHz)'%label];frame=b.set_eq(2,2,True,True,**kw);assert bytes.fromhex(c['hex'])==bytes(frame),'the codec does not build the message that was sent: '+label
     add(c['name'],frame,'coefficients for 44.1 kHz; curve of 66 frequencies in eq-curves-measured.json, read at line input 3; %d points compared, largest deviation %.3f dB, rms %.4f dB'%(c['points_counted'],c['largest_deviation_db'],c['rms_deviation_db']),'measured')
+# runs R1 and R2 on 18 November 2026: no cable; a test app on the iPad reads the levels of the twelve input channels; no other audio app open
+EXPECT={0:'-30.00 dB (Main at raw 183)',1:'-30.00 dB (Main at raw 183)',2:'-14.50 dB (headphones at raw 214)',3:'-14.50 dB (headphones at raw 214)',4:'0.00 dB (AS at raw 243)',5:'0.00 dB (AS at raw 243)'}
+for k in range(12):
+    name=b.OUTPUTS[k]
+    add('loopback of output %d (%s) on'%(k,name),b.set_loopback(k,True),'input channel %d then carried playback 1 as that output sends it: %s relative to the tone; no other input channel changed'%(k+1,EXPECT.get(k,'0.00 dB (the ADAT outputs stood at 0 dB)')),'measured')
+    add('loopback of output %d (%s) off'%(k,name),b.set_loopback(k,False),'input channel %d back to what its hardware input carries'%(k+1),'measured')
+    if k not in (0,2,4):add('mixer: playback 1 to %s at 0 dB'%name,b.set_mixer(k,12,b.UNITY),'index %d; read through loopback of that output'%(26*k+12),'measured')
+for raw,db in ((163,'-40.02'),(123,'-60.21'),(116,'-63.87'),(83,'-80.77'),(71,'-90.31'),(63,'-90.31')):add('output level Phones left raw %d'%raw,b.set_output_level(6,raw),'read through loopback: %s dB below raw 243; the law is floor(2^15 * 10^(dB/20)) / 2^15'%db,'measured')
+add('output level Phones left raw 62',b.set_output_level(6,62),'read through loopback: silent, not one sample differed from zero; so is every lower value','measured')
+add('output level Phones left raw 59',b.set_output_level(6,59),'the mute value of TotalMix FX: silent, read through loopback','measured')
+FLAT2=b.FLAT_BAND
+for out,ch,slot in (('Main right',1,3),('headphones right',3,4),('AS1',4,5),('ADAT3',6,6)):
+    for label,kw in (('low cut 80 Hz 2 poles (corner solved), low shelf +4 dB 150 Hz, peak -6 dB 800 Hz Q 2, high shelf +3 dB 6 kHz',dict(bands=(b.biquad('lowshelf',150,4,0.7,FS2),b.biquad('peak',800,-6,2,FS2),b.biquad('highshelf',6000,3,0.7,FS2)),low_cut_poles=2,low_cut=b.low_cut_coefficient_exact(80,2,FS2))),
+                     ('peak +12 dB at 100 Hz, Q 0.7, band 1',dict(bands=(b.biquad('peak',100,12,0.7,FS2),FLAT2,FLAT2)))):
+        c=CURVES['sine through loopback: output %s, slot %d, %s (44.1 kHz)'%(out,slot,label)];frame=b.set_eq(slot,ch,True,True,**kw);assert bytes.fromhex(c['hex'])==bytes(frame),'the codec does not build the message that was sent: '+label
+        add(c['name'],frame,'coefficients for 44.1 kHz; curve of 66 frequencies in eq-curves-measured.json, read digitally through loopback; %d points compared, largest deviation %.3f dB (below 20 Hz), rms %.4f dB'%(c['points_counted'],c['largest_deviation_db'],c['rms_deviation_db']),'measured')
 # one synthetic state message: Main muted by raw 59, Phones -14.5 dB, mic gains 0, line gains 6.0 and 0 dB, both sensitivity bits set
 w=[0]*44;w[0]=0x0090000C;w[1]=59|(59<<9);w[2]=(214<<14)|(214<<23);w[3]=(12<<19)
 add('state (built for this file from the values our unit reported)',b.frame(0,w),'word 0 0x0090000C, Main raw 59/59, Phones raw 214/214, gains 0, 0, 12 half dB, 0','reported')

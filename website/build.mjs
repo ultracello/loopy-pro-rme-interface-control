@@ -63,9 +63,10 @@ export function collect(root = ROOT) {
   }).sort((a, b) => (b.date + b.time + b.file).localeCompare(a.date + a.time + a.file));
   const vectors = JSON.parse(readFileSync(join(root, 'docs/protocol/reference/test-vectors.json'), 'utf8')).vectors;
   const curves = JSON.parse(readFileSync(join(root, 'docs/protocol/reference/eq-curves-measured.json'), 'utf8')).settings;
+  const law = JSON.parse(readFileSync(join(root, 'docs/protocol/reference/output-level-law-measured.json'), 'utf8')).rows;
   const counts = Object.fromEntries([...MARKS, 'other'].map((m) => [m, coverage.filter((r) => r.mark === m).length]));
   return { coverage, counts, rules, open, tested, reports, vectors: vectors.length, vectorsMeasured: vectors.filter((v) => v.status === 'measured').length,
-    curves: curves.length, curvePoints: curves.reduce((n, c) => n + c.points.length, 0), referenceUrl: blob(referencePath),
+    levelValues: law.length, lawUrl: blob('docs/protocol/reference/output-level-law-measured.json'), curves: curves.length, curvePoints: curves.reduce((n, c) => n + c.points.length, 0), referenceUrl: blob(referencePath),
     codecUrl: blob('docs/protocol/reference/babyface_cc.py'), vectorsUrl: blob('docs/protocol/reference/test-vectors.json'), curvesUrl: blob('docs/protocol/reference/eq-curves-measured.json') };
 }
 
@@ -144,6 +145,7 @@ ${p(t.developers)}
 <li><a href="${c.codecUrl}">Reference codec</a> in Python. It builds and parses bytes and sends nothing.</li>
 <li><a href="${c.vectorsUrl}">${c.vectors} test vectors</a>, ${c.vectorsMeasured} of them with an effect that was measured at the unit.</li>
 <li><a href="${c.curvesUrl}">${c.curves} measured equaliser curves</a> with ${c.curvePoints} points, next to the values the codec calculates.</li>
+<li><a href="${c.lawUrl}">The measured level of an output</a> for each of its ${c.levelValues} raw values.</li>
 </ul>
 <h3>What a host has to build around</h3>
 <ol class="rules">
