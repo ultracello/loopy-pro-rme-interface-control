@@ -1,7 +1,7 @@
 export const PUBLIC_REPOSITORY = {
   url: 'https://github.com/ultracello/loopy-pro-rme-interface-control',
   branch: 'main',
-  reviewedCommit: 'b2778821301468ac5afb286e92c81e55554abc92',
+  reviewedCommit: '6cd35a34e8b5acd56337ebf700fefee794bc83dc',
   reviewedDate: '2026-11-18',
   reviewedFile: 'README.md, transfer-copy write pair and session gain-mute check, other-project Interface READ transfer and earlier scoped milestones',
   visibility: 'public',
@@ -9,6 +9,7 @@ export const PUBLIC_REPOSITORY = {
 } as const;
 const pinned = (path: string) => `${PUBLIC_REPOSITORY.url}/blob/${PUBLIC_REPOSITORY.reviewedCommit}/${path}`;
 export const REPORTS = {
+  cableRun: pinned('docs/milestones/2026-11-18-line-input-headphone-output-and-a-second-sample-rate.md'),
   sineCurves: pinned('docs/milestones/2026-11-18-equaliser-curves-with-sine-tones.md'),
   equaliser: pinned('docs/milestones/2026-11-18-equaliser-and-low-cut-measured.md'),
   testRig: pinned('docs/milestones/2026-11-18-main-cells-and-levels-above-unity.md'),
@@ -550,11 +551,34 @@ export const SINE_CURVES_CHECKPOINT = {
   sourceUrl:REPORTS.sineCurves,
 } as const;
 
+export const CABLE_RUN_CHECKPOINT = {
+  id:'line-input-headphone-output-and-a-second-sample-rate', revision:'Line input · headphones · 44.1 kHz · 18 Nov', level:'Bounded native runs of one session, with one cable from the headphone socket to line input 3 and the sine tone of the project\'s diagnostic app; Loopy Pro ended for the time of the measurement',
+  title:'One cable: line input, headphone output and 44.1 kHz measured.',
+  referenceLevelChangeDb:8.74, referenceLevelByTheManualDb:9, lineGainSteps:19, lineGainStepDb:0.5, lineGainTopDb:9.0,
+  headphoneAboveZeroAskedDb:[0.5,1,3,6], headphoneAboveZeroMeasuredDb:[0.5,1.0,3.0,6.0], headphoneBelowZeroAskedDb:[-10,-20,-30], headphoneBelowZeroMeasuredDb:[-10.0,-20.0,-29.98],
+  headphoneLowestStepsAskedDb:[-60,-63.5], headphoneLowestStepsMeasuredDb:[-60.12,-63.76], muteValueSilent:true,
+  inputOnMainMeterBelowInputDb:[30.0,36.02], inputOnMainExpectedDb:[30,36.02], inputOnMainOffReadsZero:true,
+  headphoneEqualiserCurves:3, headphoneEqualiserPoints:198, headphoneEqualiserLargestAboveMinus20Db:0.01,
+  sampleRateWithLoopyHz:48000, sampleRateWithoutOtherAudioAppHz:44100, rmsPerCurveAt44100Db:[0.004,0.009], rmsPerCurveIfAt48000Db:[0.22,0.65], unitRunsAtTheRateOfTheHost:true,
+  as1MeterWord:30, loopbackSent:true, loopbackEffectSeen:false,
+  referenceTestVectors:148, measuredCurvesPublished:true,
+  firstPassSpoiledByAWayRoundThroughTheHostApp:true, secondsAtFullScale:7, headphonesUnpluggedBeforehand:true, input1OnMainMeasured:false,
+  input4Measured:false, headphoneOutputRightEqualiserMeasured:false, coefficientsAcrossARateChangeTested:false, equaliserAcrossAReconnectTested:false, externalMeasuringInstrumentUsed:false,
+  loopbackVerified:false, phantomPowerTried:false, deviceSettingsTried:false,
+  unitAsAtTheStartAtTheEnd:true, microphoneOrInstrumentConnected:false,
+  operationAlongsideTotalMixVerified:false, enduranceVerified:false,
+  candidateReleased:false, silentUsbContinuityProven:false, crashSafeRecoveryProven:false, generalLiveReadinessVerified:false,
+  result:'One instrument cable from the headphone socket to line input 3 settled several open points. The reference level of the line input makes 8.74 dB, its 19 gain steps are 0.50 dB each, and the headphone level is exact behind the output from −30 dB to +6 dB. An input on the main output follows the same cell law as everything else. The equaliser of the headphone output matches the calculation to 0.01 dB. With no other audio app open the unit ran at 44.1 kHz instead of 48 kHz, and the equaliser followed coefficients computed for that rate, so a host has to send them anew when the rate changes.',
+  boundary:'The first pass was spoiled by a way round through Loopy Pro, which passes input 3 on to its outputs: readings were coloured, and for about seven seconds the headphone output rang at full scale into the cable; the app was ended for the measurements that count. Input 1 on the main output was not measured, the cable for it had been removed. Loopback was sent and showed nothing at the meters; it stays unverified. Input 4, the right headphone equaliser, a change of rate with coefficients in place, phantom power and the device settings were not tried. No external measuring instrument was used. This is a private working copy, not a release.',
+  sourceUrl:REPORTS.cableRun,
+} as const;
+
 export const LAB_STATUS = {
   reviewedDate: '2026-11-18',
   evidenceType: 'Project-reported scoped experiments, linked to dated public reports. Raw captures and installable controller artifacts are not bundled with this planner.',
   releaseReady: false,
   entries: [
+    CABLE_RUN_CHECKPOINT,
     SINE_CURVES_CHECKPOINT,
     EQUALISER_CHECKPOINT,
     TEST_RIG_CHECKPOINT,
