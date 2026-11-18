@@ -20,6 +20,10 @@ Read the [project overview](docs/PROJECT_OVERVIEW.md) for signal-path examples, 
 
 The [public planning website](https://ultracello.github.io/loopy-pro-rme-interface-control/) and its [source](website/) let visitors select desired controls, preview a local-only surface and export a setup brief. It sends no MIDI, OSC or audio and is not a tested hardware controller. See [website setup and privacy](website/README.md) and the repository's **Build and deploy planning website** Actions workflow for deployment status.
 
+## Protocol reference for native support
+
+[A reference of the control protocol](docs/protocol/BABYFACE-PRO-FS-CC-REFERENCE.md) of the RME Babyface Pro FS in class-compliant mode is kept for anyone who wants to build native support into a host application. It gives every message byte for byte, with the formulas for the dB values, and marks each statement as measured on the unit, reported back by the unit, taken from other people's notes, or unknown. A small [reference codec](docs/protocol/reference/babyface_cc.py) in Python with 84 test vectors comes with it; it only builds and parses bytes and sends nothing. The reference is a draft: phantom power, loopback and the equaliser are not verified yet and are marked so.
+
 ## Latest development milestones
 
 [Single prepared messages](docs/milestones/2026-11-18-main-cells-and-levels-above-unity.md) are the latest step. A test rig that sends single prepared messages settled three open points in seven minutes: the mixer cells of the main output follow the same law as those of the headphones, levels above unity are taken up to +6 dB, and two further output channels were found. Sixteen messages, every measured value exact to the tenth of a dB. The planner on the website now offers every half-dB step from 0.5 to 30 dB.

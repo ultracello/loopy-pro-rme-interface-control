@@ -1,0 +1,509 @@
+{
+ "protocol": "RME Babyface Pro FS, class-compliant mode, MIDI SysEx on Port 2",
+ "vectors": [
+  {
+   "name": "request state",
+   "hex": "F000200D1010F7",
+   "meaning": "ask the unit for its state; it answers with sub ID 00, 01 and 02",
+   "status": "measured"
+  },
+  {
+   "name": "output level Main left 0.0 dB",
+   "hex": "F000200D100404004C0700F7",
+   "meaning": "channel 4, raw 243",
+   "status": "reported"
+  },
+  {
+   "name": "output level Main left -0.5 dB",
+   "hex": "F000200D10040400480700F7",
+   "meaning": "channel 4, raw 242",
+   "status": "reported"
+  },
+  {
+   "name": "output level Main left -14.5 dB",
+   "hex": "F000200D10040400580600F7",
+   "meaning": "channel 4, raw 214",
+   "status": "measured"
+  },
+  {
+   "name": "output level Main left -30.0 dB",
+   "hex": "F000200D100404005C0500F7",
+   "meaning": "channel 4, raw 183",
+   "status": "measured"
+  },
+  {
+   "name": "output level Main left -63.5 dB",
+   "hex": "F000200D10040400500300F7",
+   "meaning": "channel 4, raw 116",
+   "status": "reported"
+  },
+  {
+   "name": "output level Main left raw 59",
+   "hex": "F000200D100404006C0100F7",
+   "meaning": "the value TotalMix FX writes for a muted output (-92 dB by the formula)",
+   "status": "reported"
+  },
+  {
+   "name": "output level Main right 0.0 dB",
+   "hex": "F000200D100405004C0700F7",
+   "meaning": "channel 5, raw 243",
+   "status": "reported"
+  },
+  {
+   "name": "output level Main right -0.5 dB",
+   "hex": "F000200D10040500480700F7",
+   "meaning": "channel 5, raw 242",
+   "status": "reported"
+  },
+  {
+   "name": "output level Main right -14.5 dB",
+   "hex": "F000200D10040500580600F7",
+   "meaning": "channel 5, raw 214",
+   "status": "measured"
+  },
+  {
+   "name": "output level Main right -30.0 dB",
+   "hex": "F000200D100405005C0500F7",
+   "meaning": "channel 5, raw 183",
+   "status": "measured"
+  },
+  {
+   "name": "output level Main right -63.5 dB",
+   "hex": "F000200D10040500500300F7",
+   "meaning": "channel 5, raw 116",
+   "status": "reported"
+  },
+  {
+   "name": "output level Main right raw 59",
+   "hex": "F000200D100405006C0100F7",
+   "meaning": "the value TotalMix FX writes for a muted output (-92 dB by the formula)",
+   "status": "reported"
+  },
+  {
+   "name": "output level Phones left 0.0 dB",
+   "hex": "F000200D100406004C0700F7",
+   "meaning": "channel 6, raw 243",
+   "status": "reported"
+  },
+  {
+   "name": "output level Phones left -0.5 dB",
+   "hex": "F000200D10040600480700F7",
+   "meaning": "channel 6, raw 242",
+   "status": "reported"
+  },
+  {
+   "name": "output level Phones left -14.5 dB",
+   "hex": "F000200D10040600580600F7",
+   "meaning": "channel 6, raw 214",
+   "status": "measured"
+  },
+  {
+   "name": "output level Phones left -30.0 dB",
+   "hex": "F000200D100406005C0500F7",
+   "meaning": "channel 6, raw 183",
+   "status": "measured"
+  },
+  {
+   "name": "output level Phones left -63.5 dB",
+   "hex": "F000200D10040600500300F7",
+   "meaning": "channel 6, raw 116",
+   "status": "reported"
+  },
+  {
+   "name": "output level Phones left raw 59",
+   "hex": "F000200D100406006C0100F7",
+   "meaning": "the value TotalMix FX writes for a muted output (-92 dB by the formula)",
+   "status": "reported"
+  },
+  {
+   "name": "output level Phones right 0.0 dB",
+   "hex": "F000200D100407004C0700F7",
+   "meaning": "channel 7, raw 243",
+   "status": "reported"
+  },
+  {
+   "name": "output level Phones right -0.5 dB",
+   "hex": "F000200D10040700480700F7",
+   "meaning": "channel 7, raw 242",
+   "status": "reported"
+  },
+  {
+   "name": "output level Phones right -14.5 dB",
+   "hex": "F000200D10040700580600F7",
+   "meaning": "channel 7, raw 214",
+   "status": "measured"
+  },
+  {
+   "name": "output level Phones right -30.0 dB",
+   "hex": "F000200D100407005C0500F7",
+   "meaning": "channel 7, raw 183",
+   "status": "measured"
+  },
+  {
+   "name": "output level Phones right -63.5 dB",
+   "hex": "F000200D10040700500300F7",
+   "meaning": "channel 7, raw 116",
+   "status": "reported"
+  },
+  {
+   "name": "output level Phones right raw 59",
+   "hex": "F000200D100407006C0100F7",
+   "meaning": "the value TotalMix FX writes for a muted output (-92 dB by the formula)",
+   "status": "reported"
+  },
+  {
+   "name": "mic gain input 1 0 dB",
+   "hex": "F000200D10040000000000F7",
+   "meaning": "channel 0, packed value 0",
+   "status": "measured"
+  },
+  {
+   "name": "mic gain input 1 1 dB",
+   "hex": "F000200D10040000000100F7",
+   "meaning": "channel 0, packed value 32",
+   "status": "reported"
+  },
+  {
+   "name": "mic gain input 1 2 dB",
+   "hex": "F000200D10040000000200F7",
+   "meaning": "channel 0, packed value 64",
+   "status": "reported"
+  },
+  {
+   "name": "mic gain input 1 3 dB",
+   "hex": "F000200D10040000040000F7",
+   "meaning": "channel 0, packed value 1",
+   "status": "measured"
+  },
+  {
+   "name": "mic gain input 1 6 dB",
+   "hex": "F000200D10040000080000F7",
+   "meaning": "channel 0, packed value 2",
+   "status": "measured"
+  },
+  {
+   "name": "mic gain input 1 30 dB",
+   "hex": "F000200D10040000280000F7",
+   "meaning": "channel 0, packed value 10",
+   "status": "reported"
+  },
+  {
+   "name": "mic gain input 1 59 dB",
+   "hex": "F000200D100400004C0200F7",
+   "meaning": "channel 0, packed value 83",
+   "status": "reported"
+  },
+  {
+   "name": "mic gain input 1 60 dB",
+   "hex": "F000200D10040000500000F7",
+   "meaning": "channel 0, packed value 20",
+   "status": "reported"
+  },
+  {
+   "name": "mic gain input 1 61 dB",
+   "hex": "F000200D10040000500100F7",
+   "meaning": "channel 0, packed value 52",
+   "status": "reported"
+  },
+  {
+   "name": "mic gain input 1 65 dB",
+   "hex": "F000200D10040000500500F7",
+   "meaning": "channel 0, packed value 180",
+   "status": "reported"
+  },
+  {
+   "name": "mic gain input 2 0 dB",
+   "hex": "F000200D10040100000000F7",
+   "meaning": "channel 1, packed value 0",
+   "status": "reported"
+  },
+  {
+   "name": "mic gain input 2 1 dB",
+   "hex": "F000200D10040100000100F7",
+   "meaning": "channel 1, packed value 32",
+   "status": "reported"
+  },
+  {
+   "name": "mic gain input 2 2 dB",
+   "hex": "F000200D10040100000200F7",
+   "meaning": "channel 1, packed value 64",
+   "status": "reported"
+  },
+  {
+   "name": "mic gain input 2 3 dB",
+   "hex": "F000200D10040100040000F7",
+   "meaning": "channel 1, packed value 1",
+   "status": "reported"
+  },
+  {
+   "name": "mic gain input 2 6 dB",
+   "hex": "F000200D10040100080000F7",
+   "meaning": "channel 1, packed value 2",
+   "status": "reported"
+  },
+  {
+   "name": "mic gain input 2 30 dB",
+   "hex": "F000200D10040100280000F7",
+   "meaning": "channel 1, packed value 10",
+   "status": "reported"
+  },
+  {
+   "name": "mic gain input 2 59 dB",
+   "hex": "F000200D100401004C0200F7",
+   "meaning": "channel 1, packed value 83",
+   "status": "reported"
+  },
+  {
+   "name": "mic gain input 2 60 dB",
+   "hex": "F000200D10040100500000F7",
+   "meaning": "channel 1, packed value 20",
+   "status": "reported"
+  },
+  {
+   "name": "mic gain input 2 61 dB",
+   "hex": "F000200D10040100500100F7",
+   "meaning": "channel 1, packed value 52",
+   "status": "reported"
+  },
+  {
+   "name": "mic gain input 2 65 dB",
+   "hex": "F000200D10040100500500F7",
+   "meaning": "channel 1, packed value 180",
+   "status": "reported"
+  },
+  {
+   "name": "line gain input 3 0.0 dB",
+   "hex": "F000200D10040200000000F7",
+   "meaning": "channel 2, 0 half dB",
+   "status": "reported"
+  },
+  {
+   "name": "line gain input 3 0.5 dB",
+   "hex": "F000200D10040200040000F7",
+   "meaning": "channel 2, 1 half dB",
+   "status": "reported"
+  },
+  {
+   "name": "line gain input 3 6.0 dB",
+   "hex": "F000200D10040200300000F7",
+   "meaning": "channel 2, 12 half dB",
+   "status": "reported"
+  },
+  {
+   "name": "line gain input 3 9.0 dB",
+   "hex": "F000200D10040200480000F7",
+   "meaning": "channel 2, 18 half dB",
+   "status": "reported"
+  },
+  {
+   "name": "line gain input 4 0.0 dB",
+   "hex": "F000200D10040300000000F7",
+   "meaning": "channel 3, 0 half dB",
+   "status": "reported"
+  },
+  {
+   "name": "line gain input 4 0.5 dB",
+   "hex": "F000200D10040300040000F7",
+   "meaning": "channel 3, 1 half dB",
+   "status": "reported"
+  },
+  {
+   "name": "line gain input 4 6.0 dB",
+   "hex": "F000200D10040300300000F7",
+   "meaning": "channel 3, 12 half dB",
+   "status": "reported"
+  },
+  {
+   "name": "line gain input 4 9.0 dB",
+   "hex": "F000200D10040300480000F7",
+   "meaning": "channel 3, 18 half dB",
+   "status": "reported"
+  },
+  {
+   "name": "input setting: pad of input 1 on (settings before 0C)",
+   "hex": "F000200D10031000700000F7",
+   "meaning": "bits 0-15 what changes, bits 16-30 the whole new state",
+   "status": "measured"
+  },
+  {
+   "name": "input setting: pad of input 1 off (settings before 1C)",
+   "hex": "F000200D10031000300000F7",
+   "meaning": "bits 0-15 what changes, bits 16-30 the whole new state",
+   "status": "measured"
+  },
+  {
+   "name": "input setting: pad of input 2 on (settings before 0C)",
+   "hex": "F000200D10032000300100F7",
+   "meaning": "bits 0-15 what changes, bits 16-30 the whole new state",
+   "status": "reported"
+  },
+  {
+   "name": "input setting: sensitivity bit of input 3 cleared (settings before 0C)",
+   "hex": "F000200D10030400200000F7",
+   "meaning": "bits 0-15 what changes, bits 16-30 the whole new state",
+   "status": "reported"
+  },
+  {
+   "name": "input setting: sensitivity bit of input 3 set (settings before 08)",
+   "hex": "F000200D10030400300000F7",
+   "meaning": "bits 0-15 what changes, bits 16-30 the whole new state",
+   "status": "reported"
+  },
+  {
+   "name": "input setting: sensitivity bit of input 4 cleared (settings before 0C)",
+   "hex": "F000200D10030800100000F7",
+   "meaning": "bits 0-15 what changes, bits 16-30 the whole new state",
+   "status": "reported"
+  },
+  {
+   "name": "input setting: pad of input 1 on while the sensitivity bit of input 3 is clear (settings before 08)",
+   "hex": "F000200D10031000600000F7",
+   "meaning": "bits 0-15 what changes, bits 16-30 the whole new state",
+   "status": "reported"
+  },
+  {
+   "name": "mixer: playback 1 to Phones left at 0 dB",
+   "hex": "F000200D10014000000002F7",
+   "meaning": "index 26*2+12 = 64, level 0x20000",
+   "status": "measured"
+  },
+  {
+   "name": "mixer: playback 2 to Phones right at 0 dB",
+   "hex": "F000200D10015B00000002F7",
+   "meaning": "index 26*3+13 = 91, level 0x20000",
+   "status": "measured"
+  },
+  {
+   "name": "mixer: input 1 to Phones left at 0 dB",
+   "hex": "F000200D10013400000002F7",
+   "meaning": "index 52, level 131072",
+   "status": "measured"
+  },
+  {
+   "name": "mixer: input 1 to Phones left at -6 dB",
+   "hex": "F000200D10013400270001F7",
+   "meaning": "index 52, level 65692",
+   "status": "measured"
+  },
+  {
+   "name": "mixer: input 1 to Phones left at -12 dB",
+   "hex": "F000200D10013400274000F7",
+   "meaning": "index 52, level 32924",
+   "status": "measured"
+  },
+  {
+   "name": "mixer: input 1 to Phones left at -30 dB",
+   "hex": "F000200D100134200C0800F7",
+   "meaning": "index 52, level 4145",
+   "status": "measured"
+  },
+  {
+   "name": "mixer: input 1 to Phones left at -48 dB",
+   "hex": "F000200D10013440020100F7",
+   "meaning": "index 52, level 522",
+   "status": "measured"
+  },
+  {
+   "name": "mixer: input 1 to Phones left at -60 dB",
+   "hex": "F000200D10013460200000F7",
+   "meaning": "index 52, level 131",
+   "status": "reported"
+  },
+  {
+   "name": "mixer: input 1 to Phones left off",
+   "hex": "F000200D10013400000000F7",
+   "meaning": "level 0",
+   "status": "measured"
+  },
+  {
+   "name": "mixer: input 4 to Phones right at -12 dB",
+   "hex": "F000200D10015100274000F7",
+   "meaning": "index 81",
+   "status": "measured"
+  },
+  {
+   "name": "mixer: input 1 to Phones left at 0 dB, phase inverted",
+   "hex": "F000200D1001340000000EF7",
+   "meaning": "field = 2^20 - 0x20000 = 0xE0000",
+   "status": "measured"
+  },
+  {
+   "name": "mixer: input 1 to Phones left at -12 dB, phase inverted",
+   "hex": "F000200D10013400593F0FF7",
+   "meaning": "field = 2^20 - level",
+   "status": "measured"
+  },
+  {
+   "name": "mixer: playback 1 to Phones left at -20.5 dB, phase inverted",
+   "hex": "F000200D100140406A670FF7",
+   "meaning": "index 64, inverted",
+   "status": "measured"
+  },
+  {
+   "name": "mixer: playback 1 to Main left at 0 dB",
+   "hex": "F000200D10010C00000002F7",
+   "meaning": "index 12; the cell the unit has after power-up",
+   "status": "measured"
+  },
+  {
+   "name": "mixer: playback 1 to Main left at -6 dB",
+   "hex": "F000200D10010C00260001F7",
+   "meaning": "index 12, level 65688",
+   "status": "measured"
+  },
+  {
+   "name": "mixer: playback 1 to Main left off",
+   "hex": "F000200D10010C00000000F7",
+   "meaning": "index 12, level 0",
+   "status": "measured"
+  },
+  {
+   "name": "mixer: playback 2 to Main right at -6 dB",
+   "hex": "F000200D10012700260001F7",
+   "meaning": "index 39",
+   "status": "measured"
+  },
+  {
+   "name": "mixer: playback 1 to Phones left at +6 dB",
+   "hex": "F000200D10014000000004F7",
+   "meaning": "index 64, level 0x40000",
+   "status": "measured"
+  },
+  {
+   "name": "mixer: playback 1 to Phones left at +3 dB",
+   "hex": "F000200D100140004E6902F7",
+   "meaning": "index 64, level 185144",
+   "status": "measured"
+  },
+  {
+   "name": "mixer: input 1 to Main left at -12 dB",
+   "hex": "F000200D10010000274000F7",
+   "meaning": "index 0; same message as for the headphones, other output",
+   "status": "notes"
+  },
+  {
+   "name": "output level Phones left raw 255 (+6 dB)",
+   "hex": "F000200D100406007C0700F7",
+   "meaning": "channel 6, raw 255",
+   "status": "reported"
+  },
+  {
+   "name": "output level AS1 raw 183 (-30 dB)",
+   "hex": "F000200D100408005C0500F7",
+   "meaning": "channel 8",
+   "status": "reported"
+  },
+  {
+   "name": "output level AS2 raw 59",
+   "hex": "F000200D100409006C0100F7",
+   "meaning": "channel 9",
+   "status": "reported"
+  },
+  {
+   "name": "state (built for this file from the values our unit reported)",
+   "hex": "F000200D10000C004004003B6C010000000056590600000003000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000F7",
+   "meaning": "word 0 0x0090000C, Main raw 59/59, Phones raw 214/214, gains 0, 0, 12 half dB, 0",
+   "status": "reported"
+  }
+ ]
+}
