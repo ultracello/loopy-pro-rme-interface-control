@@ -1,7 +1,7 @@
 export const PUBLIC_REPOSITORY = {
   url: 'https://github.com/ultracello/loopy-pro-rme-interface-control',
   branch: 'main',
-  reviewedCommit: '24d8a3f698535564251701a487733f3cedad9873',
+  reviewedCommit: '07dd0ac6a33bc47834b007446946f9825cb573e6',
   reviewedDate: '2026-11-18',
   reviewedFile: 'README.md, transfer-copy write pair and session gain-mute check, other-project Interface READ transfer and earlier scoped milestones',
   visibility: 'public',
@@ -9,6 +9,7 @@ export const PUBLIC_REPOSITORY = {
 } as const;
 const pinned = (path: string) => `${PUBLIC_REPOSITORY.url}/blob/${PUBLIC_REPOSITORY.reviewedCommit}/${path}`;
 export const REPORTS = {
+  testRig: pinned('docs/milestones/2026-11-18-main-cells-and-levels-above-unity.md'),
   replugCorrection: pinned('docs/milestones/2026-11-18-correction-after-a-replug-the-control-works.md'),
   phase: pinned('docs/milestones/2026-11-18-phase-of-each-way.md'),
   referenceLevel: pinned('docs/milestones/2026-11-17-reference-level-of-the-line-inputs.md'),
@@ -232,6 +233,25 @@ export const INTERFACE_MUTE_CHECKPOINT = {
   boundary:'One pass, every step once, TotalMix closed. Main was not touched because the device held it at raw 59 from outside. Step buttons and fader writes under this rule were checked offline only. The level before a mute lives only in the running controller. This is a private working copy, not a release.',
   sourceUrl:REPORTS.interfaceMute,
 } as const;
+export const TEST_RIG_CHECKPOINT = {
+  id:'main-cells-and-levels-above-unity', revision:'Test rig · single messages · 18 Nov', level:'Offline tests and one bounded native run of one session, with a loop cable: a test rig sends single prepared messages, each measured and restored',
+  title:'Sixteen single messages, every value exact.',
+  testRigNotForPlaying:true, filterPassesExactlyThePreparedMessages:true, pageElementsChanged:false, everyChangeHasARestoringMessage:true, levelOfTheMainOutputWrittenByTheRig:false,
+  newOfflineTests:6, earlierOfflineTestsStillPassing:190, messagesFired:16, messagesConfirmedByTheUnit:16,
+  baselineDbfs:{mainLeft:-36.0,mainRight:-36.0,phonesLeft:-20.5,phonesRight:-20.5},
+  playbackToMainLeftAtMinus6Dbfs:[-42.0,-36.0], playbackToMainLeftOffDbfs:[null,-36.0], playbackToMainRightAtMinus6Dbfs:[-36.0,-42.0],
+  phonesCellAtPlus3Dbfs:[-17.5,-20.5], phonesCellAtPlus6Dbfs:[-14.5,-20.5], largestDeviationFromExpectedDb:0.0, sideNotAddressedEverMoved:false,
+  mainCellsFollowTheSameIndexLaw:true, levelsAboveUnityTakenUpToPlus6Db:true,
+  outputLevelAboveZeroDbReportedBack:true, outputLevelAboveZeroDbHeard:false, outputChannels8And9AreTheAsOutputs:true,
+  inputsToTheMainOutputTried:false, adatOutputsTried:false, phantomPowerTried:false, loopbackTried:false, equaliserTried:false,
+  planningStepsOnTheWebsite:'every half dB from 0.5 to 30 dB', unitAsAtTheStartAtTheEnd:true, microphoneOrInstrumentConnected:false,
+  operationAlongsideTotalMixVerified:false, enduranceVerified:false,
+  candidateReleased:false, silentUsbContinuityProven:false, crashSafeRecoveryProven:false, generalLiveReadinessVerified:false,
+  result:'A test rig that sends single prepared messages, each passed by its filter byte for byte, settled three open points in one short run. The mixer cells of the main output follow the same law as those of the headphones: playback to Main left at −6 dB lowered that side by exactly 6.0 dB, level 0 silenced it, unity brought it back, and the other side never moved; the same for the right side. Levels above unity are taken: +3 dB and +6 dB on a headphone cell raised that side by exactly 3.0 and 6.0 dB. Output channels 8 and 9 turned out to be the two further outputs the protocol notes call AS1 and AS2. Sixteen messages, all confirmed, the unit as at the start afterwards.',
+  boundary:'Inputs to the main output were left out while the loop cable is in place. An output level above 0 dB was only reported back, with no signal present. The ADAT outputs, phantom power, loopback and the equaliser are still known from other people\'s notes only. The rig is a test tool, not for playing. This is a private working copy, not a release.',
+  sourceUrl:REPORTS.testRig,
+} as const;
+
 export const REPLUG_CORRECTION_CHECKPOINT = {
   id:'correction-after-a-replug-the-control-works', revision:'Correction · replug · 18 Nov', level:'One bounded native run after one replug, a watch that changed nothing, and an offline reproduction: an earlier conclusion of the project is withdrawn',
   title:'Correction: after a replug the control works at once.',
@@ -482,6 +502,7 @@ export const LAB_STATUS = {
   evidenceType: 'Project-reported scoped experiments, linked to dated public reports. Raw captures and installable controller artifacts are not bundled with this planner.',
   releaseReady: false,
   entries: [
+    TEST_RIG_CHECKPOINT,
     REPLUG_CORRECTION_CHECKPOINT,
     PHASE_CHECKPOINT,
     REFERENCE_LEVEL_CHECKPOINT,

@@ -4,7 +4,8 @@ export const INDEPENDENCE_NOTICE = 'Independent software. Not affiliated with RM
 export const PLAN_FILENAME = 'loopy-pro-interface-control-plan';
 export const VERSION = '0.2.7';
 export const RELEASE_DATE = '2026-11-09';
-export const PLANNING_STEP_SIZES = [0.5,1,2,3,6] as const;
+// Every half dB from 0.5 to 30 dB: the range of the free step width that was accepted on the unit on 13 November 2026.
+export const PLANNING_STEP_SIZES: readonly number[] = Array.from({length:60},(_,i)=>(i+1)/2);
 export const FEATURES = [
   { id: 'phones-fader', group: 'Headphones', name: 'Smooth level fader', description: 'A dedicated continuous volume control.', kind: 'fader' },
   { id: 'phones-steps', group: 'Headphones', name: 'Volume step buttons', description: 'A pair of level up / down buttons.', kind: 'steps' },

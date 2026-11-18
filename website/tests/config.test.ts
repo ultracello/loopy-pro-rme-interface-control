@@ -1,7 +1,7 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {EVIDENCE, REPORTS, PUBLIC_REPOSITORY, LAB_STATUS, LATEST_MILESTONE, REPLUG_CORRECTION_CHECKPOINT, PHASE_CHECKPOINT, REFERENCE_LEVEL_CHECKPOINT, STEP_SIMULATION, V09B3_CHECKPOINT, MAIN_PHONES_CHECKPOINT, LIVE_FADERS_CHECKPOINT, READ_PATH_CHECKPOINT, INTEGRATION_CHECKPOINT, RESTRICTED_STEPS_CHECKPOINT, MIGRATED_READ_CHECKPOINT, SESSION_MUTE_CHECKPOINT, INTERFACE_MUTE_CHECKPOINT, HAND_OPERATION_CHECKPOINT, REASON_ROW_CHECKPOINT, FREE_STEPS_CHECKPOINT, INPUT_GAIN_CHECKPOINT, PAD_CHECKPOINT, MONITORING_CHECKPOINT, PAN_CHECKPOINT, DISPLAYS_CHECKPOINT, HOST_WAYS_CHECKPOINT, ARMING_CHECKPOINT} from '../src/lib/evidence.ts';
+import {EVIDENCE, REPORTS, PUBLIC_REPOSITORY, LAB_STATUS, LATEST_MILESTONE, TEST_RIG_CHECKPOINT, REPLUG_CORRECTION_CHECKPOINT, PHASE_CHECKPOINT, REFERENCE_LEVEL_CHECKPOINT, STEP_SIMULATION, V09B3_CHECKPOINT, MAIN_PHONES_CHECKPOINT, LIVE_FADERS_CHECKPOINT, READ_PATH_CHECKPOINT, INTEGRATION_CHECKPOINT, RESTRICTED_STEPS_CHECKPOINT, MIGRATED_READ_CHECKPOINT, SESSION_MUTE_CHECKPOINT, INTERFACE_MUTE_CHECKPOINT, HAND_OPERATION_CHECKPOINT, REASON_ROW_CHECKPOINT, FREE_STEPS_CHECKPOINT, INPUT_GAIN_CHECKPOINT, PAD_CHECKPOINT, MONITORING_CHECKPOINT, PAN_CHECKPOINT, DISPLAYS_CHECKPOINT, HOST_WAYS_CHECKPOINT, ARMING_CHECKPOINT} from '../src/lib/evidence.ts';
 import {DEFAULT_CONFIG, PROJECT_NAME, INDEPENDENCE_NOTICE, PLAN_FILENAME, PLANNING_STEP_SIZES, VERSION, FEATURES, normalizeConfig, adjustLevel, buildPlan, buildGuide} from '../src/lib/config.ts';
 test('defaults select the headphone controls only',()=>assert.deepEqual(DEFAULT_CONFIG.selected,['phones-fader','phones-steps','phones-mute']));
 test('all 64 selections generate only selected controls and never executable code',()=>{for(let mask=0;mask<64;mask++){const selected=FEATURES.filter((_,i)=>mask&(1<<i)).map(f=>f.id);const p=buildPlan({...DEFAULT_CONFIG,selected});assert.equal(p.selectedControls.length,selected.length);assert.equal(p.executable,false);assert.equal(p.hardwareTested,false);assert.deepEqual(p.selectedControls.map(c=>c.id),selected);}});
@@ -107,21 +107,23 @@ test('native simulated startup and reload do not imply physical changes or devic
  assert.equal(STEP_SIMULATION.newHardwareTest,false);
  assert.equal(STEP_SIMULATION.largerPhysicalStepsTested,false);
  assert.match(STEP_SIMULATION.boundary,/simulation reference, not a device factory default/);
- assert.equal(LATEST_MILESTONE.id,'correction-after-a-replug-the-control-works');
+ assert.equal(LATEST_MILESTONE.id,'main-cells-and-levels-above-unity');
  assert.notEqual(LATEST_MILESTONE.id,STEP_SIMULATION.id);
 });
-test('five browser planning choices remain bounded and six-dB requests round-trip',()=>{
- assert.deepEqual(PLANNING_STEP_SIZES,[0.5,1,2,3,6]);
+test('every half-dB planning step from 0.5 to 30 dB remains bounded and round-trips',()=>{
+ assert.equal(PLANNING_STEP_SIZES.length,60);assert.equal(PLANNING_STEP_SIZES[0],0.5);assert.equal(PLANNING_STEP_SIZES[59],30);
+ assert.ok(PLANNING_STEP_SIZES.every((n,i)=>n===(i+1)/2));for(const n of [8.5,11.5,0.5,1,2,3,6])assert.ok(PLANNING_STEP_SIZES.includes(n));
  for(const step of PLANNING_STEP_SIZES){
   const c=normalizeConfig({...DEFAULT_CONFIG,step});assert.equal(c.step,step);
   const p=buildPlan(c);assert.equal(p.executable,false);assert.equal(p.hardwareTested,false);
   assert.ok(buildGuide(c).includes(`(${step} dB requested)`));
-  assert.equal(adjustLevel(-10.5,step),-10.5+step);
-  assert.equal(adjustLevel(-10.5,-step),-10.5-step);
+  assert.equal(adjustLevel(-10.5,step),Math.min(0,-10.5+step));
+  assert.equal(adjustLevel(-10.5,-step),Math.max(-60,-10.5-step));
   assert.equal(adjustLevel(-59,-step),Math.max(-60,-59-step));
   assert.equal(adjustLevel(-1,step),Math.min(0,-1+step));
  }
- assert.equal(normalizeConfig({step:7}).step,2);
+ assert.equal(normalizeConfig({step:7}).step,7);assert.equal(normalizeConfig({step:11.5}).step,11.5);
+ for(const bad of [7.25,0,30.5,31,-3])assert.equal(normalizeConfig({step:bad}).step,2);
 });
 test('both exports include send-free boundaries and no simulated hardware promotion',()=>{
  const p=buildPlan({...DEFAULT_CONFIG,step:6});const guide=buildGuide({...DEFAULT_CONFIG,step:6});
@@ -229,7 +231,8 @@ test('current fader evidence is exported without native artifacts or release pro
 });
 
 test('latest read gate evidence cannot become USB or mute-restore approval',()=>{
- assert.equal(LATEST_MILESTONE,REPLUG_CORRECTION_CHECKPOINT);
+ assert.equal(LATEST_MILESTONE,TEST_RIG_CHECKPOINT);
+ assert.ok(LAB_STATUS.entries.includes(REPLUG_CORRECTION_CHECKPOINT));
  assert.ok(LAB_STATUS.entries.includes(PHASE_CHECKPOINT));
  assert.ok(LAB_STATUS.entries.includes(REFERENCE_LEVEL_CHECKPOINT));
  assert.ok(LAB_STATUS.entries.includes(ARMING_CHECKPOINT));
@@ -281,7 +284,7 @@ test('read-path result and unresolved recovery limits reach both exports',()=>{
 });
 
 test('the Interface copy with mute switches stays one bounded pass and no release',()=>{
- assert.equal(LAB_STATUS.entries[13],INTERFACE_MUTE_CHECKPOINT);
+ assert.equal(LAB_STATUS.entries[14],INTERFACE_MUTE_CHECKPOINT);
  assert.equal(INTERFACE_MUTE_CHECKPOINT.candidateRuleSha256,SESSION_MUTE_CHECKPOINT.sessionMuteCandidateRuleSha256);
  assert.equal(INTERFACE_MUTE_CHECKPOINT.routingSceneModules,15);
  assert.equal(INTERFACE_MUTE_CHECKPOINT.cleanReadsInARow,6);
@@ -297,7 +300,7 @@ test('the Interface copy with mute switches stays one bounded pass and no releas
 });
 
 test('the hand-operation checkpoint stays Phones only, names its open causes and is no release',()=>{
- assert.equal(LAB_STATUS.entries[12],HAND_OPERATION_CHECKPOINT);
+ assert.equal(LAB_STATUS.entries[13],HAND_OPERATION_CHECKPOINT);
  assert.notEqual(HAND_OPERATION_CHECKPOINT.candidateRuleSha256,INTERFACE_MUTE_CHECKPOINT.candidateRuleSha256);
  assert.match(HAND_OPERATION_CHECKPOINT.candidateRuleSha256,/^[0-9a-f]{64}$/);
  assert.match(HAND_OPERATION_CHECKPOINT.outboundFilterSha256,/^[0-9a-f]{64}$/);
@@ -318,7 +321,7 @@ test('the hand-operation checkpoint stays Phones only, names its open causes and
 });
 
 test('the reason-row checkpoint claims no endurance, no release and names what was shown offline only',()=>{
- assert.equal(LAB_STATUS.entries[11],REASON_ROW_CHECKPOINT);
+ assert.equal(LAB_STATUS.entries[12],REASON_ROW_CHECKPOINT);
  assert.match(REASON_ROW_CHECKPOINT.candidateRuleSha256,/^[0-9a-f]{64}$/);
  assert.notEqual(REASON_ROW_CHECKPOINT.candidateRuleSha256,HAND_OPERATION_CHECKPOINT.candidateRuleSha256);
  assert.equal(REASON_ROW_CHECKPOINT.reasonFields,REASON_ROW_CHECKPOINT.reasonFieldsSeenOnDevice+REASON_ROW_CHECKPOINT.reasonFieldsShownOfflineOnly);
@@ -333,7 +336,7 @@ test('the reason-row checkpoint claims no endurance, no release and names what w
 });
 
 test('the free-step checkpoint states what was not run and is no release',()=>{
- assert.equal(LAB_STATUS.entries[10],FREE_STEPS_CHECKPOINT);
+ assert.equal(LAB_STATUS.entries[11],FREE_STEPS_CHECKPOINT);
  assert.match(FREE_STEPS_CHECKPOINT.candidateRuleSha256,/^[0-9a-f]{64}$/);
  assert.notEqual(FREE_STEPS_CHECKPOINT.candidateRuleSha256,REASON_ROW_CHECKPOINT.candidateRuleSha256);
  assert.equal(FREE_STEPS_CHECKPOINT.chosenWidthOnDeviceDb*2,FREE_STEPS_CHECKPOINT.phonesRawDownAndBack[0][0]-FREE_STEPS_CHECKPOINT.phonesRawDownAndBack[1][0]);
@@ -348,7 +351,7 @@ test('the free-step checkpoint states what was not run and is no release',()=>{
 });
 
 test('the input-gain checkpoint states what was not run, keeps phantom power out and is no release',()=>{
- assert.equal(LAB_STATUS.entries[9],INPUT_GAIN_CHECKPOINT);
+ assert.equal(LAB_STATUS.entries[10],INPUT_GAIN_CHECKPOINT);
  assert.match(INPUT_GAIN_CHECKPOINT.candidateRuleSha256,/^[0-9a-f]{64}$/);
  assert.match(INPUT_GAIN_CHECKPOINT.outboundFilterSha256,/^[0-9a-f]{64}$/);
  assert.notEqual(INPUT_GAIN_CHECKPOINT.candidateRuleSha256,FREE_STEPS_CHECKPOINT.candidateRuleSha256);
@@ -371,7 +374,7 @@ test('the input-gain checkpoint states what was not run, keeps phantom power out
 });
 
 test('the pad checkpoint keeps phantom power out, says what was assumed and is no release',()=>{
- assert.equal(LAB_STATUS.entries[8],PAD_CHECKPOINT);
+ assert.equal(LAB_STATUS.entries[9],PAD_CHECKPOINT);
  assert.match(PAD_CHECKPOINT.candidateRuleSha256,/^[0-9a-f]{64}$/);
  assert.match(PAD_CHECKPOINT.outboundFilterSha256,/^[0-9a-f]{64}$/);
  assert.notEqual(PAD_CHECKPOINT.candidateRuleSha256,INPUT_GAIN_CHECKPOINT.candidateRuleSha256);
@@ -396,7 +399,7 @@ test('the pad checkpoint keeps phantom power out, says what was assumed and is n
 });
 
 test('the monitoring checkpoint says that the unit does not report its mixer, and is no release',()=>{
- assert.equal(LAB_STATUS.entries[7],MONITORING_CHECKPOINT);
+ assert.equal(LAB_STATUS.entries[8],MONITORING_CHECKPOINT);
  assert.match(MONITORING_CHECKPOINT.candidateRuleSha256,/^[0-9a-f]{64}$/);
  assert.match(MONITORING_CHECKPOINT.outboundFilterSha256,/^[0-9a-f]{64}$/);
  assert.notEqual(MONITORING_CHECKPOINT.candidateRuleSha256,PAD_CHECKPOINT.candidateRuleSha256);
@@ -419,7 +422,7 @@ test('the monitoring checkpoint says that the unit does not report its mixer, an
 });
 
 test('the pan checkpoint records its two faults and claims nothing that was not run',()=>{
- assert.equal(LAB_STATUS.entries[6],PAN_CHECKPOINT);
+ assert.equal(LAB_STATUS.entries[7],PAN_CHECKPOINT);
  assert.match(PAN_CHECKPOINT.candidateRuleSha256,/^[0-9a-f]{64}$/);
  assert.match(PAN_CHECKPOINT.correctedDisplayRuleSha256,/^[0-9a-f]{64}$/);
  assert.notEqual(PAN_CHECKPOINT.candidateRuleSha256,PAN_CHECKPOINT.correctedDisplayRuleSha256);
@@ -436,7 +439,7 @@ test('the pan checkpoint records its two faults and claims nothing that was not 
 });
 
 test('the displays checkpoint counts what was read and keeps the replug finding open',()=>{
- assert.equal(LAB_STATUS.entries[5],DISPLAYS_CHECKPOINT);
+ assert.equal(LAB_STATUS.entries[6],DISPLAYS_CHECKPOINT);
  assert.equal(DISPLAYS_CHECKPOINT.candidateRuleSha256,PAN_CHECKPOINT.correctedDisplayRuleSha256);
  assert.equal(DISPLAYS_CHECKPOINT.levelsSeen,PAN_CHECKPOINT.levelDisplayFields);
  assert.ok(DISPLAYS_CHECKPOINT.levelDisplayReadings>=DISPLAYS_CHECKPOINT.levelsSeen);
@@ -452,7 +455,7 @@ test('the displays checkpoint counts what was read and keeps the replug finding 
 });
 
 test('the host-ways checkpoint keeps its open questions open',()=>{
- assert.equal(LAB_STATUS.entries[4],HOST_WAYS_CHECKPOINT);
+ assert.equal(LAB_STATUS.entries[5],HOST_WAYS_CHECKPOINT);
  assert.equal(HOST_WAYS_CHECKPOINT.candidateRuleSha256,DISPLAYS_CHECKPOINT.candidateRuleSha256);
  assert.equal(HOST_WAYS_CHECKPOINT.outboundFilterSha256,MONITORING_CHECKPOINT.playbackFilterSha256);
  assert.equal(HOST_WAYS_CHECKPOINT.checksPassed,HOST_WAYS_CHECKPOINT.checksWithTheAppOnlyForDisplays);
@@ -476,7 +479,7 @@ test('the host-ways checkpoint keeps its open questions open',()=>{
 });
 
 test('the arming checkpoint shows the restore and keeps the one deviation visible',()=>{
- assert.equal(LAB_STATUS.entries[3],ARMING_CHECKPOINT);
+ assert.equal(LAB_STATUS.entries[4],ARMING_CHECKPOINT);
  assert.match(ARMING_CHECKPOINT.candidateRuleSha256,/^[0-9a-f]{64}$/);
  assert.notEqual(ARMING_CHECKPOINT.candidateRuleSha256,HOST_WAYS_CHECKPOINT.candidateRuleSha256);
  assert.deepEqual(ARMING_CHECKPOINT.afterArmingNothingElsePressedDbfs,ARMING_CHECKPOINT.togetherBeforeTheReplugDbfs);
@@ -494,7 +497,7 @@ test('the arming checkpoint shows the restore and keeps the one deviation visibl
 });
 
 test('the reference level checkpoint shows the switch and keeps the missing measurement visible',()=>{
- assert.equal(LAB_STATUS.entries[2],REFERENCE_LEVEL_CHECKPOINT);
+ assert.equal(LAB_STATUS.entries[3],REFERENCE_LEVEL_CHECKPOINT);
  assert.match(REFERENCE_LEVEL_CHECKPOINT.candidateRuleSha256,/^[0-9a-f]{64}$/);
  assert.match(REFERENCE_LEVEL_CHECKPOINT.filterSha256,/^[0-9a-f]{64}$/);
  assert.notEqual(REFERENCE_LEVEL_CHECKPOINT.candidateRuleSha256,ARMING_CHECKPOINT.candidateRuleSha256);
@@ -509,7 +512,7 @@ test('the reference level checkpoint shows the switch and keeps the missing meas
 });
 
 test('the phase checkpoint shows the measurement and keeps what was only tested offline visible',()=>{
- assert.equal(LAB_STATUS.entries[1],PHASE_CHECKPOINT);
+ assert.equal(LAB_STATUS.entries[2],PHASE_CHECKPOINT);
  assert.match(PHASE_CHECKPOINT.candidateRuleSha256,/^[0-9a-f]{64}$/);
  assert.match(PHASE_CHECKPOINT.filterSha256,/^[0-9a-f]{64}$/);
  assert.notEqual(PHASE_CHECKPOINT.candidateRuleSha256,REFERENCE_LEVEL_CHECKPOINT.candidateRuleSha256);
@@ -527,7 +530,7 @@ test('the phase checkpoint shows the measurement and keeps what was only tested 
 });
 
 test('the correction withdraws the claim about the host and says whose fault it was',()=>{
- assert.equal(LAB_STATUS.entries[0],REPLUG_CORRECTION_CHECKPOINT);
+ assert.equal(LAB_STATUS.entries[1],REPLUG_CORRECTION_CHECKPOINT);
  for(const key of ['earlierClaimThatTheHostInputStaysDeadWithdrawn','earlierProbeDiscardedItsOwnRead','faultWasInTheProjectsProbe','reportForTheDeveloperOfTheHostWithdrawn','routingAppSuspendedByTheReplug','readReachedTheUnit','armingBroughtTheSignalBackToTheHeadphones','stepArrivedAndWentBack','pageShowedEverythingAfterTheRoutingAppWasBroughtToTheFront','powerDropOfTheWholeChainTheSameNight','pageReadAtTheFirstTryAfterThatDrop'] as const) assert.equal(REPLUG_CORRECTION_CHECKPOINT[key],true,key);
  for(const key of ['faultOfTheHostShown','reportForTheDeveloperOfTheHostSent','routingAppTouchedBeforeTheChecks','pageShowedReadOrArmed','routingAppSuspendedByThatDrop','whyTheSystemSuspendsTheRoutingAppAtAReplugKnown','displaysIndependentOfTheRoutingApp','setupNeedsNoTouchAfterAReplug','microphoneOrInstrumentConnected','operationAlongsideTotalMixVerified','enduranceVerified','candidateReleased','silentUsbContinuityProven','crashSafeRecoveryProven','generalLiveReadinessVerified'] as const) assert.equal(REPLUG_CORRECTION_CHECKPOINT[key],false,key);
  assert.deepEqual(REPLUG_CORRECTION_CHECKPOINT.offlineReproductionOfTheEarlierProbe,{readFlagAfterTheAnswer:1,readFlagAfterTheLock:0,armedAfterwards:false,stepSent:false});
@@ -537,4 +540,18 @@ test('the correction withdraws the claim about the host and says whose fault it 
  assert.match(REPLUG_CORRECTION_CHECKPOINT.boundary,/not a release/);
  for(const other of [PHASE_CHECKPOINT,REFERENCE_LEVEL_CHECKPOINT,ARMING_CHECKPOINT]) assert.match(other.boundary,/corrected on 18 November/);
  assert.ok(REPLUG_CORRECTION_CHECKPOINT.sourceUrl.endsWith('/docs/milestones/2026-11-18-correction-after-a-replug-the-control-works.md'));
+});
+
+test('the test rig checkpoint shows exact values and what the rig did not try',()=>{
+ assert.equal(LAB_STATUS.entries[0],TEST_RIG_CHECKPOINT);
+ assert.equal(TEST_RIG_CHECKPOINT.messagesConfirmedByTheUnit,TEST_RIG_CHECKPOINT.messagesFired);
+ const b=TEST_RIG_CHECKPOINT.baselineDbfs;
+ assert.equal(TEST_RIG_CHECKPOINT.playbackToMainLeftAtMinus6Dbfs[0],b.mainLeft-6);assert.equal(TEST_RIG_CHECKPOINT.playbackToMainLeftAtMinus6Dbfs[1],b.mainRight);
+ assert.equal(TEST_RIG_CHECKPOINT.playbackToMainRightAtMinus6Dbfs[1],b.mainRight-6);assert.equal(TEST_RIG_CHECKPOINT.playbackToMainLeftOffDbfs[0],null);
+ assert.equal(TEST_RIG_CHECKPOINT.phonesCellAtPlus3Dbfs[0],b.phonesLeft+3);assert.equal(TEST_RIG_CHECKPOINT.phonesCellAtPlus6Dbfs[0],b.phonesLeft+6);assert.equal(TEST_RIG_CHECKPOINT.phonesCellAtPlus6Dbfs[1],b.phonesRight);
+ for(const key of ['testRigNotForPlaying','filterPassesExactlyThePreparedMessages','everyChangeHasARestoringMessage','mainCellsFollowTheSameIndexLaw','levelsAboveUnityTakenUpToPlus6Db','outputLevelAboveZeroDbReportedBack','outputChannels8And9AreTheAsOutputs','unitAsAtTheStartAtTheEnd'] as const) assert.equal(TEST_RIG_CHECKPOINT[key],true,key);
+ for(const key of ['pageElementsChanged','levelOfTheMainOutputWrittenByTheRig','sideNotAddressedEverMoved','outputLevelAboveZeroDbHeard','inputsToTheMainOutputTried','adatOutputsTried','phantomPowerTried','loopbackTried','equaliserTried','microphoneOrInstrumentConnected','operationAlongsideTotalMixVerified','enduranceVerified','candidateReleased','silentUsbContinuityProven','crashSafeRecoveryProven','generalLiveReadinessVerified'] as const) assert.equal(TEST_RIG_CHECKPOINT[key],false,key);
+ assert.match(TEST_RIG_CHECKPOINT.boundary,/not for playing/);
+ assert.match(TEST_RIG_CHECKPOINT.boundary,/not a release/);
+ assert.ok(TEST_RIG_CHECKPOINT.sourceUrl.endsWith('/docs/milestones/2026-11-18-main-cells-and-levels-above-unity.md'));
 });
