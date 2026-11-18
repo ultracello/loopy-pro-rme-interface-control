@@ -36,6 +36,22 @@ class Codec(unittest.TestCase):
         self.assertEqual(b.parse_mixer(b.set_mixer(2,0,0,True)),(2,0,0,False))
         self.assertEqual(V['mixer: playback 1 to Phones left at +6 dB'],bytes.fromhex('F000200D10014000000004F7'));self.assertEqual(V['mixer: playback 1 to Main left at -6 dB'],bytes.fromhex('F000200D10010C00260001F7'))
         with self.assertRaises(ValueError):b.set_mixer(2,0,2*b.UNITY+1)
+        # the gain of a cell as measured through loopback: the level without its two lowest bits, over 2^15
+        M=json.loads((Path(__file__).resolve().parent/'output-level-law-measured.json').read_text())['mixer_cell_rows'];self.assertEqual(len(M),18)
+        for field,db in M:
+            g=b.mixer_gain_from_level(field)
+            if db is None:self.assertEqual(g,0.0,field)
+            else:self.assertAlmostEqual(20*math.log10(g),db,delta=0.001,msg=field)
+        self.assertEqual([b.mixer_gain_from_level(x) for x in (0,3,4,b.UNITY,2*b.UNITY)],[0.0,0.0,1/32768,1.0,2.0])
+        # the level of an ADAT output is a mixer entry at 992 + output and follows the same law
+        E=json.loads((Path(__file__).resolve().parent/'output-level-law-measured.json').read_text())['adat_entry_rows'];self.assertEqual(len(E),18)
+        for field,db in E:
+            g=b.mixer_gain_from_level(field)
+            if db is None:self.assertEqual(g,0.0,field)
+            else:self.assertAlmostEqual(20*math.log10(g),db,delta=0.003,msg=field)
+        self.assertEqual(b.parse_frame(b.set_adat_output_level(6,0x10000)),(1,[998|(0x10000<<12)]));self.assertEqual(b.set_adat_output_level(11,b.UNITY),V['level of ADAT8: mixer entry 1003 at 0 dB'])
+        for bad in ((5,b.UNITY),(12,b.UNITY),(6,b.UNITY+1)):
+            with self.assertRaises(ValueError):b.set_adat_output_level(*bad)
     def test_state(self):
         s=b.parse_state(V['state (built for this file from the values our unit reported)'])
         self.assertEqual((s['main_raw'],s['phones_raw'],s['phones_db'],s['mic_gain_db'],s['line_gain_half_db'],s['settings']),((59,59),(214,214),(-14.5,-14.5),(0,0),(12,0),0x0C))

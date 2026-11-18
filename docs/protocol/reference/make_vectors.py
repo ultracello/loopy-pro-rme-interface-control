@@ -123,6 +123,17 @@ add('equaliser: slot 1 on input 1, peak +12 dB at 1 kHz, Q 2 (44.1 kHz)',b.set_e
 for tag in ('coefficients for 44.1 kHz, read at 44.1 kHz','coefficients for 44.1 kHz, read at 48 kHz after the rate had changed'):
     c=CURVES['sine through loopback: output AS1, slot 5, peak +12 dB at 1 kHz, Q 2 (%s)'%tag];frame=b.set_eq(5,4,True,True,bands=(FLAT2,b.biquad('peak',1000,12,2,FS2),FLAT2));assert bytes.fromhex(c['hex'])==bytes(frame)
     add(c['name'],frame,'one message, sent once; curve of 66 frequencies in eq-curves-measured.json; %d points compared, largest deviation %.3f dB, rms %.4f dB'%(c['points_counted'],c['largest_deviation_db'],c['rms_deviation_db']),'measured')
+# run B1 on 18 November 2026: level channels 10 to 15 and the cells of the ADAT outputs, read through loopback
+add('gain message for channel 10, raw 183',b.frame(4,[10|(183<<16)]),'no effect on any of the six ADAT outputs: all stayed at 0.00 dB; the same for channels 11 to 15','measured')
+add('gain message for channel 15, raw 62',b.frame(4,[15|(62<<16)]),'no effect on any of the six ADAT outputs','measured')
+for level,db in ((b.mixer_level_from_db(-20),'-20.00'),(b.mixer_level_from_db(-40),'-40.02'),(b.mixer_level_from_db(-60),'-60.21'),(0x10,'-78.27')):add('mixer: playback 1 to ADAT3, level 0x%X'%level,b.set_mixer(6,12,level),'index 168; read through loopback: %s dB below level 0x20000; the gain is floor(level / 4) / 2^15'%db,'measured')
+add('mixer: playback 1 to ADAT3, level 2',b.set_mixer(6,12,2),'index 168; read through loopback: silent, like every level below 4','measured')
+# run B2 on 18 November 2026: the level of the ADAT outputs as mixer entries 992 + output, read through loopback
+add('level of ADAT3: mixer entry 998 at half level',b.set_adat_output_level(6,0x10000),'read through loopback: ADAT3 6.021 dB lower, no other output moved','measured')
+add('level of ADAT3: mixer entry 998, level 0x3333',b.set_adat_output_level(6,b.mixer_level_from_db(-20)),'read through loopback: 20.002 dB lower','measured')
+add('level of ADAT3: mixer entry 998, level 0',b.set_adat_output_level(6,0),'read through loopback: silent','measured')
+add('level of ADAT8: mixer entry 1003 at half level',b.set_adat_output_level(11,0x10000),'read through loopback: ADAT8 6.021 dB lower, no other output moved','measured')
+add('level of ADAT8: mixer entry 1003 at 0 dB',b.set_adat_output_level(11,b.UNITY),'read through loopback: 0.00 dB, the level the output was found at','measured')
 # one synthetic state message: Main muted by raw 59, Phones -14.5 dB, mic gains 0, line gains 6.0 and 0 dB, both sensitivity bits set
 w=[0]*44;w[0]=0x0090000C;w[1]=59|(59<<9);w[2]=(214<<14)|(214<<23);w[3]=(12<<19)
 add('state (built for this file from the values our unit reported)',b.frame(0,w),'word 0 0x0090000C, Main raw 59/59, Phones raw 214/214, gains 0, 0, 12 half dB, 0','reported')

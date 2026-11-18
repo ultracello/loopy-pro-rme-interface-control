@@ -160,12 +160,18 @@ def mixer_db_from_level(level):
     return -math.inf if level == 0 else 20 * math.log10(level / UNITY)
 
 
+def mixer_gain_from_level(level):
+    """Linear gain the unit applies for a mixer level: floor(level / 4) / 2^15, a coefficient of 15 bits. Levels 0 to 3 are
+    silent, 4 to 7 give -90.3 dB. (measured digitally through loopback of the ADAT3 output for eighteen levels, within 0.001 dB)"""
+    return (level // 4) / (1 << 15)
+
+
 def set_mixer(output, source, level, inverted=False):
     """One cell of the mixer: source (0-11 hardware inputs, 12-23 playback) to output (0-11), linear level, optional phase inversion.
 
     An inverted level stands in the 20-bit field as 2^20 - level. Level 0 switches the cell off. The unit keeps the
     mixer only until its USB connection is built anew and never reports it. Levels up to +6 dB (0x40000) are taken.
-    Every bit of the level counts (measured down to level 7 against 8).
+    The unit uses the level without its two lowest bits, see mixer_gain_from_level().
     (measured for the headphones with sources 0-3, 12, 13 and for playback 1/2 to the Main output)"""
     if not (0 <= output <= 11 and 0 <= source <= 23):
         raise ValueError('output 0..11, source 0..23')
@@ -173,6 +179,17 @@ def set_mixer(output, source, level, inverted=False):
         raise ValueError('level 0..0x40000 (+6 dB)')
     field = (FIELD - level) & (FIELD - 1) if (inverted and level) else level
     return frame(SUB_MIXER, [(26 * output + source) | (field << 12)])
+
+
+def set_adat_output_level(output, level):
+    """Level of an ADAT output, 6..11 (ADAT3..ADAT8 in the list OUTPUTS): the mixer entry 992 + output, with a linear level
+    like a cell, 0x20000 = 0 dB, 0 = silence. The gain is mixer_gain_from_level(level). The unit does not report the value.
+    (measured through loopback for all six outputs; levels above 0 dB and the entries 992..997 were not tried)"""
+    if output not in range(6, 12):
+        raise ValueError('ADAT output 6..11')
+    if not 0 <= level <= UNITY:
+        raise ValueError('level 0..0x20000 (0 dB)')
+    return frame(SUB_MIXER, [(992 + output) | (level << 12)])
 
 
 def parse_mixer(data):

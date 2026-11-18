@@ -13,7 +13,7 @@ Each statement carries one of four marks, so that nothing has to be taken on tru
 | **notes** | Taken from other people's notes and not tried on our unit. Sources: the protocol notes on the oscmix wiki by Michael Forney (github.com/michaelforney/oscmix/wiki/Babyface-Pro) and the Babyface Pro part of the Linux kernel driver (`sound/usb/mixer_quirks.c`). |
 | **unknown** | We found no source and no way to observe it. |
 
-The folder `reference/` holds a small codec in Python (`babyface_cc.py`), 209 test vectors (`test-vectors.json`), the equaliser curves measured with sine tones (`eq-curves-measured.json`), the level of an output for every raw value (`output-level-law-measured.json`), the gain of a microphone input for every value (`mic-gain-measured.json`) and tests. The codec was checked against 1871 messages of the controller that was used on the unit: byte for byte the same.
+The folder `reference/` holds a small codec in Python (`babyface_cc.py`), 221 test vectors (`test-vectors.json`), the equaliser curves measured with sine tones (`eq-curves-measured.json`), the level of an output for every raw value (`output-level-law-measured.json`), the gain of a microphone input for every value (`mic-gain-measured.json`) and tests. The codec was checked against 1871 messages of the controller that was used on the unit: byte for byte the same.
 
 ## 1. Transport
 
@@ -43,7 +43,7 @@ One word: bits 0-15 channel, bits 16-23 value.
 | 4, 5 | Main output left, right | raw level, see below | **measured** |
 | 6, 7 | Headphone output left, right | raw level | **measured** |
 | 8, 9 | AS1, AS2 output | raw level | **measured** through loopback for every raw value: the law of the headphone output (below). The state reports the value (word 3) |
-| 10 and up | Presumably the ADAT outputs | | **unknown**. Read through loopback, the six ADAT outputs stood at 0 dB. **measured** |
+| 10 to 15 | Nothing that we could find | raw level as above | **measured**: each was written with raw 183, 163 and 62 while all six ADAT outputs were read through loopback; all six stayed at 0.00 dB in all 24 readings, and no word of the state followed. The level of the ADAT outputs is set as a mixer entry instead (2.4). Channels above 15 are **unknown** |
 
 **Output level.** `raw = 243 + 2 × dB`, in steps of 0.5 dB. Raw 243 is 0 dB, raw 183 is −30 dB, raw 116 is −63.5 dB. We wrote and read back values across the range 116 to 243. **reported** At raw 183 the output meter stood exactly 30.0 dB below the playback. **measured** The oscmix notes give the same law as `dB = 6 + (raw − 255) / 2`, which puts the top at raw 255 = +6 dB. Raw 249 and 255 were written to the left headphone channel, with no signal on the headphones, and the unit reported them back. **reported**
 
@@ -89,9 +89,11 @@ One word: bits 0-11 cell index, bits 12-31 level.
 - **Level:** linear, `0x20000` is 0 dB, 0 is off. `level = round(0x20000 × 10^(dB/20))`. **measured**: at 0, −6 and −12 dB the headphone output stood within 0.0 dB of the expected level, at −30 and −48 dB within 0.1 dB.
 - **Phase:** an inverted level L stands in the 20-bit field as `2^20 − L` (the two's complement). **measured**: a cell alone keeps its level exactly; two cells carrying the same signal gave −35.8 dBFS with equal signs and −44.6 dBFS with unequal signs, every combination twice with the same value.
 - **Above unity:** levels up to `0x40000` (+6 dB) are taken. **measured**: the headphone output rose by exactly 3.0 dB and 6.0 dB for +3 dB and +6 dB on one cell, the other side unchanged.
-- **Granularity:** the whole 20-bit field counts, down to its lowest bits. **measured** at the Main meter: field `0x10000` gave exactly half the peak value of `0x20000`; `0x1009C` read one meter step above `0x10098`; fields `0x10`, `8` and `7` gave −78.4 dB, −84.4 dB and less than `8`, as a linear level must. Below about −90 dB the meter itself stops resolving (its values move in steps of 64).
+- **Granularity:** the unit uses the level without its two lowest bits: the gain of a cell is `floor(level / 4) / 2^15`, a coefficient of 15 bits like that of the output level (2.2). **measured** digitally through loopback (2.6), playback 1 on ADAT3 with the cell at eighteen levels: every level that gives a signal lies within 0.001 dB of this law. `0x3333` (−20.00 dB by the plain ratio) gives −20.002 dB, `0x51F` −40.02, `0x83` −60.21, `0x10` −78.27 dB, and levels 1 to 3 are silent like 0. So below about −40 dB the level moves in visible steps, and −90.3 dB (levels 4 to 7) is the lowest. Earlier readings at the Main meter fit: `0x10000` gave exactly half the peak value of `0x20000`, `0x1009C` read one step above `0x10098`, and levels `0x10`, 8 and 7 gave −78.4 dB, −84.4 dB and less.
 
 Cells measured on the unit: inputs 1-4 to headphones left and right (indices 52-55 and 78-81); playback 1 to headphones left and playback 2 to headphones right (64 and 91); playback 1 to Main left and playback 2 to Main right (12 and 39); input 3 to Main left and right (2 and 28): with the Main output at −30 dB its meter read 30.00 dB below the meter of input 3 at unity, 36.02 dB below at −6.02 dB, and 0 when off; playback 1 to AS1 (116): the meter of the AS1 output read the level of playback 1; and playback 1 to every one of the twelve outputs (12, 38, 64, 90, 116, 142, 168, 194, 220, 246, 272, 298), read through loopback (2.6): each output carried the tone at exactly its own level, −30.00 dB on Main at raw 183, −14.50 dB on the headphones at raw 214, 0.00 dB on AS1/2 at raw 243 and on the six ADAT outputs. For the two Main cells: −6 dB lowered that side of the Main output by exactly 6.0 dB, level 0 silenced it, unity brought it back, and the other side never moved. So the index law holds for outputs 0 to 3. Inputs on the digital outputs were read through loopback with nothing connected, the signal being the noise of the open inputs (−113 to −119 dBFS RMS): the four analogue inputs to AS1 (indices 104 to 107) and input 3 to ADAT3 and ADAT8 (158 and 288). With the cell at 0 dB the loopback channel carried the same RMS level as the input's own channel in the same stretch of time, within 0.002 dB; without a cell it was exactly silent. Input 3 at half level (`0x10000`) came out 6.20 dB lower, where 6.02 dB would be exact; at a signal of some twenty steps of a 24-bit word that is probably the rounding of the unit. **measured** So the index law holds for the AS and ADAT outputs too. The other cells of these outputs, and inputs 1, 2 and 4 to the Main output, were not tried one by one.
+
+**The level of the ADAT outputs is a mixer entry.** Index 992 + output, with the level in the same field as for a cell (`0x20000` is 0 dB): 998 for ADAT3 up to 1003 for ADAT8. **measured** digitally through loopback (2.6), with playback 1 on all six outputs: each of the six entries moved exactly its own output and no other; half level gave −6.021 dB, `0x3333` −20.002 dB, level 0 silence, `0x20000` 0.00 dB again. Eighteen levels on entry 998 follow the law of the cells, `floor(level / 4) / 2^15`, within 0.002 dB. Entry and cell multiply: both at half level gave −12.041 dB. The outputs were found at 0 dB, and no word of the state follows these entries, so a host has to keep the value itself. The index comes from the Linux driver, which sets the output levels this way in the unit's other USB mode (**notes**); the gain message (2.2) with channels 10 to 15 does nothing. Levels above 0 dB, the entries 992 to 997 (Main, headphones, AS, whose level is set with sub ID 04) and whether the unit keeps the entries without power were not tried. The codec builds the message (`set_adat_output_level`).
 
 There is no pan parameter. A stereo position is two cells with two levels; the host chooses the pan law. Ours lowers the far side by 1.5 dB per position and switches it off at the end. **measured** (6.0 dB at four positions).
 
@@ -197,7 +199,8 @@ The same setting decides whether the EQ of an input is recorded. **measured** wi
 | Main, headphone and AS output level | −63.5 to 0 dB used here; up to +6 dB accepted | 0.5 dB | yes, every half dB |
 | Microphone gain | 0 to 65 dB | 1 dB | every whole dB |
 | Line gain | 0 to 9 dB | 0.5 dB | every half dB |
-| Mixer cell | off, then −102 dB to +6 dB | continuous (linear 20-bit value) | yes, any value; we used half-dB values |
+| ADAT output level | off, then −90.3 dB to 0 dB (higher not tried) | 1/32768 of unity | yes; fine down to about −40 dB, coarser below |
+| Mixer cell | off, then −90.3 dB to +6 dB | 1/32768 of unity (the level without its two lowest bits) | yes; fine down to about −40 dB, coarser below |
 | EQ band, low cut | whatever the coefficients express | continuous | yes |
 | Pad, sensitivity, phantom power | on or off | | |
 
@@ -260,7 +263,7 @@ These are the rules our controller follows. Several hundred writes went through 
 2. **Read back.** Ask for the state again about 100 ms after the write and compare. The unit answered every time. For the mixer and the EQ there is nothing to compare; the answer only shows that the unit is alive.
 3. **Keep the mixer picture and send it again** when the unit reappears. Do not touch cells the user never set. Keep the EQ settings and the slot of each channel in the same way.
 4. **Never write a setting without the others as read** (2.3). Put phantom power behind an explicit confirmation.
-5. **Offer levels in dB.** Outputs: 0.5 dB steps, raw = 243 + 2 × dB. Microphone gain: whole dB, 0 to 65. Line gain: half dB, 0 to 9. Mixer: any dB value through the linear formula.
+5. **Offer levels in dB.** Main, headphone and AS outputs: 0.5 dB steps, raw = 243 + 2 × dB. ADAT outputs: the mixer entry 992 + output, linear like a cell. Microphone gain: whole dB, 0 to 65. Line gain: half dB, 0 to 9. Mixer: any dB value through the linear formula.
 6. **Mute by level,** raw 59, and keep the value to return to.
 7. **Expect foreign changes.** The encoder on the unit and another app can change levels at any time; the state shows it.
 8. **Do not run next to TotalMix FX for iPad** without testing: both would poll and write, and each would take meter peaks from the other (3.2). We did not test this.
@@ -282,7 +285,7 @@ The last column says whether the controller page this project uses in Loopy Pro 
 | Inputs to the Main output | **measured** (input 3 to Main left and right) | no |
 | Cells of the AS and ADAT outputs | **measured** through loopback: playback 1 to each of them; the four analogue inputs to AS1, input 3 to ADAT3 and ADAT8 | no |
 | Level of the AS outputs | **measured**, the law for every raw value | no |
-| Level of the ADAT outputs | setting it: **unknown** (channel numbers); they stood at 0 dB, **measured** | no |
+| Level of the ADAT outputs | **measured**: mixer entry 992 + output, every one of the six, down to silence; they stood at 0 dB | no |
 | Output levels above 0 dB | **measured** behind the headphone output (+0.5 to +6 dB) | no |
 | Phantom power | **notes**, never sent | no |
 | EQ and low cut on inputs and outputs | **measured**, whole curves with sine tones: input 1 and Main left at 48 kHz; both headphone channels, Main right, AS1 and ADAT3 at 44.1 kHz | no |

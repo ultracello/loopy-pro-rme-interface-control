@@ -1250,6 +1250,78 @@
    "status": "measured"
   },
   {
+   "name": "gain message for channel 10, raw 183",
+   "hex": "F000200D10040A005C0500F7",
+   "meaning": "no effect on any of the six ADAT outputs: all stayed at 0.00 dB; the same for channels 11 to 15",
+   "status": "measured"
+  },
+  {
+   "name": "gain message for channel 15, raw 62",
+   "hex": "F000200D10040F00780100F7",
+   "meaning": "no effect on any of the six ADAT outputs",
+   "status": "measured"
+  },
+  {
+   "name": "mixer: playback 1 to ADAT3, level 0x3333",
+   "hex": "F000200D100128614C1900F7",
+   "meaning": "index 168; read through loopback: -20.00 dB below level 0x20000; the gain is floor(level / 4) / 2^15",
+   "status": "measured"
+  },
+  {
+   "name": "mixer: playback 1 to ADAT3, level 0x51F",
+   "hex": "F000200D10012861470200F7",
+   "meaning": "index 168; read through loopback: -40.02 dB below level 0x20000; the gain is floor(level / 4) / 2^15",
+   "status": "measured"
+  },
+  {
+   "name": "mixer: playback 1 to ADAT3, level 0x83",
+   "hex": "F000200D10012861200000F7",
+   "meaning": "index 168; read through loopback: -60.21 dB below level 0x20000; the gain is floor(level / 4) / 2^15",
+   "status": "measured"
+  },
+  {
+   "name": "mixer: playback 1 to ADAT3, level 0x10",
+   "hex": "F000200D10012801040000F7",
+   "meaning": "index 168; read through loopback: -78.27 dB below level 0x20000; the gain is floor(level / 4) / 2^15",
+   "status": "measured"
+  },
+  {
+   "name": "mixer: playback 1 to ADAT3, level 2",
+   "hex": "F000200D10012841000000F7",
+   "meaning": "index 168; read through loopback: silent, like every level below 4",
+   "status": "measured"
+  },
+  {
+   "name": "level of ADAT3: mixer entry 998 at half level",
+   "hex": "F000200D10016607000001F7",
+   "meaning": "read through loopback: ADAT3 6.021 dB lower, no other output moved",
+   "status": "measured"
+  },
+  {
+   "name": "level of ADAT3: mixer entry 998, level 0x3333",
+   "hex": "F000200D100166674C1900F7",
+   "meaning": "read through loopback: 20.002 dB lower",
+   "status": "measured"
+  },
+  {
+   "name": "level of ADAT3: mixer entry 998, level 0",
+   "hex": "F000200D10016607000000F7",
+   "meaning": "read through loopback: silent",
+   "status": "measured"
+  },
+  {
+   "name": "level of ADAT8: mixer entry 1003 at half level",
+   "hex": "F000200D10016B07000001F7",
+   "meaning": "read through loopback: ADAT8 6.021 dB lower, no other output moved",
+   "status": "measured"
+  },
+  {
+   "name": "level of ADAT8: mixer entry 1003 at 0 dB",
+   "hex": "F000200D10016B07000002F7",
+   "meaning": "read through loopback: 0.00 dB, the level the output was found at",
+   "status": "measured"
+  },
+  {
    "name": "state (built for this file from the values our unit reported)",
    "hex": "F000200D10000C004004003B6C010000000056590600000003000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000F7",
    "meaning": "word 0 0x0090000C, Main raw 59/59, Phones raw 214/214, gains 0, 0, 12 half dB, 0",
