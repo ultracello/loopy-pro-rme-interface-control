@@ -13,7 +13,7 @@ Each statement carries one of four marks, so that nothing has to be taken on tru
 | **notes** | Taken from other people's notes and not tried on our unit. Sources: the protocol notes on the oscmix wiki by Michael Forney (github.com/michaelforney/oscmix/wiki/Babyface-Pro) and the Babyface Pro part of the Linux kernel driver (`sound/usb/mixer_quirks.c`). |
 | **unknown** | We found no source and no way to observe it. |
 
-The folder `reference/` holds a small codec in Python (`babyface_cc.py`), 130 test vectors (`test-vectors.json`), the equaliser curves measured with sine tones (`eq-curves-measured.json`) and tests. The codec was checked against 1871 messages of the controller that was used on the unit: byte for byte the same.
+The folder `reference/` holds a small codec in Python (`babyface_cc.py`), 148 test vectors (`test-vectors.json`), the equaliser curves measured with sine tones (`eq-curves-measured.json`) and tests. The codec was checked against 1871 messages of the controller that was used on the unit: byte for byte the same.
 
 ## 1. Transport
 
@@ -39,13 +39,15 @@ One word: bits 0-15 channel, bits 16-23 value.
 | Channel | What | Value | Status |
 |---|---|---|---|
 | 0, 1 | Gain of microphone input 1, 2 | 0 to 65 dB in whole dB, packed (see below) | **reported** for all 66 values; **measured** at 0, 3 and 6 dB (3.0 and 6.0 dB at the input meter) |
-| 2, 3 | Gain of line input 3, 4 | count of half dB, 0 to 18 (0 to 9 dB) | **reported** for all 19 values |
+| 2, 3 | Gain of line input 3, 4 | count of half dB, 0 to 18 (0 to 9 dB) | **reported** for all 19 values; **measured** on input 3 with a tone: every step 0.50 dB, 9.00 dB at step 18 |
 | 4, 5 | Main output left, right | raw level, see below | **measured** |
 | 6, 7 | Headphone output left, right | raw level | **measured** |
-| 8, 9 | AS1, AS2 output | raw level | **reported** (state word 3) |
+| 8, 9 | AS1, AS2 output | raw level | **reported** (state word 3); AS1 at raw 243 **measured** at its own meter (it read the playback level exactly) |
 | 10 and up | Presumably the ADAT outputs | | **unknown** |
 
-**Output level.** `raw = 243 + 2 × dB`, in steps of 0.5 dB. Raw 243 is 0 dB, raw 183 is −30 dB, raw 116 is −63.5 dB. We wrote and read back values across the range 116 to 243. **reported** At raw 183 the output meter stood exactly 30.0 dB below the playback. **measured** The oscmix notes give the same law as `dB = 6 + (raw − 255) / 2`, which puts the top at raw 255 = +6 dB. Raw 249 and 255 were written to the left headphone channel, with no signal on the headphones, and the unit reported them back. **reported** The effect on audio above 0 dB was not measured.
+**Output level.** `raw = 243 + 2 × dB`, in steps of 0.5 dB. Raw 243 is 0 dB, raw 183 is −30 dB, raw 116 is −63.5 dB. We wrote and read back values across the range 116 to 243. **reported** At raw 183 the output meter stood exactly 30.0 dB below the playback. **measured** The oscmix notes give the same law as `dB = 6 + (raw − 255) / 2`, which puts the top at raw 255 = +6 dB. Raw 249 and 255 were written to the left headphone channel, with no signal on the headphones, and the unit reported them back. **reported**
+
+**Behind the output.** The headphone output left was read at line input 3 over a cable, with a sine tone. From raw 243, raw 244, 245, 249 and 255 gave +0.50, +1.00, +3.00 and +6.00 dB, and raw 223, 203 and 183 gave −10.00, −20.00 and −29.98 dB. From raw 183, raw 203, 163 and 143 gave +10.00, −10.01 and −20.02 dB. The lowest steps come out a little lower than the formula: raw 123 gave −30.12 dB and raw 116 gave −33.76 dB where the formula says −30 and −33.5. At raw 59 the output was silent (below the noise of the input, more than 97 dB under raw 243). **measured**
 
 **Mute.** There is no mute bit per output. TotalMix FX mutes an output by writing raw 59 to both of its channels (−92 dB by the formula) and restores the fader value on unmute. **reported** (watched on the same unit while TotalMix FX on a Mac was operated). A host that mutes should do the same and keep the previous value itself.
 
@@ -65,7 +67,7 @@ One word: bits 0-15 say which setting changes (one bit set), bits 16-30 carry th
 | Bit | Setting | Status |
 |---|---|---|
 | 0, 1 | Phantom power (48 V) of microphone input 1, 2 | **notes**. Never sent by us, on purpose. |
-| 2, 3 | Sensitivity of line input 3, 4. Set = "+4dBu", clear = "-10dBV" in the naming of the Linux driver | Switching **reported**, eight of eight. The naming is **notes**: the effect on a signal was not measured, and the idle noise of the inputs did not move with the bit. |
+| 2, 3 | Sensitivity of line input 3, 4. Set = "+4dBu", clear = "-10dBV" in the naming of the Linux driver | **measured** on input 3 with a tone: clearing the bit raised the level at the input meter by 8.74 dB, setting it again brought it back (0.00 dB). Set is therefore the less sensitive setting, as the naming says (the maximum input levels in RME's manual, +13 dBu and +4 dBu, are 9 dB apart). Switching of bit 3 is **reported**. |
 | 4, 5 | Pad of microphone input 1, 2 | **measured**: −10.2 dB at the input meter, exact return |
 | 15 | Labelled "AN1->2" in the oscmix notes | **unknown** |
 
@@ -85,7 +87,7 @@ One word: bits 0-11 cell index, bits 12-31 level.
 - **Above unity:** levels up to `0x40000` (+6 dB) are taken. **measured**: the headphone output rose by exactly 3.0 dB and 6.0 dB for +3 dB and +6 dB on one cell, the other side unchanged.
 - **Granularity:** the whole 20-bit field counts, down to its lowest bits. **measured** at the Main meter: field `0x10000` gave exactly half the peak value of `0x20000`; `0x1009C` read one meter step above `0x10098`; fields `0x10`, `8` and `7` gave −78.4 dB, −84.4 dB and less than `8`, as a linear level must. Below about −90 dB the meter itself stops resolving (its values move in steps of 64).
 
-Cells measured on the unit: inputs 1-4 to headphones left and right (indices 52-55 and 78-81); playback 1 to headphones left and playback 2 to headphones right (64 and 91); playback 1 to Main left and playback 2 to Main right (12 and 39). For the two Main cells: −6 dB lowered that side of the Main output by exactly 6.0 dB, level 0 silenced it, unity brought it back, and the other side never moved. So the index law holds for outputs 0 to 3. Inputs to the Main output and every cell of the AS and ADAT outputs are **notes**.
+Cells measured on the unit: inputs 1-4 to headphones left and right (indices 52-55 and 78-81); playback 1 to headphones left and playback 2 to headphones right (64 and 91); playback 1 to Main left and playback 2 to Main right (12 and 39); input 3 to Main left and right (2 and 28): with the Main output at −30 dB its meter read 30.00 dB below the meter of input 3 at unity, 36.02 dB below at −6.02 dB, and 0 when off; playback 1 to AS1 (116): the meter of the AS1 output read the level of playback 1. For the two Main cells: −6 dB lowered that side of the Main output by exactly 6.0 dB, level 0 silenced it, unity brought it back, and the other side never moved. So the index law holds for outputs 0 to 3. Inputs to the Main output and every cell of the AS and ADAT outputs are **notes**.
 
 There is no pan parameter. A stereo position is two cells with two levels; the host chooses the pan law. Ours lowers the far side by 1.5 dB per position and switches it off at the end. **measured** (6.0 dB at four positions).
 
@@ -127,8 +129,8 @@ What follows for a host:
 
 - **The slot is a shared memory.** Main left was given slot 5 with gain 0.5; then Main right was given the same slot with gain 0.25, and Main left went to −12.04 dB. So every channel with EQ or low cut on needs a slot of its own, 0 to 20 (slot 20 works). The host has to keep the list of slots in use. **measured**
 - **Switching off goes by channel, not by slot.** A message for Main left with bit 31 clear switched its EQ off although it named another slot than the one in use. **measured**
-- **The unit's own meters do not show the EQ.** The meter of an output stayed where it was while the level behind the output fell by 6 and 12 dB; the meter of input 1 did not move when the EQ of input 1 was on. **measured** For the headphone outputs we therefore could send the message but not see its effect (no cable there).
-- **The coefficients depend on the sample rate.** Our unit ran at 48 kHz (see the next part); we did not try another rate.
+- **The unit's own meters do not show the EQ.** The meter of an output stayed where it was while the level behind the output fell by 6 and 12 dB; the meter of input 1 did not move when the EQ of input 1 was on. **measured** The EQ of the headphone output was therefore measured behind the output, over a cable into line input 3 (next part).
+- **The coefficients depend on the sample rate,** and the rate is the host's: our unit ran at 48 kHz while Loopy Pro was open and at 44.1 kHz when no other audio app was (see the next part).
 - We found no word of the state message that reports the EQ, and did not test whether the unit keeps it when its USB connection is built anew. **unknown**
 
 **Frequency responses, with sine tones.** A sine at half of full scale went from the iPad to USB playback 1 and through the output channel Main left (Main at −30 dB); the level was read behind the unit at input 1 over the loop cable, at 67 frequencies from 10 Hz to 20 kHz, once with the setting and once without. The difference is the measured curve. The calculated curve comes from the words of the message that was sent: three biquads, the overall gain, and the low cut filter above once per pole (`eq_response_db` in the codec). All curves are in `reference/eq-curves-measured.json`. **measured**
@@ -150,20 +152,22 @@ What follows for a host:
 
 Of the 1407 points of the 21 curves, 1355 lay at least 30 dB above the noise and were compared. From 20 Hz up and where the curve lies above −20 dB (1219 points) every point is within 0.02 dB of the calculation, except one at 50.4 Hz with 0.05 dB (next to the mains frequency). Deeper in the stop band and below 20 Hz the difference grows to 0.17 dB at most, which is noise and the short reading time there. Three settings were also measured on input 1 (heard alone on the left headphone channel, read at the headphone meter): low cut 100 Hz with 2 poles, the peak at 1 kHz and the high shelf at 4 kHz gave the same curves as on the output. **measured**
 
+The headphone output left (type 1, channel 2) was measured the same way at line input 3, over a cable from the 6.3 mm headphone socket, at 66 frequencies up to 18.2 kHz. No other audio app was open then, the iPad reported 44,100 Hz, and the coefficients were computed for that rate: low cut 100 Hz with 2 poles (corner solved, −3 dB at 100.1 Hz), peak +6 dB at 1 kHz (+5.99 dB at 1016 Hz) and high shelf −9 dB at 4 kHz (−4.64 dB at 4064 Hz, −9.00 dB at 18.2 kHz). All 198 points were compared; from 20 Hz up and above −20 dB every one is within 0.01 dB of the calculation for 44.1 kHz. **measured**
+
 What follows for a host:
 
 - **The unit does what the coefficients say.** A host can compute the curve it draws from the same numbers it sends.
-- **The unit ran at 48 kHz.** The iPad reported 48,000 Hz for the connection, and the measured curves fit the calculation for 48 kHz (deviation 0.001 to 0.03 dB rms per curve) and not the one for 44.1 kHz (0.15 to 1.06 dB). The coefficients have to be computed for the rate the unit runs at.
+- **The unit runs at the rate the host sets, and the coefficients must match it.** With Loopy Pro open the iPad reported 48,000 Hz, and the curves fit the calculation for 48 kHz (deviation 0.001 to 0.03 dB rms per curve) and not the one for 44.1 kHz (0.15 to 1.06 dB). With no other audio app open the iPad reported 44,100 Hz, and the curves fit 44.1 kHz (0.004 to 0.009 dB) and not 48 kHz (0.22 to 0.65 dB). So the rate can change when another app opens or closes, and the host then has to compute the coefficients anew and send them again. What the unit does with coefficients it already holds when the rate changes was not tested.
 - **The low cut of the notes sits a little high and takes some level.** With the k of the notes the −3 dB point is 0.7 % above f0 with one pole at 100 Hz, 7 % with four poles at 100 Hz, and 15 % with four poles at 500 Hz. The filter also stays below 0 dB in the pass band: −0.06 dB for 100 Hz with one pole, −0.10 dB for 100 Hz with four poles, −0.52 dB for 500 Hz with four poles. Whether TotalMix FX sends the same k we do not know. A host that wants the corner exactly at f0 solves k from the filter (`low_cut_coefficient_exact`); the level in the pass band can be made up with the overall gain (word 13).
 - **A band takes any biquad** whose b0 is not zero, not only the three types TotalMix FX offers: a low pass was sent in band 3 and came out as calculated.
 
 The codec builds this message (`set_eq`, `biquad`, `low_cut_coefficient`, `low_cut_coefficient_exact`) and calculates its curve (`eq_response_db`, `eq_from_words`).
 
-### 2.6 Not tried: loopback, device settings
+### 2.6 Loopback (sent, effect not seen) and device settings (not tried)
 
 From the oscmix **notes** only:
 
-- **Sub ID `02`, loopback:** bits 0-15 output channel, bit 16 loopback on.
+- **Sub ID `02`, loopback:** bits 0-15 output channel, bit 16 loopback on. We sent it once for output AS1 (word `0x00010004`, then `0x00000004`) while AS1 carried a tone: no peak meter changed. By RME's manual loopback replaces what the host records from the input of that channel with the signal of the output; seeing it needs a host that records, which our test tool does not do. Still **notes**.
 - **Sub ID `00`, device settings:** mask in bits 0-15 and value in bits 16-30, as in 2.3. Bit 0 clock source, bit 6 "eq for record", bit 10 optical output ADAT or S/PDIF.
 
 ### 2.7 Resolution: which values exist
@@ -214,10 +218,11 @@ Forty words. Full scale is `0x08000000`; `dBFS = 20 × log10(word / 0x08000000)`
 | 0-3 | Inputs 1-4, before the EQ of the input | **measured** |
 | 12-13 | Playback 1, 2 | **measured** |
 | 26-27 | Main output left, right | **measured** |
+| 30 | AS1 output | **measured** (read the level of playback 1 when that was sent to AS1 at 0 dB) |
 | 28-29 | Headphone output left, right | **measured** |
 | others | Further inputs, playback channels and outputs in the same order | **notes** |
 
-The output meters sit behind the output level and before the EQ of the output. **measured** The meters read the digital peak exactly: a sine sent at 0.5, 0.25 and 0.125 of full scale read 0.50000, 0.25000 and 0.12501 at the playback meter (within 0.0004 dB), and with the Main output at −30 dB the Main meter read 30.00 dB below the playback meter. Over 67 frequencies from 10 Hz to 20 kHz the playback reading of one tone stayed within 0.0002 dB. **measured**
+The output meters sit behind the output level and before the EQ of the output. **measured** The meters read the digital peak exactly: a sine sent at 0.5, 0.25 and 0.125 of full scale read 0.50000, 0.25000 and 0.12501 at the playback meter (within 0.0004 dB), and with the Main output at −30 dB the Main meter read 30.00 dB below the playback meter. With no other audio app open the reading for 0.5 was exactly `0x04000000` and a silent channel read 0; next to Loopy Pro a silent channel read about 1200 (−101 dBFS). Over 67 frequencies from 10 Hz to 20 kHz the playback reading of one tone stayed within 0.0002 dB. **measured**
 
 **Each answer carries the peak since the previous request.** The unit holds the highest value until it is asked, and starts anew after every answer. **measured**: after pauses of 2.0 to 5.2 seconds without a request, the first answer showed the loudest spot of a 2-second test loop every time (8 of 8), while the answers 0.3 seconds later lay up to 6.5 dB lower; and after a source was switched off, the first answer four seconds later still showed signal from before, the next one silence. Three things follow:
 
@@ -246,30 +251,30 @@ These are the rules our controller follows. Several hundred writes went through 
 | Function | Status here |
 |---|---|
 | Main and headphone level, mute by level | **measured** |
-| Microphone gain, line gain | **reported**, partly **measured** |
+| Microphone gain, line gain | **reported**; line gain of input 3 **measured** step by step, microphone gain at three values |
 | Pad | **measured** |
-| Line sensitivity (+4 dBu / −10 dBV) | switching **reported**, effect not measured |
+| Line sensitivity (+4 dBu / −10 dBV) | **measured** on input 3 (8.74 dB) |
 | Monitoring of inputs and playback to the headphones: level, pan, phase | **measured** |
 | Playback to the Main output: level, off | **measured** |
 | Mixer levels above 0 dB, up to +6 dB | **measured** |
-| Inputs to the Main output; all cells of the AS and ADAT outputs | **notes** |
-| Level of the AS outputs | **reported** |
+| Inputs to the Main output | **measured** (input 3 to Main left and right) |
+| Cells of the AS and ADAT outputs | playback 1 to AS1 **measured** at its meter; the others **notes** |
+| Level of the AS outputs | **reported**; AS1 at 0 dB **measured** at its meter |
 | Level of the ADAT outputs | **unknown** (channel numbers) |
-| Output levels above 0 dB | **reported**, effect not measured |
+| Output levels above 0 dB | **measured** behind the headphone output (+0.5 to +6 dB) |
 | Phantom power | **notes**, never sent |
-| EQ and low cut on inputs and outputs | **measured**, whole curves with sine tones at 48 kHz (not on the headphone outputs: no cable there) |
-| Loopback, clock source, optical format, EQ for record | **notes** |
+| EQ and low cut on inputs and outputs | **measured**, whole curves with sine tones: inputs and Main output at 48 kHz, headphone output left at 44.1 kHz |
+| Loopback | **notes**; sent once, no effect at the meters, needs a recording host to be seen |
+| Clock source, optical format, EQ for record | **notes** |
 | Dim, mono, global mute, solo, stereo link, cue, talkback | reading of dim and global mute **reported**; writing **unknown** |
 | Snapshots, layouts | belong to TotalMix FX, not to the unit |
 | Reading the mixer back | not possible, the unit does not report it |
 
 ## 6. Open points we can still close on our unit
 
-- The effect of the line sensitivity on a signal (needs a source at input 3 or 4).
-- Inputs to the Main output (with the loop cable removed, to avoid a feedback path).
 - Phantom power on an input with nothing connected.
-- Loopback, with the loop cable removed.
-- Whether the unit keeps the EQ across a reconnect; EQ at a sample rate other than 48 kHz; the EQ of the headphone outputs (needs a cable from a headphone output to an input).
+- Loopback, with a host that records what the unit sends.
+- Whether the unit keeps the EQ across a reconnect, and what it does with it when the sample rate changes.
 - Whether a state part with phantom power bits left at zero switches phantom power off.
 
 ## 7. Sources

@@ -11,8 +11,8 @@ for name,ch in (('Main left',4),('Main right',5),('Phones left',6),('Phones righ
 for i in (1,2):
     for db in (0,1,2,3,6,30,59,60,61,65):add('mic gain input %d %d dB'%(i,db),b.set_mic_gain(i,db),'channel %d, packed value %d'%(i-1,b.pack_mic_gain(db)),'measured' if db in (0,3,6) and i==1 else 'reported')
 for i in (3,4):
-    for k in (0,1,12,18):add('line gain input %d %.1f dB'%(i,k/2),b.set_line_gain(i,k),'channel %d, %d half dB'%(i-1,k),'reported')
-for settings,bit,on,what,status in ((0x0C,4,True,'pad of input 1 on','measured'),(0x1C,4,False,'pad of input 1 off','measured'),(0x0C,5,True,'pad of input 2 on','reported'),(0x0C,2,False,'sensitivity bit of input 3 cleared','reported'),(0x08,2,True,'sensitivity bit of input 3 set','reported'),(0x0C,3,False,'sensitivity bit of input 4 cleared','reported'),(0x08,4,True,'pad of input 1 on while the sensitivity bit of input 3 is clear','reported')):
+    for k in (0,1,12,18):add('line gain input %d %.1f dB'%(i,k/2),b.set_line_gain(i,k),'channel %d, %d half dB'%(i-1,k)+('; measured with a tone at the input: %.2f dB above step 0'%{0:0,1:0.50,12:6.00,18:9.00}[k] if i==3 else ''),'measured' if i==3 else 'reported')
+for settings,bit,on,what,status in ((0x0C,4,True,'pad of input 1 on','measured'),(0x1C,4,False,'pad of input 1 off','measured'),(0x0C,5,True,'pad of input 2 on','reported'),(0x0C,2,False,'sensitivity bit of input 3 cleared','measured'),(0x08,2,True,'sensitivity bit of input 3 set','measured'),(0x0C,3,False,'sensitivity bit of input 4 cleared','reported'),(0x08,4,True,'pad of input 1 on while the sensitivity bit of input 3 is clear','reported')):
     add('input setting: %s (settings before %02X)'%(what,settings),b.set_input_setting(bit,on,settings),'bits 0-15 what changes, bits 16-30 the whole new state',status)
 add('mixer: playback 1 to Phones left at 0 dB',b.set_mixer(2,12,b.UNITY),'index 26*2+12 = 64, level 0x20000','measured')
 add('mixer: playback 2 to Phones right at 0 dB',b.set_mixer(3,13,b.UNITY),'index 26*3+13 = 91, level 0x20000','measured')
@@ -30,7 +30,7 @@ add('mixer: playback 2 to Main right at -6 dB',b.set_mixer(1,13,65688),'index 39
 add('mixer: playback 1 to Phones left at +6 dB',b.set_mixer(2,12,2*b.UNITY),'index 64, level 0x40000','measured')
 add('mixer: playback 1 to Phones left at +3 dB',b.set_mixer(2,12,185144),'index 64, level 185144','measured')
 add('mixer: input 1 to Main left at -12 dB',b.set_mixer(0,0,b.mixer_level_from_db(-12)),'index 0; same message as for the headphones, other output','notes')
-add('output level Phones left raw 255 (+6 dB)',b.set_output_level(6,255),'channel 6, raw 255','reported')
+add('output level Phones left raw 255 (+6 dB)',b.set_output_level(6,255),'channel 6, raw 255; measured behind the output: +6.00 dB above raw 243','measured')
 add('output level AS1 raw 183 (-30 dB)',b.set_output_level(8,183),'channel 8','reported')
 add('output level AS2 raw 59',b.set_output_level(9,59),'channel 9','reported')
 add('mixer: playback 1 to Main left, level field 0x10000',b.set_mixer(0,12,0x10000),'index 12; the Main peak value was exactly half of the one at 0x20000','measured')
@@ -78,7 +78,23 @@ def sine(where,label,frame):
 for label,kw in T1:sine('output Main left, slot 0',label,b.set_eq(0,0,True,True,**kw))
 for label,kw in (T1[1],T1[6],T1[10]):sine('input 1, slot 1',label,b.set_eq(1,0,False,True,**kw))
 for label,kw in TX:sine('output Main left, slot 0',label,b.set_eq(0,0,True,True,**kw))
-assert len(CURVES)==len(T1)+3+len(TX)
+assert len(CURVES)==len(T1)+3+len(TX)+3
+# run K1 on 18 November 2026: a cable from the 6.3 mm headphone socket to line input 3, a sine tone on playback 1, no other audio app open
+for raw,db in ((244,0.5),(245,1.0),(249,3.0)):add('output level Phones left raw %d (+%.1f dB)'%(raw,db),b.set_output_level(6,raw),'measured behind the output: +%.2f dB above raw 243'%db,'measured')
+add('output level Phones left raw 203 (-20 dB)',b.set_output_level(6,203),'measured behind the output: -20.00 dB below raw 243 and +10.00 dB above raw 183','measured')
+add('output level Phones left raw 116 (-63.5 dB)',b.set_output_level(6,116),'measured behind the output: -33.76 dB below raw 183, 0.26 dB lower than the formula','measured')
+for out,name in ((0,'left'),(1,'right')):
+    add('mixer: input 3 to Main %s at 0 dB'%name,b.set_mixer(out,2,b.UNITY),'index %d; with Main at -30 dB its meter read 30.00 dB below the meter of input 3'%(26*out+2),'measured')
+    add('mixer: input 3 to Main %s at -6.02 dB'%name,b.set_mixer(out,2,0x10000),'the Main meter read 36.02 dB below the meter of input 3','measured')
+    add('mixer: input 3 off Main %s'%name,b.set_mixer(out,2,0),'the Main meter read 0','measured')
+add('mixer: playback 1 to AS1 at 0 dB',b.set_mixer(4,12,b.UNITY),'index 116; peak word 30 then read the level of playback 1 (with AS1 at raw 243)','measured')
+add('output level AS1 raw 243 (0 dB)',b.set_output_level(8,243),'peak word 30 read the level of playback 1 exactly','measured')
+add('loopback of output AS1 on',b.frame(2,[4|(1<<16)]),'sent; no peak meter changed. The effect needs a recording host to be seen and was not verified','notes')
+add('loopback of output AS1 off',b.frame(2,[4]),'sent; no peak meter changed','notes')
+FS2=44100
+for label,kw in (('low cut 100 Hz, 2 poles, corner solved',dict(low_cut_poles=2,low_cut=b.low_cut_coefficient_exact(100,2,FS2))),('peak +6 dB at 1 kHz, Q 1, band 2',dict(bands=(FLAT,b.biquad('peak',1000,6,1,FS2),FLAT))),('high shelf -9 dB at 4 kHz, Q 0.7, band 3',dict(bands=(FLAT,FLAT,b.biquad('highshelf',4000,-9,0.7,FS2))))):
+    c=CURVES['sine: output Phones left, slot 2, %s (44.1 kHz)'%label];frame=b.set_eq(2,2,True,True,**kw);assert bytes.fromhex(c['hex'])==bytes(frame),'the codec does not build the message that was sent: '+label
+    add(c['name'],frame,'coefficients for 44.1 kHz; curve of 66 frequencies in eq-curves-measured.json, read at line input 3; %d points compared, largest deviation %.3f dB, rms %.4f dB'%(c['points_counted'],c['largest_deviation_db'],c['rms_deviation_db']),'measured')
 # one synthetic state message: Main muted by raw 59, Phones -14.5 dB, mic gains 0, line gains 6.0 and 0 dB, both sensitivity bits set
 w=[0]*44;w[0]=0x0090000C;w[1]=59|(59<<9);w[2]=(214<<14)|(214<<23);w[3]=(12<<19)
 add('state (built for this file from the values our unit reported)',b.frame(0,w),'word 0 0x0090000C, Main raw 59/59, Phones raw 214/214, gains 0, 0, 12 half dB, 0','reported')

@@ -72,7 +72,8 @@ def output_db_from_raw(raw):
 
 def set_output_level(channel, raw):
     """Level of one output channel. channel: 4 Main left, 5 Main right, 6 Phones left, 7 Phones right (measured),
-    8 AS1, 9 AS2 (reported back). Raw values up to 255 (+6 dB) are taken (reported back for the headphones)."""
+    8 AS1, 9 AS2 (reported back). Raw values up to 255 (+6 dB) are taken (measured behind the headphone output:
+    +0.50, +1.00, +3.00 and +6.00 dB for raw 244, 245, 249 and 255; the lowest steps are up to 0.26 dB lower than the law)."""
     if channel not in (4, 5, 6, 7, 8, 9):
         raise ValueError('channel 4..9')
     if not 0 <= raw <= 255:
@@ -99,7 +100,8 @@ def set_mic_gain(input_number, db):
 
 
 def set_line_gain(input_number, half_db_steps):
-    """Gain of line input 3 or 4 as a count of half dB, 0..18 (0 to 9 dB). (reported back for every value)"""
+    """Gain of line input 3 or 4 as a count of half dB, 0..18 (0 to 9 dB). (reported back for every value; measured on
+    input 3 with a tone: 0.50 dB per step)"""
     if input_number not in (3, 4) or not (isinstance(half_db_steps, int) and 0 <= half_db_steps <= 18):
         raise ValueError('line input 3 or 4, 0..18 half dB')
     return frame(SUB_GAIN, [(input_number - 1) | (half_db_steps << 16)])
@@ -109,7 +111,8 @@ def set_input_setting(bit, on, current_settings):
     """Switch one input setting. current_settings: the six setting bits as the unit reports them (state word 0, bits 0-5).
 
     The message carries "what changes" in bits 0-15 and the complete new state in bits 16-30, so every other setting
-    must be sent back as read. (reported back for bits 2-5; bits 0 and 1 are phantom power and were never sent)"""
+    must be sent back as read. (reported back for bits 2-5; measured: pad -10.2 dB, and clearing bit 2 raises the level of
+    input 3 by 8.74 dB; bits 0 and 1 are phantom power and were never sent)"""
     if bit not in range(6) or current_settings & ~0x3F:
         raise ValueError('bit 0..5, settings within six bits')
     new = (current_settings | (1 << bit)) if on else (current_settings & ~(1 << bit))

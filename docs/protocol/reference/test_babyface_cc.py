@@ -43,17 +43,17 @@ class Codec(unittest.TestCase):
         self.assertEqual(len(V['equaliser: slot 1 on input 1 off']),87);self.assertEqual(b.parse_frame(V['equaliser: slot 1 on input 1 off'])[1][0],1)
     def test_equaliser_curves_measured_with_sine_tones(self):
         """Every measured point that was compared lies on the curve the codec calculates for the message that was sent."""
-        C=json.loads((Path(__file__).resolve().parent/'eq-curves-measured.json').read_text());self.assertEqual((len(C['settings']),C['sample_rate']),(21,48000));n=0;upper=[]
+        C=json.loads((Path(__file__).resolve().parent/'eq-curves-measured.json').read_text());self.assertEqual((len(C['settings']),C['sample_rate']),(24,48000));n=0;upper=[]
         for c in C['settings']:
             self.assertEqual(V[c['name']],bytes.fromhex(c['hex']));index,channel,is_output,enabled,kw=b.eq_from_words(b.parse_frame(V[c['name']])[1]);self.assertTrue(enabled)
-            self.assertEqual(b.set_eq(index,channel,is_output,enabled,**kw),V[c['name']]);self.assertEqual(len(c['points']),67)
+            self.assertEqual(b.set_eq(index,channel,is_output,enabled,**kw),V[c['name']]);fs=c.get('sample_rate',C['sample_rate']);self.assertEqual(len(c['points']),67 if fs==48000 else 66)
             for f,measured,calculated,counted in c['points']:
-                mine=b.eq_response_db(f,48000,**kw);self.assertAlmostEqual(mine,calculated,delta=0.0006)
+                mine=b.eq_response_db(f,fs,**kw);self.assertAlmostEqual(mine,calculated,delta=0.0006)
                 if not counted:continue
                 n+=1;self.assertLessEqual(abs(measured-mine),0.2,(c['name'],f))
                 if f>=20 and measured>=-20:upper.append(abs(measured-mine))
-        # from 20 Hz up and above -20 dB: 1219 points, every one within 0.02 dB but one at 50.4 Hz (0.048 dB, next to the mains frequency)
-        self.assertEqual((n,len(upper),sum(1 for x in upper if x>0.02)),(1355,1219,1));self.assertLess(max(upper),0.05)
+        # from 20 Hz up and above -20 dB: 1398 points (1219 at 48 kHz, 179 at 44.1 kHz), every one within 0.02 dB but one at 50.4 Hz (0.048 dB, next to the mains frequency)
+        self.assertEqual((n,len(upper),sum(1 for x in upper if x>0.02)),(1553,1398,1));self.assertLess(max(upper),0.05)
     def test_low_cut_corner(self):
         for f0,poles in ((20,1),(100,1),(100,2),(100,4),(250,1),(500,4)):
             self.assertAlmostEqual(b.eq_response_db(f0,48000,low_cut_poles=poles,low_cut=b.low_cut_coefficient_exact(f0,poles,48000)),-3.0103,places=3)

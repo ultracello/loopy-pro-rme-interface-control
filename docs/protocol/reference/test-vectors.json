@@ -274,26 +274,26 @@
   {
    "name": "line gain input 3 0.0 dB",
    "hex": "F000200D10040200000000F7",
-   "meaning": "channel 2, 0 half dB",
-   "status": "reported"
+   "meaning": "channel 2, 0 half dB; measured with a tone at the input: 0.00 dB above step 0",
+   "status": "measured"
   },
   {
    "name": "line gain input 3 0.5 dB",
    "hex": "F000200D10040200040000F7",
-   "meaning": "channel 2, 1 half dB",
-   "status": "reported"
+   "meaning": "channel 2, 1 half dB; measured with a tone at the input: 0.50 dB above step 0",
+   "status": "measured"
   },
   {
    "name": "line gain input 3 6.0 dB",
    "hex": "F000200D10040200300000F7",
-   "meaning": "channel 2, 12 half dB",
-   "status": "reported"
+   "meaning": "channel 2, 12 half dB; measured with a tone at the input: 6.00 dB above step 0",
+   "status": "measured"
   },
   {
    "name": "line gain input 3 9.0 dB",
    "hex": "F000200D10040200480000F7",
-   "meaning": "channel 2, 18 half dB",
-   "status": "reported"
+   "meaning": "channel 2, 18 half dB; measured with a tone at the input: 9.00 dB above step 0",
+   "status": "measured"
   },
   {
    "name": "line gain input 4 0.0 dB",
@@ -341,13 +341,13 @@
    "name": "input setting: sensitivity bit of input 3 cleared (settings before 0C)",
    "hex": "F000200D10030400200000F7",
    "meaning": "bits 0-15 what changes, bits 16-30 the whole new state",
-   "status": "reported"
+   "status": "measured"
   },
   {
    "name": "input setting: sensitivity bit of input 3 set (settings before 08)",
    "hex": "F000200D10030400300000F7",
    "meaning": "bits 0-15 what changes, bits 16-30 the whole new state",
-   "status": "reported"
+   "status": "measured"
   },
   {
    "name": "input setting: sensitivity bit of input 4 cleared (settings before 0C)",
@@ -484,8 +484,8 @@
   {
    "name": "output level Phones left raw 255 (+6 dB)",
    "hex": "F000200D100406007C0700F7",
-   "meaning": "channel 6, raw 255",
-   "status": "reported"
+   "meaning": "channel 6, raw 255; measured behind the output: +6.00 dB above raw 243",
+   "status": "measured"
   },
   {
    "name": "output level AS1 raw 183 (-30 dB)",
@@ -773,6 +773,114 @@
    "name": "sine: output Main left, slot 0, exact low cut 250 Hz, 1 pole",
    "hex": "F000200D100600024000080000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004000343F7F01000000000000F7",
    "meaning": "curve of 67 frequencies in eq-curves-measured.json; 67 points compared, largest deviation from the calculation 0.047 dB (in the stop band), rms 0.0063 dB",
+   "status": "measured"
+  },
+  {
+   "name": "output level Phones left raw 244 (+0.5 dB)",
+   "hex": "F000200D10040600500700F7",
+   "meaning": "measured behind the output: +0.50 dB above raw 243",
+   "status": "measured"
+  },
+  {
+   "name": "output level Phones left raw 245 (+1.0 dB)",
+   "hex": "F000200D10040600540700F7",
+   "meaning": "measured behind the output: +1.00 dB above raw 243",
+   "status": "measured"
+  },
+  {
+   "name": "output level Phones left raw 249 (+3.0 dB)",
+   "hex": "F000200D10040600640700F7",
+   "meaning": "measured behind the output: +3.00 dB above raw 243",
+   "status": "measured"
+  },
+  {
+   "name": "output level Phones left raw 203 (-20 dB)",
+   "hex": "F000200D100406002C0600F7",
+   "meaning": "measured behind the output: -20.00 dB below raw 243 and +10.00 dB above raw 183",
+   "status": "measured"
+  },
+  {
+   "name": "output level Phones left raw 116 (-63.5 dB)",
+   "hex": "F000200D10040600500300F7",
+   "meaning": "measured behind the output: -33.76 dB below raw 183, 0.26 dB lower than the formula",
+   "status": "measured"
+  },
+  {
+   "name": "mixer: input 3 to Main left at 0 dB",
+   "hex": "F000200D10010200000002F7",
+   "meaning": "index 2; with Main at -30 dB its meter read 30.00 dB below the meter of input 3",
+   "status": "measured"
+  },
+  {
+   "name": "mixer: input 3 to Main left at -6.02 dB",
+   "hex": "F000200D10010200000001F7",
+   "meaning": "the Main meter read 36.02 dB below the meter of input 3",
+   "status": "measured"
+  },
+  {
+   "name": "mixer: input 3 off Main left",
+   "hex": "F000200D10010200000000F7",
+   "meaning": "the Main meter read 0",
+   "status": "measured"
+  },
+  {
+   "name": "mixer: input 3 to Main right at 0 dB",
+   "hex": "F000200D10011C00000002F7",
+   "meaning": "index 28; with Main at -30 dB its meter read 30.00 dB below the meter of input 3",
+   "status": "measured"
+  },
+  {
+   "name": "mixer: input 3 to Main right at -6.02 dB",
+   "hex": "F000200D10011C00000001F7",
+   "meaning": "the Main meter read 36.02 dB below the meter of input 3",
+   "status": "measured"
+  },
+  {
+   "name": "mixer: input 3 off Main right",
+   "hex": "F000200D10011C00000000F7",
+   "meaning": "the Main meter read 0",
+   "status": "measured"
+  },
+  {
+   "name": "mixer: playback 1 to AS1 at 0 dB",
+   "hex": "F000200D10017400000002F7",
+   "meaning": "index 116; peak word 30 then read the level of playback 1 (with AS1 at raw 243)",
+   "status": "measured"
+  },
+  {
+   "name": "output level AS1 raw 243 (0 dB)",
+   "hex": "F000200D100408004C0700F7",
+   "meaning": "peak word 30 read the level of playback 1 exactly",
+   "status": "measured"
+  },
+  {
+   "name": "loopback of output AS1 on",
+   "hex": "F000200D10020400040000F7",
+   "meaning": "sent; no peak meter changed. The effect needs a recording host to be seen and was not verified",
+   "status": "notes"
+  },
+  {
+   "name": "loopback of output AS1 off",
+   "hex": "F000200D10020400000000F7",
+   "meaning": "sent; no peak meter changed",
+   "status": "notes"
+  },
+  {
+   "name": "sine: output Phones left, slot 2, low cut 100 Hz, 2 poles, corner solved (44.1 kHz)",
+   "hex": "F000200D1006020648000800000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040005B4F4900000000000000F7",
+   "meaning": "coefficients for 44.1 kHz; curve of 66 frequencies in eq-curves-measured.json, read at line input 3; 66 points compared, largest deviation 0.047 dB, rms 0.0088 dB",
+   "status": "measured"
+  },
+  {
+   "name": "sine: output Phones left, slot 2, peak +6 dB at 1 kHz, Q 1, band 2 (44.1 kHz)",
+   "hex": "F000200D10060200480008000000000000000000000000000000000000000035132E070F0E756F3900551A6C0C0F7F552A340000000000000000000000000000000000000000005A1706430000000000000000000000F7",
+   "meaning": "coefficients for 44.1 kHz; curve of 66 frequencies in eq-curves-measured.json, read at line input 3; 66 points compared, largest deviation 0.020 dB, rms 0.0038 dB",
+   "status": "measured"
+  },
+  {
+   "name": "sine: output Phones left, slot 2, high shelf -9 dB at 4 kHz, Q 0.7, band 3 (44.1 kHz)",
+   "hex": "F000200D10060200480008000000000000000000000000000000000000000000000000000000000000000000000000000000007F614D270F4A097521001B2B033F0F07716B16002C7C6E1B0000000000000000000000F7",
+   "meaning": "coefficients for 44.1 kHz; curve of 66 frequencies in eq-curves-measured.json, read at line input 3; 66 points compared, largest deviation 0.020 dB, rms 0.0036 dB",
    "status": "measured"
   },
   {
