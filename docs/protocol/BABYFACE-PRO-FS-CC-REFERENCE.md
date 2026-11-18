@@ -13,7 +13,7 @@ Each statement carries one of four marks, so that nothing has to be taken on tru
 | **notes** | Taken from other people's notes and not tried on our unit. Sources: the protocol notes on the oscmix wiki by Michael Forney (github.com/michaelforney/oscmix/wiki/Babyface-Pro) and the Babyface Pro part of the Linux kernel driver (`sound/usb/mixer_quirks.c`). |
 | **unknown** | We found no source and no way to observe it. |
 
-The folder `reference/` holds a small codec in Python (`babyface_cc.py`), 84 test vectors (`test-vectors.json`) and tests. The codec was checked against 1871 messages of the controller that was used on the unit: byte for byte the same.
+The folder `reference/` holds a small codec in Python (`babyface_cc.py`), 87 test vectors (`test-vectors.json`) and tests. The codec was checked against 1871 messages of the controller that was used on the unit: byte for byte the same.
 
 ## 1. Transport
 
@@ -99,7 +99,12 @@ So the host has to keep its own picture of every cell it has set and send it aga
 From the oscmix **notes** only:
 
 - **Sub ID `02`, loopback:** bits 0-15 output channel, bit 16 loopback on.
-- **Sub ID `06`, EQ and low cut:** 16 words. Word 0: bits 0-7 EQ slot, bits 8-11 low-cut poles, bits 16-19 channel, bit 20 input or output, bit 31 enabled. Words 1-12: three bands of biquad coefficients (a1/a0, a2/a0, b1/b0, b2/b0) as signed 5.27 fixed point. Word 13 overall gain, word 14 the low-cut coefficient.
+- **Sub ID `06`, EQ and low cut:** 16 words (87 bytes).
+  - Word 0, control: bits 0-7 EQ index (a slot from 0 to 20 that no other channel uses; the lowest free one is taken when EQ is enabled on a channel and freed when it is disabled), bits 8-11 low-cut poles 1 to 4 (one bit each), bits 16-19 channel 0-11, bit 20 channel type (0 input, 1 output), bit 31 enabled.
+  - Words 1-12: three bands, four coefficients each in the order a1/a0, a2/a0, b1/b0, b2/b0, as signed 5.27 fixed point (−2.375 is `0xED000000`). The bands are biquads after the Audio EQ Cookbook; TotalMix FX uses its peaking, low-shelf and high-shelf types.
+  - Word 13: the product of b0/a0 of the three bands (overall gain). Word 15: 0.
+  - Word 14: the low cut, stored as 1 − k with k = 1 / (2π·c·f0/fs + 1); c = 1, 0.655, 0.528, 0.457 for 1 to 4 poles. The filter (k − k·z⁻¹) / (1 − k·z⁻¹) is applied once per pole.
+  - The codec builds this message (`set_eq`, `biquad`, `low_cut_coefficient`). **We could not test it:** our sending tool passes at most 16 bytes per message. Sent in pieces, a SysEx does not reach the unit as one message; a control experiment showed that with a message that is known to work (whole: effect; in two or three pieces: none). So seven EQ and low-cut messages sent in pieces had no effect, and that says nothing about the layout.
 - **Sub ID `00`, device settings:** mask in bits 0-15 and value in bits 16-30, as in 2.3. Bit 0 clock source, bit 6 "eq for record", bit 10 optical output ADAT or S/PDIF.
 
 ### 2.6 Resolution: which values exist
@@ -198,6 +203,7 @@ These are the rules our controller follows. Several hundred writes went through 
 - Inputs to the Main output (with the loop cable removed, to avoid a feedback path).
 - Phantom power on an input with nothing connected.
 - Loopback, with the loop cable removed.
+- EQ and low cut, once we can send a message of 87 bytes in one piece.
 - Whether a state part with phantom power bits left at zero switches phantom power off.
 
 ## 7. Sources

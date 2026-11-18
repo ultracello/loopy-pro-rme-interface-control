@@ -148,6 +148,61 @@ def parse_mixer(data):
     return index // 26, index % 26, (FIELD - field) if inverted else field, inverted
 
 
+# ---- equaliser and low cut (sub ID 06) ---------------------------------------------------------------------------------
+SUB_EQ = 0x06
+LOW_CUT_CORRECTION = (1.0, 0.655, 0.528, 0.457)   # per number of poles 1..4, keeps -3 dB at the cutoff
+
+
+def fixed_5_27(x):
+    """A coefficient as signed 5.27 binary fixed point in a 32-bit word. Example of the notes: -2.375 -> 0xED000000."""
+    if not -16 <= x < 16:
+        raise ValueError('coefficient out of the range of 5.27')
+    return int(round(x * (1 << 27))) & 0xFFFFFFFF
+
+
+def biquad(kind, f0, gain_db, q, fs):
+    """One band after the Audio EQ Cookbook, normalised as the unit wants it: (a1/a0, a2/a0, b1/b0, b2/b0, b0/a0).
+    kind: 'peak', 'lowshelf' or 'highshelf'."""
+    A = 10 ** (gain_db / 40); w = 2 * math.pi * f0 / fs; cw, sw = math.cos(w), math.sin(w); alpha = sw / (2 * q)
+    if kind == 'peak':
+        b0, b1, b2 = 1 + alpha * A, -2 * cw, 1 - alpha * A; a0, a1, a2 = 1 + alpha / A, -2 * cw, 1 - alpha / A
+    elif kind == 'lowshelf':
+        r = 2 * math.sqrt(A) * alpha
+        b0, b1, b2 = A * ((A + 1) - (A - 1) * cw + r), 2 * A * ((A - 1) - (A + 1) * cw), A * ((A + 1) - (A - 1) * cw - r)
+        a0, a1, a2 = (A + 1) + (A - 1) * cw + r, -2 * ((A - 1) + (A + 1) * cw), (A + 1) + (A - 1) * cw - r
+    elif kind == 'highshelf':
+        r = 2 * math.sqrt(A) * alpha
+        b0, b1, b2 = A * ((A + 1) + (A - 1) * cw + r), -2 * A * ((A - 1) + (A + 1) * cw), A * ((A + 1) + (A - 1) * cw - r)
+        a0, a1, a2 = (A + 1) - (A - 1) * cw + r, 2 * ((A - 1) - (A + 1) * cw), (A + 1) - (A - 1) * cw - r
+    else:
+        raise ValueError('kind')
+    return a1 / a0, a2 / a0, b1 / b0, b2 / b0, b0 / a0
+
+
+FLAT_BAND = (0.0, 0.0, 0.0, 0.0, 1.0)
+
+
+def low_cut_coefficient(f0, poles, fs):
+    """The word for the low cut: 1 - k with k = 1 / (2*pi*c*f0/fs + 1), c by the number of poles."""
+    k = 1 / (2 * math.pi * LOW_CUT_CORRECTION[poles - 1] * f0 / fs + 1)
+    return 1 - k
+
+
+def set_eq(eq_index, channel, is_output, enabled, bands=(FLAT_BAND, FLAT_BAND, FLAT_BAND), low_cut_poles=0, low_cut=0.0, overall_gain=None):
+    """Equaliser and low cut of one channel: 16 words. eq_index 0..20 is a slot that no other channel may use.
+    bands: three tuples as biquad() returns them. overall_gain: product of the three b0/a0 unless given.
+    (layout from the notes; see the reference for what was measured)"""
+    if not (0 <= eq_index <= 20 and 0 <= channel <= 11 and 0 <= low_cut_poles <= 4 and len(bands) == 3):
+        raise ValueError('eq_index 0..20, channel 0..11, poles 0..4, three bands')
+    gain = overall_gain if overall_gain is not None else bands[0][4] * bands[1][4] * bands[2][4]
+    control = eq_index | (((1 << low_cut_poles) - 1) << 8) | (channel << 16) | ((1 if is_output else 0) << 20) | ((1 if enabled else 0) << 31)
+    words = [control]
+    for band in bands:
+        words += [fixed_5_27(c) for c in band[:4]]
+    words += [fixed_5_27(gain), fixed_5_27(low_cut), 0]
+    return frame(SUB_EQ, words)
+
+
 # ---- unit to host ----------------------------------------------------------------------------------------------------
 def parse_state(data):
     """The fields of the state message (sub ID 00, 227 bytes, 44 words) that this reference has seen change on a unit."""

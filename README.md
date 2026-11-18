@@ -22,7 +22,7 @@ The [public planning website](https://ultracello.github.io/loopy-pro-rme-interfa
 
 ## Protocol reference for native support
 
-[A reference of the control protocol](docs/protocol/BABYFACE-PRO-FS-CC-REFERENCE.md) of the RME Babyface Pro FS in class-compliant mode is kept for anyone who wants to build native support into a host application. It gives every message byte for byte, with the formulas for the dB values, and marks each statement as measured on the unit, reported back by the unit, taken from other people's notes, or unknown. A small [reference codec](docs/protocol/reference/babyface_cc.py) in Python with 84 test vectors comes with it; it only builds and parses bytes and sends nothing. The reference is a draft: phantom power, loopback and the equaliser are not verified yet and are marked so.
+[A reference of the control protocol](docs/protocol/BABYFACE-PRO-FS-CC-REFERENCE.md) of the RME Babyface Pro FS in class-compliant mode is kept for anyone who wants to build native support into a host application. It gives every message byte for byte, with the formulas for the dB values, and marks each statement as measured on the unit, reported back by the unit, taken from other people's notes, or unknown. A small [reference codec](docs/protocol/reference/babyface_cc.py) in Python with 87 test vectors comes with it; it only builds and parses bytes and sends nothing. The reference is a draft: phantom power, loopback and the equaliser are not verified yet and are marked so. The equaliser message could not be tested with the project's sending tool, which passes at most 16 bytes in one piece; sent in pieces, a message does not reach the unit.
 
 ## Latest development milestones
 

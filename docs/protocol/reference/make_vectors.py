@@ -33,6 +33,9 @@ add('mixer: input 1 to Main left at -12 dB',b.set_mixer(0,0,b.mixer_level_from_d
 add('output level Phones left raw 255 (+6 dB)',b.set_output_level(6,255),'channel 6, raw 255','reported')
 add('output level AS1 raw 183 (-30 dB)',b.set_output_level(8,183),'channel 8','reported')
 add('output level AS2 raw 59',b.set_output_level(9,59),'channel 9','reported')
+add('equaliser: slot 0 on input 1, flat bands, overall gain 0.5, enabled',b.set_eq(0,0,False,True,overall_gain=0.5),'87 bytes; layout from the notes','notes')
+add('equaliser: slot 0 on input 1 disabled',b.set_eq(0,0,False,False),'bit 31 of word 0 clear','notes')
+add('low cut: input 1, 4 poles at 2 kHz at 48 kHz, slot 0',b.set_eq(0,0,False,True,low_cut_poles=4,low_cut=b.low_cut_coefficient(2000,4,48000)),'word 14 = 1 - k','notes')
 # one synthetic state message: Main muted by raw 59, Phones -14.5 dB, mic gains 0, line gains 6.0 and 0 dB, both sensitivity bits set
 w=[0]*44;w[0]=0x0090000C;w[1]=59|(59<<9);w[2]=(214<<14)|(214<<23);w[3]=(12<<19)
 add('state (built for this file from the values our unit reported)',b.frame(0,w),'word 0 0x0090000C, Main raw 59/59, Phones raw 214/214, gains 0, 0, 12 half dB, 0','reported')

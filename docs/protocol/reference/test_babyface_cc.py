@@ -34,6 +34,12 @@ class Codec(unittest.TestCase):
         s=b.parse_state(V['state (built for this file from the values our unit reported)'])
         self.assertEqual((s['main_raw'],s['phones_raw'],s['phones_db'],s['mic_gain_db'],s['line_gain_half_db'],s['settings']),((59,59),(214,214),(-14.5,-14.5),(0,0),(12,0),0x0C))
         self.assertEqual((s['pad'],s['line_sensitivity_bit'],s['phantom_48v'],s['dim']),((False,False),(True,True),(False,False),False))
+    def test_equaliser(self):
+        self.assertEqual(b.fixed_5_27(-2.375),0xED000000);self.assertEqual(b.fixed_5_27(1.0),0x08000000)
+        sub,w=b.parse_frame(V['equaliser: slot 0 on input 1, flat bands, overall gain 0.5, enabled']);self.assertEqual((sub,len(w),w[0],w[13],w[1:13]),(6,16,1<<31,0x04000000,[0]*12))
+        sub,w=b.parse_frame(V['low cut: input 1, 4 poles at 2 kHz at 48 kHz, slot 0']);self.assertEqual(w[0],(1<<31)|(0xF<<8));self.assertEqual(w[13],0x08000000);self.assertAlmostEqual(w[14]/(1<<27),0.10686,places=4)
+        a1,a2,b1,b2,g=b.biquad('peak',1000,0,0.7,48000);self.assertAlmostEqual(g,1.0);self.assertAlmostEqual(a1,b1);self.assertAlmostEqual(a2,b2)
+        self.assertEqual(len(V['equaliser: slot 0 on input 1 disabled']),87)
     def test_meters(self):
         self.assertEqual(b.meter_dbfs(b.METER_FULL_SCALE),0.0);self.assertAlmostEqual(b.meter_dbfs(b.METER_FULL_SCALE//2),-6.0206,places=3);self.assertEqual(b.meter_dbfs(0),-math.inf)
         w=[0]*40;w[0]=b.METER_FULL_SCALE//2;w[28]=b.METER_FULL_SCALE//4;p=b.parse_peaks(b.frame(2,w));self.assertAlmostEqual(p['inputs_1_to_4'][0],-6.0206,places=3);self.assertAlmostEqual(p['phones_out'][0],-12.0412,places=3)
