@@ -1,205 +1,35 @@
-# Loopy Pro Interface Control
+# RME Babyface Pro FS, controlled from Loopy Pro
 
-Reusable controls for RME audio interfaces from Loopy Pro, with device-specific MIDI paths and TotalMix behavior documented separately.
+This repository documents how an RME Babyface Pro FS is controlled from inside Loopy Pro on an iPad, without TotalMix FX, over the MIDI port the unit offers in class-compliant mode.
 
-**Independent software. Not affiliated with RME.**
+**Website: https://ultracello.github.io/loopy-pro-rme-interface-control/**
 
-**Status: research and early development.** This repository publishes documentation, contribution templates and a browser-only planning configurator. It does not yet contain a released hardware-control module, an importable Loopy Pro project, or a reproducible hardware-validation package.
+The website shows what can be controlled and how far each function is measured, the open points and the list of all reports. It is built from the documents in this repository, and its tests fail when it falls behind them, so it is the place to look for the current state.
 
-## Why control an interface from Loopy?
+## What is here
 
-Keep main/headphone controls within reach beside the looping controls, without switching apps or reaching down to an interface. The aim is reusable controls that fit into an existing Loopy project while preserving its audio routing.
+- [Protocol reference](docs/protocol/BABYFACE-PRO-FS-CC-REFERENCE.md): every message byte for byte, with the formulas for the dB values. Each statement is marked as measured on the unit, reported back by the unit, taken from other people's notes, or unknown. It is written for anyone who wants to build native support into a host application.
+- [Reference codec, test vectors and measured curves](docs/protocol/reference/): a small codec in Python that builds and parses bytes and sends nothing, the test vectors for it, and the equaliser curves measured with sine tones.
+- [Reports](docs/milestones/): one dated report for every step of the work, with what was done, what was measured and what went wrong.
+- [Website generator](website/).
 
-An ordinary Loopy audio fader changes the signal in Loopy. Interface output level, preamp gain and an independently routed hardware direct-monitor mix are different parameters. This project investigates device-specific controls for those hardware functions, starting with outputs. Input gain and hardware-monitor mix controls still need separate implementation and tests.
+## What is not here
 
-The intended path uses model-specific USB MIDI/SysEx with StreamByter processing and a MidiFire return path. It does not assume that TotalMix FX for iPad accepts desktop Mackie Control or OSC commands. Reliable operation with TotalMix closed, a complete iPhone-only setup and a validated minimum end-user setup remain unproven.
+The controller page that runs in Loopy Pro is a private working copy and is not published. There is nothing to download and install. The aim is native support in a host; the reference is written for that.
 
-Read the [project overview](docs/PROJECT_OVERVIEW.md) for signal-path examples, iPad/iPhone/Mac roles, effects limitations, earlier prototype results and ways to contribute. Loopy also documents device-dependent hardware-gain controls; this project does not establish whether those support a particular Babyface setup.
+## Checks
 
-## Planning website
+```
+python3 docs/protocol/reference/test_babyface_cc.py
+cd website && npm test && npm run build
+```
 
-The [public planning website](https://ultracello.github.io/loopy-pro-rme-interface-control/) and its [source](website/) let visitors select desired controls, preview a local-only surface and export a setup brief. It sends no MIDI, OSC or audio and is not a tested hardware controller. See [website setup and privacy](website/README.md) and the repository's **Build and deploy planning website** Actions workflow for deployment status.
+## Older documents
 
-## Protocol reference for native support
+[Project overview](docs/PROJECT_OVERVIEW.md), [module status](docs/MODULE_STATUS.md), [testing](docs/TESTING.md), [development setup](docs/DEVELOPMENT_SETUP.md), [repository plan](docs/REPOSITORY_PLAN.md), [sources](docs/SOURCES.md) and the [acceptance gates](docs/ACCEPTANCE.md) were written in the first days of the project, 8 to 10 November 2026. They are kept as they were. Where they differ from the protocol reference or from a later report, the later document is right.
 
-[A reference of the control protocol](docs/protocol/BABYFACE-PRO-FS-CC-REFERENCE.md) of the RME Babyface Pro FS in class-compliant mode is kept for anyone who wants to build native support into a host application. It gives every message byte for byte, with the formulas for the dB values, and marks each statement as measured on the unit, reported back by the unit, taken from other people's notes, or unknown. A small [reference codec](docs/protocol/reference/babyface_cc.py) in Python with 148 test vectors comes with it; it only builds and parses bytes and sends nothing. Equaliser and low cut are measured since 18 November 2026: levels to 0.01 dB, and whole frequency responses with sine tones at 48 kHz, which match the calculation from the coefficients to 0.02 dB; the [measured curves](docs/protocol/reference/eq-curves-measured.json) are included, among them three of the headphone output at 44.1 kHz. The reference is a draft: phantom power, loopback and the device settings are not verified yet and are marked so.
+## License
 
-## Latest development milestones
+Public domain under the [Unlicense](LICENSE). Do whatever you want with it.
 
-[Line input, headphone output and a second sample rate](docs/milestones/2026-11-18-line-input-headphone-output-and-a-second-sample-rate.md) is the latest step. Over one cable from the headphone socket to line input 3: the reference level of the line input makes 8.74 dB, its gain steps are 0.50 dB each, the headphone level is exact from −30 to +6 dB behind the output, an input on the main output follows the same cell law as everything else, and the equaliser of the headphone output matches the calculation to 0.01 dB. With no other audio app open the unit ran at 44.1 kHz instead of 48 kHz, and the equaliser followed coefficients computed for that rate, so a host has to send them anew when the rate changes. The first pass was spoiled by a way round through Loopy Pro, which passes input 3 on to its outputs; the report says what happened. Loopback was sent and showed nothing at the meters; it stays unverified.
-
-[Equaliser curves with sine tones](docs/milestones/2026-11-18-equaliser-curves-with-sine-tones.md) came before. The project's diagnostic app on the iPad was given a sine generator of its own, and with it whole frequency responses of equaliser and low cut were measured behind the main output over the loop cable: 21 curves of 67 frequencies from 10 Hz to 20 kHz. From 20 Hz up and above −20 dB every one of 1219 points lies within 0.02 dB of the calculation from the coefficients that were sent, except one at 50.4 Hz with 0.05 dB. The unit ran at 48 kHz. The low cut formula of the protocol notes puts the −3 dB point up to 15 % above the nominal frequency and costs up to 0.5 dB in the pass band; a corner solved from the filter itself came out where it was asked for. A band takes any biquad, and the equaliser of an input behaves like that of an output.
-
-[Equaliser and low cut measured](docs/milestones/2026-11-18-equaliser-and-low-cut-measured.md) came before, with music as the test signal. The project's diagnostic app on the iPad can now send a whole message to the unit, behind a gate that refuses everything outside fixed limits and phantom power always. With it the 87-byte equaliser message was measured behind the main output over the loop cable: an overall gain of 0.5 and 0.25 gave −6.02 and −12.04 dB, a low shelf of −12 dB gave −12.0 dB in each of the three bands, the low cut fell with every pole, and off returned to 0.00 dB. The slot number in the message turned out to be a shared memory, so every channel needs its own. The run also showed that each meter answer carries the peak since the previous request, which explains what earlier reports called a lag of the meters, and that the level of a mixer cell counts down to its lowest bit.
-
-[Single prepared messages](docs/milestones/2026-11-18-main-cells-and-levels-above-unity.md) came before. A test rig that sends single prepared messages settled three open points in seven minutes: the mixer cells of the main output follow the same law as those of the headphones, levels above unity are taken up to +6 dB, and two further output channels were found. Sixteen messages, every measured value exact to the tenth of a dB. The planner on the website now offers every half-dB step from 0.5 to 30 dB.
-
-[A correction](docs/milestones/2026-11-18-correction-after-a-replug-the-control-works.md) came half an hour earlier. Earlier reports said that after a replug of the interface the input of the host stays dead until the separate routing app wakes, and called it a fault of the host. That was wrong: the project's own probe discarded its read. Measured with a corrected probe, the control works at once after a replug, with the routing app suspended and untouched; only the displays wait for that app. The report drafted for the developer of the host was never sent and is withdrawn.
-
-[The phase of each way to the headphones](docs/milestones/2026-11-18-phase-of-each-way.md) came an hour earlier. The sixteenth revision can invert the phase of each of the five ways to the headphones. Measured on the unit with the same signal on two ways: a way alone keeps its level exactly, and the sum of the two changes by 8.8 dB with the sign, every combination twice with the same value. The routing app that carries the displays now passes a wider range of feedback numbers, so the page has room for more displays.
-
-[The reference level of the two line inputs](docs/milestones/2026-11-17-reference-level-of-the-line-inputs.md) came the evening before. The fifteenth revision switches the sensitivity of line input 3 and 4 from the page, in the same guarded course as the pad. On the unit, eight of eight switches were reported back and shown. What the switch does to a signal is not established: nothing was connected, and the idle noise of the inputs did not move with it. The same afternoon the routing app that carries the displays stayed alive in the background for more than 90 minutes.
-
-[Arming restores the mixer of the unit](docs/milestones/2026-11-17-arming-restores-the-mixer.md) came some hours earlier. The unit forgets its mixer whenever its USB connection is built anew. The fourteenth revision sends again, on arming, every way to the headphones whose state it knows. Measured across a replug: after reading and arming, with nothing else pressed, the headphone output stood exactly where it had stood before. A soak of 400 measured presses lost no message.
-
-[The two ways to and from the interface inside the host](docs/milestones/2026-11-17-control-ways-inside-the-host.md) came a few hours earlier. The host now listens to the interface itself, and a second plugin instance inside the host carries the strict filter before it. With the separate routing app ended, a READ still reached the unit and a step on the headphones arrived; the routing app only carries the displays of the page now. Displays and measurements were repeated on this setup. One thing is not explained: in the first of two acceptance attempts twelve presses in a row changed nothing. Replugged three times later the same day, no app had to be restarted. The conclusion first drawn there, that the input of the host stays dead until the routing app wakes, has been corrected: the control works at once, only the displays wait for the routing app.
-
-[Every display read field by field](docs/milestones/2026-11-17-displays-read-field-by-field.md) came an hour earlier. The revision that no longer scales any display is on the interface: all 121 levels, 22 pan positions and every value of the input gains were read from the page and compared with the unit, without a single difference. Monitoring was measured down to −48 dB and together with the playback. The same run found that after the interface had been replugged, MIDI between the host and the separate routing app stayed dead in both directions until both apps were started anew; loading the scene again was not enough.
-
-[Pan, and two faults recorded plainly](docs/milestones/2026-11-17-pan-and-two-findings.md) came a few hours earlier. Each way to the headphones now has a pan, measured left and right without a difference from the expected level. The same runs found that the level display of the page was one field off at some levels, a fault of the project's own scaling, and that the system ended the separate MIDI routing app in the background, after which the page stopped answering while still showing "armed". A revision that no longer scales any display was built and waited for its run.
-
-[Hearing the inputs on the headphones](docs/milestones/2026-11-17-monitoring-inputs-on-phones.md) came before that. Each of the four inputs can be put on the headphones with a level of its own, through the mixer of the unit. The unit does not report its mixer, so the rule keeps its own picture and a measurement had to decide: with a cable from an output into an input, the headphone output carried exactly the expected peak at −12, −6 and 0 dB, and nothing when the way was off. The playback got the same controls afterwards, on, off and a level, and measured the same way it arrived exactly as well.
-
-The [pad of the microphone inputs](docs/milestones/2026-11-17-pad-and-renewed-minute.md) came an hour earlier. The pad shares its message with phantom power, so rule and filter were built never to set a 48 V bit. Where the unit reports the pad was an assumption until the first press decided it; on the interface 14 of 14 checks passed, both pads on and off, and an input step now keeps the page armed like an output step. With a cable from an output into an input, the meters of the unit then showed the pad taking 10.2 dB and gain steps of 3 and 6 dB arriving exactly.
-
-The [gain of all four analog inputs](docs/milestones/2026-11-17-input-gain-all-four-inputs.md) came earlier the same night. A read-only run first showed how the unit reports these gains while the operator turned them on the unit. A seventh rule revision then reads, writes and reads back each step; on the interface twelve of twelve checks passed with small values, and a second acceptance then ran the whole range: 36 of 36 checks, the microphone gain up to its upper end of 65 dB and back, the line inputs to both ends, and every input ended where it started. Nothing was connected to the inputs, and phantom power stays out of reach.
-
-[Any step width and the first operation of Main](docs/milestones/2026-11-13-free-step-width-and-main.md) came four days earlier. A slider on the page chooses a width from 0.5 to 30 dB, and two buttons per output apply it; on the interface a chosen 10.5 dB went down and exactly back on Phones. With nothing connected to it, Main was operated for the first time: out of a foreign mute to −30 dB, half-dB steps up and down, an own mute and the exact return, with the peak at the Main output following each step. **Large steps upward were not run**, and Main was not heard through speakers. No live approval.
-
-The [reason row and the new USB chain](docs/milestones/2026-11-12-reason-row-and-usb-chain.md) came the day before. Without the charging adapter that had sat between iPad and interface, on a hub with its own power input, the connection held through a 20-minute watch: 120 of 120 read queries answered, signal at the Phones output each time. The Phones route control restored the route a second time. A fifth rule revision shows on the page why the controller locked or refused; on the interface the fields ok, refused, read first and minute over appeared as intended. **Twenty minutes are not an endurance test**, Main was again not operated, and three of the seven reason fields were shown offline only. No live approval.
-
-The [first operation by hand with a looping clip](docs/milestones/2026-11-10-hand-operation-loop-transport-phones-route.md) showed what the automated runs had missed, because none of them played a clip: READ and ARM were demanded again and again, one Phones mute never completed and left the output muted with the page waiting, and sound dropped whenever the iPad lost the interface on USB. The candidate rule was revised three times the same evening and built into the operator's own project. On the interface, with the clip looping: eight Phones steps in 29 seconds without a new READ, three mutes with exact return, and refused operations that no longer lock the page. A new control writes the two mixer levels that put playback on the Phones output; after a USB loss the Phones output peak went from zero to the expected level, with TotalMix closed. **Main was not operated**, the cause of the USB losses is open, and after a loss MidiFire had to be restarted and the project loaded again by hand. No live approval.
-
-The [Interface copy with mute switches](docs/milestones/2026-11-10-interface-copy-mute-switches.md) brings the operating page and the session gain-mute together in one copy of a real music project: one fader, one dB display, step buttons, a status row and a mute switch per output group. In one bounded run the copy and a 15-module routing scene were loaded, six of six reads were clean, the Phones fader and dB display matched the level read, and the Phones switch muted (raw 222/222 to 59/59) and returned exactly. **Main was not touched** because the device held it at raw 59 from outside; step buttons and fader writes under this rule were checked offline only. One pass, TotalMix closed, no live approval.
-
-The [transfer-copy write pair and session gain-mute check](docs/milestones/2026-11-10-transfer-write-pair-session-mute.md) records two separate results. In the transferred Interface copy, on the unchanged Restricted rule, Main and Phones were each lowered by 0.5 dB once and returned exactly, with the other group unchanged; no other step size, fader write or mute was exercised there. In a separate candidate rule, the controller muted Phones itself (raw 222/222 to 59/59) and returned it exactly after a lock, a transport stop and start, and a press without a preceding read; Main was not touched because the device held it at raw 59 from outside. The report also records that TotalMix mutes by writing gain raw 59, that the route through MidiFire was silent for some minutes, and that the first reply after loading the routing scene often arrived incomplete. A same-day follow-up did not reproduce the silence by waiting seven minutes or by a short replug of the interface; MidiFire's own port notice indicates the interface had dropped off USB by itself around that time, and why is open. The candidate is a test rig: gain-mute stays blocked in the Restricted copy, and no Main mute, endurance, USB/crash-safety or general live approval is added.
-
-A [transfer into another project's Interface page](docs/milestones/2026-11-10-other-project-interface-transfer.md) passed complete READ, matching Main/Phones fader feedback, and same-project return with transport continuing. Its older MIDI-source structure was explicitly remapped around the unchanged Restricted rule, preserving the checked target audio records, existing music page and resources. No activation, gain action or repeated step test was performed; the zero-track target establishes neither transfer-write validation nor acoustic/multitrack continuity. Original project and previous MidiFire scene were restored, output values remained unchanged, and temporary diagnostics were stopped. This is one bounded transfer, not a general importer, public installer or live approval.
-
-The [Restricted step-width follow-up](docs/milestones/2026-11-10-restricted-step-widths.md) records Main 1 / 2 / 3 / 6 dB reduction-and-return pairs and a distinct fresh-identity Phones cohort passing the same four sizes, each with exact return and the other group unchanged. An earlier Phones return remains failed with its restore authority revoked; a separate new normal target did not reinstate that authority. The unchanged rule, original-project/scene restoration and final output values were checked, and temporary diagnostics were stopped. Gain-mute and old saved-level restore remain blocked; no USB/crash-safety, arbitrary-sequence or general live approval is added.
-
-The [Restricted control and Interface integration checkpoint](docs/milestones/2026-11-09-restricted-control-interface-integration.md) records two distinct results on the same rule revision: a separate Main/Phones copy passed ±0.5-dB steps and small fader movements with exact restoration and the other group unchanged; a separate integration copy passed full READ, matching fader feedback and return to its music page while transport continued.
-
-**Current Restricted policy: gain-mute and old saved-level restore are blocked.** Silent USB/receiver failures and crash-safe automatic restoration remain open. The original project and previous MidiFire scene were restored. These are bounded observations, not complete live approval or an installable integration for other users.
-
-The [read-path and reply-loss checkpoint](docs/milestones/2026-11-09-read-paths-reply-loss-lock.md) observed complete state and meter replies through both prepared read paths using the same persistent receiver. In a **gain-disabled diagnostic copy**, a suppressed return input blocked activation; restoring it required a new complete read followed by explicit activation. All four output values stayed unchanged, and the original project/scene were restored.
-
-The sporadic USB/hub failure and historical missing-prefix cause were **not resolved**. Safe gain-mute restore across interruptions and the complete proposed F-01–F-12 regression remain open. This result does not establish a finished product or general live approval.
-
-The [Sync LIVE1 fader checkpoint](docs/milestones/2026-11-09-live-faders-startup-gates.md) confirmed correct current values after **three project starts without touching a fader first**. Main and Phones were each reduced and increased with the native fader, independently checked and restored exactly; the other output group stayed unchanged. **Transport stop locked the controls; a missing return path prevented activation.** The tested copy was saved and the original project/scene restored.
-
-These are bounded fader and activation-gate results. Auxiliary displays, gain-mute lifecycle, physical USB reconnect and duration checks remain open. No full-range or complete live approval is claimed.
-
-The [latest Main/Phones checkpoint](docs/milestones/2026-11-09-main-phones-steps-gain-mute.md) tested **0.5 / 1 / 2 / 3 / 6 dB reduction-and-restoration pairs on both stereo output groups**. Phones tests left Main unchanged; stereo Main tests left Phones unchanged. XLR2 was verified separately first. A **gain-mute/restore toggle per group** recovered its saved level, and the following 0.5-dB checks passed. The saved combined candidate's code and 22 button actions were checked; original project and scene were restored.
-
-Gain-mute uses level reduction, **not a verified hardware mute bit**. The later fader checkpoint advances native-fader and activation-gate evidence; auxiliary feedback, gain-mute lifecycle and USB reconnect/duration behavior remain open. This is scoped device evidence, not a full live release or a public installable package.
-
-The [9 November v09b3 checkpoint](docs/milestones/2026-11-09-phones-v09b3-follow-up.md) passed one paired Phones reduction and exact restoration, **−10.5 → −11.0 → −10.5 dB**, after more than 75 seconds of transport runtime. Automatic follow-up queries after **101/100 ms** received successful replies; separate device queries confirmed both operations. StreamByter showed BEREIT / AKTIV, Main stayed at −8.0 dB, and the original project and scene were restored. This is a bounded result, not a general live release or long-duration validation.
-
-The [bounded native Phones-fader test](docs/milestones/2026-11-08-phones-fader-write-restore.md) now records both headphone channels changing **−10.5 → −11.0 → −10.5 dB**, with fresh complete readback before restoration and Main unchanged. These are mapped device/display values, not a new acoustic measurement. The original project and scene were restored.
-
-A later [native step-selection simulation](docs/milestones/2026-11-08-native-step-simulation.md) checked 0.5 / 1 / 2 / 3 / 6 dB choices, both directions, inert startup and reload using only internal Loopy widgets. It sent no MIDI and did not test larger real steps or the native sender connection.
-
-The preceding [filtered receive/step test](docs/milestones/2026-11-08-phones-step-restore.md) and [automatic native fader display](docs/milestones/2026-11-08-native-fader-display.md) remain separate checkpoints. See the [mapping evidence](docs/protocol/output-gain-evidence.md) for the raw-unit/dB distinction.
-
-The checkpoints remain scoped to their own revisions. Bounded native faders, physical step buttons and gain-mute/restore now have separate device observations. Full-range behavior, auxiliary feedback, mute lifecycle, USB reconnect/duration behavior, TotalMix independence and a complete installable profile remain unverified.
-
-The [earlier READ report](docs/milestones/2026-11-08-loopy-read-ready-locked.md) and [passive report](docs/milestones/2026-11-08-passive-ipad-reception.md) remain dated historical evidence, with forward links to later tests.
-
-## The goal
-
-Make useful interface controls easy to add to an existing Loopy Pro project, without rebuilding its audio routing:
-
-- Independent headphone and main-output volume controls.
-- Volume up/down buttons with selectable, profile-verified step sizes.
-- Continuous faders.
-- Separate mute/unmute toggles.
-- Feedback showing actual device state, with safe startup and reconnection.
-- A simple, complete setup guide for each verified hardware/software combination.
-
-The initial research focus is RME Babyface Pro / Babyface Pro FS workflows with iPad. That is a development focus, not a compatibility claim for every model, firmware version, or connection. iPhone support is not confirmed.
-
-## Current scope and verification
-
-| Area | Status |
-|---|---|
-| Headphone/main-output step controls | Five physical reduction/restore sizes tested for paired Phones and stereo Main, with the other group unchanged; arbitrary sequences, lifecycle safety and a released profile remain unverified |
-| Continuous faders | Three startup checks and bounded native Main/Phones writes with exact restoration passed; full range and complete lifecycle safety remain unverified |
-| Independent mute/unmute | Historical bounded gain-mute tests remain recorded; current Restricted gain-mute and old saved-level restore are blocked. Native hardware mute bits and interruption safety remain unverified |
-| Input gain, pan and additional mixer functions | Further research |
-| iPhone workflow | Limited earlier prototype observation; complete workflow remains unverified |
-| Installable module or tested device profile | Not published in this repository yet |
-
-A private experiment or a working browser preview is not a general compatibility guarantee. Each released module needs its exact device model, firmware, software versions, transport, mappings and reproducible results.
-
-Important distinctions:
-
-- A level value does not prove whether an output is muted.
-- A MIDI increment is not automatically an exact dB step.
-- An input mixer fader is not necessarily microphone-preamp gain.
-- A control should obtain the current device state before applying a stored value, so loading a project does not cause an unintended level jump.
-- A headphone test does not verify the main output, and an iPad test does not verify iPhone.
-
-## Interface control and TotalMix
-
-The intended target is the RME interface's supported mixer functions. A direct device-control path and remote control of TotalMix software are different approaches.
-
-- **Direct interface control:** must be established for the exact RME model, firmware, operating mode and MIDI/control transport.
-- **Desktop TotalMix FX:** RME documents remote-control options, but a particular Loopy-to-host workflow still needs end-to-end verification.
-- **TotalMix FX for iPad:** RME's app description excludes MIDI/OSC and TCP/IP remote control. Do not assume desktop TotalMix remote instructions work with this app. This restriction does not establish whether a separate direct hardware path exists.
-- **TotalMix Remote:** controls TotalMix on a host computer and is distinct from TotalMix FX for iPad.
-
-USB audio support alone does not establish mixer-control support.
-
-Official references:
-- [RME TotalMix FX and TotalMix Remote](https://rme-audio.de/totalmix-fx.html)
-- [RME's TotalMix FX for iPad description](https://apps.apple.com/us/app/totalmix-fx-for-ipad/id739965887)
-
-## End-user setup versus development tools
-
-A verified minimal end-user setup has not yet been published. It will depend on the released device profile. A desktop-host route may need a Mac/PC; a hostless route must be proven separately.
-
-Mac-based testing for this project has involved Appium and WebDriverAgent/XCTest. Xcode supports the underlying development/provisioning toolchain. They are not established end-user requirements for these controls. UI automation, the MIDI/control connection and the audio connection must be documented separately, including whether each uses USB or a network.
-
-Exact tool versions and a reproducible developer setup should accompany the corresponding test report. No machine-specific setup or automation script is included in this repository yet.
-
-## Documentation
-
-- [Purpose, control paths, platform requirements and current limits](docs/PROJECT_OVERVIEW.md)
-- [Module status and evidence levels](docs/MODULE_STATUS.md)
-- [Contributing](CONTRIBUTING.md)
-- [Developer setup versus end-user requirements](docs/DEVELOPMENT_SETUP.md)
-- [Planning website tests and browser checklist](docs/TESTING.md)
-- [Restricted control and same-project Interface integration](docs/milestones/2026-11-09-restricted-control-interface-integration.md)
-- [Read-path comparison and gain-disabled reply-loss gate](docs/milestones/2026-11-09-read-paths-reply-loss-lock.md)
-- [Native fader startup, writes and activation gates](docs/milestones/2026-11-09-live-faders-startup-gates.md)
-- [Main/Phones step sizes and gain-mute restoration](docs/milestones/2026-11-09-main-phones-steps-gain-mute.md)
-- [v09b3 Phones test with automatic follow-up reads](docs/milestones/2026-11-09-phones-v09b3-follow-up.md)
-- [Native step-selection simulation](docs/milestones/2026-11-08-native-step-simulation.md)
-- [Bounded native Phones-fader write/restore](docs/milestones/2026-11-08-phones-fader-write-restore.md)
-- [Output-gain mapping and tested points](docs/protocol/output-gain-evidence.md)
-- [Earlier Phones step/restore milestone](docs/milestones/2026-11-08-phones-step-restore.md)
-- [Native Loopy fader-display milestone](docs/milestones/2026-11-08-native-fader-display.md)
-- [Earlier Loopy READ / READY / LOCKED milestone](docs/milestones/2026-11-08-loopy-read-ready-locked.md)
-- [Earlier passive iPad reception milestone](docs/milestones/2026-11-08-passive-ipad-reception.md)
-- [Hardware and release acceptance gates](docs/ACCEPTANCE.md)
-- [Test-report template](templates/test-report.md) and [device-profile template](templates/device-profile.md)
-- [Sources](docs/SOURCES.md) and [changelog](CHANGELOG.md)
-
-The issue chooser provides forms for test reports and feature requests. These forms do not authorize a hardware test or establish compatibility.
-
-## How to help
-
-Use [Issues](https://github.com/ultracello/loopy-pro-rme-interface-control/issues) to suggest one concrete musical task, point out unclear documentation, or contribute a reproducible observation.
-
-For a useful report, include:
-
-1. Interface model, firmware, device/OS and app versions.
-2. Intended control path and the specific output or function.
-3. Exact steps, expected behavior and actual result.
-4. What passed, failed, was blocked, or was not tested.
-5. An official manual section or sanitized evidence where available.
-
-Do not change a working project or routing just to produce a report. Hardware tests need a separate working copy, a reviewed procedure, safe monitoring and a clear stop/restore plan. Do not infer safe hardware values from a browser demo.
-
-Issues and attachments are public. Do not post credentials, private messages, recordings, original working projects, device identifiers, or private network details.
-
-## What unlocks a release
-
-A control module needs a documented profile, verified mappings and feedback, independent-output tests, measured level behavior where relevant, reconnect/restart checks, and a novice-friendly installation and removal guide. Claims must stay within the tested profile and revision.
-
-This repository is independent of RME and Loopy Pro. Everything the project authored here is public domain under [the Unlicense](LICENSE): do whatever you want with it. That dedication covers only project-authored material. Third-party software, names and trademarks keep their own terms, and no rights to them are granted here.
-
-_Last reviewed: 9 November 2026._
-
-
+Independent work. Not affiliated with RME or with A Tasty Pixel, the maker of Loopy Pro.

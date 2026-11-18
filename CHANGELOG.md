@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-11-18 · Website and README rebuilt
+
+- The website is now one plain page that is built from the documents: status table, rules for a host and open points from the protocol reference, the list of reports from `docs/milestones`. It replaces the planning configurator, which described a product that does not exist and had fallen behind the work.
+- A fingerprint of what the page takes from the documents is kept under `website/`; the tests fail when it is not current, so the documents cannot change without the page being published again.
+- The README was cut down to what the repository holds and where the current state can be read.
+
 ## 2026-11-09 · Restricted control and same-project Interface evidence
 
 - Recorded the separate Main/Phones copy's bounded ±0.5-dB steps and small fader movements, exact return and unchanged other group.
