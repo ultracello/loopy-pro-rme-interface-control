@@ -36,10 +36,11 @@ class Codec(unittest.TestCase):
         self.assertEqual((s['pad'],s['line_sensitivity_bit'],s['phantom_48v'],s['dim']),((False,False),(True,True),(False,False),False))
     def test_equaliser(self):
         self.assertEqual(b.fixed_5_27(-2.375),0xED000000);self.assertEqual(b.fixed_5_27(1.0),0x08000000)
-        sub,w=b.parse_frame(V['equaliser: slot 0 on input 1, flat bands, overall gain 0.5, enabled']);self.assertEqual((sub,len(w),w[0],w[13],w[1:13]),(6,16,1<<31,0x04000000,[0]*12))
-        sub,w=b.parse_frame(V['low cut: input 1, 4 poles at 2 kHz at 48 kHz, slot 0']);self.assertEqual(w[0],(1<<31)|(0xF<<8));self.assertEqual(w[13],0x08000000);self.assertAlmostEqual(w[14]/(1<<27),0.10686,places=4)
+        sub,w=b.parse_frame(V['equaliser: slot 1 on input 1, flat bands, overall gain 0.5']);self.assertEqual((sub,len(w),w[0],w[13],w[1:13]),(6,16,(1<<31)|1,0x04000000,[0]*12))
+        sub,w=b.parse_frame(V['equaliser: slot 20 on output Main left, flat bands, overall gain 0.5']);self.assertEqual(w[0],(1<<31)|(1<<20)|20)
+        sub,w=b.parse_frame(V['low cut: input 1, 4 poles at 2 kHz (48 kHz), slot 1']);self.assertEqual(w[0],(1<<31)|(0xF<<8)|1);self.assertEqual([b.parse_frame(V['low cut: output Main left, %s at 2 kHz (48 kHz), slot 0'%n])[1][0]>>8&15 for n in ('1 pole','2 poles','3 poles','4 poles')],[1,3,7,15]);self.assertEqual(w[13],0x08000000);self.assertAlmostEqual(w[14]/(1<<27),0.10686,places=4)
         a1,a2,b1,b2,g=b.biquad('peak',1000,0,0.7,48000);self.assertAlmostEqual(g,1.0);self.assertAlmostEqual(a1,b1);self.assertAlmostEqual(a2,b2)
-        self.assertEqual(len(V['equaliser: slot 0 on input 1 disabled']),87)
+        self.assertEqual(len(V['equaliser: slot 1 on input 1 off']),87);self.assertEqual(b.parse_frame(V['equaliser: slot 1 on input 1 off'])[1][0],1)
     def test_meters(self):
         self.assertEqual(b.meter_dbfs(b.METER_FULL_SCALE),0.0);self.assertAlmostEqual(b.meter_dbfs(b.METER_FULL_SCALE//2),-6.0206,places=3);self.assertEqual(b.meter_dbfs(0),-math.inf)
         w=[0]*40;w[0]=b.METER_FULL_SCALE//2;w[28]=b.METER_FULL_SCALE//4;p=b.parse_peaks(b.frame(2,w));self.assertAlmostEqual(p['inputs_1_to_4'][0],-6.0206,places=3);self.assertAlmostEqual(p['phones_out'][0],-12.0412,places=3)

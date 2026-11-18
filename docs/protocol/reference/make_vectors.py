@@ -33,9 +33,36 @@ add('mixer: input 1 to Main left at -12 dB',b.set_mixer(0,0,b.mixer_level_from_d
 add('output level Phones left raw 255 (+6 dB)',b.set_output_level(6,255),'channel 6, raw 255','reported')
 add('output level AS1 raw 183 (-30 dB)',b.set_output_level(8,183),'channel 8','reported')
 add('output level AS2 raw 59',b.set_output_level(9,59),'channel 9','reported')
-add('equaliser: slot 0 on input 1, flat bands, overall gain 0.5, enabled',b.set_eq(0,0,False,True,overall_gain=0.5),'87 bytes; layout from the notes','notes')
-add('equaliser: slot 0 on input 1 disabled',b.set_eq(0,0,False,False),'bit 31 of word 0 clear','notes')
-add('low cut: input 1, 4 poles at 2 kHz at 48 kHz, slot 0',b.set_eq(0,0,False,True,low_cut_poles=4,low_cut=b.low_cut_coefficient(2000,4,48000)),'word 14 = 1 - k','notes')
+add('mixer: playback 1 to Main left, level field 0x10000',b.set_mixer(0,12,0x10000),'index 12; the Main peak value was exactly half of the one at 0x20000','measured')
+add('mixer: playback 1 to Main left, level field 0x1009C',b.set_mixer(0,12,0x1009C),'a level that is no multiple of 8; read one meter step above 0x10098','measured')
+add('mixer: playback 1 to Main left, level field 8',b.set_mixer(0,12,8),'-84.4 dB below the level at 0x20000','measured')
+add('mixer: playback 1 to Main left, level field 7',b.set_mixer(0,12,7),'read lower than level 8: the lowest bits count','measured')
+# equaliser and low cut, as sent in run D1 on 18 November 2026; "measured" changes were read behind the output over a loop cable
+FS=48000;FLAT=b.FLAT_BAND;LS=b.biquad('lowshelf',15000,-12,0.7,FS);HS=b.biquad('highshelf',20,-12,0.7,FS);PK=b.biquad('peak',1000,-12,0.3,FS)
+lc=lambda f,p:dict(low_cut_poles=p,low_cut=b.low_cut_coefficient(f,p,FS))
+for name,frame,meaning in (
+    ('equaliser: slot 20 on output Main left, flat bands, overall gain 0.5',b.set_eq(20,0,True,True,overall_gain=0.5),'87 bytes; -6.02 dB'),
+    ('equaliser: slot 20 on output Main left off',b.set_eq(20,0,True,False),'bit 31 of word 0 clear; 0.00 dB'),
+    ('equaliser: slot 6 on output Main left, flat bands, overall gain 0.25',b.set_eq(6,0,True,True,overall_gain=0.25),'-12.04 dB'),
+    ('equaliser: slot 0 on output Main left, flat bands, overall gain 1.0',b.set_eq(0,0,True,True,overall_gain=1.0),'0.00 dB'),
+    ('equaliser: slot 0 on output Main left, low shelf -12 dB at 15 kHz Q 0.7 in band 1 (48 kHz)',b.set_eq(0,0,True,True,bands=(LS,FLAT,FLAT)),'-12.01 dB with music below 2 kHz'),
+    ('equaliser: the same low shelf in band 2',b.set_eq(0,0,True,True,bands=(FLAT,LS,FLAT)),'-12.01 dB'),
+    ('equaliser: the same low shelf in band 3',b.set_eq(0,0,True,True,bands=(FLAT,FLAT,LS)),'-12.02 dB'),
+    ('equaliser: the same low shelf in bands 1 and 2',b.set_eq(0,0,True,True,bands=(LS,LS,FLAT)),'-23.93 dB'),
+    ('equaliser: slot 0 on output Main left, high shelf -12 dB at 20 Hz Q 0.7 in band 1 (48 kHz)',b.set_eq(0,0,True,True,bands=(HS,FLAT,FLAT)),'-10.64 dB with music'),
+    ('equaliser: slot 0 on output Main left, peak -12 dB at 1 kHz Q 0.3 in band 2 (48 kHz)',b.set_eq(0,0,True,True,bands=(FLAT,PK,FLAT)),'-3.47 dB with music'),
+    ('low cut: output Main left, 1 pole at 2 kHz (48 kHz), slot 0',b.set_eq(0,0,True,True,**lc(2000,1)),'word 14 = 1 - k; -13.89 dB with music below 2 kHz'),
+    ('low cut: output Main left, 2 poles at 2 kHz (48 kHz), slot 0',b.set_eq(0,0,True,True,**lc(2000,2)),'-19.07 dB'),
+    ('low cut: output Main left, 3 poles at 2 kHz (48 kHz), slot 0',b.set_eq(0,0,True,True,**lc(2000,3)),'-19.96 dB'),
+    ('low cut: output Main left, 4 poles at 2 kHz (48 kHz), slot 0',b.set_eq(0,0,True,True,**lc(2000,4)),'-20.42 dB'),
+    ('low cut: output Main left, 4 poles at 500 Hz (48 kHz), slot 0',b.set_eq(0,0,True,True,**lc(500,4)),'-8.56 dB'),
+    ('low cut: output Main left, 4 poles at 100 Hz (48 kHz), slot 0',b.set_eq(0,0,True,True,**lc(100,4)),'-0.71 dB'),
+    ('low cut and gain: output Main left, 1 pole at 2 kHz and overall gain 0.5, slot 0',b.set_eq(0,0,True,True,overall_gain=0.5,**lc(2000,1)),'-19.90 dB, the sum of the two'),
+    ('equaliser: slot 1 on input 1, flat bands, overall gain 0.5',b.set_eq(1,0,False,True,overall_gain=0.5),'-6.02 dB at the headphones with input 1 monitored'),
+    ('low cut: input 1, 4 poles at 2 kHz (48 kHz), slot 1',b.set_eq(1,0,False,True,**lc(2000,4)),'-20.43 dB at the headphones'),
+    ('equaliser: slot 1 on input 1 off',b.set_eq(1,0,False,False),'0.00 dB')):
+    add(name,frame,meaning,'measured')
+add('equaliser: slot 2 on output Phones left, flat bands, overall gain 0.5',b.set_eq(2,2,True,True,overall_gain=0.5),'sent; the unit\'s own headphone meter does not show the EQ, so the effect could not be read','notes')
 # one synthetic state message: Main muted by raw 59, Phones -14.5 dB, mic gains 0, line gains 6.0 and 0 dB, both sensitivity bits set
 w=[0]*44;w[0]=0x0090000C;w[1]=59|(59<<9);w[2]=(214<<14)|(214<<23);w[3]=(12<<19)
 add('state (built for this file from the values our unit reported)',b.frame(0,w),'word 0 0x0090000C, Main raw 59/59, Phones raw 214/214, gains 0, 0, 12 half dB, 0','reported')

@@ -129,6 +129,7 @@ def set_mixer(output, source, level, inverted=False):
 
     An inverted level stands in the 20-bit field as 2^20 - level. Level 0 switches the cell off. The unit keeps the
     mixer only until its USB connection is built anew and never reports it. Levels up to +6 dB (0x40000) are taken.
+    Every bit of the level counts (measured down to level 7 against 8).
     (measured for the headphones with sources 0-3, 12, 13 and for playback 1/2 to the Main output)"""
     if not (0 <= output <= 11 and 0 <= source <= 23):
         raise ValueError('output 0..11, source 0..23')
@@ -189,9 +190,11 @@ def low_cut_coefficient(f0, poles, fs):
 
 
 def set_eq(eq_index, channel, is_output, enabled, bands=(FLAT_BAND, FLAT_BAND, FLAT_BAND), low_cut_poles=0, low_cut=0.0, overall_gain=None):
-    """Equaliser and low cut of one channel: 16 words. eq_index 0..20 is a slot that no other channel may use.
-    bands: three tuples as biquad() returns them. overall_gain: product of the three b0/a0 unless given.
-    (layout from the notes; see the reference for what was measured)"""
+    """Equaliser and low cut of one channel: 16 words, to be sent in one piece. eq_index 0..20 is a slot, a memory for one
+    set of coefficients: two channels on the same slot share it, so give every channel its own. bands: three tuples as
+    biquad() returns them. overall_gain: product of the three b0/a0 unless given. enabled=False switches EQ and low cut
+    of the channel off, whatever the slot. (measured on output Main left and on input 1: overall gain to 0.01 dB, low
+    shelf in each of the three bands, low cut by poles and frequency; corner frequencies not verified with sine tones)"""
     if not (0 <= eq_index <= 20 and 0 <= channel <= 11 and 0 <= low_cut_poles <= 4 and len(bands) == 3):
         raise ValueError('eq_index 0..20, channel 0..11, poles 0..4, three bands')
     gain = overall_gain if overall_gain is not None else bands[0][4] * bands[1][4] * bands[2][4]
@@ -236,7 +239,8 @@ def meter_dbfs(word):
 
 
 def parse_peaks(data):
-    """Peak meters (sub ID 02, 207 bytes, 40 words), in dBFS. Output meters sit behind the output level. (measured)"""
+    """Peak meters (sub ID 02, 207 bytes, 40 words), in dBFS. Each answer carries the peak since the previous request.
+    Output meters sit behind the output level and before the EQ of the output; input meters before the input EQ. (measured)"""
     sub, w = parse_frame(data)
     if sub != SUB_PEAKS or len(w) != 40:
         raise ValueError('not a peak meter message')
