@@ -22,7 +22,7 @@ The [public planning website](https://ultracello.github.io/loopy-pro-rme-interfa
 
 ## Latest development milestones
 
-[Single prepared messages](docs/milestones/2026-11-18-main-cells-and-levels-above-unity.md) are the latest step. A test rig that sends single prepared messages settled three open points in five minutes: the mixer cells of the main output follow the same law as those of the headphones, levels above unity are taken up to +6 dB, and two further output channels were found. Sixteen messages, every measured value exact to the tenth of a dB. The planner on the website now offers every half-dB step from 0.5 to 30 dB.
+[Single prepared messages](docs/milestones/2026-11-18-main-cells-and-levels-above-unity.md) are the latest step. A test rig that sends single prepared messages settled three open points in seven minutes: the mixer cells of the main output follow the same law as those of the headphones, levels above unity are taken up to +6 dB, and two further output channels were found. Sixteen messages, every measured value exact to the tenth of a dB. The planner on the website now offers every half-dB step from 0.5 to 30 dB.
 
 [A correction](docs/milestones/2026-11-18-correction-after-a-replug-the-control-works.md) came half an hour earlier. Earlier reports said that after a replug of the interface the input of the host stays dead until the separate routing app wakes, and called it a fault of the host. That was wrong: the project's own probe discarded its read. Measured with a corrected probe, the control works at once after a replug, with the routing app suspended and untouched; only the displays wait for that app. The report drafted for the developer of the host was never sent and is withdrawn.
 

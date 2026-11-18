@@ -1,6 +1,6 @@
 # Single prepared messages: playback to the main output, levels above unity, two more output channels
 
-Completed 18 November 2026, 01:17 to 01:22 (Europe/Berlin). Evidence: project-reported, offline tests and one bounded native iPad/Babyface Pro FS run of one session, with a cable from XLR output 1 to XLR input 1. This is not a live approval.
+Completed 18 November 2026, 01:13 to 01:20 (Europe/Berlin). Evidence: project-reported, offline tests and one bounded native iPad/Babyface Pro FS run of one session, with a cable from XLR output 1 to XLR input 1. This is not a live approval.
 
 ## A faster way to settle open points
 
