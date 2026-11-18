@@ -13,7 +13,7 @@ Each statement carries one of four marks, so that nothing has to be taken on tru
 | **notes** | Taken from other people's notes and not tried on our unit. Sources: the protocol notes on the oscmix wiki by Michael Forney (github.com/michaelforney/oscmix/wiki/Babyface-Pro) and the Babyface Pro part of the Linux kernel driver (`sound/usb/mixer_quirks.c`). |
 | **unknown** | We found no source and no way to observe it. |
 
-The folder `reference/` holds a small codec in Python (`babyface_cc.py`), 195 test vectors (`test-vectors.json`), the equaliser curves measured with sine tones (`eq-curves-measured.json`), the level of an output for every raw value (`output-level-law-measured.json`) and tests. The codec was checked against 1871 messages of the controller that was used on the unit: byte for byte the same.
+The folder `reference/` holds a small codec in Python (`babyface_cc.py`), 199 test vectors (`test-vectors.json`), the equaliser curves measured with sine tones (`eq-curves-measured.json`), the level of an output for every raw value (`output-level-law-measured.json`) and tests. The codec was checked against 1871 messages of the controller that was used on the unit: byte for byte the same.
 
 ## 1. Transport
 
@@ -161,13 +161,13 @@ Four more outputs were read digitally through loopback (2.6), also at 44.1 kHz: 
 What follows for a host:
 
 - **The unit does what the coefficients say.** A host can compute the curve it draws from the same numbers it sends.
-- **The unit runs at the rate the host sets, and the coefficients must match it.** With Loopy Pro open the iPad reported 48,000 Hz, and the curves fit the calculation for 48 kHz (deviation 0.001 to 0.03 dB rms per curve) and not the one for 44.1 kHz (0.15 to 1.06 dB). With no other audio app open the iPad reported 44,100 Hz, and the curves fit 44.1 kHz (0.004 to 0.009 dB) and not 48 kHz (0.22 to 0.65 dB). So the rate can change when another app opens or closes, and the host then has to compute the coefficients anew and send them again. What the unit does with coefficients it already holds when the rate changes was not tested.
+- **The unit runs at the rate the host sets, and the coefficients must match it.** With Loopy Pro open the iPad reported 48,000 Hz, and the curves fit the calculation for 48 kHz (deviation 0.001 to 0.03 dB rms per curve) and not the one for 44.1 kHz (0.15 to 1.06 dB). With no other audio app open the iPad reported 44,100 Hz, and the curves fit 44.1 kHz (0.004 to 0.009 dB) and not 48 kHz (0.22 to 0.65 dB). So the rate can change when another app opens or closes, and the host then has to compute the coefficients anew and send them again. **The unit keeps the coefficients it holds when the rate changes**, so the curve moves: one message with a peak of +12 dB at 1 kHz, computed for 44.1 kHz, was read through loopback at 44.1 kHz and again after Loopy Pro had been opened and the rate had become 48 kHz. Before, the curve fitted the calculation for 44.1 kHz; after, it fitted what the same coefficients give at 48 kHz, each time within 0.001 dB at 60 frequencies from 20 Hz up (the peak then lies near 1.09 kHz). Loopback and the mixer cell stayed as they were across the change. **measured**
 - **The low cut of the notes sits a little high and takes some level.** With the k of the notes the −3 dB point is 0.7 % above f0 with one pole at 100 Hz, 7 % with four poles at 100 Hz, and 15 % with four poles at 500 Hz. The filter also stays below 0 dB in the pass band: −0.06 dB for 100 Hz with one pole, −0.10 dB for 100 Hz with four poles, −0.52 dB for 500 Hz with four poles. Whether TotalMix FX sends the same k we do not know. A host that wants the corner exactly at f0 solves k from the filter (`low_cut_coefficient_exact`); the level in the pass band can be made up with the overall gain (word 13).
 - **A band takes any biquad** whose b0 is not zero, not only the three types TotalMix FX offers: a low pass was sent in band 3 and came out as calculated.
 
 The codec builds this message (`set_eq`, `biquad`, `low_cut_coefficient`, `low_cut_coefficient_exact`) and calculates its curve (`eq_response_db`, `eq_from_words`).
 
-### 2.6 Loopback: sub ID `02`; device settings (not tried)
+### 2.6 Loopback: sub ID `02`; device settings: sub ID `00`
 
 **Loopback.** One word: bits 0-15 output channel (0 to 11, in the order of 2.4), bit 16 on. While loopback of an output is on, the host records the signal of that output on the input channel of the same number, in place of the hardware input. **measured** for all twelve outputs, with a test app on the iPad that reads the level of each of the twelve input channels (the iPad shows the unit with twelve inputs and twelve outputs):
 
@@ -178,7 +178,15 @@ The codec builds this message (`set_eq`, `biquad`, `low_cut_coefficient`, `low_c
 
 By RME's manual the hardware input still reaches the mixer of the unit while loopback is on. A host that passes a recorded input on to an output must not switch on loopback of that same output: that is a way round with no cable. Whether the state message reports loopback, and whether the unit keeps it when its USB connection is built anew, was not tested. The codec builds the message (`set_loopback`).
 
-**Device settings**, from the oscmix **notes** only, never sent by us: sub ID `00`, mask in bits 0-15 and value in bits 16-30, as in 2.3. Bit 0 clock source, bit 6 "eq for record", bit 10 optical output ADAT or S/PDIF.
+**Device settings.** Sub ID `00`, one word: mask in bits 0-15 and state in bits 16-30, as in 2.3. The oscmix **notes** name bit 0 clock source, bit 6 "eq for record" and bit 10 optical output ADAT or S/PDIF; notes on the unit's other USB mode say that bit 0 set means the internal clock.
+
+Bit 6 was tried, with mask `0x0040` and bit 0 set in the state: **measured** through loopback of an output whose EQ made +12 dB at the test tone.
+
+- State `0x0001` (bit 6 clear): the recorded tone stood 12.0 dB higher than without EQ. The EQ is in what the host records. This is how the unit was found.
+- State `0x0041` (bit 6 set): 0.0 dB, with the EQ of the output still on. The EQ is not in what the host records.
+- Each was sent twice in changing order; the message sets the state and does not toggle it. So in this mode a set bit 6 takes the EQ out of the recording.
+
+By RME's manual the same setting decides whether the EQ of an input is recorded; that was not measured (it needs a signal at an input). We found no word of the state message that reports these settings, so the state part could not be read first: both messages carried bit 10 as zero, and whether that changed the optical format of our unit we cannot tell. Clock source and optical format were never switched on purpose. The codec builds the two messages (`set_eq_in_recording`).
 
 ### 2.7 Resolution: which values exist
 
@@ -275,7 +283,8 @@ These are the rules our controller follows. Several hundred writes went through 
 | Phantom power | **notes**, never sent |
 | EQ and low cut on inputs and outputs | **measured**, whole curves with sine tones: input 1 and Main left at 48 kHz; both headphone channels, Main right, AS1 and ADAT3 at 44.1 kHz |
 | Loopback | **measured** for all twelve outputs |
-| Clock source, optical format, EQ for record | **notes** |
+| EQ for Record | **measured** for the EQ of an output in loopback (bit 6 of the device settings); for the EQ of an input **notes** |
+| Clock source, optical format | **notes** |
 | Dim, mono, global mute, solo, stereo link, cue, talkback | reading of dim and global mute **reported**; writing **unknown** |
 | Snapshots, layouts | belong to TotalMix FX, not to the unit |
 | Reading the mixer back | not possible, the unit does not report it |
@@ -284,7 +293,8 @@ These are the rules our controller follows. Several hundred writes went through 
 
 - Phantom power on an input with nothing connected.
 - Whether the unit reports loopback and keeps it across a reconnect.
-- Whether the unit keeps the EQ across a reconnect, and what it does with it when the sample rate changes.
+- Whether the unit keeps the EQ across a reconnect.
+- EQ for Record with a signal at an input; where the unit reports its device settings, if it does.
 - Whether a state part with phantom power bits left at zero switches phantom power off.
 
 ## 7. Sources

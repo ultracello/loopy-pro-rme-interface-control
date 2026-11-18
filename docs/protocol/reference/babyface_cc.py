@@ -132,6 +132,16 @@ def output_gain_from_raw(raw):
 SUB_LOOPBACK = 0x02
 
 
+def set_eq_in_recording(on):
+    """Device setting "EQ for Record" (sub ID 00, bit 6), with the clock bit (bit 0) sent as set, internal clock.
+    on=True: what the host records carries the equaliser (the state our unit was found in); on=False: it does not.
+    The bit is SET for "not in the recording". The message carries "what changes" in bits 0-15 and a state in
+    bits 16-30; only these two messages were sent, with the optical format bit (10) at zero. (measured through
+    loopback of an output with its equaliser on: bit clear +12.0 dB, bit set 0.0 dB, each twice; the clock source
+    and the optical format were never switched)"""
+    return frame(SUB_STATE, [0x40 | ((0x01 if on else 0x41) << 16)])
+
+
 def set_loopback(output, on):
     """Loopback of one output, 0..11 (the list OUTPUTS): while it is on, the host records the signal of that output,
     taken behind its level and its equaliser, on the input channel of the same number, instead of the hardware input.

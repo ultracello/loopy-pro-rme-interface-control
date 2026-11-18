@@ -1166,6 +1166,30 @@
    "status": "measured"
   },
   {
+   "name": "device settings: equaliser in the recording (bit 6 clear, clock bit set)",
+   "hex": "F000200D10004000040000F7",
+   "meaning": "read through loopback of an output with a peak of +12 dB: the recorded tone stood 12.0 dB higher than without equaliser",
+   "status": "measured"
+  },
+  {
+   "name": "device settings: equaliser not in the recording (bit 6 set, clock bit set)",
+   "hex": "F000200D10004000040200F7",
+   "meaning": "the recorded tone stood at 0.0 dB, the equaliser of the output still on",
+   "status": "measured"
+  },
+  {
+   "name": "sine through loopback: output AS1, slot 5, peak +12 dB at 1 kHz, Q 2 (coefficients for 44.1 kHz, read at 44.1 kHz)",
+   "hex": "F000200D100605005000080000000000000000000000000000000000000000104141030F704C613D000A5E56090F6D2544370000000000000000000000000000000000000000005F712A430000000000000000000000F7",
+   "meaning": "one message, sent once; curve of 66 frequencies in eq-curves-measured.json; 66 points compared, largest deviation 0.002 dB, rms 0.0004 dB",
+   "status": "measured"
+  },
+  {
+   "name": "sine through loopback: output AS1, slot 5, peak +12 dB at 1 kHz, Q 2 (coefficients for 44.1 kHz, read at 48 kHz after the rate had changed)",
+   "hex": "F000200D100605005000080000000000000000000000000000000000000000104141030F704C613D000A5E56090F6D2544370000000000000000000000000000000000000000005F712A430000000000000000000000F7",
+   "meaning": "one message, sent once; curve of 66 frequencies in eq-curves-measured.json; 66 points compared, largest deviation 0.001 dB, rms 0.0002 dB",
+   "status": "measured"
+  },
+  {
    "name": "state (built for this file from the values our unit reported)",
    "hex": "F000200D10000C004004003B6C010000000056590600000003000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000F7",
    "meaning": "word 0 0x0090000C, Main raw 59/59, Phones raw 214/214, gains 0, 0, 12 half dB, 0",

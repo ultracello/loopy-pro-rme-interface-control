@@ -43,19 +43,20 @@ class Codec(unittest.TestCase):
         self.assertEqual(len(V['equaliser: slot 1 on input 1 off']),87);self.assertEqual(b.parse_frame(V['equaliser: slot 1 on input 1 off'])[1][0],1)
     def test_equaliser_curves_measured_with_sine_tones(self):
         """Every measured point that was compared lies on the curve the codec calculates for the message that was sent."""
-        C=json.loads((Path(__file__).resolve().parent/'eq-curves-measured.json').read_text());self.assertEqual((len(C['settings']),C['sample_rate']),(32,48000));n=0;upper=[];digital=[]
+        C=json.loads((Path(__file__).resolve().parent/'eq-curves-measured.json').read_text());self.assertEqual((len(C['settings']),C['sample_rate']),(34,48000));n=0;upper=[];digital=[]
         for c in C['settings']:
             self.assertEqual(V[c['name']],bytes.fromhex(c['hex']));index,channel,is_output,enabled,kw=b.eq_from_words(b.parse_frame(V[c['name']])[1]);self.assertTrue(enabled)
-            self.assertEqual(b.set_eq(index,channel,is_output,enabled,**kw),V[c['name']]);fs=c.get('sample_rate',C['sample_rate']);self.assertEqual(len(c['points']),67 if fs==48000 else 66)
+            self.assertEqual(b.set_eq(index,channel,is_output,enabled,**kw),V[c['name']]);fs=c.get('sample_rate',C['sample_rate']);self.assertEqual(len(c['points']),67 if fs==48000 and 'through loopback' not in c['name'] else 66)
             for f,measured,calculated,counted in c['points']:
                 mine=b.eq_response_db(f,fs,**kw);self.assertAlmostEqual(mine,calculated,delta=0.0006)
                 if not counted:continue
                 n+=1;self.assertLessEqual(abs(measured-mine),0.2,(c['name'],f))
                 if f>=20 and measured>=-20:upper.append(abs(measured-mine))
                 if f>=20 and 'through loopback' in c['name']:digital.append(abs(measured-mine))
-        # from 20 Hz up and above -20 dB: 1878 points (1219 at 48 kHz over a cable, 179 at 44.1 kHz over a cable, 480 at 44.1 kHz through loopback),
-        # every one within 0.02 dB but one at 50.4 Hz (0.048 dB, next to the mains frequency); the 480 read digitally are within 0.012 dB
-        self.assertEqual((n,len(upper),sum(1 for x in upper if x>0.02)),(2081,1878,1));self.assertEqual(len(digital),480);self.assertLessEqual(max(digital),0.0125);self.assertLess(max(upper),0.05)
+        # from 20 Hz up and above -20 dB: 1998 points (1219 at 48 kHz over a cable, 179 at 44.1 kHz over a cable, 600 through loopback, of which
+        # 60 were read at 48 kHz with coefficients made for 44.1 kHz and are compared with what those coefficients give at 48 kHz),
+        # every one within 0.02 dB but one at 50.4 Hz (0.048 dB, next to the mains frequency); the 600 read digitally are within 0.012 dB
+        self.assertEqual((n,len(upper),sum(1 for x in upper if x>0.02)),(2213,1998,1));self.assertEqual(len(digital),600);self.assertLessEqual(max(digital),0.0125);self.assertLess(max(upper),0.05)
     def test_output_level_law(self):
         """Every raw value from 243 down to 0, as measured through loopback, lies on the law of the codec."""
         L=json.loads((Path(__file__).resolve().parent/'output-level-law-measured.json').read_text());self.assertEqual([r for r,d in L['rows']],list(range(243,-1,-1)))

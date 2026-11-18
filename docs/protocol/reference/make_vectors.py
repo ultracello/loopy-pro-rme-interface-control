@@ -78,7 +78,7 @@ def sine(where,label,frame):
 for label,kw in T1:sine('output Main left, slot 0',label,b.set_eq(0,0,True,True,**kw))
 for label,kw in (T1[1],T1[6],T1[10]):sine('input 1, slot 1',label,b.set_eq(1,0,False,True,**kw))
 for label,kw in TX:sine('output Main left, slot 0',label,b.set_eq(0,0,True,True,**kw))
-assert len(CURVES)==len(T1)+3+len(TX)+3+8
+assert len(CURVES)==len(T1)+3+len(TX)+3+8+2
 # run K1 on 18 November 2026: a cable from the 6.3 mm headphone socket to line input 3, a sine tone on playback 1, no other audio app open
 for raw,db in ((244,0.5),(245,1.0),(249,3.0)):add('output level Phones left raw %d (+%.1f dB)'%(raw,db),b.set_output_level(6,raw),'measured behind the output: +%.2f dB above raw 243'%db,'measured')
 add('output level Phones left raw 203 (-20 dB)',b.set_output_level(6,203),'measured behind the output: -20.00 dB below raw 243 and +10.00 dB above raw 183','measured')
@@ -109,6 +109,12 @@ for out,ch,slot in (('Main right',1,3),('headphones right',3,4),('AS1',4,5),('AD
                      ('peak +12 dB at 100 Hz, Q 0.7, band 1',dict(bands=(b.biquad('peak',100,12,0.7,FS2),FLAT2,FLAT2)))):
         c=CURVES['sine through loopback: output %s, slot %d, %s (44.1 kHz)'%(out,slot,label)];frame=b.set_eq(slot,ch,True,True,**kw);assert bytes.fromhex(c['hex'])==bytes(frame),'the codec does not build the message that was sent: '+label
         add(c['name'],frame,'coefficients for 44.1 kHz; curve of 66 frequencies in eq-curves-measured.json, read digitally through loopback; %d points compared, largest deviation %.3f dB (below 20 Hz), rms %.4f dB'%(c['points_counted'],c['largest_deviation_db'],c['rms_deviation_db']),'measured')
+# runs S1 and S2 on 18 November 2026: "EQ for Record", and one equaliser message before and after the sample rate changed
+add('device settings: equaliser in the recording (bit 6 clear, clock bit set)',b.set_eq_in_recording(True),'read through loopback of an output with a peak of +12 dB: the recorded tone stood 12.0 dB higher than without equaliser','measured')
+add('device settings: equaliser not in the recording (bit 6 set, clock bit set)',b.set_eq_in_recording(False),'the recorded tone stood at 0.0 dB, the equaliser of the output still on','measured')
+for tag in ('coefficients for 44.1 kHz, read at 44.1 kHz','coefficients for 44.1 kHz, read at 48 kHz after the rate had changed'):
+    c=CURVES['sine through loopback: output AS1, slot 5, peak +12 dB at 1 kHz, Q 2 (%s)'%tag];frame=b.set_eq(5,4,True,True,bands=(FLAT2,b.biquad('peak',1000,12,2,FS2),FLAT2));assert bytes.fromhex(c['hex'])==bytes(frame)
+    add(c['name'],frame,'one message, sent once; curve of 66 frequencies in eq-curves-measured.json; %d points compared, largest deviation %.3f dB, rms %.4f dB'%(c['points_counted'],c['largest_deviation_db'],c['rms_deviation_db']),'measured')
 # one synthetic state message: Main muted by raw 59, Phones -14.5 dB, mic gains 0, line gains 6.0 and 0 dB, both sensitivity bits set
 w=[0]*44;w[0]=0x0090000C;w[1]=59|(59<<9);w[2]=(214<<14)|(214<<23);w[3]=(12<<19)
 add('state (built for this file from the values our unit reported)',b.frame(0,w),'word 0 0x0090000C, Main raw 59/59, Phones raw 214/214, gains 0, 0, 12 half dB, 0','reported')
