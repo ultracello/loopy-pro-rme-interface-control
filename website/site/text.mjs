@@ -39,7 +39,7 @@ export const TEXT = {
   figure: {
     file: 'controller-interface-page.png', width: 1600, height: 1050,
     alt: 'The controller page in Loopy Pro: a row of status lamps, faders and dB displays for the main and the headphone output, step buttons from 0.5 to 6 dB for each, and a mute switch for each.',
-    caption: 'The first of the three pages on 18 November 2026, armed. The labels are German: LESEN reads the unit, AKTIVIEREN arms the page, SPERREN locks it. Under the faders, one row names the reason when a press is refused; the round lamps show the state of each output. The other two pages hold the input gains and the monitoring.',
+    caption: 'The first of the three pages on 18 November 2026, armed. READ reads the unit, ARM arms the page, LOCK locks it. Under the faders, one row names the reason when a press is refused; the round lamps show the state of each output. The other two pages hold the input gains and the monitoring.',
   },
   pageAfter: [
     'Equaliser and low cut are not on the page: the scripting plug-in it is built with cannot send a message of that length in one piece. Phantom power is left out on purpose.',
