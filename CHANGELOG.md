@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-11-19 · Controller page 1.1
+
+- Pad and reference level now also switch while the unit's own OUT key stands on "Opt". The unit sets one more bit in its settings then, and the rules of 1.0 refused to write while they saw a bit they did not know. One statement of the rules changed; any other unknown bit is refused as before.
+- Checked offline (203 tests, the same 1871 messages byte for byte) and on the iPad the page was made on, with OUT on "Opt": 29 of 29 acceptance steps, the pad of input 1 and the reference level of input 4 written and read back at the unit, the selection on the unit untouched.
+- The files carry 1.1 in their names. The MidiFire scene is unchanged apart from its name.
+
 ## 2026-11-19 · The controller page is published
 
 - `controller/` holds the Loopy Pro project, the MidiFire scene and the two StreamByter rule texts of the controller page, with a set-up guide. Everything that belonged to one unit was taken out: the serial number and USB identifier, an audio clip, and the older modules of a private MidiFire set-up. A user connects his own unit in four taps.

@@ -1,3 +1,4 @@
+# LIVE18 2026-11-19: LIVE17, and bit 9 of the reported settings (the OUT key of the unit on Opt) no longer blocks pad and sensitivity.
 # LIVE17 2026-11-19: LIVE16 with every name in English; no statement changed.
 # LIVE16 CANDIDATE 2026-11-18: offline only; not natively compiled or installed.
 # Phase of a way to the headphones: CC92..95 input 1..4, CC96 playback. L234..238 0 normal/1 inverted. BE40 = their bits.
@@ -1150,8 +1151,10 @@ IF LOAD
       REASON $46
     ELSE
       # Only the known setting bits may stand: 2 and 3 (sent back as read), 4 and 5 (the pads).
+      # LIVE18: bit 9 (value 4 of the second byte) follows the OUT key of the unit. It may stand and is never sent.
       MAT L$212 = L$216 & $64
-      MAT L$212 = L$212 + L$217
+      MAT L$213 = L$217 & $123
+      MAT L$212 = L$212 + L$213
       MAT L$212 = L$212 + L$218
       MAT L$213 = L$216 & 3
       IF L$212 > 0

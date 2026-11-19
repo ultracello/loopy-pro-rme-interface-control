@@ -14,8 +14,8 @@ It was built for one player and one unit and has been used on exactly that set-u
 
 | File | What it is |
 |---|---|
-| `Babyface Pro Controller for Loopy Pro 1.0.lpproj` | the Loopy Pro project: pages "Interface", "Inputs" and "Monitoring" |
-| `Scene-Babyface Pro Controller display feedback 1.0.mfr` | the MidiFire scene for the displays |
+| `Babyface Pro Controller for Loopy Pro 1.1.lpproj` | the Loopy Pro project: pages "Interface", "Inputs" and "Monitoring" |
+| `Scene-Babyface Pro Controller display feedback 1.1.mfr` | the MidiFire scene for the displays |
 | `StreamByter rules - controller (instance A in Loopy Pro).txt` | the rules of the controller, as text. They are already inside the project; the file is for reading. Its first lines are notes from the days each part was added; the text as a whole is what runs. |
 | `StreamByter rules - filter in front of the Babyface (instance B in Loopy Pro).txt` | the rules of the filter that lets only known messages reach the unit. Also already inside the project. |
 
@@ -31,13 +31,13 @@ It was built for one player and one unit and has been used on exactly that set-u
 
 1. Install StreamByter and MidiFire first. The project holds two instances of StreamByter with their rules.
 2. Download this repository (on its GitHub page: Code, then Download ZIP) and unpack it. The files are in the folder `controller`.
-3. In the Files app, move the folder `Babyface Pro Controller for Loopy Pro 1.0.lpproj` to **On My iPad › Loopy Pro › Projects**.
-4. Move the file `Scene-Babyface Pro Controller display feedback 1.0.mfr` to **On My iPad › MidiFire**.
+3. In the Files app, move the folder `Babyface Pro Controller for Loopy Pro 1.1.lpproj` to **On My iPad › Loopy Pro › Projects**.
+4. Move the file `Scene-Babyface Pro Controller display feedback 1.1.mfr` to **On My iPad › MidiFire**.
 
 ### 2. MidiFire
 
 1. Open MidiFire. If you have a set-up of your own in it, save it first: **Scenes**, then **Save**.
-2. Tap **Scenes** and load "Babyface Pro Controller display feedback 1.0". Three modules appear: "Loopy Out", "UI feedback only" and "Status to Loopy". There is nothing to connect.
+2. Tap **Scenes** and load "Babyface Pro Controller display feedback 1.1". Three modules appear: "Loopy Out", "UI feedback only" and "Status to Loopy". There is nothing to connect.
 3. Under **Setup**, set "background idle timeout (when on battery)" to "never", so that MidiFire keeps running behind Loopy Pro.
 
 The scene uses the ports "MidiFire 2" and "MidiFire 3" that MidiFire offers to other apps. On our iPad they were there without any setting.
@@ -46,14 +46,14 @@ The scene uses the ports "MidiFire 2" and "MidiFire 3" that MidiFire offers to o
 
 Loopy Pro ties a MIDI connection to the one unit it was made with, so the project comes with a placeholder where your unit belongs. Four taps put yours in:
 
-1. Open the project "Babyface Pro Controller for Loopy Pro 1.0" and tap **Mixer** (bottom left).
+1. Open the project "Babyface Pro Controller for Loopy Pro 1.1" and tap **Mixer** (bottom left).
 2. In the strip "StreamByter B", under "Destinations", tap **+** ("Add Destination") and choose "Babyface Pro (…) Port 2" from the list "MIDI Destinations".
 3. In the strip "StreamByter A", under "Sources", tap **+** ("Add Source") and choose "Babyface Pro (…) Port 2" from the list "MIDI Source".
 4. Tap **Mixer** again to close it.
 
 It has to be Port 2: that is the port on which the unit answers. The entries "Babyface Pro (your unit) Port 2" are the placeholders; they can stay. Save the project.
 
-This is how far it was tested: on the iPad and the unit it was made on, with the placeholders in place and the two connections made by hand as above. There the page read and armed, stepped the headphone level and a line gain, refused a step it has to refuse, and switched monitoring, pan and phase. Nobody has set it up on a second iPad yet. If the displays stay dark on yours while the levels do change, the binding of the displays to the port "MidiFire 3" did not carry over; please [tell us](https://github.com/ultracello/loopy-pro-rme-interface-control/issues/new).
+This is how far it was tested: on the iPad and the unit it was made on, with the placeholders in place and the two connections made by hand as above. There the page read and armed, stepped the headphone level and a line gain, refused a step it has to refuse, switched a pad and a reference level, and switched monitoring, pan and phase. Nobody has set it up on a second iPad yet. If the displays stay dark on yours while the levels do change, the binding of the displays to the port "MidiFire 3" did not carry over; please [tell us](https://github.com/ultracello/loopy-pro-rme-interface-control/issues/new).
 
 ## Every time you start
 
@@ -108,11 +108,11 @@ Levels, gains and input settings survive. The mixer is gone, so the headphones a
 2. If the displays do not move, tap MidiFire once and come back to Loopy Pro, then READ and ARM again. iPadOS pauses MidiFire when the interface disappears; the control itself does not need MidiFire, only the displays do.
 3. If the column PB still shows "?", press "HEADPHONE ROUTE · RESTORE".
 
-## If pad or reference level answer FAULT
+## If a switch answers FAULT
 
-The page writes a setting only when it knows every bit of the settings the unit reports. On our unit one more bit appeared there while the unit's own OUT key stood on "Opt"; then "IN1 PAD", "IN2 PAD" and the two reference level switches answered FAULT and wrote nothing, and everything else went on working.
+The page writes a setting (pad, reference level) only when it knows every bit of the settings the unit reports; otherwise it answers FAULT and writes nothing. One such bit is known and allowed: the one the unit sets while its own OUT key stands on "Opt". With version 1.0 of this page that bit locked the pad switches; since 1.1 they work with OUT on "Opt" as well, and the selection on the unit stays as it is.
 
-The way out: on the unit, press OUT until "Ch 1/2" is lit, then READ and ARM again. Seen on our unit: with OUT on "Opt" pad answered FAULT, and with OUT back on "Ch 1/2" it switched on and off as before.
+If a switch still answers FAULT, the unit reports something this page has not seen. Press READ and try again, and if it stays, please [tell us](https://github.com/ultracello/loopy-pro-rme-interface-control/issues/new) what you had set on the unit.
 
 ## What it does not do
 
