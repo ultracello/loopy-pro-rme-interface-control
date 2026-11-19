@@ -25,7 +25,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / 'docs' / 'protocol' / 'reference'))
 import babyface_cc as cc  # the reference codec of this repository: builds and parses bytes, sends nothing
 
-TOOL_VERSION = 'babyface-helper-1'
+TOOL_VERSION = 'babyface-helper-2'
 STATE_LENGTH = 227          # bytes of a state message (sub ID 00)
 HEADER = bytes([0xF0, 0x00, 0x20, 0x0D, 0x10])
 FLAG_BITS = 0xE03F          # the bits of state word 0 that the settings message carries: 0-5 and 13-15
@@ -165,8 +165,9 @@ def now():
 
 
 def mask(name):
-    """Port names carry the serial number of the unit; the report keeps the name with every digit replaced."""
-    return re.sub(r'\d', '#', name)
+    """Port names carry the serial number of the unit; the report keeps the name with every run of four or more
+    digits replaced (the number of the port stays readable)."""
+    return re.sub(r'\d{4,}', lambda found: '#' * len(found.group()), name)
 
 
 def confirm(report, lines):
@@ -347,7 +348,7 @@ def task_ports(simulate):
         pairs = port_pairs()
     except ImportError:
         sys.exit('The package python-rtmidi is missing. Install it with:  pip install python-rtmidi')
-    print('MIDI ports that exist as input and output (index, name with digits masked):')
+    print('MIDI ports that exist as input and output (index, name with the serial number masked):')
     for out_index, in_index, name in pairs:
         print('  %d  %s' % (out_index, mask(name)))
     if not pairs:

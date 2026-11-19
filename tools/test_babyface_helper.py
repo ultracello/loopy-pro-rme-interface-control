@@ -70,7 +70,7 @@ class Tasks(unittest.TestCase):
         self.assertEqual([s['hex'] for s in report['sent']], [bytes(cc.set_output_level(6, 213)).hex(' ').upper(), bytes(cc.set_output_level(6, 214)).hex(' ').upper()])
         self.assertEqual(unit.words, helper.SimulatedUnit().words)   # the unit is as it was
         self.all_harmless(unit)
-        self.assertNotRegex(report['midi_port_name_with_digits_masked'], r'\d')
+        self.assertNotRegex(report['midi_port_name_with_digits_masked'], r'\d{4}')
         self.assertTrue(report['simulated'])
 
     def test_check_leaves_a_muted_output_alone(self):
@@ -140,7 +140,8 @@ class Tasks(unittest.TestCase):
         self.assertEqual([s['answered'] for s in asked], ['yes', 'pro fs', 'usb', 'a test', '', 'unsure', '', 'unsure'])
 
     def test_mask(self):
-        self.assertEqual(helper.mask('Babyface Pro (23456789) Port 2'), 'Babyface Pro (########) Port #')
+        self.assertEqual(helper.mask('Babyface Pro (23456789) Port 2'), 'Babyface Pro (########) Port 2')
+        self.assertEqual(helper.mask('Unit 123 and 1234 and 12345'), 'Unit 123 and #### and #####')
 
 
 SERVER = r'''
@@ -180,13 +181,13 @@ class Ports(unittest.TestCase):
             time.sleep(0.5)
             with tempfile.TemporaryDirectory() as folder:
                 listed = subprocess.run([sys.executable, str(HERE / 'babyface_helper.py'), 'ports'], capture_output=True, text=True, cwd=folder)
-                self.assertIn('Babyface Pro (########) Port #', listed.stdout)
+                self.assertIn('Babyface Pro (########) Port 2', listed.stdout)
                 done = subprocess.run([sys.executable, str(HERE / 'babyface_helper.py'), 'check'], input='\n'.join(START) + '\n', capture_output=True, text=True, cwd=folder, timeout=60)
                 self.assertEqual(done.returncode, 0, done.stdout + done.stderr)
                 report = json.loads(sorted(Path(folder).glob('babyface-report-check-*.json'))[-1].read_text())
             self.assertFalse(report['simulated'])
             self.assertEqual(report['write_reported'], {'down': True, 'back': True, 'right_channel_unchanged': True})
-            self.assertEqual(report['midi_port_name_with_digits_masked'], 'Babyface Pro (########) Port #')
+            self.assertEqual(report['midi_port_name_with_digits_masked'], 'Babyface Pro (########) Port 2')
         finally:
             server.kill()
             server.wait()

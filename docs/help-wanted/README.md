@@ -21,6 +21,8 @@ Each task sends a small, fixed set of messages, which the tool lists before it s
 
 It is still your unit and your ears: turn monitors and headphones down before you start, and stop if anything looks wrong.
 
+How far the tool itself is tested: against a simulated unit, over virtual MIDI ports, and on the project's Babyface Pro FS connected to a Mac (task `check`, 19 November 2026). On Windows and Linux nobody has run it yet; if you are the first, say so in your report.
+
 ## Step by step
 
 1. **Install Python** 3.9 or later, if you do not have it: [python.org/downloads](https://www.python.org/downloads/).
