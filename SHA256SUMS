@@ -13,7 +13,7 @@ d80780a6194ab8dd3164b3a13ed65ae072ef616288ba68f4363698b0f70b9e34  controller/Bab
 945aa20469f12a878d6d52b0b7f6dbcc53382de11681ff40035712221c3ee8b6  controller/Babyface Pro Controller for Loopy Pro 1.0.lpproj/Project.sqlite
 fee1f101064e172a4c9c553b7fb3dc8297671c2146bcc65b04df62c4ed8da89b  controller/Babyface Pro Controller for Loopy Pro 1.0.lpproj/Resources.plist
 fa983ee2f0ecbe6ddb94b1a20082541d400810fee7fdf4c70d1692fbb1224e9e  controller/Babyface Pro Controller for Loopy Pro 1.0.lpproj/Resources/c8f6f57b00b9440a.moduleState
-8ec4fc7bebeeb2a12ff10f7ce476ad3b4c4fe3e8c95d6dee3214333440a3981a  controller/README.md
+01988cba0f2d52d241ad61dfbfcb7c05ffab2468fb5d4826e14e23c1377dec38  controller/README.md
 9e6cb2f886f2d8ac3b5e6b705079308737439507e906f2020dfaa5ba9c4d25db  controller/Scene-Babyface Pro Controller display feedback 1.0.mfr
 6ce0bc9c44b2619cfecaa5e530ac9f969ffb2353f6744e8cd9bbe6deae6a27e8  controller/StreamByter rules - controller (instance A in Loopy Pro).txt
 d86ef258fc00da6d9fb672eaa0819762e86e2ba0563a355c11fa9ebc0084cff2  controller/StreamByter rules - filter in front of the Babyface (instance B in Loopy Pro).txt
@@ -68,7 +68,7 @@ adc8057ebc9d9cad9a9d3cda399efdd22e687cfd5909d317ac330ecbd781cd7b  docs/milestone
 f2ac7d0b1318429f5810f7464d3e7921fa716ac23b0edeed5bb5bd98f4ff6592  docs/milestones/2026-11-19-optical-format-on-the-units-display.md
 937f044ef4a29a20da26766fdfd0ab297e29fa8127fdaf93af479cd5cf48cddc  docs/milestones/2026-11-19-phantom-power-and-what-dim-and-mute-are.md
 de0642e9f43ca3b0a389f4fb65203f1af2df6a0ed47a445ce1542e418daa46ea  docs/milestones/2026-11-19-the-dim-key-and-its-lamp.md
-5a20dc7962c8e56ecf9d1de4dc86447bb7fdeadfecf7a017bb4c509157a8c6b8  docs/protocol/BABYFACE-PRO-FS-CC-REFERENCE.md
+9289302830dcf62fcfa7408d3c058170848f3dfdaad66635d4cc9af1fd738e9d  docs/protocol/BABYFACE-PRO-FS-CC-REFERENCE.md
 fbd5ca266d6ae1f638c38d659f98c84145ea9b305f2f6bdb22054a351f55c797  docs/protocol/output-gain-evidence.md
 30eb814218936cff4e6b26f368ec9f487f8d00be6c3001cafbc1dc3874edb37f  docs/protocol/reference/babyface_cc.py
 705d540371dafff638b117a35fc07f38fd3f598ab77818a03484a6d90f9303be  docs/protocol/reference/eq-curves-measured.json

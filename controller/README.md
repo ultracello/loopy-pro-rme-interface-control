@@ -108,9 +108,11 @@ Levels, gains and input settings survive. The mixer is gone, so the headphones a
 2. If the displays do not move, tap MidiFire once and come back to Loopy Pro, then READ and ARM again. iPadOS pauses MidiFire when the interface disappears; the control itself does not need MidiFire, only the displays do.
 3. If the column PB still shows "?", press "HEADPHONE ROUTE · RESTORE".
 
-## A known limit: pad and reference level can answer FAULT
+## If pad or reference level answer FAULT
 
-The page writes a setting only when it knows every bit of the settings the unit reports. On our unit one more bit (bit 9) has been set since keys of the unit itself were used, and since then "IN1 PAD", "IN2 PAD" and the two reference level switches answer FAULT and write nothing. Everything else works. We do not know yet what that bit means or how to clear it; when we do, it will be said here.
+The page writes a setting only when it knows every bit of the settings the unit reports. One more bit appears there while the unit's own OUT key stands on "Opt"; then "IN1 PAD", "IN2 PAD" and the two reference level switches answer FAULT and write nothing, and everything else goes on working.
+
+The way out: on the unit, press OUT until "Ch 1/2" is lit, then READ and ARM again. Seen on our unit: with OUT on "Opt" pad answered FAULT, and with OUT back on "Ch 1/2" it switched on and off as before.
 
 ## What it does not do
 

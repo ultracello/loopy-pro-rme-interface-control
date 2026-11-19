@@ -1,6 +1,6 @@
 # RME Babyface Pro FS in class-compliant mode: control protocol reference
 
-Version 1.3, 19 November 2026. Public domain (Unlicense).
+Version 1.4, 19 November 2026. Public domain (Unlicense).
 
 This document describes how a host application on iPadOS can read and set the Babyface Pro FS without TotalMix FX, over MIDI SysEx. It is written for someone who wants to build native support. Everything in it was worked out on one unit (Babyface Pro FS, iPad, iPadOS 27.2.1) between 8 and 19 November 2026.
 
@@ -233,9 +233,9 @@ A request is answered with three messages, in this order: sub ID `00` (227 bytes
 | 0 | 13 | Dim, a flag. With TotalMix FX on a Mac the Main level fields stood 40 raw steps (20 dB) lower while it was set; written by a host it changes nothing else (2.3) | **reported** |
 | 0 | 14, 15 | Global mute of TotalMix FX, flags (2.3) | **reported** |
 | 0 | 16-19 | Counter of the encoder, one detent = 1, wraps | **reported** |
-| 0 | 20-23 | Mode and selection of the unit's own keys | **reported**, not fully decoded |
+| 0 | 20-23 | Mode and selection of the unit's own keys: read 9 with IN on "Ch 3/4" and 4 with IN on "Ch 1/2" | **reported**, not fully decoded |
 | 0 | 24, 28 | Flash briefly on a key press | **reported** |
-| 0 | 9 | Seen set once, after keys of the unit had been used (OUT on Opt, IN on Ch 3/4, SET); clear before | **unknown** |
+| 0 | 9 | Follows the keys of the unit: set while its OUT key stood on "Opt" (IN on "Ch 3/4"), clear with OUT on "Ch 1/2", before and after. Probably the output selection "Opt" | **reported**, three readings |
 | 0 | 30 | Clock source: follows bit 0 of the device settings (2.6) | **reported** |
 | 1 | 0-7, 9-16 | Main left, Main right, raw level | **measured** |
 | 2 | 0-6, 7-13 | Gain of microphone input 1, 2 in dB (plain number) | **reported** |
@@ -278,7 +278,7 @@ These are the rules our controller follows. Several hundred writes went through 
 1. **Read before every write.** Take a fresh state, compute the new value from it, write once.
 2. **Read back.** Ask for the state again about 100 ms after the write and compare. The unit answered every time. For the mixer and the EQ there is nothing to compare; the answer only shows that the unit is alive.
 3. **Keep the mixer picture and send it again** when the unit reappears. Do not touch cells the user never set. Keep the EQ settings and the slot of each channel in the same way.
-4. **Never write a setting without the others as read** (2.3). Put phantom power behind an explicit confirmation, and expect a transient on the input when it switches.
+4. **Never write a setting without the others as read** (2.3). Bits of word 0 that belong to the keys of the unit (bit 9, bits 16 and up) are not settings: a host that refuses to write while it sees a bit it does not know will lock itself out when the user presses OUT on the unit, as our controller did. Put phantom power behind an explicit confirmation, and expect a transient on the input when it switches.
 5. **Offer levels in dB.** Main, headphone and AS outputs: 0.5 dB steps, raw = 243 + 2 × dB. ADAT outputs: the mixer entry 992 + output, linear like a cell. Microphone gain: whole dB, 0 to 65. Line gain: half dB, 0 to 9. Mixer: any dB value through the linear formula.
 6. **Mute by level,** raw 59, and keep the value to return to. **Dim by level** as well, 20 dB down, and set the dim flag (2.3) so that the state says so.
 7. **Expect foreign changes.** The encoder on the unit and another app can change levels at any time; the state shows it.
