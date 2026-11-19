@@ -56,6 +56,7 @@ export const TEXT = {
   ],
   questions: [
     ['Can I help?', 'Yes, if you own a Babyface Pro or a Babyface Pro FS and a computer. Everything here was measured on one unit; a small tool guides you through a few checks with yours, and no programming is needed. [How to help](https://github.com/ultracello/loopy-pro-rme-interface-control/blob/main/docs/help-wanted/README.md).'],
+    ['Is there an app I can use?', 'A first one exists, made by someone else from this reference: [OliSimpleRME](https://github.com/OlivierPersoGit/OliSimpleRME), a small iPad mixer for the Babyface Pro FS, to sit next to Loopy Pro. It has to be built with Xcode. We have not built or tested it.'],
     ['Can I get the controller?', 'Not yet. It is one person\'s working copy, tied to one project and one iPad. What is published is everything needed to build the same thing properly: the protocol reference.'],
     ['Does it work on the iPhone?', 'Not tested. There is no TotalMix FX for the iPhone, which is one reason to want this. Hub and power supply on the iPhone are open questions.'],
     ['Does it work with other RME interfaces?', 'Unknown. Everything here was measured on a Babyface Pro FS in class-compliant mode. The notes this work started from describe the Babyface Pro. No other model was tried.'],

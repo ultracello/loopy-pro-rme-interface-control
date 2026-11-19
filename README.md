@@ -32,6 +32,10 @@ A function counts as measured when its effect was read at the unit. Native suppo
 
 Everything here was measured on one unit. If you own a Babyface Pro or Babyface Pro FS and a computer, you can check in a few minutes whether yours behaves the same, and help with the one function that is not measured yet: [how to help](docs/help-wanted/README.md). No programming needed.
 
+## Built on this reference
+
+- [OliSimpleRME](https://github.com/OlivierPersoGit/OliSimpleRME): a small iPad mixer for the Babyface Pro FS, made to sit next to Loopy Pro. By its own README it started from this repository. It is someone else's project and has to be built with Xcode; we have not built or tested it.
+
 ## What is not here
 
 The controller page that runs in Loopy Pro is a private working copy and is not published. There is nothing to download and install. The aim is native support in a host; the reference is written for that.
