@@ -25,7 +25,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / 'docs' / 'protocol' / 'reference'))
 import babyface_cc as cc  # the reference codec of this repository: builds and parses bytes, sends nothing
 
-TOOL_VERSION = 'babyface-helper-3'
+TOOL_VERSION = 'babyface-helper-4'
 STATE_LENGTH = 227          # bytes of a state message (sub ID 00)
 HEADER = bytes([0xF0, 0x00, 0x20, 0x0D, 0x10])
 FLAG_BITS = 0xE03F          # the bits of state word 0 that the settings message carries: 0-5 and 13-15
@@ -256,7 +256,8 @@ def task_clock_optical(report):
     The clock source needs nothing from you: the state of the unit shows it (bit 30 of word 0 follows the bit written, as
     found on the project's unit), so the tool switches it, reads it and puts it back. The optical format does not show
     in the state, and the unit's own display stays dark while a computer asks for the state; so that part runs only if
-    a device at the optical OUTPUT shows what it receives.
+    a device at the optical OUTPUT shows what it receives. On the project's unit the display showed ADAT with bit 10
+    clear and S/PDIF with it set; what is missing is the same seen at a receiving device.
 
     Sends: the state request; the device settings message for bit 0 (clock source), three times at most; with a device
     at the optical output, the device settings message for bit 10 (optical format), three times at most. Bit 6 of the
@@ -297,8 +298,8 @@ def task_clock_optical(report):
             report.send(device_setting(0x400, 0x400), 'optical format back to what it was at the start')
         report.say('The optical format is back at %s.' % start_format.upper())
     else:
-        report.say('The tool could not tell what the format was at the start; bit 10 is clear now. If your device no longer '
-                   'locks, run the task again and note with which value it locks.')
+        report.say('The tool could not tell what the format was at the start; bit 10 is clear now, which was ADAT on the '
+                   'project\'s unit. If your device no longer locks, run the task again and note with which value it locks.')
 
 
 def task_replug(report):
@@ -421,6 +422,8 @@ def main(argv=None, answers=None):
     print('Found the unit on: %s\n' % mask(transport.name))
     try:
         TASKS[args.task](report)
+    except KeyboardInterrupt:
+        print('\nStopped by Ctrl-C. Nothing more is sent; what was done so far is in the report.')
     finally:
         name = report.save()
         report.transport.close()

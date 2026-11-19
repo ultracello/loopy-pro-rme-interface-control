@@ -1382,6 +1382,18 @@
    "status": "reported"
   },
   {
+   "name": "device settings: optical output S/PDIF (bit 10 set)",
+   "hex": "F000200D10000008002000F7",
+   "meaning": "the level meters of the unit showed two lamps for the format (S/PDIF); what leaves the socket was not measured",
+   "status": "reported"
+  },
+  {
+   "name": "device settings: optical output ADAT (bit 10 clear)",
+   "hex": "F000200D10000008000000F7",
+   "meaning": "the level meters of the unit showed eight lamps for the format (ADAT), before and after",
+   "status": "reported"
+  },
+  {
    "name": "state (built for this file from the values our unit reported)",
    "hex": "F000200D10000C004004003B6C010000000056590600000003000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000F7",
    "meaning": "word 0 0x0090000C, Main raw 59/59, Phones raw 214/214, gains 0, 0, 12 half dB, 0",
