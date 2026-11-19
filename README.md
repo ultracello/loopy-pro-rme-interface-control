@@ -15,7 +15,7 @@ The website shows what can be controlled and how far each function is measured, 
 | Usable today from the controller page | `██████░░░░░░░░░░░░░░` | **28 %**, 5 of 18 functions |
 | Native support in Loopy Pro | `░░░░░░░░░░░░░░░░░░░░` | not started |
 
-Counted from the [coverage table](docs/protocol/BABYFACE-PRO-FS-CC-REFERENCE.md#5-coverage-against-what-totalmix-fx-offers) of the protocol reference. Last report: [Phantom power, and what dim and mute are](docs/milestones/2026-11-19-phantom-power-and-what-dim-and-mute-are.md), 19 November 2026.
+Counted from the [coverage table](docs/protocol/BABYFACE-PRO-FS-CC-REFERENCE.md#5-coverage-against-what-totalmix-fx-offers) of the protocol reference. Last report: [The DIM key and its lamp](docs/milestones/2026-11-19-the-dim-key-and-its-lamp.md), 19 November 2026.
 <!-- progress:end -->
 
 A function counts as measured when its effect was read at the unit. Native support in Loopy Pro is the aim; it is in the hands of the developer of Loopy Pro, and what he needs is in the protocol reference.

@@ -1,6 +1,6 @@
 # RME Babyface Pro FS in class-compliant mode: control protocol reference
 
-Version 1, 19 November 2026. Public domain (Unlicense).
+Version 1.1, 19 November 2026. Public domain (Unlicense).
 
 This document describes how a host application on iPadOS can read and set the Babyface Pro FS without TotalMix FX, over MIDI SysEx. It is written for someone who wants to build native support. Everything in it was worked out on one unit (Babyface Pro FS, iPad, iPadOS 27.2.1) between 8 and 19 November 2026.
 
@@ -81,6 +81,8 @@ The state part carries every setting, so a host should read the current settings
 **Phantom power, measured.** Inputs 1 and 2 were open (−117 dBFS RMS at gain 0, the noise of an open input). Switching 48 V on at input 1 took the unit's peak meter of that input from −105 to −55 dBFS, and the recorded noise needed seconds to settle; input 2 stayed at −105. Switching it off again gave a peak of −69 dBFS. Input 2 gave −58 and −71 dBFS, with input 1 quiet. The state reported bit 0 and bit 1 each time. A host should expect this transient and keep the input out of the monitoring while it switches.
 
 **Dim and mute are flags.** With a tone on all twelve outputs, read through loopback (2.6), bits 13, 14 and 15 were each set and cleared: the state reported each bit, and not one output and not one level field moved. When TotalMix FX on a Mac dimmed, we had seen the Main level fields stand 40 raw steps lower while bit 13 was set; so the attenuation is the host's own write of the level, and the bit only says that it is in force. A host that dims writes the level 20 dB down and sets bit 13; a host that mutes writes raw 59 (2.2).
+
+**The DIM lamp follows the flag, and the DIM key does not dim by itself.** With the unit on a Mac in this mode, the owner pressed DIM twice with "Ch 1/2" selected: the state read after each press showed no flag and no changed level, and the lamp stayed dark. Then the flag was set by message: the lamp lit, and went out when the flag was cleared. **measured** (the lamp seen by the owner; the Main output stood at its mute value, raw 59, at the time). So in this mode the key is left to the host: it has to notice the press (bits 24 and 28 of state word 0 flash on a key press, 3.1) and do the dimming itself. That last step is our reading, not something we tried.
 
 Example, pad of input 1 on while both sensitivity bits are set (settings `0C`): word = `0x10 | (0x1C << 16)`, message `F0 00 20 0D 10 03 10 00 70 00 00 F7`. **measured**
 
@@ -306,7 +308,7 @@ The last column says whether the controller page this project uses in Loopy Pro 
 
 - A replug with the unit kept alive by a power supply of its own: does it keep mixer, loopback and EQ then?
 - Where the unit reports its device settings, if it does.
-- What the DIM key of the unit itself does in this mode, and whether the unit shows the dim flag on its DIM lamp.
+- How a host tells a press of the DIM key from the other keys of the unit (which of the bits that flash in state word 0), and whether the key behaves the same with the Main output not muted.
 - Clock source and optical format: they need a device at the optical socket, or a look at the unit's own display.
 
 ## 7. Sources

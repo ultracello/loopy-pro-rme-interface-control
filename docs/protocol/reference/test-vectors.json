@@ -1354,7 +1354,7 @@
   {
    "name": "settings flag: dim on (bit 13, settings before 0C)",
    "hex": "F000200D10030040300002F7",
-   "meaning": "the state reported the bit; none of the twelve outputs and no level field moved",
+   "meaning": "the state reported the bit; none of the twelve outputs and no level field moved; the DIM lamp of the unit lit",
    "status": "measured"
   },
   {

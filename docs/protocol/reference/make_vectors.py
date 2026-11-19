@@ -140,7 +140,7 @@ add('input setting: phantom power of input 1 off (settings before 0D)',b.set_inp
 add('input setting: phantom power of input 2 on (settings before 0C)',b.set_input_setting(1,True,0x0C),'nothing connected: the state reported bit 1, the peak meter of input 2 went from -105 to -58 dBFS','measured')
 add('input setting: phantom power of input 2 off (settings before 0E)',b.set_input_setting(1,False,0x0E),'the state reported bit 1 clear; a peak of -71 dBFS on input 2','measured')
 add('input setting: pad of input 2 on, state part 2C, sent while phantom power of input 1 was on',b.frame(3,[0x20|(0x2C<<16)]),'the state then reported 2D: phantom power of input 1 stayed on, and input 1 showed no transient','measured')
-add('settings flag: dim on (bit 13, settings before 0C)',b.set_input_setting(13,True,0x0C),'the state reported the bit; none of the twelve outputs and no level field moved','measured')
+add('settings flag: dim on (bit 13, settings before 0C)',b.set_input_setting(13,True,0x0C),'the state reported the bit; none of the twelve outputs and no level field moved; the DIM lamp of the unit lit','measured')
 add('settings flag: dim off (settings before 200C)',b.set_input_setting(13,False,0x200C),'the state reported the bit clear','measured')
 add('settings flag: bit 15 on (settings before 0C)',b.set_input_setting(15,True,0x0C),'the state reported the bit; no output moved','measured')
 # one synthetic state message: Main muted by raw 59, Phones -14.5 dB, mic gains 0, line gains 6.0 and 0 dB, both sensitivity bits set
