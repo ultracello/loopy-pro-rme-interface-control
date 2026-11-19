@@ -1,8 +1,8 @@
 # RME Babyface Pro FS in class-compliant mode: control protocol reference
 
-Version 1 draft, 18 November 2026. Public domain (Unlicense).
+Version 1, 19 November 2026. Public domain (Unlicense).
 
-This document describes how a host application on iPadOS can read and set the Babyface Pro FS without TotalMix FX, over MIDI SysEx. It is written for someone who wants to build native support. Everything in it was worked out on one unit (Babyface Pro FS, iPad, iPadOS 27.2.1) between 8 and 18 November 2026.
+This document describes how a host application on iPadOS can read and set the Babyface Pro FS without TotalMix FX, over MIDI SysEx. It is written for someone who wants to build native support. Everything in it was worked out on one unit (Babyface Pro FS, iPad, iPadOS 27.2.1) between 8 and 19 November 2026.
 
 Each statement carries one of four marks, so that nothing has to be taken on trust:
 
@@ -13,7 +13,7 @@ Each statement carries one of four marks, so that nothing has to be taken on tru
 | **notes** | Taken from other people's notes and not tried on our unit. Sources: the protocol notes on the oscmix wiki by Michael Forney (github.com/michaelforney/oscmix/wiki/Babyface-Pro) and the Babyface Pro part of the Linux kernel driver (`sound/usb/mixer_quirks.c`). |
 | **unknown** | We found no source and no way to observe it. |
 
-The folder `reference/` holds a small codec in Python (`babyface_cc.py`), 221 test vectors (`test-vectors.json`), the equaliser curves measured with sine tones (`eq-curves-measured.json`), the level of an output for every raw value (`output-level-law-measured.json`), the gain of a microphone input for every value (`mic-gain-measured.json`) and tests. The codec was checked against 1871 messages of the controller that was used on the unit: byte for byte the same.
+The folder `reference/` holds a small codec in Python (`babyface_cc.py`), 229 test vectors (`test-vectors.json`), the equaliser curves measured with sine tones (`eq-curves-measured.json`), the level of an output for every raw value (`output-level-law-measured.json`), the gain of a microphone input for every value (`mic-gain-measured.json`) and tests. The codec was checked against 1871 messages of the controller that was used on the unit: byte for byte the same.
 
 ## 1. Transport
 
@@ -66,16 +66,21 @@ The state reports the gain as the plain dB number (section 3.1), so a write of p
 
 ### 2.3 Input settings: sub ID `03`
 
-One word: bits 0-15 say which setting changes (one bit set), bits 16-30 carry the complete new state of all settings.
+One word: bits 0-15 say which setting changes (one bit set), the bits from 16 on carry the complete new state of all settings, bit 16 for setting 0.
 
 | Bit | Setting | Status |
 |---|---|---|
-| 0, 1 | Phantom power (48 V) of microphone input 1, 2 | **notes**. Never sent by us, on purpose. |
+| 0, 1 | Phantom power (48 V) of microphone input 1, 2 | **measured** with nothing connected to the inputs: the state reported the bit, and the switching showed as a transient on that input and no other (below). The voltage at the socket was not measured. |
 | 2, 3 | Sensitivity of line input 3, 4. Set = "+4dBu", clear = "-10dBV" in the naming of the Linux driver | **measured** on input 3 with a tone: clearing the bit raised the level at the input meter by 8.74 dB, setting it again brought it back (0.00 dB). Set is therefore the less sensitive setting, as the naming says (the maximum input levels in RME's manual, +13 dBu and +4 dBu, are 9 dB apart). Switching of bit 3 is **reported**. |
 | 4, 5 | Pad of microphone input 1, 2 | **measured**: −10.2 dB at the input meter, exact return |
-| 15 | Labelled "AN1->2" in the oscmix notes | **unknown** |
+| 13 | Dim, as a flag | **measured**: the unit takes the bit and reports it, and no output and no level field moves (below) |
+| 14, 15 | The global mute of TotalMix FX, as flags; bit 15 is labelled "AN1->2" in the oscmix notes | **measured** in the same way: taken, reported, no effect on any output |
 
-Because the state part carries every setting, a host must read the current settings first and send them back unchanged except for the one bit. This matters most for phantom power: a careless write of another setting with bits 0 and 1 at zero would presumably switch phantom power off. **notes**, not tried.
+The state part carries every setting, so a host should read the current settings first and send them back unchanged except for the one bit. What the unit did with a state part that disagrees was tried once: with phantom power on at input 1, the pad of input 2 was switched with bit 0 left at zero in the state part. Phantom power stayed on: the state still reported it and input 1 showed no transient. So the unit followed the bit named in the first half and not the rest. **measured** for this one case; do not build on it.
+
+**Phantom power, measured.** Inputs 1 and 2 were open (−117 dBFS RMS at gain 0, the noise of an open input). Switching 48 V on at input 1 took the unit's peak meter of that input from −105 to −55 dBFS, and the recorded noise needed seconds to settle; input 2 stayed at −105. Switching it off again gave a peak of −69 dBFS. Input 2 gave −58 and −71 dBFS, with input 1 quiet. The state reported bit 0 and bit 1 each time. A host should expect this transient and keep the input out of the monitoring while it switches.
+
+**Dim and mute are flags.** With a tone on all twelve outputs, read through loopback (2.6), bits 13, 14 and 15 were each set and cleared: the state reported each bit, and not one output and not one level field moved. When TotalMix FX on a Mac dimmed, we had seen the Main level fields stand 40 raw steps lower while bit 13 was set; so the attenuation is the host's own write of the level, and the bit only says that it is in force. A host that dims writes the level 20 dB down and sets bit 13; a host that mutes writes raw 59 (2.2).
 
 Example, pad of input 1 on while both sensitivity bits are set (settings `0C`): word = `0x10 | (0x1C << 16)`, message `F0 00 20 0D 10 03 10 00 70 00 00 F7`. **measured**
 
@@ -214,9 +219,9 @@ A request is answered with three messages, in this order: sub ID `00` (227 bytes
 
 | Word | Bits | Content | Status |
 |---|---|---|---|
-| 0 | 0-5 | Input settings, same bit numbers as in 2.3 | **reported** for bits 2-5; bits 0-1 by analogy only |
-| 0 | 13 | Dim. While set, the Main level fields stand 40 raw steps (20 dB) lower | **reported** (TotalMix FX on a Mac) |
-| 0 | 14, 15 | Global mute of TotalMix FX | **reported** (same) |
+| 0 | 0-5 | Input settings, same bit numbers as in 2.3 | **reported** for all six bits |
+| 0 | 13 | Dim, a flag. With TotalMix FX on a Mac the Main level fields stood 40 raw steps (20 dB) lower while it was set; written by a host it changes nothing else (2.3) | **reported** |
+| 0 | 14, 15 | Global mute of TotalMix FX, flags (2.3) | **reported** |
 | 0 | 16-19 | Counter of the encoder, one detent = 1, wraps | **reported** |
 | 0 | 20-23 | Mode and selection of the unit's own keys | **reported**, not fully decoded |
 | 0 | 24, 28 | Flash briefly on a key press | **reported** |
@@ -228,7 +233,7 @@ A request is answered with three messages, in this order: sub ID `00` (227 bytes
 | 3 | 19-23, 24-28 | Gain of line input 3, 4 in half dB | **reported** |
 | 4-43 | | RMS meters | **notes** |
 
-How to *write* dim and the global mute is **unknown**.
+Dim and the global mute are written with the settings message (2.3); they are flags and attenuate nothing.
 
 A change made on the unit itself (encoder, keys) shows in the next state message. **reported** A host can therefore follow the hardware by polling.
 
@@ -262,9 +267,9 @@ These are the rules our controller follows. Several hundred writes went through 
 1. **Read before every write.** Take a fresh state, compute the new value from it, write once.
 2. **Read back.** Ask for the state again about 100 ms after the write and compare. The unit answered every time. For the mixer and the EQ there is nothing to compare; the answer only shows that the unit is alive.
 3. **Keep the mixer picture and send it again** when the unit reappears. Do not touch cells the user never set. Keep the EQ settings and the slot of each channel in the same way.
-4. **Never write a setting without the others as read** (2.3). Put phantom power behind an explicit confirmation.
+4. **Never write a setting without the others as read** (2.3). Put phantom power behind an explicit confirmation, and expect a transient on the input when it switches.
 5. **Offer levels in dB.** Main, headphone and AS outputs: 0.5 dB steps, raw = 243 + 2 × dB. ADAT outputs: the mixer entry 992 + output, linear like a cell. Microphone gain: whole dB, 0 to 65. Line gain: half dB, 0 to 9. Mixer: any dB value through the linear formula.
-6. **Mute by level,** raw 59, and keep the value to return to.
+6. **Mute by level,** raw 59, and keep the value to return to. **Dim by level** as well, 20 dB down, and set the dim flag (2.3) so that the state says so.
 7. **Expect foreign changes.** The encoder on the unit and another app can change levels at any time; the state shows it.
 8. **Do not run next to TotalMix FX for iPad** without testing: both would poll and write, and each would take meter peaks from the other (3.2). We did not test this.
 9. **Send every message in one piece** (section 1).
@@ -287,21 +292,22 @@ The last column says whether the controller page this project uses in Loopy Pro 
 | Level of the AS outputs | **measured**, the law for every raw value | no |
 | Level of the ADAT outputs | **measured**: mixer entry 992 + output, every one of the six, down to silence; they stood at 0 dB | no |
 | Output levels above 0 dB | **measured** behind the headphone output (+0.5 to +6 dB) | no |
-| Phantom power | **notes**, never sent | no |
+| Phantom power | **measured** at open inputs: the switching transient on that input alone, and the bit in the state; the voltage itself not | no |
 | EQ and low cut on inputs and outputs | **measured**, whole curves with sine tones: input 1 and Main left at 48 kHz; both headphone channels, Main right, AS1 and ADAT3 at 44.1 kHz | no |
 | Loopback | **measured** for all twelve outputs | no |
 | EQ for Record | **measured** for the EQ of an output in loopback and for the EQ of an input (bit 6 of the device settings) | no |
 | Clock source, optical format | **notes** | no |
-| Dim, mono, global mute, solo, stereo link, cue, talkback | reading of dim and global mute **reported**; writing **unknown** | no |
+| Dim, global mute | **measured**: the unit keeps and reports a flag for each and attenuates nothing; the host does it with the levels | no |
+| Mono, solo, stereo link, cue, talkback | by RME's manual functions of the control room of TotalMix FX; a host builds them from levels and mixer cells, the unit has nothing of its own for them that we know of |  |
 | Snapshots, layouts | belong to TotalMix FX, not to the unit |  |
 | Reading the mixer back | not possible, the unit does not report it |  |
 
 ## 6. Open points we can still close on our unit
 
-- Phantom power on an input with nothing connected.
 - A replug with the unit kept alive by a power supply of its own: does it keep mixer, loopback and EQ then?
 - Where the unit reports its device settings, if it does.
-- Whether a state part with phantom power bits left at zero switches phantom power off.
+- What the DIM key of the unit itself does in this mode, and whether the unit shows the dim flag on its DIM lamp.
+- Clock source and optical format: they need a device at the optical socket, or a look at the unit's own display.
 
 ## 7. Sources
 

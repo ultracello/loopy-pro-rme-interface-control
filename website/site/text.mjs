@@ -17,7 +17,7 @@ export const TEXT = {
   nativePercent: 'Not started:',
   native: 'native support in Loopy Pro. That is the aim. It is in the hands of the developer of Loopy Pro; what he needs is in the protocol reference.',
   progressAfter: [
-    'A function counts as measured when its effect was read at the unit. Functions the unit only reported back, or that are known from other people\'s notes alone, do not count yet. Two entries of the table are left out because they are not functions of the unit.',
+    'A function counts as measured when its effect was read at the unit. Functions the unit only reported back, or that are known from other people\'s notes alone, do not count yet. Entries of the table that are not functions of the unit are left out.',
   ],
   status: [
     'The table follows the functions TotalMix FX offers. Each entry says how far it is established on the one unit all of this was done with.',

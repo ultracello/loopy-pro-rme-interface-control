@@ -108,13 +108,16 @@ def set_line_gain(input_number, half_db_steps):
 
 
 def set_input_setting(bit, on, current_settings):
-    """Switch one input setting. current_settings: the six setting bits as the unit reports them (state word 0, bits 0-5).
+    """Switch one setting. Bits 0-5 are the input settings: 0, 1 phantom power of microphone input 1, 2; 2, 3 sensitivity
+    of line input 3, 4; 4, 5 pad of microphone input 1, 2. Bits 13, 14, 15 are the flags for dim and the global mute.
+    current_settings: these bits as the unit reports them (state word 0, bits 0-15).
 
-    The message carries "what changes" in bits 0-15 and the complete new state in bits 16-30, so every other setting
-    must be sent back as read. (reported back for bits 2-5; measured: pad -10.2 dB, and clearing bit 2 raises the level of
-    input 3 by 8.74 dB; bits 0 and 1 are phantom power and were never sent)"""
-    if bit not in range(6) or current_settings & ~0x3F:
-        raise ValueError('bit 0..5, settings within six bits')
+    The message carries "what changes" in bits 0-15 and the complete new state from bit 16 on, so every other setting
+    must be sent back as read. (measured: pad -10.2 dB; clearing bit 2 raises the level of input 3 by 8.74 dB; phantom
+    power at open inputs shows as a transient on that input and in the state; the flags 13-15 are kept and reported and
+    change no output)"""
+    if bit not in (0, 1, 2, 3, 4, 5, 13, 14, 15) or current_settings & ~0xE03F:
+        raise ValueError('bit 0..5 or 13..15, settings within these bits')
     new = (current_settings | (1 << bit)) if on else (current_settings & ~(1 << bit))
     return frame(SUB_INPUT_SETTINGS, [(1 << bit) | (new << 16)])
 

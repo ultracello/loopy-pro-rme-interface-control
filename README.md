@@ -11,11 +11,11 @@ The website shows what can be controlled and how far each function is measured, 
 <!-- progress:start (written by website/build.mjs --stamp; do not edit by hand) -->
 | | | |
 |---|---|---|
-| Measured on the unit | `█████████████████░░░` | **83 %**, 15 of 18 functions |
+| Measured on the unit | `███████████████████░` | **94 %**, 17 of 18 functions |
 | Usable today from the controller page | `██████░░░░░░░░░░░░░░` | **28 %**, 5 of 18 functions |
 | Native support in Loopy Pro | `░░░░░░░░░░░░░░░░░░░░` | not started |
 
-Counted from the [coverage table](docs/protocol/BABYFACE-PRO-FS-CC-REFERENCE.md#5-coverage-against-what-totalmix-fx-offers) of the protocol reference. Last report: [Level of the ADAT outputs, and the exact law of the mixer](docs/milestones/2026-11-18-level-of-the-adat-outputs-and-the-exact-law-of-the-mixer.md), 18 November 2026.
+Counted from the [coverage table](docs/protocol/BABYFACE-PRO-FS-CC-REFERENCE.md#5-coverage-against-what-totalmix-fx-offers) of the protocol reference. Last report: [Phantom power, and what dim and mute are](docs/milestones/2026-11-19-phantom-power-and-what-dim-and-mute-are.md), 19 November 2026.
 <!-- progress:end -->
 
 A function counts as measured when its effect was read at the unit. Native support in Loopy Pro is the aim; it is in the hands of the developer of Loopy Pro, and what he needs is in the protocol reference.

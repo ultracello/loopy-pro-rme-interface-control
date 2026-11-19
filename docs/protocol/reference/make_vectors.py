@@ -134,6 +134,15 @@ add('level of ADAT3: mixer entry 998, level 0x3333',b.set_adat_output_level(6,b.
 add('level of ADAT3: mixer entry 998, level 0',b.set_adat_output_level(6,0),'read through loopback: silent','measured')
 add('level of ADAT8: mixer entry 1003 at half level',b.set_adat_output_level(11,0x10000),'read through loopback: ADAT8 6.021 dB lower, no other output moved','measured')
 add('level of ADAT8: mixer entry 1003 at 0 dB',b.set_adat_output_level(11,b.UNITY),'read through loopback: 0.00 dB, the level the output was found at','measured')
+# run P1 on 19 November 2026: phantom power at open inputs, and the flags for dim and the global mute
+add('input setting: phantom power of input 1 on (settings before 0C)',b.set_input_setting(0,True,0x0C),'nothing connected: the state reported bit 0, the peak meter of input 1 went from -105 to -55 dBFS, input 2 did not move','measured')
+add('input setting: phantom power of input 1 off (settings before 0D)',b.set_input_setting(0,False,0x0D),'the state reported bit 0 clear; a peak of -69 dBFS on input 1','measured')
+add('input setting: phantom power of input 2 on (settings before 0C)',b.set_input_setting(1,True,0x0C),'nothing connected: the state reported bit 1, the peak meter of input 2 went from -105 to -58 dBFS','measured')
+add('input setting: phantom power of input 2 off (settings before 0E)',b.set_input_setting(1,False,0x0E),'the state reported bit 1 clear; a peak of -71 dBFS on input 2','measured')
+add('input setting: pad of input 2 on, state part 2C, sent while phantom power of input 1 was on',b.frame(3,[0x20|(0x2C<<16)]),'the state then reported 2D: phantom power of input 1 stayed on, and input 1 showed no transient','measured')
+add('settings flag: dim on (bit 13, settings before 0C)',b.set_input_setting(13,True,0x0C),'the state reported the bit; none of the twelve outputs and no level field moved','measured')
+add('settings flag: dim off (settings before 200C)',b.set_input_setting(13,False,0x200C),'the state reported the bit clear','measured')
+add('settings flag: bit 15 on (settings before 0C)',b.set_input_setting(15,True,0x0C),'the state reported the bit; no output moved','measured')
 # one synthetic state message: Main muted by raw 59, Phones -14.5 dB, mic gains 0, line gains 6.0 and 0 dB, both sensitivity bits set
 w=[0]*44;w[0]=0x0090000C;w[1]=59|(59<<9);w[2]=(214<<14)|(214<<23);w[3]=(12<<19)
 add('state (built for this file from the values our unit reported)',b.frame(0,w),'word 0 0x0090000C, Main raw 59/59, Phones raw 214/214, gains 0, 0, 12 half dB, 0','reported')

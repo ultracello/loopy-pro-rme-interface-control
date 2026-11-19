@@ -1322,6 +1322,54 @@
    "status": "measured"
   },
   {
+   "name": "input setting: phantom power of input 1 on (settings before 0C)",
+   "hex": "F000200D10030100340000F7",
+   "meaning": "nothing connected: the state reported bit 0, the peak meter of input 1 went from -105 to -55 dBFS, input 2 did not move",
+   "status": "measured"
+  },
+  {
+   "name": "input setting: phantom power of input 1 off (settings before 0D)",
+   "hex": "F000200D10030100300000F7",
+   "meaning": "the state reported bit 0 clear; a peak of -69 dBFS on input 1",
+   "status": "measured"
+  },
+  {
+   "name": "input setting: phantom power of input 2 on (settings before 0C)",
+   "hex": "F000200D10030200380000F7",
+   "meaning": "nothing connected: the state reported bit 1, the peak meter of input 2 went from -105 to -58 dBFS",
+   "status": "measured"
+  },
+  {
+   "name": "input setting: phantom power of input 2 off (settings before 0E)",
+   "hex": "F000200D10030200300000F7",
+   "meaning": "the state reported bit 1 clear; a peak of -71 dBFS on input 2",
+   "status": "measured"
+  },
+  {
+   "name": "input setting: pad of input 2 on, state part 2C, sent while phantom power of input 1 was on",
+   "hex": "F000200D10032000300100F7",
+   "meaning": "the state then reported 2D: phantom power of input 1 stayed on, and input 1 showed no transient",
+   "status": "measured"
+  },
+  {
+   "name": "settings flag: dim on (bit 13, settings before 0C)",
+   "hex": "F000200D10030040300002F7",
+   "meaning": "the state reported the bit; none of the twelve outputs and no level field moved",
+   "status": "measured"
+  },
+  {
+   "name": "settings flag: dim off (settings before 200C)",
+   "hex": "F000200D10030040300000F7",
+   "meaning": "the state reported the bit clear",
+   "status": "measured"
+  },
+  {
+   "name": "settings flag: bit 15 on (settings before 0C)",
+   "hex": "F000200D10030000320008F7",
+   "meaning": "the state reported the bit; no output moved",
+   "status": "measured"
+  },
+  {
    "name": "state (built for this file from the values our unit reported)",
    "hex": "F000200D10000C004004003B6C010000000056590600000003000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000F7",
    "meaning": "word 0 0x0090000C, Main raw 59/59, Phones raw 214/214, gains 0, 0, 12 half dB, 0",

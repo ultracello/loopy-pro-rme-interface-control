@@ -28,6 +28,10 @@ class Codec(unittest.TestCase):
         self.assertEqual(b.parse_frame(V['input setting: pad of input 1 on (settings before 0C)']),(3,[0x10|(0x1C<<16)]))
         self.assertEqual(b.parse_frame(V['input setting: sensitivity bit of input 3 cleared (settings before 0C)']),(3,[0x04|(0x08<<16)]))
         self.assertEqual(V['input setting: pad of input 1 on (settings before 0C)'],bytes.fromhex('F000200D10031000700000F7'))
+        self.assertEqual(b.parse_frame(V['input setting: phantom power of input 1 on (settings before 0C)']),(3,[0x01|(0x0D<<16)]));self.assertEqual(b.parse_frame(V['settings flag: dim on (bit 13, settings before 0C)']),(3,[0x2000|(0x200C<<16)]))
+        self.assertEqual(b.parse_frame(b.set_input_setting(15,True,0x0C)),(3,[0x8000|(0x800C<<16)]))
+        for bad in ((6,True,0x0C),(12,True,0x0C),(0,True,0x4C)):
+            with self.assertRaises(ValueError):b.set_input_setting(*bad)
     def test_mixer(self):
         self.assertEqual(V['mixer: playback 1 to Phones left at 0 dB'],bytes.fromhex('F000200D10014000000002F7'));self.assertEqual(V['mixer: playback 2 to Phones right at 0 dB'],bytes.fromhex('F000200D10015B00000002F7'))
         self.assertEqual(b.parse_mixer(V['mixer: input 1 to Phones left at 0 dB, phase inverted']),(2,0,b.UNITY,True));self.assertEqual(V['mixer: input 1 to Phones left at 0 dB, phase inverted'][6:11],bytes([52,0,0,0,0x0E]))
