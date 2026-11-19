@@ -1,0 +1,40 @@
+name: Hardware result from a helper
+description: You ran tools/babyface_helper.py with your own Babyface Pro or Pro FS. Thank you.
+title: '[Result] '
+body:
+- type: markdown
+  attributes:
+    value: This issue and its attachments are public. Read the report file before you attach it. It holds no serial number, but it does hold your operating system and what you typed.
+- type: dropdown
+  id: task
+  attributes:
+    label: Which task did you run?
+    options:
+    - check
+    - dim-key
+    - clock-optical
+    - replug
+    - something did not work
+  validations:
+    required: true
+- type: dropdown
+  id: unit
+  attributes:
+    label: Your unit
+    options:
+    - Babyface Pro FS
+    - Babyface Pro (without FS)
+  validations:
+    required: true
+- type: textarea
+  id: report
+  attributes:
+    label: The report file
+    description: Attach babyface-report-….json here (drag it into this field). If GitHub refuses the file, zip it or paste its text.
+  validations:
+    required: true
+- type: textarea
+  id: notes
+  attributes:
+    label: Anything you noticed
+    description: What you saw or heard that the tool did not ask about, or what went wrong. Optional.

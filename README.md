@@ -25,7 +25,12 @@ A function counts as measured when its effect was read at the unit. Native suppo
 - [Protocol reference](docs/protocol/BABYFACE-PRO-FS-CC-REFERENCE.md): every message byte for byte, with the formulas for the dB values. Each statement is marked as measured on the unit, reported back by the unit, taken from other people's notes, or unknown. It is written for anyone who wants to build native support into a host application.
 - [Reference codec, test vectors and measured curves](docs/protocol/reference/): a small codec in Python that builds and parses bytes and sends nothing, the test vectors for it, and the equaliser curves measured with sine tones.
 - [Reports](docs/milestones/): one dated report for every step of the work, with what was done, what was measured and what went wrong.
+- [Tool for helpers](tools/babyface_helper.py): guided checks for people who test with their own unit, with [instructions](docs/help-wanted/README.md).
 - [Website generator](website/).
+
+## Help wanted
+
+Everything here was measured on one unit. If you own a Babyface Pro or Babyface Pro FS and a computer, you can check in a few minutes whether yours behaves the same, and help with the one function that is not measured yet: [how to help](docs/help-wanted/README.md). No programming needed.
 
 ## What is not here
 
@@ -35,6 +40,7 @@ The controller page that runs in Loopy Pro is a private working copy and is not 
 
 ```
 python3 docs/protocol/reference/test_babyface_cc.py
+python3 tools/test_babyface_helper.py
 cd website && npm test && npm run build
 ```
 

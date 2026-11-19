@@ -1,32 +1,22 @@
 # Contributing
 
-Start with one clearly described issue. This repository contains documentation, templates and a browser-only planning website. It does not contain a released hardware-control package.
+The most useful thing you can do is a short test with your own unit. If you own an RME Babyface Pro or Babyface Pro FS and a computer, see **[Help wanted](docs/help-wanted/README.md)**: a small tool guides you, and you need no programming.
 
-## You do not need to code
+Other ways to help:
 
-- Report confusing wording or a failed documented step using [the test-report template](templates/test-report.md).
-- Suggest one concrete musical task and its smallest useful result.
-- Supply an official manual link and relevant section. Documentation supports a documented capability, not a hardware-test pass.
+- Tell us where the [protocol reference](docs/protocol/BABYFACE-PRO-FS-CC-REFERENCE.md) is unclear or wrong. Open an issue and name the section.
+- If you build support for the unit into an application, tell us what was missing.
 
-Issues, pull requests and their attachments are public. Remove private data before posting. Do not submit personal recordings, device/network identifiers, original projects, credentials or private correspondence.
+## Rules of the repository
 
-## Small changes are easiest to review
+- Issues, pull requests and their attachments are public. Remove private data before posting: no recordings, no serial numbers, no credentials, no private messages.
+- A statement about the hardware needs to say how it was established. The reference uses four marks for that: measured, reported, notes, unknown. A result from another unit is recorded as such, with the report it comes from.
+- Keep changes small and say what you checked. The checks of the repository:
+  ```
+  python3 docs/protocol/reference/test_babyface_cc.py
+  python3 tools/test_babyface_helper.py
+  cd website && npm test
+  ```
+- Everything here is public domain under [the Unlicense](LICENSE). By contributing you dedicate your contribution to the public domain as well.
 
-1. Describe the intended change in an issue before doing substantial implementation work.
-2. Work on one module or coherent behavior at a time. Preserve existing routing and working project originals.
-3. For website changes, follow [the checked-in setup and test instructions](website/README.md). For future hardware modules, include their own reproducible setup and test instructions; the planner does not install device controls.
-4. Record the exact revision and each check as passed, failed, blocked or not run. A browser simulation is not a hardware test.
-5. Update [module status](docs/MODULE_STATUS.md), its [machine-readable registry](verification/module-status.json), and [the changelog](CHANGELOG.md) when behavior or evidence changes.
-6. Submit a **draft** pull request for review. Approval and merging are separate from release or deployment.
-
-Project-authored material in this repository is public domain under [the Unlicense](LICENSE). Contributions are accepted on the same terms: by contributing you dedicate your contribution to the public domain. Third-party code requires compatible rights and attribution; a public repository alone does not supply them.
-
-See [the developer/test setup](docs/DEVELOPMENT_SETUP.md) for Mac/iPad automation roles, version inventory, reproduction, and the separate end-user requirements.
-
-## Hardware-control contributions
-
-Complete [the device-profile template](templates/device-profile.md) and meet [the acceptance gates](docs/ACCEPTANCE.md) before describing a module as hardware verified. Include actual message mappings, encoding, destination, feedback, safe failure behavior, and precise software/hardware versions.
-
-Keep input gain, mixer level, mute and pan distinct. Verify that headphones and main output behave independently. Display uncertain hardware state honestly instead of guessing. Do not improvise a hardware setup from the planning website.
-
-A test report applies only to the stated module, profile and revision. Preserve failures and limits. Do not generalize a single-model result to every RME device or from iPad to iPhone.
+The documents under `docs/` that date from 8 to 10 November 2026, and the folder `templates/`, belong to the first days of the project and are kept as they were.

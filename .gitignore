@@ -21,3 +21,6 @@ private/
 raw-evidence/
 original-projects/
 *.log
+# Reports and caches of the helper tool
+babyface-report-*.json
+__pycache__/
