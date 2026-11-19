@@ -110,7 +110,7 @@ Levels, gains and input settings survive. The mixer is gone, so the headphones a
 
 ## If pad or reference level answer FAULT
 
-The page writes a setting only when it knows every bit of the settings the unit reports. One more bit appears there while the unit's own OUT key stands on "Opt"; then "IN1 PAD", "IN2 PAD" and the two reference level switches answer FAULT and write nothing, and everything else goes on working.
+The page writes a setting only when it knows every bit of the settings the unit reports. On our unit one more bit appeared there while the unit's own OUT key stood on "Opt"; then "IN1 PAD", "IN2 PAD" and the two reference level switches answered FAULT and wrote nothing, and everything else went on working.
 
 The way out: on the unit, press OUT until "Ch 1/2" is lit, then READ and ARM again. Seen on our unit: with OUT on "Opt" pad answered FAULT, and with OUT back on "Ch 1/2" it switched on and off as before.
 
