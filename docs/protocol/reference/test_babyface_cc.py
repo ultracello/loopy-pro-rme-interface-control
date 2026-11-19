@@ -96,6 +96,7 @@ class Codec(unittest.TestCase):
             g=b.output_gain_from_raw(raw)/b.output_gain_from_raw(183)
             if db is None:self.assertEqual(g,0.0)
             else:self.assertAlmostEqual(20*math.log10(g),db,delta=0.003)
+        self.assertEqual(b.set_device_setting(0,True),bytes.fromhex('F000200D10000100040000F7'));self.assertEqual(b.parse_frame(b.set_device_setting(10,False)),(0,[0x400]));self.assertEqual(b.parse_frame(b.set_device_setting(6,True)),(0,[0x40|(0x40<<16)]))
         self.assertEqual(b.set_loopback(4,True),bytes.fromhex('F000200D10020400040000F7'));self.assertEqual(b.parse_frame(b.set_loopback(11,False)),(2,[11]))
     def test_low_cut_corner(self):
         for f0,poles in ((20,1),(100,1),(100,2),(100,4),(250,1),(500,4)):

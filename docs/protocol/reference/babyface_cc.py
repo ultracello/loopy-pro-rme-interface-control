@@ -145,6 +145,16 @@ def set_eq_in_recording(on):
     return frame(SUB_STATE, [0x40 | ((0x01 if on else 0x41) << 16)])
 
 
+def set_device_setting(bit, on):
+    """One device setting (sub ID 00): bit 0 clock source, bit 6 "EQ for Record" (set = not in the recording), bit 10
+    optical output format. Only the named bit is sent in the state part; the unit follows the bit named in the mask.
+    (bit 0: reported, bit 30 of state word 0 follows it; bit 6: measured, see set_eq_in_recording; bit 10: written,
+    with nothing to read it from)"""
+    if bit not in (0, 6, 10):
+        raise ValueError('bit 0, 6 or 10')
+    return frame(SUB_STATE, [(1 << bit) | ((1 << bit if on else 0) << 16)])
+
+
 def set_loopback(output, on):
     """Loopback of one output, 0..11 (the list OUTPUTS): while it is on, the host records the signal of that output,
     taken behind its level and its equaliser, on the input channel of the same number, instead of the hardware input.

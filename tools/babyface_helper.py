@@ -25,7 +25,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / 'docs' / 'protocol' / 'reference'))
 import babyface_cc as cc  # the reference codec of this repository: builds and parses bytes, sends nothing
 
-TOOL_VERSION = 'babyface-helper-2'
+TOOL_VERSION = 'babyface-helper-3'
 STATE_LENGTH = 227          # bytes of a state message (sub ID 00)
 HEADER = bytes([0xF0, 0x00, 0x20, 0x0D, 0x10])
 FLAG_BITS = 0xE03F          # the bits of state word 0 that the settings message carries: 0-5 and 13-15
@@ -245,62 +245,60 @@ def task_dim_key(report):
 
 
 def device_setting(mask_bit, state_bits):
-    """Device settings message (sub ID 00): which bit changes, and the state part. The state part always carries bit 0
-    (clock: internal) unless the task clears it on purpose, and never bit 6 (so the equaliser stays in the recording)."""
+    """Device settings message (sub ID 00): which bit changes, and its new value in the state part. The project's unit
+    followed only the bit named in the first half; the tasks send no other bit in the state part."""
     return cc.frame(cc.SUB_STATE, [mask_bit | (state_bits << 16)])
 
 
 def task_clock_optical(report):
-    """Optical output format (ADAT or S/PDIF) and clock source, switched by message; you read the unit's own display,
-    and, if you have one, a device at the optical output.
+    """Clock source and optical output format, switched by message.
 
-    Sends: the state request; the device settings message for bit 10 (optical format), three times at most; the device
-    settings message for bit 0 (clock source), three times at most. Bit 6 of the state part stays clear in all of them."""
-    confirm(report, ['This task switches the format of the optical output and the clock source of your Babyface by message.',
-                     'You read the result from the level meters of the unit. A device connected to the optical OUTPUT that',
-                     'shows what it receives (ADAT or S/PDIF) makes the result much more valuable, but is not needed.',
-                     'Stop all playback and turn your monitors and headphones down first: switching can click.',
-                     'At the end the tool puts both settings back to what you reported at the start.', ''])
+    The clock source needs nothing from you: the state of the unit shows it (bit 30 of word 0 follows the bit written, as
+    found on the project's unit), so the tool switches it, reads it and puts it back. The optical format does not show
+    in the state, and the unit's own display stays dark while a computer asks for the state; so that part runs only if
+    a device at the optical OUTPUT shows what it receives.
+
+    Sends: the state request; the device settings message for bit 0 (clock source), three times at most; with a device
+    at the optical output, the device settings message for bit 10 (optical format), three times at most. Bit 6 of the
+    state part stays clear in all of them."""
+    confirm(report, ['This task switches the clock source of your Babyface by message, reads it back from the state of the unit',
+                     'and puts it back. If a device at the optical OUTPUT shows what it receives (ADAT or S/PDIF), it also',
+                     'switches the format of the optical output and asks what that device shows.',
+                     'Stop all playback and turn your monitors and headphones down first: switching can click.', ''])
     about_the_unit(report)
     receiver = report.ask('Is a device connected to the optical OUTPUT of the Babyface that shows what it receives?', ['yes', 'no'])
-    look_format = 'On the unit, press OUT until "Opt" is selected, then press SET: 8 lit LEDs mean ADAT, 2 mean S/PDIF.'
-    look_clock = ('Hold SET for two seconds: the meters show the clock mode. Digits (for example 0441) mean Master, bars mean '
-                  'AutoSync. Any of the four keys below the meters leaves this display.')
-    start_format = report.ask(look_format + ' What does it show?', ['adat', 'spdif', 'unsure'])
-    start_clock = report.ask(look_clock + ' What does it show?', ['master', 'autosync', 'unsure'])
-    first = report.state('before anything is switched')
 
-    # optical format: bit 10. The state part says "clock internal" (bit 0), as every message of the project did.
+    # clock source: bit 0 of the device settings; bit 30 of state word 0 reports it
+    first = report.state('before the clock source is switched')['bit_30']
+    read_back = {}
+    for bit_0 in ((0, 1) if first else (1, 0)):   # the other value first, then the value found
+        report.send(device_setting(0x001, bit_0), 'clock source: bit 0 %s' % ('set' if bit_0 else 'clear'))
+        read_back[bit_0] = report.state('after bit 0 was %s' % ('set' if bit_0 else 'cleared'))['bit_30']
+    report.note('clock_source', {'state_bit_30_at_the_start': first, 'with_bit_0_set': read_back[1], 'with_bit_0_clear': read_back[0],
+                                 'state_follows_the_bit': read_back[1] is True and read_back[0] is False})
+    if read_back[1] is True and read_back[0] is False:
+        report.say('Clock source: the state followed the bit both ways, and it is back where it was.')
+    else:
+        report.say('Clock source: the state did NOT follow the bit as on the project\'s unit; see the report. The last message sent the value found at the start.')
+
+    # optical format: bit 10; only a device at the optical output can show it
+    if receiver == 'no':
+        report.note('optical_format', 'not tried: no device at the optical output')
+        report.say('Optical format left out: without a device at the optical output there is nothing to read it from.')
+        return
+    start_format = report.ask('What does the device at the optical output show that it receives right now?', ['adat', 'spdif', 'nothing', 'unsure'])
     seen = {}
     for bit_10 in (1, 0):
-        report.send(device_setting(0x400, 0x001 | (0x400 if bit_10 else 0)), 'optical format: bit 10 %s' % ('set' if bit_10 else 'clear'))
-        seen[bit_10] = report.ask('Look again (OUT to "Opt", then SET). What does the unit show now?', ['adat', 'spdif', 'unsure'])
-        if receiver == 'yes':
-            report.ask('What does the device at the optical output show that it receives?', ['adat', 'spdif', 'nothing', 'unsure'])
+        report.send(device_setting(0x400, 0x400 if bit_10 else 0), 'optical format: bit 10 %s' % ('set' if bit_10 else 'clear'))
+        seen[bit_10] = report.ask('What does the device at the optical output show now?', ['adat', 'spdif', 'nothing', 'unsure'])
     report.note('optical_format', {'at_the_start': start_format, 'with_bit_10_set': seen[1], 'with_bit_10_clear': seen[0]})
-    format_bits = 0   # bit 10 as it stands now; carried along in the clock messages below
     if seen[1] != seen[0] and start_format in (seen[1], seen[0]):
         if seen[1] == start_format:
-            format_bits = 0x400
-            report.send(device_setting(0x400, 0x401), 'optical format back to what it was at the start')
+            report.send(device_setting(0x400, 0x400), 'optical format back to what it was at the start')
         report.say('The optical format is back at %s.' % start_format.upper())
     else:
-        report.say('The tool could not tell how to put the format back. Set it at the unit: OUT to "Opt", SET, then SELECT.')
-
-    # clock source: bit 0
-    seen, bit_30 = {}, {}
-    for bit_0 in (0, 1):
-        report.send(device_setting(0x001, bit_0 | format_bits), 'clock source: bit 0 %s' % ('set' if bit_0 else 'clear'))
-        bit_30[bit_0] = report.state('after bit 0 was %s' % ('set' if bit_0 else 'cleared'))['bit_30']
-        seen[bit_0] = report.ask('Hold SET for two seconds again. What does the unit show now?', ['master', 'autosync', 'unsure'])
-    report.note('clock_source', {'at_the_start': start_clock, 'with_bit_0_clear': seen[0], 'with_bit_0_set': seen[1],
-                                 'state_bit_30': {'at_the_start': first['bit_30'], 'with_bit_0_clear': bit_30[0], 'with_bit_0_set': bit_30[1]}})
-    if seen[0] != seen[1] and start_clock in (seen[0], seen[1]):
-        if seen[0] == start_clock:
-            report.send(device_setting(0x001, format_bits), 'clock source back to what it was at the start')
-        report.say('The clock source is back at %s.' % start_clock)
-    else:
-        report.say('The tool could not tell how to put the clock source back. Set it at the unit: hold SET two seconds, then SELECT.')
+        report.say('The tool could not tell what the format was at the start; bit 10 is clear now. If your device no longer '
+                   'locks, run the task again and note with which value it locks.')
 
 
 def task_replug(report):
@@ -369,7 +367,7 @@ class SimulatedUnit:
         self.words[1] = 183 | (183 << 9)
         self.words[2] = (214 << 14) | (214 << 23)
         self.words[3] = 59 | (59 << 9) | (12 << 19)
-        self.out, self.received, self.cells, self.device = [], [], {}, 0x001
+        self.out, self.received, self.cells, self.device = [], [], {}, 0x000
 
     def send(self, frame):
         frame = bytes(frame)
@@ -392,7 +390,7 @@ class SimulatedUnit:
         elif sub == 0x00:
             mask_bits, state = words[0] & 0xFFFF, words[0] >> 16
             self.device = (self.device & ~mask_bits) | (state & mask_bits)
-            self.words[0] = (self.words[0] & ~(1 << 30)) | ((0 if self.device & 1 else 1) << 30)
+            self.words[0] = (self.words[0] & ~(1 << 30)) | ((self.device & 1) << 30)   # as on the project's unit
 
     def collect(self, seconds):
         got, self.out = self.out, []

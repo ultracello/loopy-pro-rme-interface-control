@@ -10,7 +10,7 @@ You do not need to program. A small tool talks you through each task, and you ca
 |---|---|---|---|
 | `check` | the unit and a computer | 5 min | Does another unit answer like ours? Most wanted from a Babyface Pro **without** FS. |
 | `dim-key` | the same | 5 min | What the DIM key does in this mode, and whether its lamp follows a message. |
-| `clock-optical` | the same; much better with a device at the optical **output** that shows what it receives (ADAT or S/PDIF) | 10 min | Clock source and optical format: the one function of the unit that is not measured yet. |
+| `clock-optical` | the same, for the clock source (2 min, nothing to do but start it); **a device at the optical output that shows what it receives (ADAT or S/PDIF)** for the optical format | 2 to 10 min | Clock source and optical format: the one function of the unit that is not measured yet. The optical part is what we cannot do ourselves. |
 | `replug` | the power supply of the unit, and headphones | 10 min | Does the unit keep its mixer when USB is pulled while it stays powered? |
 
 Start with `check`. Each task is separate; do as many as you like.
@@ -21,7 +21,9 @@ Each task sends a small, fixed set of messages, which the tool lists before it s
 
 It is still your unit and your ears: turn monitors and headphones down before you start, and stop if anything looks wrong.
 
-How far the tool itself is tested: against a simulated unit, over virtual MIDI ports, and on the project's Babyface Pro FS connected to a Mac (task `check`, 19 November 2026). On Windows and Linux nobody has run it yet; if you are the first, say so in your report.
+How far the tool itself is tested: against a simulated unit, over virtual MIDI ports, and on the project's Babyface Pro FS connected to a Mac (tasks `check`, `dim-key` and the clock part of `clock-optical`, 19 November 2026). On Windows and Linux nobody has run it yet; if you are the first, say so in your report.
+
+Good to know: while a computer asks the unit for its state, some keys of the unit behave differently. On our unit DIM did not dim and SET showed nothing. When the unit takes its keys back we have not found out yet; plugging it in again is the first thing to try.
 
 ## Step by step
 

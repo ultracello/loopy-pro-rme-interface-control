@@ -53,7 +53,7 @@ def harmless(frame, start):
     if sub == 0x01:    # only playback to the headphones, at 0 dB or off
         return len(words) == 1 and word & 0xFFF in (64, 91) and (word >> 12) in (0, cc.UNITY)
     if sub == 0x00:    # only optical format or clock source, and bit 6 of the state part clear
-        return len(words) == 1 and word & 0xFFFF in (0x400, 0x001) and not (word >> 16) & 0x40 and not (word >> 16) & ~0x401
+        return len(words) == 1 and word & 0xFFFF in (0x400, 0x001) and not (word >> 16) & ~(word & 0xFFFF)   # the state part carries the named bit only
     return False
 
 
@@ -96,30 +96,35 @@ class Tasks(unittest.TestCase):
         self.assertEqual(unit.words, helper.SimulatedUnit().words)
         self.all_harmless(unit)
 
-    def test_clock_and_optical_are_put_back(self):
-        # the helper reports ADAT and AutoSync at the start; bit 10 set shows S/PDIF, bit 0 set shows Master
-        answers = START + ['no', 'adat', 'autosync', 'spdif', 'adat', 'autosync', 'master']
-        report, unit = run('clock-optical', answers)
-        self.assertEqual(report['optical_format'], {'at_the_start': 'adat', 'with_bit_10_set': 'spdif', 'with_bit_10_clear': 'adat'})
-        self.assertEqual(report['clock_source']['with_bit_0_set'], 'master')
-        words = [cc.parse_frame(bytes.fromhex(s['hex']))[1][0] for s in report['sent']]
-        self.assertEqual(words, [0x400 | (0x401 << 16), 0x400 | (0x001 << 16), 0x001, 0x001 | (0x001 << 16), 0x001])
-        self.assertEqual(unit.device & 0x401, 0x000)   # optical bit clear (ADAT here), clock bit clear (AutoSync here)
+    def test_clock_source_is_read_from_the_state_and_put_back(self):
+        report, unit = run('clock-optical', START + ['no'])
+        self.assertEqual(report['clock_source'], {'state_bit_30_at_the_start': False, 'with_bit_0_set': True, 'with_bit_0_clear': False, 'state_follows_the_bit': True})
+        self.assertEqual([cc.parse_frame(bytes.fromhex(s['hex']))[1][0] for s in report['sent']], [0x001 | (0x001 << 16), 0x001])
+        self.assertIn('not tried', report['optical_format'])
+        self.assertEqual(unit.device, 0x000)
         self.all_harmless(unit)
 
-    def test_clock_and_optical_with_the_other_polarity(self):
-        answers = START + ['yes', 'spdif', 'master', 'spdif', 'spdif', 'adat', 'adat', 'autosync', 'master']
-        report, unit = run('clock-optical', answers)
+    def test_clock_source_found_set_is_left_set(self):
+        unit = helper.SimulatedUnit()
+        unit.send(helper.device_setting(0x001, 0x001))
+        unit.received.clear()
+        report, unit = run('clock-optical', START + ['no'], unit)
+        self.assertEqual([cc.parse_frame(bytes.fromhex(s['hex']))[1][0] for s in report['sent']], [0x001, 0x001 | (0x001 << 16)])
+        self.assertEqual(unit.device & 1, 1)
+
+    def test_optical_format_with_a_device_is_put_back(self):
+        # the device shows S/PDIF at the start; bit 10 set shows S/PDIF, clear shows ADAT
+        report, unit = run('clock-optical', START + ['yes', 'spdif', 'spdif', 'adat'])
         words = [cc.parse_frame(bytes.fromhex(s['hex']))[1][0] for s in report['sent']]
-        self.assertEqual(words[:3], [0x400 | (0x401 << 16), 0x400 | (0x001 << 16), 0x400 | (0x401 << 16)])   # back to S/PDIF = bit set
-        self.assertEqual(words[3:], [0x001 | (0x400 << 16), 0x001 | (0x401 << 16)])                          # the format bit is carried along; Master = bit set stays
-        self.assertEqual(unit.device & 0x401, 0x401)
+        self.assertEqual(words[2:], [0x400 | (0x400 << 16), 0x400, 0x400 | (0x400 << 16)])
+        self.assertEqual(report['optical_format'], {'at_the_start': 'spdif', 'with_bit_10_set': 'spdif', 'with_bit_10_clear': 'adat'})
+        self.assertEqual(unit.device, 0x400)
         self.all_harmless(unit)
 
-    def test_clock_and_optical_when_the_helper_cannot_tell(self):
-        answers = START + ['no', 'unsure', 'unsure', 'unsure', 'unsure', 'unsure', 'unsure']
-        report, unit = run('clock-optical', answers)
-        self.assertEqual(len(report['sent']), 4)   # two per setting, and no guess at a way back
+    def test_optical_format_when_the_helper_cannot_tell(self):
+        report, unit = run('clock-optical', START + ['yes', 'unsure', 'unsure', 'unsure'])
+        self.assertEqual(len(report['sent']), 4)   # two for the clock, two for the format, and no guess at a way back
+        self.assertEqual(unit.device, 0x000)
         self.all_harmless(unit)
 
     def test_replug(self):

@@ -143,6 +143,9 @@ add('input setting: pad of input 2 on, state part 2C, sent while phantom power o
 add('settings flag: dim on (bit 13, settings before 0C)',b.set_input_setting(13,True,0x0C),'the state reported the bit; none of the twelve outputs and no level field moved; the DIM lamp of the unit lit','measured')
 add('settings flag: dim off (settings before 200C)',b.set_input_setting(13,False,0x200C),'the state reported the bit clear','measured')
 add('settings flag: bit 15 on (settings before 0C)',b.set_input_setting(15,True,0x0C),'the state reported the bit; no output moved','measured')
+# 19 November 2026, on a Mac: the clock source bit, read back from the state
+add('device settings: clock source bit set',b.set_device_setting(0,True),'bit 30 of state word 0 stood set in the next state; the effect on audio was not measured','reported')
+add('device settings: clock source bit clear',b.set_device_setting(0,False),'bit 30 of state word 0 stood clear; the state the unit was found in','reported')
 # one synthetic state message: Main muted by raw 59, Phones -14.5 dB, mic gains 0, line gains 6.0 and 0 dB, both sensitivity bits set
 w=[0]*44;w[0]=0x0090000C;w[1]=59|(59<<9);w[2]=(214<<14)|(214<<23);w[3]=(12<<19)
 add('state (built for this file from the values our unit reported)',b.frame(0,w),'word 0 0x0090000C, Main raw 59/59, Phones raw 214/214, gains 0, 0, 12 half dB, 0','reported')

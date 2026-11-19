@@ -1,6 +1,6 @@
 # RME Babyface Pro FS in class-compliant mode: control protocol reference
 
-Version 1.1, 19 November 2026. Public domain (Unlicense).
+Version 1.2, 19 November 2026. Public domain (Unlicense).
 
 This document describes how a host application on iPadOS can read and set the Babyface Pro FS without TotalMix FX, over MIDI SysEx. It is written for someone who wants to build native support. Everything in it was worked out on one unit (Babyface Pro FS, iPad, iPadOS 27.2.1) between 8 and 19 November 2026.
 
@@ -13,7 +13,7 @@ Each statement carries one of four marks, so that nothing has to be taken on tru
 | **notes** | Taken from other people's notes and not tried on our unit. Sources: the protocol notes on the oscmix wiki by Michael Forney (github.com/michaelforney/oscmix/wiki/Babyface-Pro) and the Babyface Pro part of the Linux kernel driver (`sound/usb/mixer_quirks.c`). |
 | **unknown** | We found no source and no way to observe it. |
 
-The folder `reference/` holds a small codec in Python (`babyface_cc.py`), 229 test vectors (`test-vectors.json`), the equaliser curves measured with sine tones (`eq-curves-measured.json`), the level of an output for every raw value (`output-level-law-measured.json`), the gain of a microphone input for every value (`mic-gain-measured.json`) and tests. The codec was checked against 1871 messages of the controller that was used on the unit: byte for byte the same.
+The folder `reference/` holds a small codec in Python (`babyface_cc.py`), 231 test vectors (`test-vectors.json`), the equaliser curves measured with sine tones (`eq-curves-measured.json`), the level of an output for every raw value (`output-level-law-measured.json`), the gain of a microphone input for every value (`mic-gain-measured.json`) and tests. The codec was checked against 1871 messages of the controller that was used on the unit: byte for byte the same.
 
 ## 1. Transport
 
@@ -82,7 +82,7 @@ The state part carries every setting, so a host should read the current settings
 
 **Dim and mute are flags.** With a tone on all twelve outputs, read through loopback (2.6), bits 13, 14 and 15 were each set and cleared: the state reported each bit, and not one output and not one level field moved. When TotalMix FX on a Mac dimmed, we had seen the Main level fields stand 40 raw steps lower while bit 13 was set; so the attenuation is the host's own write of the level, and the bit only says that it is in force. A host that dims writes the level 20 dB down and sets bit 13; a host that mutes writes raw 59 (2.2).
 
-**The DIM lamp follows the flag, and the DIM key does not dim by itself.** With the unit on a Mac in this mode, the owner pressed DIM twice with "Ch 1/2" selected: the state read after each press showed no flag and no changed level, and the lamp stayed dark. Then the flag was set by message: the lamp lit, and went out when the flag was cleared. **measured** (the lamp seen by the owner; the Main output stood at its mute value, raw 59, at the time). So in this mode the key is left to the host: it has to notice the press (bits 24 and 28 of state word 0 flash on a key press, 3.1) and do the dimming itself. That last step is our reading, not something we tried.
+**The DIM lamp follows the flag, and the DIM key does not dim by itself.** With the unit on a Mac in this mode and a tool asking for its state, the owner pressed DIM twice with "Ch 1/2" selected: the state read after each press showed no flag and no changed level, and the lamp stayed dark. Then the flag was set by message: the lamp lit, and went out when the flag was cleared. **measured** (the lamp seen by the owner; the Main output stood at its mute value, raw 59, at the time). So in this mode the key is left to the host: it has to notice the press (bits 24 and 28 of state word 0 flash on a key press, 3.1) and do the dimming itself. That last step is our reading, not something we tried.
 
 Example, pad of input 1 on while both sensitivity bits are set (settings `0C`): word = `0x10 | (0x1C << 16)`, message `F0 00 20 0D 10 03 10 00 70 00 00 F7`. **measured**
 
@@ -197,7 +197,13 @@ Bit 6 was tried, with mask `0x0040` and bit 0 set in the state: **measured** thr
 - State `0x0041` (bit 6 set): 0.0 dB, with the EQ of the output still on. The EQ is not in what the host records.
 - Each was sent twice in changing order; the message sets the state and does not toggle it. So in this mode a set bit 6 takes the EQ out of the recording.
 
-The same setting decides whether the EQ of an input is recorded. **measured** with a tone over a cable into input 1 and an EQ on that input making +12 dB at the tone: with bit 6 clear the recorded tone stood 12.00 dB higher than without EQ, with bit 6 set at 0.00 dB, each state three and two times in turn. We found no word of the state message that reports these settings, so the state part could not be read first: both messages carried bit 10 as zero, and whether that changed the optical format of our unit we cannot tell. Clock source and optical format were never switched on purpose. The codec builds the two messages (`set_eq_in_recording`).
+The same setting decides whether the EQ of an input is recorded. **measured** with a tone over a cable into input 1 and an EQ on that input making +12 dB at the tone: with bit 6 clear the recorded tone stood 12.00 dB higher than without EQ, with bit 6 set at 0.00 dB, each state three and two times in turn. **Clock source, reported.** Bit 0 was written with mask `0x0001`, on a Mac and with no digital input signal: set, bit 30 of state word 0 stood set in the next state; clear, it stood clear; each way more than once. The unit was found with the bit clear, which by the notes is AutoSync, the default of this mode by RME's manual. What it does to audio was not measured; without a digital input the unit is its own master either way. **reported**
+
+**The unit follows the bit named in the mask.** Messages that named bit 10 or bit 6 and carried bit 0 set in their state part left bit 30 clear. **reported** So our messages for EQ for Record did not switch the clock source, and by the same rule will not have switched the optical format.
+
+**Optical format.** Bit 10 was written set and clear. No word of the state follows it, and there was nothing to read it from: no device at the optical output, and the unit's own display for it (OUT on Opt, then SET) stayed dark while a host was asking for the state. **notes** as before.
+
+The codec builds the messages (`set_eq_in_recording`, `set_device_setting`).
 
 ### 2.7 Resolution: which values exist
 
@@ -227,7 +233,8 @@ A request is answered with three messages, in this order: sub ID `00` (227 bytes
 | 0 | 16-19 | Counter of the encoder, one detent = 1, wraps | **reported** |
 | 0 | 20-23 | Mode and selection of the unit's own keys | **reported**, not fully decoded |
 | 0 | 24, 28 | Flash briefly on a key press | **reported** |
-| 0 | 30 | Clock source | **notes** |
+| 0 | 9 | Seen set once, after keys of the unit had been used (OUT on Opt, IN on Ch 3/4, SET); clear before | **unknown** |
+| 0 | 30 | Clock source: follows bit 0 of the device settings (2.6) | **reported** |
 | 1 | 0-7, 9-16 | Main left, Main right, raw level | **measured** |
 | 2 | 0-6, 7-13 | Gain of microphone input 1, 2 in dB (plain number) | **reported** |
 | 2 | 14-21, 23-30 | Headphones left, right, raw level | **measured** |
@@ -298,7 +305,7 @@ The last column says whether the controller page this project uses in Loopy Pro 
 | EQ and low cut on inputs and outputs | **measured**, whole curves with sine tones: input 1 and Main left at 48 kHz; both headphone channels, Main right, AS1 and ADAT3 at 44.1 kHz | no |
 | Loopback | **measured** for all twelve outputs | no |
 | EQ for Record | **measured** for the EQ of an output in loopback and for the EQ of an input (bit 6 of the device settings) | no |
-| Clock source, optical format | **notes** | no |
+| Clock source, optical format | clock source **reported**: the state follows the written bit, its effect on audio not measured; optical format written with nothing to read it from, **notes** | no |
 | Dim, global mute | **measured**: the unit keeps and reports a flag for each and attenuates nothing; the host does it with the levels | no |
 | Mono, solo, stereo link, cue, talkback | by RME's manual functions of the control room of TotalMix FX; a host builds them from levels and mixer cells, the unit has nothing of its own for them that we know of |  |
 | Snapshots, layouts | belong to TotalMix FX, not to the unit |  |
@@ -309,7 +316,7 @@ The last column says whether the controller page this project uses in Loopy Pro 
 - A replug with the unit kept alive by a power supply of its own: does it keep mixer, loopback and EQ then?
 - Where the unit reports its device settings, if it does.
 - How a host tells a press of the DIM key from the other keys of the unit (which of the bits that flash in state word 0), and whether the key behaves the same with the Main output not muted.
-- Clock source and optical format: they need a device at the optical socket, or a look at the unit's own display.
+- Optical format: needs a device at the optical output that shows what it receives. Clock source at work: needs a signal at the optical input.
 
 ## 7. Sources
 
