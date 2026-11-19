@@ -9,7 +9,7 @@ export const TEXT = {
   intro: [
     'This project comes from a cellist who plays with live looping in Loopy Pro on an iPad, through an RME Babyface Pro FS. The levels of that interface are normally set in TotalMix FX, which is a second app on the iPad and does not exist for the iPhone. The wish was simple: main and headphone level next to the loops.',
     'So the interface is controlled from inside Loopy Pro, over the MIDI port the unit offers in class-compliant mode. Two things have come out of it: a controller page that is in use, and a protocol reference with measured values, written so that Loopy Pro or any other host could support the interface natively.',
-    'There is nothing to download and install yet. The controller is a private working copy.',
+    'The controller page can be downloaded as a working example. It has to be set up by hand, and it was used on one iPad with one unit.',
   ],
   progress: [
     'Three figures say how far the work is. The first two are counted from the table below every time the page is built; nobody types them.',
@@ -52,12 +52,12 @@ export const TEXT = {
   pageAfter: [
     'Equaliser and low cut are not on the page: the scripting plug-in it is built with cannot send a message of that length in one piece. Phantom power is left out on purpose.',
     'How it is wired: a StreamByter plug-in inside Loopy Pro builds the messages and checks every answer of the unit. A second one in front of the unit lets only known messages pass. The answers reach the displays on the page through the app MidiFire.',
-    'The page is not published, and it is no substitute for native support: it has to keep its own picture of the mixer, and setting it up takes many steps.',
+    'The page is [published as a working example](https://github.com/ultracello/loopy-pro-rme-interface-control/blob/main/controller/README.md), with a set-up guide. It is no substitute for native support: it has to keep its own picture of the mixer, and setting it up takes several steps.',
   ],
   questions: [
     ['Can I help?', 'Yes, if you own a Babyface Pro or a Babyface Pro FS and a computer. Everything here was measured on one unit; a small tool guides you through a few checks with yours, and no programming is needed. [How to help](https://github.com/ultracello/loopy-pro-rme-interface-control/blob/main/docs/help-wanted/README.md).'],
     ['Is there an app I can use?', 'A first one exists, made by someone else from this reference: [OliSimpleRME](https://github.com/OlivierPersoGit/OliSimpleRME), a small iPad mixer for the Babyface Pro FS, to sit next to Loopy Pro. It has to be built with Xcode. We have not built or tested it.'],
-    ['Can I get the controller?', 'Not yet. It is one person\'s working copy, tied to one project and one iPad. What is published is everything needed to build the same thing properly: the protocol reference.'],
+    ['Can I get the controller?', 'Yes, as a working example: the Loopy Pro project, the MidiFire scene and the rules, with a [set-up guide](https://github.com/ultracello/loopy-pro-rme-interface-control/blob/main/controller/README.md). You need Loopy Pro, StreamByter and MidiFire, and you connect your own Babyface in four taps. It was tested on the iPad it was made on; nobody has set it up on a second one yet.'],
     ['Does it work on the iPhone?', 'Not tested. There is no TotalMix FX for the iPhone, which is one reason to want this. Hub and power supply on the iPhone are open questions.'],
     ['Does it work with other RME interfaces?', 'Unknown. Everything here was measured on a Babyface Pro FS in class-compliant mode. The notes this work started from describe the Babyface Pro. No other model was tried.'],
     ['Can it run next to TotalMix FX for iPad?', 'Not tested. Both would ask the unit for its meters, and each would take the peak values away from the other.'],

@@ -1,0 +1,3009 @@
+# LIVE17 2026-11-19: LIVE16 with every name in English; no statement changed.
+# LIVE16 CANDIDATE 2026-11-18: offline only; not natively compiled or installed.
+# Phase of a way to the headphones: CC92..95 input 1..4, CC96 playback. L234..238 0 normal/1 inverted. BE40 = their bits.
+# LIVE15 CANDIDATE 2026-11-17: offline only; not natively compiled or installed.
+# Sensitivity of line input 3 (CC90) and 4 (CC91): setting bits 2 and 3, written like a pad bit. BE6F shows both.
+# LIVE14 CANDIDATE 2026-11-17: offline only; not natively compiled or installed.
+# Arming sends again every way to the headphones whose state the rules know (the unit forgets its mixer
+# when its USB connection is built anew). L216 counts the ways sent.
+# LIVE13 CANDIDATE 2026-11-17: offline only; not natively compiled or installed.
+# Dials are sent the number of their field (128 fields each), times a whole factor; nothing is scaled any more.
+# LIVE12 CANDIDATE 2026-11-17: offline only; not natively compiled or installed.
+# The five level displays (121 fields) get the value that selects the field under field = value*121/127.5.
+# LIVE11 CANDIDATE 2026-11-17: offline only; not natively compiled or installed.
+# Pan of the five ways to the headphones: CC75..84 left/right, CC85..89 middle. L240..244 position 0..40
+# (20 middle). K130..150 factor/4096 of the far side. BE7A..7E show the position.
+# LIVE10 CANDIDATE 2026-11-17: offline only; not natively compiled or installed.
+# Playback 1/2 on Phones with on/off and level: CC72 on/off, CC73/74 level down/up. L230 level index kept,
+# L231 0 unknown/1 off/2 on. BE78 level, BE79 state. CC30 sets this picture to on at 0 dB.
+# LIVE9 CANDIDATE 2026-11-17: offline only; not natively compiled or installed.
+# Monitoring of input 1..4 on Phones (mixer, sub ID 01): CC60..63 on/off, CC64..71 level down/up.
+# The unit does not report its mixer: L220..223 level index kept, L224..227 0 unknown/1 off/2 on.
+# K0..K120 level/8 for -60.0..0.0 dB. BE70..73 level, BE74..77 state.
+# LIVE8 CANDIDATE 2026-11-17: offline only; not natively compiled or installed.
+# A confirmed input step renews the armed minute like a confirmed output step.
+# LIVE7 CANDIDATE 2026-11-17: offline only; not natively compiled or installed.
+# Input gain: CC50..57 = input 1..4 down/up; value = count of steps (1 dB mic, half dB line),
+# 126 = width of slider Q5, 127 = one. Fresh read, write, check read. BE67..6A show the gains.
+# Write per oscmix/kernel notes (sub ID 04, channels 0..3, mic value packed); not verified on our hardware.
+# L200..203 input gains; L204 known; L205 phase 1 read/2 check; L206 input; L207 count; L208 up;
+# L209 target; L210 maximum; L211 current; L212..215 scratch; P21 age of the input step.
+# LIVE6 CANDIDATE 2026-11-13: offline only; not natively compiled or installed.
+# Steps: CC26..29 values 1..125 are half-dB counts; 126 uses slider Q5 (1..60); 127 is one.
+# BE60 shows the chosen width (Q5) as one of 60 fields.
+# LIVE5 CANDIDATE 2026-11-12: offline only; not natively compiled or installed.
+# BE61 carries the reason of the last lock or refusal: 9 ok/27 minute over/46 read first/
+# 64 no answer/82 level differs/101 refused/119 fault. No decision depends on it.
+# LIVE4 CANDIDATE 2026-11-10: offline only; not natively compiled or installed.
+# A refused operation (range, muted pair, fader problem) no longer locks the page.
+# LIVE3 CANDIDATE 2026-11-10: offline only; not natively compiled or installed.
+# Ch16 CC30=127 writes mixer unity playback1->out3 and playback2->out4 (Phones way).
+# Mixer message per oscmix notes (sub ID 01); not verified on our hardware.
+# LIVE2 CANDIDATE 2026-11-10: offline only; not natively compiled or installed.
+# PO (host transport position) decides nothing: it goes backwards when a clip loops.
+# Read/armed for 60s after the last accepted answer. An overdue wait (1.5s) is resolved
+# by the next press: a missing check read is sent then; other waits lock.
+# A mute switch over an unowned 59/59 pair writes raw183 (-30 dB) to that pair.
+# BE62/63 and group status64 show an own mute while its reference is held.
+# OFFLINE SESSION-MUTE CANDIDATE 2026-11-10: not natively compiled or installed.
+# Idle manual LOCK and transport change keep a confirmed own-mute reference.
+# LOAD, errors, observed foreign change and anything pending still forget it.
+# CC25 value0 locks and keeps; CC25 values1..63 lock and forget explicitly.
+# A control pressed while not read/armed is refused and keeps an idle reference.
+# Accepted residual risk: an unobserved loss followed by raw59 is not detected.
+# LOCAL LIFECYCLE CANDIDATE: offline only; not natively compiled or installed.
+# Derived from observer SHA98807f02. Withdraw-only52 plus one-shot53 watchdog.
+# No USB/receiver-epoch detection. Missing context signals remain unobservable.
+# B10 LIVE1 ROUTED CANDIDATE; native routing/widget/fader behavior still requires verification.
+# AU OUT ONLY to virtual MidiFire2, followed by separate strict RME/UI filters.
+# Derived from exact native B7 SHA68b38030b35e8adfcc52d2ee63c0114ed6a8aaeecd16308f23ba85188e23adbb.
+# Ch16 CC40/41=127 begin Main/Phones; CC42/43=127 release that same gesture.
+# Private F0 7D 01 03/04 F7 samples Q3/Q4 ONLY into an active own gesture latch.
+# Q changes and Q sampling never query, commit, or publish feedback.
+# BE60/61 Ready/Active; BE62/63 confirmed own gain-mute, not native M bits.
+# BE64 status0 unknown/32 wait/64 read-ready/96 armed/127 gesture.
+# BE65/66 group0 unknown/32 normal/64 own-gain-mute/96 unowned59/127 outside.
+# Group status describes gain/ref availability, never native TotalMix M bits.
+# BE3C/3D left index feedback only when idle and a full valid group is known.
+# A private 21-bit 10s marker only locks readiness; it never queries or writes.
+# L160..163 expiry token/valid; L164..168 UI values; L169 feedback suppression.
+# P18(hex24) monotonic expiry token counter, no wrap.
+# Software116..243 only; left absolute index+116, right retains the fresh stereo offset.
+# Gesture must receive a Q sample, and end within external10s AND accumulated local10s.
+# Q-frame PO is never compared with external Press/Release PO.
+# L140 group; L141 desired; L142 sample-valid; L144 elapsed-ms; L148 frozen-release index.
+# L143/145/146/147 reserved; P14 external Press PO; P15 signed delta; P16 release age.
+# P17 is the wide local-age sum before checked narrowing to L144; I5 is a transient selector.
+# No proactive gesture expiry display, reconnect detector, or authenticated private-frame origin.
+# v09b8 MAIN+PHONES: free software-range faders plus retained B7 gain-mute and steps.
+# CC26 down / CC27 up: values 1,2,4,6,12 are raw half-dB step counts.
+# Value127 remains a compatibility alias for one half-dB step.
+# Both channels receive the same delta or neither is written. No repeated-step loop.
+# Software bounds116..243 are not a claim about complete hardware limits.
+# Channel16 CC24 READ; CC25 ARM127/LOCK0; CC34 Press127/cancel0; CC21 commit.
+# Human Press latches a recently read snapshot; Release commits CC21.
+# Incoming UI feedback must only change a value store, never send a commit.
+# Fresh read must equal the latched snapshot, then one bounded operation is permitted.
+# Retains explicit Main CC28/29 steps; CC22 Main4/5 / CC23 Phones6/7 gain-mute toggle.
+# Own restore only after matched ACK; never native TotalMix mute-bit synchronization.
+# Local ownership120/121; saved pairs122..125; pending action126.
+# Normal idle READ and benign rejected steps preserve freshly checked ownership.
+# Genuine errors/reload forget ownership; idle manual LOCK/transport keep it.
+# No actual reconnect detector or protocol transaction nonce is available here.
+# Writes Main4/5 or Phones6/7; private delayed dispatch100ms, then immediate read.
+# Phase4 ignores state before dispatch; token/phase/time gate is local, not SDK causality.
+# External callback PO anchors external replies only; T0/T1 measure local elapsed ms.
+# One-shot answer watchdog is offline-tested only; native delivery/live approval unproven.
+# Ignore virtual UI echoes before any clock/state transition can publish again.
+IF LOAD
+ELSE
+  ASS L$169 = 0
+  IF ML == 3
+    IF M0 == BE
+      BLOCK
+      EXIT
+    END
+  END
+  # Sample callbacks must never publish a response, including error paths.
+  IF ML == 5
+    IF M0 == F0 7D 01
+      IF M4 == F7
+        IF M3 == 03
+          ASS L$169 = 1
+        END
+        IF M3 == 04
+          ASS L$169 = 1
+        END
+      END
+    END
+  END
+END
+
+IF LOAD
+  # Cancel this instance's old queued events before resetting the local token session.
+  SET FLUSH 1
+  ASS P11 = 0
+  ASS L$70 = 0 0 0 0 0 0 0 0
+  ASS L$20 = 1
+  ASS L$50 = 0
+  ASS P7 = $-10000001
+  ASS P8 = $60000
+  ASS L$90 = T1
+  ASS P20 = 0
+  ASS L0 = 0
+  ASS L1 = 0
+  ASS L$10 = 0
+  ASS L$21 = 0
+  ASS L$30 = 0 0 0 0 0
+  ASS L$120 = 0 0 0 0 0 0 0
+  ASS L$140 = 0 0 0 0 0 0 0 0 0
+  ASS P14 = 0
+  ASS P15 = 0
+  ASS P16 = 0
+  ASS P17 = 0
+  ASS P18 = 0
+  ASS P19 = 0
+  ASS L$180 = 0 0 0 0
+  ASS L$160 = 0 0 0 0 0 0 0 0 0 0
+  ASS L$170 = 0 0
+  SET LB0 SREAD
+  SET LB1 SLOCKED
+  SET Q0 EV_RAW $0 $255
+  SET Q1 PH_L_RAW $0 $255
+  SET Q2 PH_R_RAW $0 $255
+  SET Q3 MAIN_INDEX $0 $127
+  SET Q4 PHONES_INDEX $0 $127
+  SET Q5 STEP_WIDTH $0 $127
+  SET Q6 UNUSED +HIDE
+  SET Q7 UNUSED +HIDE
+  
+  SUB STEP_GET
+    # LIVE6: the width in half dB, 1..60, from the whole travel of slider Q5; 0 when Q5 is out of range.
+    ASS L$194 = 0
+    IF Q5 <= $127
+      MAT L$194 = Q5 * $59
+      MAT L$194 = L$194 / $127
+      MAT L$194 = L$194 + 1
+    END
+  END
+  
+  SUB STEP_SHOW
+    # LIVE6: the chosen step width as one of 60 display fields; 0 when it is out of range.
+    STEP_GET
+    ASS L$193 = 0
+    IF L$194 >= 1
+      # LIVE13: field 2*(half dB - 1) of a dial with 128 fields
+      MAT L$193 = L$194 - 1
+      MAT L$193 = L$193 * 2
+    END
+    SND BE 60 L$193
+  END
+  
+  SUB REASON CODE
+    # LIVE5: why. Never from a sample callback.
+    ASS L$192 = CODE
+    IF L$169 == 0
+      SND BE 61 L$192
+    END
+  END
+  
+  SUB UI_PUBLISH
+    # Only confirmed current values are presented; Ready0 means unknown.
+    # This subroutine never changes the writer, Q3/Q4 or a gesture latch.
+    IF L$169 == 0
+      ASS L$164 = 0 0 0 0 0
+      ASS L$170 = 0 0
+      IF L$10 > 0
+        ASS L$168 = $32
+      END
+      IF L0 == 1
+        IF L$10 == 0
+          IF L$126 == 0
+            ASS L$164 = $127
+            ASS L$168 = $64
+            IF L1 == 1
+              ASS L$165 = $127
+              ASS L$168 = $96
+            END
+            IF L$140 > 0
+              ASS L$168 = $127
+            END
+            IF L$120 == 1
+              IF L2 == $59
+                IF L5 == $59
+                  IF L$122 >= $116
+                    IF L$122 <= $243
+                      IF L$123 >= $116
+                        IF L$123 <= $243
+                          ASS L$166 = $127
+                        END
+                      END
+                    END
+                  END
+                END
+              END
+            END
+            IF L$121 == 1
+              IF L3 == $59
+                IF L4 == $59
+                  IF L$124 >= $116
+                    IF L$124 <= $243
+                      IF L$125 >= $116
+                        IF L$125 <= $243
+                          ASS L$167 = $127
+                        END
+                      END
+                    END
+                  END
+                END
+              END
+            END
+          END
+        END
+      END
+      # Group status never turns unknown/raw59 into an AN or native mute claim.
+      IF L$164 == $127
+        ASS L$170 = $127 $127
+        IF L2 >= $116
+          IF L2 <= $243
+            IF L5 >= $116
+              IF L5 <= $243
+                ASS L$170 = $32
+              END
+            END
+          END
+        END
+        IF L2 == $59
+          IF L5 == $59
+            ASS L$170 = $96
+            IF L$166 == $127
+              ASS L$170 = $64
+            END
+          END
+        END
+        IF L3 >= $116
+          IF L3 <= $243
+            IF L4 >= $116
+              IF L4 <= $243
+                ASS L$171 = $32
+              END
+            END
+          END
+        END
+        IF L3 == $59
+          IF L4 == $59
+            ASS L$171 = $96
+            IF L$167 == $127
+              ASS L$171 = $64
+            END
+          END
+        END
+      END
+      # LIVE2: an own mute stays shown while its reference is held, also when locked.
+      IF L$120 == 1
+        ASS L$166 = $127
+        IF L$164 == 0
+          ASS L$170 = $64
+        END
+      END
+      IF L$121 == 1
+        ASS L$167 = $127
+        IF L$164 == 0
+          ASS L$171 = $64
+        END
+      END
+      STEP_SHOW
+      SND BE 61 L$192
+      SND BE 62 L$166
+      SND BE 63 L$167
+      SND BE 64 L$168
+      SND BE 65 L$170
+      SND BE 66 L$171
+      IF L$164 == $127
+        IF L$140 == 0
+          # Validate both channels, then publish the left display position.
+          ASS I6 = $65535 $65535
+          IF L2 >= $116
+            IF L2 <= $243
+              IF L5 >= $116
+                IF L5 <= $243
+                  MAT I6 = L2 - $116
+                END
+              END
+            END
+          END
+          IF L$166 == $127
+            MAT I6 = L$122 - $116
+          END
+          IF L3 >= $116
+            IF L3 <= $243
+              IF L4 >= $116
+                IF L4 <= $243
+                  MAT I7 = L3 - $116
+                END
+              END
+            END
+          END
+          IF L$167 == $127
+            MAT I7 = L$124 - $116
+          END
+          IF I6 <= $127
+            SND BE 3C I6
+          END
+          IF I7 <= $127
+            SND BE 3D I7
+          END
+        END
+      END
+    END
+  END
+  
+  SUB END_GESTURE
+    ASS L$140 = 0 0 0 0 0 0 0 0
+    ASS P14 = 0
+  END
+  
+  # Only idle explicit READ uses soft cancellation. Hard loss paths keep FLUSH.
+  SUB IDLE_READ_LOCK
+    END_GESTURE
+    ASS L$148 = 0
+    ASS L0 = 0
+    ASS L1 = 0
+    ASS L$10 = 0
+    ASS L$50 = 0
+    ASS L$73 = 0 0 0 0
+    ASS L$163 = 0
+    ASS L$183 = 0
+    SET LB1 SLOCKED
+    UI_PUBLISH
+  END
+  
+  SUB READ_LOCK
+    END_GESTURE
+    ASS L$148 = 0
+    ASS L0 = 0
+    ASS L1 = 0
+    ASS L$10 = 0
+    ASS L$50 = 0
+    ASS L$73 = 0 0 0 0
+    ASS L$163 = 0
+    ASS L$183 = 0
+    SET FLUSH 1
+    SET LB1 SLOCKED
+    UI_PUBLISH
+  END
+  
+  SUB EXPIRY_RENEW
+    # No reuse within this load session. This marker grants no authority.
+    IF P18 < $2097151
+      MAT P18 = P18 + 1
+      MAT L$160 = P18 / $16384
+      MAT L$161 = P18 / $128
+      MAT L$161 = L$161 & 7F
+      MAT L$162 = P18 & 7F
+      ASS L$163 = 1
+      SND F0 7D 51 L$160 L$161 L$162 F7 +I +D60000
+    ELSE
+      READ_LOCK
+      SET LB0 SREAD_NEEDED
+      REASON $27
+    END
+  END
+  
+  SUB FORGET_MUTES
+    ASS L$120 = 0 0 0 0 0 0 0
+  END
+  
+  SUB LOCK
+    READ_LOCK
+    FORGET_MUTES
+  END
+  
+  # Explicit lock or transport change. With nothing pending the confirmed own-mute
+  # reference of this load session is kept. This never grants a reference.
+  SUB SESSION_LOCK
+    MAT I4 = L$10 + L$126
+    IF I4 == 0
+      READ_LOCK
+    ELSE
+      LOCK
+    END
+  END
+  
+  SUB BEGIN_READ
+    # Only an idle, non-pending read may preserve confirmed own restore values.
+    MAT I4 = L$10 + L$126
+    IF I4 == 0
+      IDLE_READ_LOCK
+    ELSE
+      LOCK
+      SET LB0 SREAD_ABORTED
+      REASON $101
+      BLOCK
+      EXIT
+    END
+  END
+  
+  SUB OWNERS_CURRENT
+    IF L$120 == 1
+      ASS I4 = 0
+      IF L2 == $59
+        IF L5 == $59
+          IF L$122 >= $116
+            IF L$122 <= $243
+              IF L$123 >= $116
+                IF L$123 <= $243
+                  ASS I4 = 1
+                END
+              END
+            END
+          END
+        END
+      END
+      IF I4 == 0
+        LOCK
+        SET LB0 SFOREIGN_CHANGE
+        REASON $82
+        BLOCK
+        EXIT
+      END
+    END
+    IF L$121 == 1
+      ASS I4 = 0
+      IF L3 == $59
+        IF L4 == $59
+          IF L$124 >= $116
+            IF L$124 <= $243
+              IF L$125 >= $116
+                IF L$125 <= $243
+                  ASS I4 = 1
+                END
+              END
+            END
+          END
+        END
+      END
+      IF I4 == 0
+        LOCK
+        SET LB0 SFOREIGN_CHANGE
+        REASON $82
+        BLOCK
+        EXIT
+      END
+    END
+  END
+  
+  SUB OBSERVE_OWNERS
+    # Passive complete-frame observations may only withdraw mute ownership.
+    # Never change cached gains, Q values, Ready, read age or an action target.
+    MAT I4 = L$120 + L$121
+    IF I4 > 0
+      MAT I0 = M$12 & 1
+      MAT I0 = I0 * $128
+      MAT I0 = I0 + M$11
+      MAT I1 = M$12 / 4
+      MAT I4 = M$13 & 7
+      MAT I4 = I4 * $32
+      MAT I1 = I1 + I4
+      MAT I2 = M$19 & 1
+      MAT I2 = I2 * $128
+      MAT I2 = I2 + M$18
+      MAT I3 = M$19 / 4
+      MAT I4 = M$20 & 7
+      MAT I4 = I4 * $32
+      MAT I3 = I3 + I4
+      IF L$120 == 1
+        ASS I4 = 0
+        IF I0 != $59
+          ASS I4 = 1
+        END
+        IF I1 != $59
+          ASS I4 = 1
+        END
+        IF I4 == 1
+          ASS L$120 = 0
+          ASS L$122 = 0 0
+          ASS I4 = 0
+          # An already dispatched own restore keeps only its sealed ACK flow.
+          IF L$126 == 2
+            IF L$14 == 1
+              IF L$12 == $22
+                IF L$10 >= 3
+                  IF L$10 <= 4
+                    ASS I4 = 1
+                  END
+                END
+              END
+            END
+          END
+          IF I4 == 0
+            LOCK
+            SET LB0 SFOREIGN_CHANGE
+            REASON $82
+            BLOCK
+            EXIT
+          END
+        END
+      END
+      IF L$121 == 1
+        ASS I4 = 0
+        IF I2 != $59
+          ASS I4 = 1
+        END
+        IF I3 != $59
+          ASS I4 = 1
+        END
+        IF I4 == 1
+          ASS L$121 = 0
+          ASS L$124 = 0 0
+          ASS I4 = 0
+          IF L$126 == 4
+            IF L$14 == 2
+              IF L$12 == $23
+                IF L$10 >= 3
+                  IF L$10 <= 4
+                    ASS I4 = 1
+                  END
+                END
+              END
+            END
+          END
+          IF I4 == 0
+            LOCK
+            SET LB0 SFOREIGN_CHANGE
+            REASON $82
+            BLOCK
+            EXIT
+          END
+        END
+      END
+    END
+  END
+  
+  SUB MUTE_ACK
+    # Called only after all four ACK fields match and the backend stays armed.
+    IF L$126 > 0
+      ASS I4 = 0
+      IF L$12 == $22
+        IF L$14 == 1
+          IF L$126 == 1
+            ASS L$120 = 1
+            ASS I4 = 1
+          END
+          IF L$126 == 2
+            ASS L$120 = 0
+            ASS L$122 = 0 0
+            ASS I4 = 1
+          END
+        END
+      END
+      IF L$12 == $23
+        IF L$14 == 2
+          IF L$126 == 3
+            ASS L$121 = 1
+            ASS I4 = 1
+          END
+          IF L$126 == 4
+            ASS L$121 = 0
+            ASS L$124 = 0 0
+            ASS I4 = 1
+          END
+        END
+      END
+      IF I4 == 1
+        ASS L$126 = 0
+      ELSE
+        LOCK
+        SET LB0 SMUTE_ACK_ERROR
+        REASON $82
+      END
+    END
+  END
+  
+  SUB WATCH_ARM
+    # Withdrawal-only local token. No state grant and no RME send.
+    IF P19 < $2097151
+      MAT P19 = P19 + 1
+      MAT L$180 = P19 / $16384
+      MAT L$181 = P19 / $128
+      MAT L$181 = L$181 & 7F
+      MAT L$182 = P19 & 7F
+      ASS L$183 = 1
+      SND F0 7D 53 L$180 L$181 L$182 F7 +I +D1000
+    ELSE
+      LOCK
+      SET LB0 SWATCH_TOKEN_END
+      REASON $119
+      BLOCK
+      EXIT
+    END
+  END
+  
+  SUB ASK PHASE
+    WATCH_ARM
+    IF PHASE == 3
+      # Called only after APPLY, with no LOCK/FLUSH in this same event.
+      IF P11 < $2097151
+        MAT P11 = P11 + 1
+        MAT L$70 = P11 / $16384
+        MAT L$71 = P11 / $128
+        MAT L$71 = L$71 & 7F
+        MAT L$72 = P11 & 7F
+        ASS L$73 = L$70 L$71 L$72
+        ASS L$76 = 1
+        ASS L$10 = 4
+        ASS L$11 = T0
+        ASS P20 = 0
+        ASS P9 = PO
+        SND F0 7D 4E L$73 L$74 L$75 F7 +I +D100
+        SET LB0 SWAITS_TO_SEND
+        REASON $9
+      ELSE
+        LOCK
+        SET LB0 STOKEN_END
+        REASON $119
+      END
+    ELSE
+      ASS L$10 = PHASE
+      ASS L$11 = T0
+      ASS P20 = 0
+      ASS P0 = PO
+      SND F0 00 20 0D 10 10 F7
+      SET LB0 SWAITING
+      REASON $9
+    END
+    UI_PUBLISH
+  END
+  
+  SUB TARGET CHANNEL VALUE
+    # Only call after a validated fresh state and one software-bounded operation.
+    LOG TARGET_CHANNEL CHANNEL +D
+    LOG TARGET_RAW VALUE +D
+    IF L$20 == 1
+      MAT L$100 = VALUE & $31
+      MAT L$100 = L$100 * 4
+      MAT L$101 = VALUE / $32
+      SND F0 00 20 0D 10 04 CHANNEL 00 L$100 L$101 00 F7
+    END
+  END
+  
+  SUB APPLY
+    ASS L$126 = 0
+    ASS L$14 = 0
+    ASS L$103 = L2 L3 L4 L5
+    # Fresh reply must still equal the snapshot latched by a human Press.
+    ASS L$60 = 1
+    IF L2 != L$54
+      ASS L$60 = 0
+    END
+    IF L3 != L$55
+      ASS L$60 = 0
+    END
+    IF L4 != L$56
+      ASS L$60 = 0
+    END
+    IF L5 != L$57
+      ASS L$60 = 0
+    END
+    IF L$60 == 1
+      IF L$12 == $21
+        IF L3 >= $116
+          IF L3 <= $243
+            IF L4 >= $116
+              IF L4 <= $243
+                MAT L$61 = L$16 + $116
+                MAT L$62 = L3 + 1
+                IF L$61 == L$62
+                  IF L3 < $243
+                    IF L4 < $243
+                      MAT L$104 = L3 + 1
+                      MAT L$105 = L4 + 1
+                      ASS L$14 = 2
+                    END
+                  END
+                END
+                MAT L$62 = L$61 + 1
+                IF L3 == L$62
+                  IF L3 > $116
+                    IF L4 > $116
+                      MAT L$104 = L3 - 1
+                      MAT L$105 = L4 - 1
+                      ASS L$14 = 2
+                    END
+                  END
+                END
+              END
+            END
+          END
+        END
+      END
+      # Explicit direction and step count are latched before the fresh query.
+      ASS L$107 = 0
+      IF L$12 == $26
+        MAT L$107 = 0 - L$108
+      END
+      IF L$12 == $27
+        ASS L$107 = L$108
+      END
+      IF L$107 != 0
+        IF L3 >= $116
+          IF L4 >= $116
+            IF L3 <= $243
+              IF L4 <= $243
+                MAT L$104 = L3 + L$107
+                MAT L$105 = L4 + L$107
+                IF L$104 >= $116
+                  IF L$105 >= $116
+                    IF L$104 <= $243
+                      IF L$105 <= $243
+                        ASS L$14 = 2
+                      END
+                    END
+                  END
+                END
+              END
+            END
+          END
+        END
+      END
+      # Stereo Main uses the same fresh, four-field-matched snapshot.
+      ASS P10 = 0
+      IF L$12 == $28
+        MAT P10 = 0 - L$108
+      END
+      IF L$12 == $29
+        ASS P10 = L$108
+      END
+      IF P10 != 0
+        IF L2 >= $116
+          IF L5 >= $116
+            IF L2 <= $243
+              IF L5 <= $243
+                MAT L$103 = L2 + P10
+                MAT L$106 = L5 + P10
+                IF L$103 >= $116
+                  IF L$106 >= $116
+                    IF L$103 <= $243
+                      IF L$106 <= $243
+                        ASS L$14 = 1
+                      END
+                    END
+                  END
+                END
+              END
+            END
+          END
+        END
+      END
+      # Frozen Release intent only; neither live Q nor a local value store is read here.
+      IF L$12 == $42
+        IF L$148 <= $127
+          IF L2 >= $116
+            IF L2 <= $243
+              IF L5 >= $116
+                IF L5 <= $243
+                  MAT L$103 = L$148 + $116
+                  MAT P15 = L$103 - L2
+                  MAT L$106 = L5 + P15
+                  IF P15 != 0
+                    IF L$106 >= $116
+                      IF L$106 <= $243
+                        ASS L$14 = 1
+                      END
+                    END
+                  END
+                END
+              END
+            END
+          END
+        END
+      END
+      IF L$12 == $43
+        IF L$148 <= $127
+          IF L3 >= $116
+            IF L3 <= $243
+              IF L4 >= $116
+                IF L4 <= $243
+                  MAT L$104 = L$148 + $116
+                  MAT P15 = L$104 - L3
+                  MAT L$105 = L4 + P15
+                  IF P15 != 0
+                    IF L$105 >= $116
+                      IF L$105 <= $243
+                        ASS L$14 = 2
+                      END
+                    END
+                  END
+                END
+              END
+            END
+          END
+        END
+      END
+      # Toggle decision is made from this matched fresh four-field reply only.
+      IF L$12 == $22
+        IF L$120 == 0
+          IF L2 >= $116
+            IF L2 <= $243
+              IF L5 >= $116
+                IF L5 <= $243
+                  ASS L$122 = L2 L5
+                  ASS L$103 = $59
+                  ASS L$106 = $59
+                  ASS L$126 = 1
+                  ASS L$14 = 1
+                END
+              END
+            END
+          END
+        ELSE
+          IF L$120 == 1
+            IF L2 == $59
+              IF L5 == $59
+                IF L$122 >= $116
+                  IF L$122 <= $243
+                    IF L$123 >= $116
+                      IF L$123 <= $243
+                        ASS L$103 = L$122
+                        ASS L$106 = L$123
+                        ASS L$126 = 2
+                        ASS L$14 = 1
+                      END
+                    END
+                  END
+                END
+              END
+            END
+          END
+        END
+        # LIVE2: an unowned 59/59 pair is brought back to one fixed quiet level.
+        IF L$14 == 0
+          IF L$120 == 0
+            IF L2 == $59
+              IF L5 == $59
+                ASS L$103 = $183
+                ASS L$106 = $183
+                ASS L$126 = 2
+                ASS L$14 = 1
+              END
+            END
+          END
+        END
+        IF L$14 == 0
+          # Fresh OWNERS_CURRENT already validated every confirmed owner.
+          # An unowned 59/59 pair is unknown, not a reason to lose another reference.
+          ASS I4 = 0
+          IF L$120 == 0
+            IF L2 == $59
+              IF L5 == $59
+                ASS I4 = 1
+              END
+            END
+          END
+          IF I4 == 1
+            READ_LOCK
+          ELSE
+            LOCK
+          END
+          SET LB0 SMUTE_UNKNOWN
+          REASON $101
+          BLOCK
+          EXIT
+        END
+      END
+      IF L$12 == $23
+        IF L$121 == 0
+          IF L3 >= $116
+            IF L3 <= $243
+              IF L4 >= $116
+                IF L4 <= $243
+                  ASS L$124 = L3 L4
+                  ASS L$104 = $59
+                  ASS L$105 = $59
+                  ASS L$126 = 3
+                  ASS L$14 = 2
+                END
+              END
+            END
+          END
+        ELSE
+          IF L$121 == 1
+            IF L3 == $59
+              IF L4 == $59
+                IF L$124 >= $116
+                  IF L$124 <= $243
+                    IF L$125 >= $116
+                      IF L$125 <= $243
+                        ASS L$104 = L$124
+                        ASS L$105 = L$125
+                        ASS L$126 = 4
+                        ASS L$14 = 2
+                      END
+                    END
+                  END
+                END
+              END
+            END
+          END
+        END
+        # LIVE2: an unowned 59/59 pair is brought back to one fixed quiet level.
+        IF L$14 == 0
+          IF L$121 == 0
+            IF L3 == $59
+              IF L4 == $59
+                ASS L$104 = $183
+                ASS L$105 = $183
+                ASS L$126 = 4
+                ASS L$14 = 2
+              END
+            END
+          END
+        END
+        IF L$14 == 0
+          # Fresh OWNERS_CURRENT already validated every confirmed owner.
+          # An unowned 59/59 pair is unknown, not a reason to lose another reference.
+          ASS I4 = 0
+          IF L$121 == 0
+            IF L3 == $59
+              IF L4 == $59
+                ASS I4 = 1
+              END
+            END
+          END
+          IF I4 == 1
+            READ_LOCK
+          ELSE
+            LOCK
+          END
+          SET LB0 SMUTE_UNKNOWN
+          REASON $101
+          BLOCK
+          EXIT
+        END
+      END
+    ELSE
+      LOCK
+      SET LB0 SFOREIGN_CHANGE
+      REASON $82
+    END
+    IF L$14 > 0
+      # Never write if no fresh non-reused post-read token remains.
+      IF P11 >= $2097151
+        LOCK
+        SET LB0 STOKEN_END
+        REASON $119
+        BLOCK
+        EXIT
+      END
+      IF L$20 == 1
+        IF P19 >= $2097151
+          LOCK
+          SET LB0 SWATCH_TOKEN_END
+          REASON $119
+          BLOCK
+          EXIT
+        END
+      END
+      IF L$14 == 1
+        TARGET 4 L$103
+        TARGET 5 L$106
+      END
+      IF L$14 == 2
+        TARGET 6 L$104
+        TARGET 7 L$105
+      END
+      IF L$20 == 1
+        ASK 3
+      ELSE
+        SET LB0 SFADER_TARGET_LOG
+        REASON $9
+      END
+    ELSE
+      IF L$60 == 1
+        # LIVE4: nothing was written and the state is freshly read: the page stays ready.
+        SET LB0 SLEVEL_LIMIT
+        REASON $101
+      END
+    END
+  END
+END
+
+IF LOAD
+  UI_PUBLISH
+END
+
+IF LOAD
+  ASS L$200 = 0 0 0 0 0 0 0 0
+  ASS L$208 = 0 0 0 0 0 0 0 0
+  ASS P21 = 0
+
+  SUB IN_READ
+    # LIVE7: the four input gains of a validated state frame.
+    ASS L$200 = M$16 M$17
+    MAT L$202 = M$23 / $32
+    MAT L$212 = M$24 & 7
+    MAT L$212 = L$212 * 4
+    MAT L$202 = L$202 + L$212
+    MAT L$203 = M$24 / 8
+    MAT L$212 = M$25 & 1
+    MAT L$212 = L$212 * $16
+    MAT L$203 = L$203 + L$212
+    ASS L$216 = M6 M7
+    MAT L$218 = M8 & 3
+    ASS L$204 = 1
+  END
+
+  SUB IN_FIELD NUM FIELDS DEST
+    # One of FIELDS fields of a display, as the step width on BE60.
+    MAT L$213 = NUM * $128
+    MAT L$213 = L$213 + $64
+    MAT L$213 = L$213 / FIELDS
+    IF L$213 > $127
+      ASS L$213 = $127
+    END
+    SND BE DEST L$213
+  END
+
+  SUB IN_SHOW
+    IF L$169 == 0
+      IF L$204 == 1
+        # LIVE13: the gains as fields of dials with 128 fields: the dB, and 6 times the count of half dB
+        ASS L$213 = L$200
+        IF L$213 > $127
+          ASS L$213 = $127
+        END
+        SND BE 67 L$213
+        ASS L$213 = L$201
+        IF L$213 > $127
+          ASS L$213 = $127
+        END
+        SND BE 68 L$213
+        MAT L$213 = L$202 * 6
+        IF L$213 > $127
+          ASS L$213 = $127
+        END
+        SND BE 69 L$213
+        MAT L$213 = L$203 * 6
+        IF L$213 > $127
+          ASS L$213 = $127
+        END
+        SND BE 6A L$213
+        # LIVE8: pad and 48 V of the microphone inputs as two-field displays (off/on). 48 V is shown, never set.
+        MAT L$213 = L$216 & $16
+        MAT L$213 = L$213 / $16
+        IN_FIELD L$213 2 6B
+        MAT L$213 = L$216 & $32
+        MAT L$213 = L$213 / $32
+        IN_FIELD L$213 2 6C
+        MAT L$213 = L$216 & 1
+        IN_FIELD L$213 2 6D
+        MAT L$213 = L$216 & 2
+        MAT L$213 = L$213 / 2
+        IN_FIELD L$213 2 6E
+        # LIVE15: sensitivity of line input 3 and 4 as one display of four fields: bit 2 + 2 * bit 3.
+        MAT L$213 = L$216 & $12
+        MAT L$213 = L$213 / 4
+        IN_FIELD L$213 4 6F
+      END
+    END
+  END
+
+  SUB IN_SELECT
+    # Current gain and maximum of the latched input.
+    ASS L$211 = L$200
+    ASS L$210 = $65
+    IF L$215 == 2
+      # LIVE9: a monitoring send; the unit answered, there is no value to compare.
+      ASS L$211 = 0
+      ASS L$209 = 0
+    END
+    IF L$215 == 1
+      # LIVE8: the pad bit of the latched microphone input.
+      ASS L$210 = 1
+      IF L$206 == 0
+        MAT L$211 = L$216 & $16
+        MAT L$211 = L$211 / $16
+      ELSE
+        MAT L$211 = L$216 & $32
+        MAT L$211 = L$211 / $32
+      END
+      # LIVE15: the sensitivity bit of the latched line input.
+      IF L$206 == 2
+        MAT L$211 = L$216 & 4
+        MAT L$211 = L$211 / 4
+      END
+      IF L$206 == 3
+        MAT L$211 = L$216 & 8
+        MAT L$211 = L$211 / 8
+      END
+    END
+    IF L$215 == 0
+      IF L$206 == 1
+        ASS L$211 = L$201
+      END
+      IF L$206 == 2
+        ASS L$211 = L$202
+        ASS L$210 = $18
+      END
+      IF L$206 == 3
+        ASS L$211 = L$203
+        ASS L$210 = $18
+      END
+    END
+  END
+
+  SUB PAD_WRITE
+    # LIVE8: the fresh state is in. One pad switch of a microphone input, or nothing.
+    ASS L$205 = 0
+    ASS L$214 = 0
+    IF L0 == 1
+      IF L1 == 1
+        IF L$10 == 0
+          IF L$20 == 1
+            ASS L$214 = 1
+          END
+        END
+      END
+    END
+    IF L$214 == 0
+      SET LB0 SREAD_NEEDED
+      REASON $46
+    ELSE
+      # Only the known setting bits may stand: 2 and 3 (sent back as read), 4 and 5 (the pads).
+      MAT L$212 = L$216 & $64
+      MAT L$212 = L$212 + L$217
+      MAT L$212 = L$212 + L$218
+      MAT L$213 = L$216 & 3
+      IF L$212 > 0
+        SET LB0 SIN_FAULT
+        REASON $119
+      ELSE
+        IF L$213 > 0
+          # 48 V is on. The rules never send a 48 V bit, so they send nothing.
+          SET LB0 S48V_IS_ON
+          REASON $101
+        ELSE
+          IN_SELECT
+          ASS L$209 = L$211
+          IF L$207 == 1
+            ASS L$209 = 1
+          END
+          IF L$207 == 2
+            ASS L$209 = 0
+          END
+          IF L$207 == $127
+            MAT L$209 = 1 - L$211
+          END
+          IF L$209 == L$211
+            SET LB0 SPAD_AS_IT_IS
+            REASON $9
+          ELSE
+            # state bits 0..4 travel in the third data byte above the two top bits of "what changed"
+            MAT L$212 = L$216 & $12
+            MAT L$213 = L$216 & $32
+            MAT L$213 = L$213 / $32
+            IF L$206 == 0
+              MAT L$214 = L$209 * $16
+              MAT L$212 = L$212 + L$214
+              ASS L$214 = $16
+            ELSE
+              IF L$206 == 1
+                ASS L$213 = L$209
+                MAT L$214 = L$216 & $16
+                MAT L$212 = L$212 + L$214
+                ASS L$214 = $32
+              ELSE
+                # LIVE15: sensitivity of line input 3 (bit 2) or 4 (bit 3); the other one and both pads go back as read.
+                MAT L$214 = L$216 & $16
+                IF L$206 == 2
+                  MAT L$212 = L$216 & 8
+                  MAT L$212 = L$212 + L$214
+                  MAT L$214 = L$209 * 4
+                  MAT L$212 = L$212 + L$214
+                  ASS L$214 = 4
+                ELSE
+                  MAT L$212 = L$216 & 4
+                  MAT L$212 = L$212 + L$214
+                  MAT L$214 = L$209 * 8
+                  MAT L$212 = L$212 + L$214
+                  ASS L$214 = 8
+                END
+              END
+            END
+            MAT L$212 = L$212 * 4
+            SND F0 00 20 0D 10 03 L$214 00 L$212 L$213 00 F7
+            ASS L$205 = 2
+            ASS P21 = 0
+            SND F0 00 20 0D 10 10 F7 +D100
+            SET LB0 SPAD_CHECKING
+          END
+        END
+      END
+    END
+  END
+
+  SUB IN_WRITE
+    # The fresh state is in. One bounded write, or none.
+    ASS L$205 = 0
+    ASS L$214 = 0
+    IF L0 == 1
+      IF L1 == 1
+        IF L$10 == 0
+          IF L$20 == 1
+            ASS L$214 = 1
+          END
+        END
+      END
+    END
+    IF L$214 == 0
+      SET LB0 SREAD_NEEDED
+      REASON $46
+    ELSE
+      IN_SELECT
+      IF L$211 > L$210
+        SET LB0 SIN_FAULT
+        REASON $119
+      ELSE
+        IF L$208 == 1
+          MAT L$209 = L$211 + L$207
+          IF L$209 > L$210
+            ASS L$209 = L$210
+          END
+        ELSE
+          ASS L$209 = 0
+          IF L$211 > L$207
+            MAT L$209 = L$211 - L$207
+          END
+        END
+        IF L$209 == L$211
+          SET LB0 SIN_AT_LIMIT
+          REASON $101
+        ELSE
+          # Line: the count of half dB. Microphone: coarse dB/3 (at most 20), fine the rest.
+          ASS L$212 = L$209 0
+          IF L$206 <= 1
+            MAT L$212 = L$209 / 3
+            IF L$212 > $20
+              ASS L$212 = $20
+            END
+            MAT L$213 = L$212 * 3
+            MAT L$213 = L$209 - L$213
+          END
+          MAT L$212 = L$212 * 4
+          SND F0 00 20 0D 10 04 L$206 00 L$212 L$213 00 F7
+          ASS L$205 = 2
+          ASS P21 = 0
+          SND F0 00 20 0D 10 10 F7 +D100
+          SET LB0 SIN_CHECKING
+        END
+      END
+    END
+  END
+END
+
+IF LOAD
+  # LIVE9: level table, level/8 of the unit's scale for -60.0 .. 0.0 dB in half dB.
+  ASS K$0 = $16 $17 $18 $19 $21 $22 $23 $25
+  ASS K$8 = $26 $28 $29 $31 $33 $35 $37 $39
+  ASS K$16 = $41 $44 $46 $49 $52 $55 $58 $62
+  ASS K$24 = $65 $69 $73 $78 $82 $87 $92 $98
+  ASS K$32 = $103 $110 $116 $123 $130 $138 $146 $155
+  ASS K$40 = $164 $174 $184 $195 $206 $218 $231 $245
+  ASS K$48 = $260 $275 $291 $309 $327 $346 $367 $389
+  ASS K$56 = $412 $436 $462 $489 $518 $549 $581 $616
+  ASS K$64 = $652 $691 $732 $775 $821 $870 $921 $976
+  ASS K$72 = $1034 $1095 $1160 $1229 $1301 $1379 $1460 $1547
+  ASS K$80 = $1638 $1735 $1838 $1947 $2063 $2185 $2314 $2451
+  ASS K$88 = $2597 $2751 $2914 $3086 $3269 $3463 $3668 $3885
+  ASS K$96 = $4115 $4359 $4618 $4891 $5181 $5488 $5813 $6158
+  ASS K$104 = $6523 $6909 $7318 $7752 $8211 $8698 $9213 $9759
+  ASS K$112 = $10338 $10950 $11599 $12286 $13014 $13785 $14602 $15467
+  ASS K$120 = $16384
+  ASS L$220 = $96 $96 $96 $96 0 0 0 0
+  ASS L$230 = $120 0 0
+  # LIVE11: pan in the middle; factors of the far side for 0..20 positions (1.5 dB each, off at the end)
+  ASS L$240 = $20 $20 $20 $20 $20
+  # LIVE16: phase of the five ways, normal after loading
+  ASS L$234 = 0 0 0 0 0 0
+  ASS K$130 = $4096 $3446 $2900 $2440 $2053 $1727 $1453
+  ASS K$137 = $1223 $1029 $866 $728 $613 $516 $434
+  ASS K$144 = $365 $307 $258 $217 $183 $154 $0
+
+  SUB DIAL_FIELD NUM TIMES DEST
+    # LIVE13: field NUM*TIMES of a dial with 128 fields, sent as it is.
+    MAT L$213 = NUM * TIMES
+    IF L$213 > $127
+      ASS L$213 = $127
+    END
+    SND BE DEST L$213
+  END
+
+  SUB MON_SHOW
+    # Level (one of 121 fields) and state (one of 3) of the four monitoring ways.
+    IF L$169 == 0
+      DIAL_FIELD L$220 1 70
+      DIAL_FIELD L$221 1 71
+      DIAL_FIELD L$222 1 72
+      DIAL_FIELD L$223 1 73
+      IN_FIELD L$224 3 74
+      IN_FIELD L$225 3 75
+      IN_FIELD L$226 3 76
+      IN_FIELD L$227 3 77
+      DIAL_FIELD L$230 1 78
+      IN_FIELD L$231 3 79
+      DIAL_FIELD L$240 3 7A
+      DIAL_FIELD L$241 3 7B
+      DIAL_FIELD L$242 3 7C
+      DIAL_FIELD L$243 3 7D
+      DIAL_FIELD L$244 3 7E
+      # LIVE16: the inverted ways as one number for a dial with 128 fields: bit 0..3 input 1..4, bit 4 playback
+      MAT L$213 = L$238 * 2
+      MAT L$213 = L$213 + L$237
+      MAT L$213 = L$213 * 2
+      MAT L$213 = L$213 + L$236
+      MAT L$213 = L$213 * 2
+      MAT L$213 = L$213 + L$235
+      MAT L$213 = L$213 * 2
+      MAT L$213 = L$213 + L$234
+      SND BE 40 L$213
+    END
+  END
+
+  SUB MON_SIDE DISTANCE DEST
+    # LIVE11: one side of a way. Level/8 of the way is kept in L253; this side is lowered by DISTANCE positions.
+    MAT I9 = DISTANCE + $130
+    MAT P22 = L$253 * KI9
+    MAT P22 = P22 / $4096
+    ASS L$212 = P22
+    # LIVE16: an inverted way carries minus its level: 2^20 - level in the field, 131072 - level/8 here.
+    IF L$239 == 1
+      IF P22 > 0
+        MAT P22 = $131072 - P22
+      END
+    END
+    MAT L$213 = P22 & $63
+    MAT L$213 = L$213 * 2
+    MAT L$214 = P22 / $64
+    MAT L$214 = L$214 & $127
+    MAT L$219 = P22 / $8192
+    SND F0 00 20 0D 10 01 DEST 00 L$213 L$214 L$219 F7
+  END
+
+  SUB MON_PAIR
+    # Input L206 (or, with L232 set, the playback) to Phones left and right; level/8 of the way = L212, pan from
+    # L240..244. (LIVE14: split off from MON_SEND, unchanged.)
+    ASS L$253 = L$212
+    ASS I9 = L$206
+    IF L$232 == 0
+      MAT L$228 = L$206 + $52
+      MAT L$229 = L$206 + $78
+    ELSE
+      # LIVE10: playback 1 to Phones left, playback 2 to Phones right
+      ASS L$228 = $64 $91
+      ASS I9 = 4
+    END
+    ASS L$232 = 0
+    # LIVE16: the sign of this way for both of its sides
+    MAT I9 = I9 + $234
+    ASS L$239 = LI9
+    MAT I9 = I9 + 6
+    ASS L$248 = LI9
+    ASS L$249 = 0 0
+    IF L$248 < $20
+      MAT L$250 = $20 - L$248
+    END
+    IF L$248 > $20
+      MAT L$249 = L$248 - $20
+    END
+    MON_SIDE L$249 L$228
+    MON_SIDE L$250 L$229
+  END
+
+  SUB MON_SEND
+    # One way, then ask the unit for its state.
+    MON_PAIR
+    ASS L$215 = 2
+    ASS L$205 = 2
+    ASS P21 = 0
+    SND F0 00 20 0D 10 10 F7 +D100
+    SET LB0 SMON_SENT
+  END
+
+  SUB MON_ALLOWED
+    # L214 = 1 when a monitoring press may act now.
+    ASS L$214 = 0
+    MAT I4 = L$10 + L$140
+    IF I4 == 0
+      IF L0 == 1
+        IF L1 == 1
+          IF L$21 == 1
+            IF P8 < $60000
+              IF L$20 == 1
+                ASS L$214 = 1
+              END
+            END
+          END
+        END
+      END
+    END
+  END
+
+  SUB MON_RESEND_WAY NUMBER STATUS LEVEL_INDEX
+    # LIVE14: way NUMBER (0..3 inputs, 4 playback) again, when its state is known: on with its level, off as off.
+    IF STATUS >= 1
+      ASS L$212 = 0
+      IF STATUS == 2
+        ASS I9 = LEVEL_INDEX
+        ASS L$212 = KI9
+      END
+      ASS L$206 = NUMBER
+      IF L$206 == 4
+        ASS L$232 = 1
+      END
+      MON_PAIR
+      MAT L$216 = L$216 + 1
+    END
+  END
+
+  SUB MON_RESEND
+    # LIVE14: every known way again, then one request for the state. Nothing when no way is known.
+    ASS L$216 = 0
+    MON_RESEND_WAY 0 L$224 L$220
+    MON_RESEND_WAY 1 L$225 L$221
+    MON_RESEND_WAY 2 L$226 L$222
+    MON_RESEND_WAY 3 L$227 L$223
+    MON_RESEND_WAY 4 L$231 L$230
+    IF L$216 > 0
+      ASS L$215 = 2
+      ASS L$205 = 2
+      ASS P21 = 0
+      SND F0 00 20 0D 10 10 F7 +D150
+      SET LB0 SMIXER_RESENT
+    END
+  END
+
+  # show the monitoring picture once after loading: all unknown, -12 dB kept
+  MON_SHOW
+END
+
+# Exact private adapter-load notification. Withdrawal only, no identity claim.
+IF ML == 5
+  IF M0 == F0 7D 52 01
+    IF M4 == F7
+      LOCK
+      SET LB0 SCONTEXT_NEW
+      REASON $119
+      BLOCK
+      EXIT
+    END
+  END
+END
+
+# One-shot watchdog needs callback delivery. It is not a USB detector.
+# Internal callback PO is never used to grant authority.
+IF ML == 7
+  IF M0 == F0 7D 53
+    IF M6 == F7
+      IF M3 <= 7F
+        IF M4 <= 7F
+          IF M5 <= 7F
+            IF L$183 == 1
+              IF M3 == L$180 L$181 L$182
+                ASS L$183 = 0
+                IF L$10 > 0
+                  LOCK
+                  SET LB0 SNO_ANSWER
+                  REASON $64
+                END
+              END
+            END
+          END
+        END
+      END
+    END
+    BLOCK
+    EXIT
+  END
+END
+
+# Historical expiry: pending uncertainty revokes ownership too.
+# Idle expiry preserves an intentional long-duration own-mute reference.
+IF ML == 7
+  IF M0 == F0 7D 51
+    IF M6 == F7
+      IF M3 <= 7F
+        IF M4 <= 7F
+          IF M5 <= 7F
+            IF L$163 == 1
+              IF M3 == L$160 L$161 L$162
+                IF L$10 > 0
+                  LOCK
+                  SET LB0 SNO_ANSWER
+                  REASON $64
+                ELSE
+                  READ_LOCK
+                  SET LB0 SREAD_NEEDED
+                  REASON $27
+                END
+              END
+            END
+          END
+        END
+      END
+    END
+    BLOCK
+    EXIT
+  END
+END
+
+IF ML == 5
+  IF M0 == F0 7D 01
+    IF M3 >= 7A
+      IF M3 <= 7C
+        SESSION_LOCK
+        ASS L$21 = 1
+        IF M3 == 7C
+          ASS L$21 = 0
+        END
+        SET LB0 SREAD
+        REASON $9
+      END
+    END
+  END
+END
+
+
+# Accumulate wall time between events; never renew the last-read age on Press.
+IF LOAD
+ELSE
+  ASS L$90 = T1
+  MAT P8 = P8 + L$90
+  IF P8 > $60000
+    ASS P8 = $60000
+  END
+  # LIVE2: age of a pending wait, from the same local timer.
+  IF L$10 > 0
+    MAT P20 = P20 + L$90
+  ELSE
+    ASS P20 = 0
+  END
+END
+
+# One shared local elapsed counter; no internal-frame PO participates here.
+IF L$140 > 0
+  MAT P17 = L$144 + L$90
+  IF P17 >= $10000
+    # LIVE4: the gesture ends; the event that showed it is handled as usual.
+    END_GESTURE
+    UI_PUBLISH
+    SET LB0 SGESTURE_EXPIRED
+    REASON $101
+  ELSE
+    ASS L$144 = P17
+  END
+END
+
+# LIVE2: an overdue wait never blocks for good. The next press resolves it.
+IF ML == 3
+  IF M0 == BF
+    IF L$10 > 0
+      IF P20 >= $1500
+        IF L$10 == 4
+          # The write went out and its check read was never dispatched: send it now.
+          # The reply is compared with the written targets as usual.
+          ASS L$73 = 0 0 0 0
+          ASS L$10 = 3
+          ASS L$11 = T0
+          ASS P20 = 0
+          WATCH_ARM
+          SND F0 00 20 0D 10 10 F7
+          SET LB0 SCHECK_LATE
+          REASON $9
+          UI_PUBLISH
+          BLOCK
+          EXIT
+        ELSE
+          # A query without an answer. Lock as the watchdog would; the press is handled below.
+          LOCK
+          SET LB0 SNO_ANSWER
+          REASON $64
+        END
+      END
+    END
+  END
+END
+
+# LIVE7: gain of the four inputs. Own small sequence; the page state is read, never changed.
+IF L$205 > 0
+  MAT P21 = P21 + L$90
+END
+IF ML == 3
+  IF M0 == BF
+    IF L$205 > 0
+      IF M1 != $24
+        IF M1 != $25
+          IF P21 >= $1500
+            ASS L$205 = 0
+            SET LB0 SIN_ANSWER
+            REASON $64
+          ELSE
+            SET LB0 SBUSY
+            REASON $101
+          END
+          BLOCK
+          EXIT
+        END
+      END
+    END
+  END
+END
+IF ML == 3
+  IF M0 == BF
+    IF M1 >= $50
+      IF M1 <= $57
+        ASS L$207 = 0
+        IF M2 == $127
+          ASS L$207 = 1
+        END
+        IF M2 >= 1
+          IF M2 <= $125
+            ASS L$207 = M2
+          END
+        END
+        IF M2 == $126
+          STEP_GET
+          ASS L$207 = L$194
+          IF M1 <= $53
+            # Microphone inputs move in whole dB: the half-dB width is rounded up.
+            MAT L$207 = L$207 + 1
+            MAT L$207 = L$207 / 2
+          END
+          IF L$207 == 0
+            SET LB0 SSTEP_WIDTH
+            REASON $101
+          END
+        END
+        IF L$207 == 0
+          BLOCK
+          EXIT
+        END
+        IF L$10 > 0
+          SET LB0 SBUSY
+          REASON $101
+          BLOCK
+          EXIT
+        END
+        IF L$140 > 0
+          SET LB0 SBUSY
+          REASON $101
+          BLOCK
+          EXIT
+        END
+        IF L0 == 1
+          IF L1 == 1
+            IF L$21 == 1
+              IF P8 < $60000
+                ASS L$215 = 0
+                MAT L$206 = M1 - $50
+                MAT L$208 = L$206 & 1
+                MAT L$206 = L$206 / 2
+                ASS L$205 = 1
+                ASS P21 = 0
+                SND F0 00 20 0D 10 10 F7
+                SET LB0 SIN_READING
+                BLOCK
+                EXIT
+              END
+            END
+          END
+        END
+        SET LB0 SREAD_NEEDED
+        REASON $46
+        BLOCK
+        EXIT
+      END
+    END
+  END
+END
+
+# LIVE11: pan of a way to the headphones. CC75/76 input 1 left/right .. CC81/82 input 4, CC83/84 playback;
+# CC85..89 with 127: back to the middle.
+IF ML == 3
+  IF M0 == BF
+    IF M1 >= $75
+      IF M1 <= $89
+        ASS L$207 = 0
+        IF M1 <= $84
+          IF M2 == $127
+            ASS L$207 = 1
+          END
+          IF M2 >= 1
+            IF M2 <= $40
+              ASS L$207 = M2
+            END
+          END
+        ELSE
+          IF M2 == $127
+            ASS L$207 = 1
+          END
+        END
+        IF L$207 == 0
+          BLOCK
+          EXIT
+        END
+        MON_ALLOWED
+        IF L$214 == 0
+          MAT I4 = L$10 + L$140
+          IF I4 > 0
+            SET LB0 SBUSY
+            REASON $101
+          ELSE
+            SET LB0 SREAD_NEEDED
+            REASON $46
+          END
+          BLOCK
+          EXIT
+        END
+        # way 0..4, and where the pan shall stand
+        IF M1 <= $84
+          MAT L$254 = M1 - $75
+          MAT L$208 = L$254 & 1
+          MAT L$254 = L$254 / 2
+          MAT I9 = L$254 + $240
+          ASS L$211 = LI9
+          IF L$208 == 1
+            MAT L$209 = L$211 + L$207
+            IF L$209 > $40
+              ASS L$209 = $40
+            END
+          ELSE
+            ASS L$209 = 0
+            IF L$211 > L$207
+              MAT L$209 = L$211 - L$207
+            END
+          END
+        ELSE
+          MAT L$254 = M1 - $85
+          MAT I9 = L$254 + $240
+          ASS L$211 = LI9
+          ASS L$209 = $20
+        END
+        IF L$209 == L$211
+          SET LB0 SPAN_AS_IT_IS
+          REASON $101
+          BLOCK
+          EXIT
+        END
+        ASS LI9 = L$209
+        MON_SHOW
+        # level index and state of this way
+        IF L$254 <= 3
+          MAT I9 = L$254 + $224
+          ASS L$255 = LI9
+          MAT I9 = L$254 + $220
+          ASS I9 = LI9
+        ELSE
+          ASS L$255 = L$231
+          ASS I9 = L$230
+        END
+        IF L$255 == 2
+          ASS L$212 = KI9
+          ASS L$206 = L$254
+          IF L$254 == 4
+            ASS L$232 = 1
+          END
+          MON_SEND
+        ELSE
+          SET LB0 SMON_NOTED
+          REASON $9
+        END
+        BLOCK
+        EXIT
+      END
+    END
+  END
+END
+
+# LIVE10: playback 1/2 on Phones. On/off (CC72).
+IF ML == 3
+  IF M0 == BF
+    IF M1 == $72
+      ASS L$207 = 0
+      IF M2 == $127
+        ASS L$207 = 3
+      END
+      IF M2 >= 1
+        IF M2 <= 2
+          ASS L$207 = M2
+        END
+      END
+      IF L$207 == 0
+        BLOCK
+        EXIT
+      END
+      MON_ALLOWED
+      IF L$214 == 0
+        MAT I4 = L$10 + L$140
+        IF I4 > 0
+          SET LB0 SBUSY
+          REASON $101
+        ELSE
+          SET LB0 SREAD_NEEDED
+          REASON $46
+        END
+        BLOCK
+        EXIT
+      END
+      IF L$207 == 3
+        ASS L$207 = 1
+        IF L$231 != 2
+          ASS L$207 = 2
+        END
+      ELSE
+        MAT L$207 = 3 - L$207
+      END
+      ASS L$231 = L$207
+      ASS L$212 = 0
+      IF L$207 == 2
+        ASS I9 = L$230
+        ASS L$212 = KI9
+      END
+      MON_SHOW
+      ASS L$232 = 1
+      MON_SEND
+      BLOCK
+      EXIT
+    END
+  END
+END
+
+# LIVE10: level of the playback on Phones down (CC73) and up (CC74).
+IF ML == 3
+  IF M0 == BF
+    IF M1 >= $73
+      IF M1 <= $74
+        ASS L$207 = 0
+        IF M2 == $127
+          ASS L$207 = 1
+        END
+        IF M2 >= 1
+          IF M2 <= $120
+            ASS L$207 = M2
+          END
+        END
+        IF M2 == $126
+          STEP_GET
+          ASS L$207 = L$194
+          IF L$207 == 0
+            SET LB0 SSTEP_WIDTH
+            REASON $101
+          END
+        END
+        IF L$207 == 0
+          BLOCK
+          EXIT
+        END
+        MON_ALLOWED
+        IF L$214 == 0
+          MAT I4 = L$10 + L$140
+          IF I4 > 0
+            SET LB0 SBUSY
+            REASON $101
+          ELSE
+            SET LB0 SREAD_NEEDED
+            REASON $46
+          END
+          BLOCK
+          EXIT
+        END
+        ASS L$211 = L$230
+        IF M1 == $74
+          MAT L$209 = L$211 + L$207
+          IF L$209 > $120
+            ASS L$209 = $120
+          END
+        ELSE
+          ASS L$209 = 0
+          IF L$211 > L$207
+            MAT L$209 = L$211 - L$207
+          END
+        END
+        IF L$209 == L$211
+          SET LB0 SMON_AT_LIMIT
+          REASON $101
+          BLOCK
+          EXIT
+        END
+        ASS L$230 = L$209
+        MON_SHOW
+        IF L$231 == 2
+          ASS I9 = L$209
+          ASS L$212 = KI9
+          ASS L$232 = 1
+          MON_SEND
+        ELSE
+          SET LB0 SMON_NOTED
+          REASON $9
+        END
+        BLOCK
+        EXIT
+      END
+    END
+  END
+END
+
+# LIVE9: monitoring of input 1..4 on Phones. On/off (CC60..63).
+IF ML == 3
+  IF M0 == BF
+    IF M1 >= $60
+      IF M1 <= $63
+        ASS L$207 = 0
+        IF M2 == $127
+          ASS L$207 = 3
+        END
+        IF M2 >= 1
+          IF M2 <= 2
+            ASS L$207 = M2
+          END
+        END
+        IF L$207 == 0
+          BLOCK
+          EXIT
+        END
+        MON_ALLOWED
+        IF L$214 == 0
+          MAT I4 = L$10 + L$140
+          IF I4 > 0
+            SET LB0 SBUSY
+            REASON $101
+          ELSE
+            SET LB0 SREAD_NEEDED
+            REASON $46
+          END
+          BLOCK
+          EXIT
+        END
+        MAT L$206 = M1 - $60
+        MAT I9 = L$206 + $224
+        # wanted: 2 on, 1 off. Switching over: from on to off, otherwise to on.
+        IF L$207 == 3
+          ASS L$207 = 1
+          IF LI9 != 2
+            ASS L$207 = 2
+          END
+        ELSE
+          MAT L$207 = 3 - L$207
+        END
+        ASS LI9 = L$207
+        ASS L$212 = 0
+        IF L$207 == 2
+          MAT I9 = L$206 + $220
+          ASS I9 = LI9
+          ASS L$212 = KI9
+        END
+        MON_SHOW
+        MON_SEND
+        BLOCK
+        EXIT
+      END
+    END
+  END
+END
+
+# LIVE9: monitoring level down/up (CC64/65 input 1 .. CC70/71 input 4).
+IF ML == 3
+  IF M0 == BF
+    IF M1 >= $64
+      IF M1 <= $71
+        ASS L$207 = 0
+        IF M2 == $127
+          ASS L$207 = 1
+        END
+        IF M2 >= 1
+          IF M2 <= $120
+            ASS L$207 = M2
+          END
+        END
+        IF M2 == $126
+          STEP_GET
+          ASS L$207 = L$194
+          IF L$207 == 0
+            SET LB0 SSTEP_WIDTH
+            REASON $101
+          END
+        END
+        IF L$207 == 0
+          BLOCK
+          EXIT
+        END
+        MON_ALLOWED
+        IF L$214 == 0
+          MAT I4 = L$10 + L$140
+          IF I4 > 0
+            SET LB0 SBUSY
+            REASON $101
+          ELSE
+            SET LB0 SREAD_NEEDED
+            REASON $46
+          END
+          BLOCK
+          EXIT
+        END
+        MAT L$206 = M1 - $64
+        MAT L$208 = L$206 & 1
+        MAT L$206 = L$206 / 2
+        MAT I9 = L$206 + $220
+        ASS L$211 = LI9
+        IF L$208 == 1
+          MAT L$209 = L$211 + L$207
+          IF L$209 > $120
+            ASS L$209 = $120
+          END
+        ELSE
+          ASS L$209 = 0
+          IF L$211 > L$207
+            MAT L$209 = L$211 - L$207
+          END
+        END
+        IF L$209 == L$211
+          SET LB0 SMON_AT_LIMIT
+          REASON $101
+          BLOCK
+          EXIT
+        END
+        ASS LI9 = L$209
+        MON_SHOW
+        MAT I9 = L$206 + $224
+        IF LI9 == 2
+          ASS I9 = L$209
+          ASS L$212 = KI9
+          MON_SEND
+        ELSE
+          # not on: only the level that is kept changes
+          SET LB0 SMON_NOTED
+          REASON $9
+        END
+        BLOCK
+        EXIT
+      END
+    END
+  END
+END
+
+# LIVE16: phase of a way to the headphones. CC92..95 input 1..4, CC96 playback. 127 switches over, 1 = inverted, 2 = normal.
+IF ML == 3
+  IF M0 == BF
+    IF M1 >= $92
+      IF M1 <= $96
+        ASS L$207 = 0
+        IF M2 == $127
+          ASS L$207 = 3
+        END
+        IF M2 >= 1
+          IF M2 <= 2
+            ASS L$207 = M2
+          END
+        END
+        IF L$207 == 0
+          BLOCK
+          EXIT
+        END
+        MON_ALLOWED
+        IF L$214 == 0
+          MAT I4 = L$10 + L$140
+          IF I4 > 0
+            SET LB0 SBUSY
+            REASON $101
+          ELSE
+            SET LB0 SREAD_NEEDED
+            REASON $46
+          END
+          BLOCK
+          EXIT
+        END
+        MAT L$206 = M1 - $92
+        MAT I9 = L$206 + $234
+        # wanted: 1 inverted, 0 normal
+        IF L$207 == 3
+          MAT L$207 = 1 - LI9
+        ELSE
+          MAT L$207 = 2 - L$207
+        END
+        IF L$207 == LI9
+          SET LB0 SPHASE_AS_IT_IS
+          REASON $9
+          BLOCK
+          EXIT
+        END
+        ASS LI9 = L$207
+        MON_SHOW
+        # state (L233) and level index (I9) of the way
+        IF L$206 == 4
+          ASS L$233 = L$231
+          ASS I9 = L$230
+        ELSE
+          MAT I9 = L$206 + $224
+          ASS L$233 = LI9
+          MAT I9 = L$206 + $220
+          ASS I9 = LI9
+        END
+        IF L$233 == 2
+          ASS L$212 = KI9
+          IF L$206 == 4
+            ASS L$232 = 1
+          END
+          MON_SEND
+        ELSE
+          # not on: only the kept sign changes
+          SET LB0 SMON_NOTED
+          REASON $9
+        END
+        BLOCK
+        EXIT
+      END
+    END
+  END
+END
+
+# LIVE15: sensitivity of line input 3 (CC90) and 4 (CC91). Value 127 switches over, 1 = bit set, 2 = bit clear.
+IF ML == 3
+  IF M0 == BF
+    IF M1 >= $90
+      IF M1 <= $91
+        ASS L$214 = 0
+        IF M2 == $127
+          ASS L$214 = 1
+        END
+        IF M2 >= 1
+          IF M2 <= 2
+            ASS L$214 = 1
+          END
+        END
+        IF L$214 == 0
+          BLOCK
+          EXIT
+        END
+        IF L$10 > 0
+          SET LB0 SBUSY
+          REASON $101
+          BLOCK
+          EXIT
+        END
+        IF L$140 > 0
+          SET LB0 SBUSY
+          REASON $101
+          BLOCK
+          EXIT
+        END
+        IF L0 == 1
+          IF L1 == 1
+            IF L$21 == 1
+              IF P8 < $60000
+                ASS L$215 = 1
+                MAT L$206 = M1 - $88
+                ASS L$207 = M2
+                ASS L$205 = 1
+                ASS P21 = 0
+                SND F0 00 20 0D 10 10 F7
+                SET LB0 SSENS_READING
+                BLOCK
+                EXIT
+              END
+            END
+          END
+        END
+        SET LB0 SREAD_NEEDED
+        REASON $46
+        BLOCK
+        EXIT
+      END
+    END
+  END
+END
+
+# LIVE8: pad of microphone input 1 (CC58) and 2 (CC59). Value 127 switches over, 1 = on, 2 = off.
+IF ML == 3
+  IF M0 == BF
+    IF M1 >= $58
+      IF M1 <= $59
+        ASS L$214 = 0
+        IF M2 == $127
+          ASS L$214 = 1
+        END
+        IF M2 >= 1
+          IF M2 <= 2
+            ASS L$214 = 1
+          END
+        END
+        IF L$214 == 0
+          BLOCK
+          EXIT
+        END
+        IF L$10 > 0
+          SET LB0 SBUSY
+          REASON $101
+          BLOCK
+          EXIT
+        END
+        IF L$140 > 0
+          SET LB0 SBUSY
+          REASON $101
+          BLOCK
+          EXIT
+        END
+        IF L0 == 1
+          IF L1 == 1
+            IF L$21 == 1
+              IF P8 < $60000
+                ASS L$215 = 1
+                MAT L$206 = M1 - $58
+                ASS L$207 = M2
+                ASS L$205 = 1
+                ASS P21 = 0
+                SND F0 00 20 0D 10 10 F7
+                SET LB0 SPAD_READING
+                BLOCK
+                EXIT
+              END
+            END
+          END
+        END
+        SET LB0 SREAD_NEEDED
+        REASON $46
+        BLOCK
+        EXIT
+      END
+    END
+  END
+END
+
+# LIVE6: the step slider moved. Show its width; nothing else happens.
+IF ML == 5
+  IF M0 == F0 7D 01 05
+    IF M4 == F7
+      STEP_SHOW
+      BLOCK
+      EXIT
+    END
+  END
+END
+
+# Private Q notifications only sample an existing matching gesture. No SND/ASK here.
+IF ML == 5
+  IF M0 == F0 7D 01
+    IF M4 == F7
+      IF M3 == 03
+        IF L$140 == 1
+          IF Q3 <= $127
+            ASS L$141 = Q3
+            ASS L$142 = 1
+          ELSE
+            END_GESTURE
+            UI_PUBLISH
+            SET LB0 SFADER_VALUE
+            REASON $101
+          END
+        END
+        BLOCK
+        EXIT
+      END
+      IF M3 == 04
+        IF L$140 == 2
+          IF Q4 <= $127
+            ASS L$141 = Q4
+            ASS L$142 = 1
+          ELSE
+            END_GESTURE
+            UI_PUBLISH
+            SET LB0 SFADER_VALUE
+            REASON $101
+          END
+        END
+        BLOCK
+        EXIT
+      END
+    END
+  END
+END
+
+# A live fader gesture cannot be replaced by an old commit, step, or mute action.
+IF ML == 3
+  IF M0 == BF
+    IF L$140 > 0
+      ASS I5 = 0
+      IF M1 == $21
+        ASS I5 = 1
+      END
+      IF M1 == $22
+        ASS I5 = 1
+      END
+      IF M1 == $23
+        ASS I5 = 1
+      END
+      IF M1 >= $26
+        IF M1 <= $29
+          ASS I5 = 1
+        END
+      END
+      IF M1 == $34
+        IF M2 == $127
+          ASS I5 = 1
+        END
+      END
+      IF I5 == 1
+        SET LB0 SBUSY
+        REASON $101
+        BLOCK
+        EXIT
+      END
+    END
+  END
+END
+
+# Begin uses a recently read armed snapshot; a second begin never replaces it.
+IF ML == 3
+  IF M0 == BF
+    IF M1 >= $40
+      IF M1 <= $41
+        IF M2 == $127
+          IF L$10 > 0
+            SET LB0 SBUSY
+            REASON $101
+            BLOCK
+            EXIT
+          END
+          IF L$126 > 0
+            SET LB0 SBUSY
+            REASON $101
+            BLOCK
+            EXIT
+          END
+          IF L$140 > 0
+            SET LB0 SBUSY
+            REASON $101
+            BLOCK
+            EXIT
+          END
+          ASS L$50 = 0
+          IF L0 == 1
+            IF L1 == 1
+              IF L$21 == 1
+                ASS P6 = 0
+                IF P6 >= 0
+                  IF P6 < $10000000
+                    IF P8 < $60000
+                      ASS L$54 = L2 L3 L4 L5
+                      END_GESTURE
+                      ASS L$148 = 0
+                      MAT L$140 = M1 - $39
+                      ASS P14 = PO
+                      SET LB0 SFADER_GESTURE
+                      REASON $9
+                      UI_PUBLISH
+                      BLOCK
+                      EXIT
+                    END
+                  END
+                END
+              END
+            END
+          END
+          SESSION_LOCK
+          SET LB0 SREAD_NEEDED
+          REASON $46
+          BLOCK
+          EXIT
+        END
+      END
+    END
+  END
+END
+
+# Release freezes one sampled value. Later Q updates or duplicate releases cannot commit.
+IF ML == 3
+  IF M0 == BF
+    IF M1 >= $42
+      IF M1 <= $43
+        IF M2 == $127
+          IF L$10 > 0
+            SET LB0 SBUSY
+            REASON $101
+            BLOCK
+            EXIT
+          END
+          IF L$126 > 0
+            SET LB0 SBUSY
+            REASON $101
+            BLOCK
+            EXIT
+          END
+          IF L$140 == 0
+            # Inert releases never echo a ready fader value back into the UI.
+            IF L0 == 0
+              UI_PUBLISH
+            END
+            BLOCK
+            EXIT
+          END
+          IF L0 != 1
+            SESSION_LOCK
+            SET LB0 SREAD_NEEDED
+            REASON $46
+            BLOCK
+            EXIT
+          END
+          IF L1 != 1
+            SESSION_LOCK
+            SET LB0 SREAD_NEEDED
+            REASON $46
+            BLOCK
+            EXIT
+          END
+          IF L$21 != 1
+            LOCK
+            SET LB0 STRANSPORT
+            REASON $119
+            BLOCK
+            EXIT
+          END
+          MAT I5 = M1 - $41
+          IF I5 != L$140
+            END_GESTURE
+            UI_PUBLISH
+            SET LB0 SWRONG_GESTURE
+            REASON $101
+            BLOCK
+            EXIT
+          END
+          ASS P16 = 0
+          IF P16 < 0
+            END_GESTURE
+            UI_PUBLISH
+            SET LB0 SGESTURE_EXPIRED
+            REASON $101
+            BLOCK
+            EXIT
+          END
+          IF P16 >= $10000000
+            END_GESTURE
+            UI_PUBLISH
+            SET LB0 SGESTURE_EXPIRED
+            REASON $101
+            BLOCK
+            EXIT
+          END
+          IF L$144 >= $10000
+            END_GESTURE
+            UI_PUBLISH
+            SET LB0 SGESTURE_EXPIRED
+            REASON $101
+            BLOCK
+            EXIT
+          END
+          IF L$142 == 0
+            END_GESTURE
+            SET LB0 SNO_FADER_VALUE
+            REASON $101
+            UI_PUBLISH
+            BLOCK
+            EXIT
+          END
+          IF L$141 > $127
+            END_GESTURE
+            UI_PUBLISH
+            SET LB0 SFADER_VALUE
+            REASON $101
+            BLOCK
+            EXIT
+          END
+          ASS L$148 = L$141
+          ASS L$12 = M1
+          ASS L$16 = L$148
+          END_GESTURE
+          ASK 2
+          BLOCK
+          EXIT
+        END
+      END
+    END
+  END
+END
+
+# LIVE3: the way of USB playback 1/2 to Phones. Two fixed mixer levels, nothing else.
+IF ML == 3
+  IF M0 == BF
+    IF M1 == $30
+      IF M2 == $127
+        MAT I4 = L$10 + L$126
+        MAT I4 = I4 + L$140
+        IF I4 > 0
+          SET LB0 SBUSY
+          REASON $101
+          BLOCK
+          EXIT
+        END
+        IF L0 == 1
+          IF L1 == 1
+            IF L$21 == 1
+              IF P8 < $60000
+                IF L$20 == 1
+                  SND F0 00 20 0D 10 01 40 00 00 00 02 F7
+                  SND F0 00 20 0D 10 01 5B 00 00 00 02 F7
+                  # LIVE10: the picture of the playback way: on at 0.0 dB
+                  ASS L$230 = $120 2
+                  ASS L$244 = $20
+                  # LIVE16: the fixed levels of this button are not inverted
+                  ASS L$238 = 0
+                  MON_SHOW
+                END
+                SET LB0 SHEADPHONE_ROUTE
+                REASON $9
+                BLOCK
+                EXIT
+              END
+            END
+          END
+        END
+        SESSION_LOCK
+        SET LB0 SREAD_NEEDED
+        REASON $46
+      END
+      BLOCK
+      EXIT
+    END
+  END
+END
+
+# Exact toggle trigger only. UI toggled state and old RESTORE0 are not authority.
+IF ML == 3
+  IF M0 == BF
+    IF M1 >= $22
+      IF M1 <= $23
+        IF M2 == $127
+          IF L$10 > 0
+            SET LB0 SBUSY
+            REASON $101
+            BLOCK
+            EXIT
+          END
+          ASS L$50 = 0
+          IF L0 == 1
+            IF L1 == 1
+              IF L$21 == 1
+                ASS P6 = 0
+                IF P6 >= 0
+                  IF P6 < $10000000
+                    IF P8 < $60000
+                      ASS L$54 = L2 L3 L4 L5
+                      ASS L$12 = M1
+                      ASS L$16 = M2
+                      ASK 2
+                      BLOCK
+                      EXIT
+                    END
+                  END
+                END
+              END
+            END
+          END
+          SESSION_LOCK
+          SET LB0 SREAD_NEEDED
+          REASON $46
+          BLOCK
+          EXIT
+        END
+      END
+    END
+  END
+END
+
+# Invalid values cannot query, write, change the latched intent, or start repeats.
+IF ML == 3
+  IF M0 == BF
+    IF M1 >= $26
+      IF M1 <= $29
+        ASS I0 = 0
+        IF M2 == $127
+          ASS I0 = 1
+        END
+        # LIVE6: every count of half dB; 126 takes the width chosen on the page.
+        IF M2 >= 1
+          IF M2 <= $125
+            ASS I0 = M2
+          END
+        END
+        IF M2 == $126
+          STEP_GET
+          ASS I0 = L$194
+          IF I0 == 0
+            SET LB0 SSTEP_WIDTH
+            REASON $101
+            BLOCK
+            EXIT
+          END
+        END
+        IF I0 > 0
+          IF L$10 > 0
+            SET LB0 SBUSY
+            REASON $101
+            BLOCK
+            EXIT
+          END
+          ASS L$50 = 0
+          IF L0 == 1
+            IF L1 == 1
+              IF L$21 == 1
+                ASS P6 = 0
+                IF P6 >= 0
+                  IF P6 < $10000000
+                    IF P8 < $60000
+                      ASS L$54 = L2 L3 L4 L5
+                      ASS L$12 = M1
+                      ASS L$16 = M2
+                      ASS L$108 = I0
+                      ASK 2
+                      BLOCK
+                      EXIT
+                    END
+                  END
+                END
+              END
+            END
+          END
+          SESSION_LOCK
+          SET LB0 SREAD_NEEDED
+          REASON $46
+          BLOCK
+          EXIT
+        END
+      END
+    END
+  END
+END
+
+IF ML == 3
+  IF M0 == BF
+    IF M2 <= 7F
+      IF M1 == $24
+        IF M2 >= $64
+          BEGIN_READ
+          IF L$21 == 1
+            ASK 1
+          ELSE
+            SET LB0 STRANSPORT
+            REASON $119
+          END
+        END
+      END
+      IF M1 == $25
+        IF M2 < $64
+          # Value0 is the existing lock widget. Values1..63 explicitly forget.
+          IF M2 == 0
+            SESSION_LOCK
+          ELSE
+            LOCK
+          END
+          SET LB0 SREAD
+          REASON $9
+        ELSE
+          IF L0 == 1
+            IF L$10 == 0
+              ASS L1 = 1
+              SET LB1 SARMED
+              UI_PUBLISH
+              # LIVE14: the unit forgets its mixer with its USB connection; send what is known again
+              IF L$205 == 0
+                MON_ALLOWED
+                IF L$214 == 1
+                  MON_RESEND
+                END
+              END
+            END
+          END
+        END
+      END
+      IF M1 == $34
+        ASS L$50 = 0
+        IF M2 == 0
+          LOCK
+          SET LB0 SABORTED
+          REASON $101
+        END
+        IF M2 == $127
+          IF L0 == 1
+            IF L1 == 1
+              IF L$10 == 0
+                IF L$21 == 1
+                  ASS P6 = 0
+                  IF P6 >= 0
+                    IF P6 < $10000000
+                      IF P8 < $60000
+                        ASS L$54 = L2 L3 L4 L5
+                        ASS L$50 = 1
+                      END
+                    END
+                  END
+                END
+              END
+            END
+          END
+        END
+      END
+      IF M1 == $21
+        IF L$50 == 1
+          ASS L$50 = 0
+          IF L0 == 1
+            IF L1 == 1
+              IF L$10 == 0
+                IF L$21 == 1
+                  ASS P6 = 0
+                  IF P6 >= 0
+                    IF P6 < $10000000
+                      IF P8 < $60000
+                        ASS L$12 = $21
+                        ASS L$16 = M2
+                        ASK 2
+                      END
+                    END
+                  END
+                END
+              END
+            END
+          END
+        END
+      END
+    END
+  END
+END
+
+
+# A matched private marker may dispatch only the fixed READ query.
+# Never compare injected PO to an external MIDI callback PO: measured clocks drift.
+# T0 bounds the local delay; the reply still uses external P9 as its original anchor.
+IF ML == 7
+  IF M0 == F0 7D 4E
+    IF M6 == F7
+      IF M3 <= 7F
+        IF M4 <= 7F
+          IF M5 <= 7F
+            IF L$10 == 4
+              IF L$76 == 1
+                IF M3 == L$73 L$74 L$75
+                  IF L$73 == L$70 L$71 L$72
+                    IF L0 == 1
+                      IF L1 == 1
+                        IF L$21 == 1
+                          ASS L$77 = T0
+                          IF L$77 >= $80
+                            IF L$77 < $1000
+                              ASS L$73 = 0 0 0 0
+                              ASS L$10 = 3
+                              ASS L$11 = T0
+                              ASS P20 = 0
+                              # Same external clock domain; includes pending wait and reply.
+                              ASS P0 = P9
+                              SND F0 00 20 0D 10 10 F7
+                              SET LB0 SWAITING
+                              REASON $9
+                            ELSE
+                              LOCK
+                              SET LB0 STIMING_ERROR
+                              REASON $119
+                            END
+                          ELSE
+                            LOCK
+                            SET LB0 STIMING_ERROR
+                            REASON $119
+                          END
+                        END
+                      END
+                    END
+                  END
+                END
+              END
+            END
+          END
+        END
+      END
+    END
+  END
+END
+
+# Validate the entire payload before interpreting any state fields.
+IF ML == $227
+  ASS I0 = $6
+  IF I0 < $116 +L
+    IF MI0 >= 80
+      LOCK
+      SET LB0 SPACKET_ERROR
+      REASON $119
+      BLOCK
+      EXIT
+    END
+    MAT I0 = I0 + 1
+  END
+  ASS I0 = $116
+  IF I0 < $226 +L
+    IF MI0 >= 80
+      LOCK
+      SET LB0 SPACKET_ERROR
+      REASON $119
+      BLOCK
+      EXIT
+    END
+    MAT I0 = I0 + 1
+  END
+  ASS I0 = $10
+  IF I0 < $226 +L
+    IF MI0 > 0F
+      LOCK
+      SET LB0 SPACKET_ERROR
+      REASON $119
+      BLOCK
+      EXIT
+    END
+    MAT I0 = I0 + 5
+  END
+END
+
+# Validate first; a passive valid frame may revoke ownership even in phase4.
+# This is never response acceptance or readiness renewal.
+IF ML == $227
+  IF M0 == F0 00 20 0D
+    IF M4 == 10 00
+      IF M$226 == F7
+        OBSERVE_OWNERS
+      END
+    END
+  END
+END
+
+# LIVE7: every validated state shows the input gains; an own input step continues here.
+IF ML == $227
+  IF M0 == F0 00 20 0D
+    IF M4 == 10 00
+      IF M$226 == F7
+        IN_READ
+        IN_SHOW
+        MON_SHOW
+        IF L$205 == 2
+          IF P21 >= $80
+            IN_SELECT
+            ASS L$205 = 0
+            IF L$211 == L$209
+              SET LB0 SIN_OK
+              REASON $9
+              # LIVE8: the unit confirmed the step; the page stays active for another minute.
+              IF L0 == 1
+                IF L1 == 1
+                  ASS P8 = 0
+                  EXPIRY_RENEW
+                END
+              END
+            ELSE
+              SET LB0 SIN_DIFFERS
+              REASON $82
+            END
+          END
+        END
+        IF L$205 == 1
+          IF P21 < $1000
+            IF L$215 == 1
+              PAD_WRITE
+            ELSE
+              IN_WRITE
+            END
+          ELSE
+            ASS L$205 = 0
+            SET LB0 SIN_ANSWER
+            REASON $64
+          END
+        END
+      END
+    END
+  END
+END
+
+# Early complete state cannot acknowledge or cancel an unsent post-write read.
+IF L$10 == 4
+  IF ML == $227
+    BLOCK
+    EXIT
+  END
+END
+
+# Require a complete state packet. Meter/partial/wrong-model packets do nothing.
+IF ML == $227
+  IF M0 == F0 00 20 0D
+    IF M4 == 10 00
+      IF M$226 == F7
+        IF L$10 > 0
+          # Query is emitted immediately; accept only the bounded reply window.
+          # PO also rejects old/rewound replies despite the 16-bit T0 wrap.
+          ASS P1 = 0
+          ASS L$15 = T0
+          IF P1 >= 0
+            IF L$15 < $1000
+              IF P1 < $1000000
+                MAT L2 = M$12 & 1
+                MAT L2 = L2 * $128
+                MAT L2 = L2 + M$11
+                MAT L3 = M$19 & 1
+                MAT L3 = L3 * $128
+                MAT L3 = L3 + M$18
+                MAT L4 = M$19 / 4
+                MAT L$102 = M$20 & 7
+                MAT L$102 = L$102 * $32
+                MAT L4 = L4 + L$102
+                MAT L5 = M$12 / 4
+                MAT L$102 = M$13 & 7
+                MAT L$102 = L$102 * $32
+                MAT L5 = L5 + L$102
+                ASS L$183 = 0
+                ASS P7 = PO
+                ASS P8 = 0
+                ASS Q0 = L2 L3 L4
+                ASS L0 = 1
+                ASS L$13 = L$10
+                ASS L$10 = 0
+                IF L$13 < 3
+                  OWNERS_CURRENT
+                END
+                SET LB0 SREADY
+                REASON $9
+                EXPIRY_RENEW
+                IF L$13 == 2
+                  IF L1 == 1
+                    APPLY
+                  END
+                END
+                IF L$13 == 3
+                  IF L2 != L$103
+                    LOCK
+                    SET LB0 SREADBACK_ERROR
+                    REASON $82
+                  END
+                  IF L3 != L$104
+                    LOCK
+                    SET LB0 SREADBACK_ERROR
+                    REASON $82
+                  END
+                  IF L4 != L$105
+                    LOCK
+                    SET LB0 SREADBACK_ERROR
+                    REASON $82
+                  END
+                  IF L5 != L$106
+                    LOCK
+                    SET LB0 SREADBACK_ERROR
+                    REASON $82
+                  END
+                  IF L1 == 1
+                    MUTE_ACK
+                  END
+                END
+                UI_PUBLISH
+              ELSE
+                LOCK
+                SET LB0 STIMING_ERROR
+                REASON $119
+              END
+            ELSE
+              LOCK
+              SET LB0 STIMING_ERROR
+              REASON $119
+            END
+          ELSE
+            IF P1 < 0
+              LOCK
+              SET LB0 STIMING_ERROR
+              REASON $119
+            END
+          END
+        END
+      END
+    END
+  END
+END
+
+BLOCK

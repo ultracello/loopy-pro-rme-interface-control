@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-11-19 · The controller page is published
+
+- `controller/` holds the Loopy Pro project, the MidiFire scene and the two StreamByter rule texts of the controller page, with a set-up guide. Everything that belonged to one unit was taken out: the serial number and USB identifier, an audio clip, and the older modules of a private MidiFire set-up. A user connects his own unit in four taps.
+- The names inside the controller rules were German and are English now; no statement of the rules changed (checked offline: the same 1871 messages byte for byte, 194 tests).
+- Checked on the iPad the page was made on: the cleaned project and scene load, and with the two connections made by hand the page read, armed, stepped levels and gains, refused what it has to refuse and switched monitoring, pan and phase. Not checked on a second iPad. Pad and reference level answer FAULT on our unit at present; the guide says why.
+- Earlier documents of this repository say that the controller is not distributed. That was true when they were written.
+
 ## 2026-11-18 · Website and README rebuilt
 
 - The website is now one plain page that is built from the documents: status table, rules for a host and open points from the protocol reference, the list of reports from `docs/milestones`. It replaces the planning configurator, which described a product that does not exist and had fallen behind the work.

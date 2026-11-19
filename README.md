@@ -25,6 +25,7 @@ A function counts as measured when its effect was read at the unit. Native suppo
 - [Protocol reference](docs/protocol/BABYFACE-PRO-FS-CC-REFERENCE.md): every message byte for byte, with the formulas for the dB values. Each statement is marked as measured on the unit, reported back by the unit, taken from other people's notes, or unknown. It is written for anyone who wants to build native support into a host application.
 - [Reference codec, test vectors and measured curves](docs/protocol/reference/): a small codec in Python that builds and parses bytes and sends nothing, the test vectors for it, and the equaliser curves measured with sine tones.
 - [Reports](docs/milestones/): one dated report for every step of the work, with what was done, what was measured and what went wrong.
+- [Controller page](controller/): the Loopy Pro project, the MidiFire scene and the StreamByter rules this project uses, with a [set-up guide](controller/README.md). A working example, cleaned of everything that belongs to one unit.
 - [Tool for helpers](tools/babyface_helper.py): guided checks for people who test with their own unit, with [instructions](docs/help-wanted/README.md).
 - [Website generator](website/).
 
@@ -38,7 +39,7 @@ Everything here was measured on one unit. If you own a Babyface Pro or Babyface 
 
 ## What is not here
 
-The controller page that runs in Loopy Pro is a private working copy and is not published. There is nothing to download and install. The aim is native support in a host; the reference is written for that.
+No installer and no app. The controller page is a Loopy Pro project that has to be set up by hand, and it was used on one iPad with one unit. The diagnostic app the measurements were made with is not published. The aim remains native support in a host; the reference is written for that.
 
 ## Checks
 

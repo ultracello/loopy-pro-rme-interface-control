@@ -1,0 +1,197 @@
+# Pass unchanged: exact fixed read or canonically packed supported gain only.
+# This filter has no SND, repair, injection or bypass. Maximum 4 RHS values.
+IF ML == 7
+  IF M0 == F0 00 20 0D
+    IF M4 == 10 10 F7
+      EXIT
+    END
+  END
+END
+IF ML == $12
+  IF M0 == F0 00 20 0D
+    IF M4 == 10 04
+      IF M$11 == F7
+        IF M6 >= 04
+          IF M6 <= 07
+            IF M7 == 00
+              IF M$10 == 00
+                IF M8 <= 7C
+                  IF M9 <= 07
+                    MAT I0 = M8 & 03
+                    IF I0 == 0
+                      MAT I0 = M8 / 4
+                      MAT I1 = M9 * $32
+                      MAT I0 = I0 + I1
+                      IF I0 == $59
+                        EXIT
+                      END
+                      IF I0 >= $116
+                        IF I0 <= $243
+                          EXIT
+                        END
+                      END
+                    END
+                  END
+                END
+              END
+            END
+          END
+        END
+      END
+    END
+  END
+END
+# STRICT3: gain of the four inputs. Channels 0/1 microphone, packed: coarse dB/3 (0..20) in the low five bits,
+# fine 0..2 (at coarse 20: 0..5) above. Channels 2/3 line: 0..18 half dB. Nothing else on these channels.
+IF ML == $12
+  IF M0 == F0 00 20 0D
+    IF M4 == 10 04
+      IF M$11 == F7
+        IF M7 == 00
+          IF M$10 == 00
+            IF M8 <= 7C
+              MAT I0 = M8 & 03
+              IF I0 == 0
+                MAT I0 = M8 / 4
+                IF M6 <= 01
+                  IF I0 < $20
+                    IF M9 <= 02
+                      EXIT
+                    END
+                  END
+                  IF I0 == $20
+                    IF M9 <= 05
+                      EXIT
+                    END
+                  END
+                END
+                IF M6 >= 02
+                  IF M6 <= 03
+                    IF M9 == 00
+                      IF I0 <= $18
+                        EXIT
+                      END
+                    END
+                  END
+                END
+              END
+            END
+          END
+        END
+      END
+    END
+  END
+END
+# STRICT7: the same message with "what changed" = hex 04 or 08 (sensitivity of line input 3 or 4) passes under the
+# same conditions as a pad bit.
+# STRICT4: the pad of microphone input 1 or 2 (sub ID 03). "What changed" must be exactly one pad bit (hex 10 or 20).
+# In the state part no 48 V bit and none of the upper bits may be set: the third data byte carries the two top bits of
+# "what changed" (must be 0), the two 48 V state bits (must be 0) and state bits 2..4; the fourth carries pad 2 only.
+IF ML == $12
+  IF M0 == F0 00 20 0D
+    IF M4 == 10 03
+      IF M$11 == F7
+        IF M7 == 00
+          IF M$10 == 00
+            IF M9 <= 01
+              IF M8 <= 70
+                MAT I0 = M8 & 0F
+                IF I0 == 0
+                  IF M6 == 10
+                    EXIT
+                  END
+                  IF M6 == 20
+                    EXIT
+                  END
+                  IF M6 == 04
+                    EXIT
+                  END
+                  IF M6 == 08
+                    EXIT
+                  END
+                END
+              END
+            END
+          END
+        END
+      END
+    END
+  END
+END
+# STRICT5: monitoring of input 1..4 on Phones (mixer, sub ID 01). Index 52..55 (Phones left) or 78..81 (Phones right),
+# nothing in the second data byte (no upper index bit, lowest two level bits 0), third lowest level bit 0, and a level of
+# at most unity (fifth data byte 2 only with the two before it 0).
+IF ML == $12
+  IF M0 == F0 00 20 0D
+    IF M4 == 10 01
+      IF M$11 == F7
+        IF M7 == 00
+          ASS I1 = 0
+          IF M6 >= $52
+            IF M6 <= $55
+              ASS I1 = 1
+            END
+          END
+          IF M6 >= $78
+            IF M6 <= $81
+              ASS I1 = 1
+            END
+          END
+          # STRICT6: playback 1 to Phones left (64) and playback 2 to Phones right (91), any level up to unity.
+          IF M6 == $64
+            ASS I1 = 1
+          END
+          IF M6 == $91
+            ASS I1 = 1
+          END
+          IF I1 == 1
+            MAT I0 = M8 & 01
+            IF I0 == 0
+              IF M8 <= 7F
+                IF M9 <= 7F
+                  IF M$10 <= 01
+                    EXIT
+                  END
+                  IF M$10 == 02
+                    IF M8 == 00
+                      IF M9 == 00
+                        EXIT
+                      END
+                    END
+                  END
+                  # STRICT8: the same ways with the phase inverted. The level field then holds 2^20 minus a level of at
+                  # most unity; that is exactly a fifth data byte of hex 0E or 0F.
+                  IF M$10 >= 0E
+                    IF M$10 <= 0F
+                      EXIT
+                    END
+                  END
+                END
+              END
+            END
+          END
+        END
+      END
+    END
+  END
+END
+# STRICT2: the two fixed mixer levels of the Phones way, byte for byte, and no other mixer message.
+IF ML == $12
+  IF M0 == F0 00 20 0D
+    IF M4 == 10 01
+      IF M7 == 00 00 00
+        IF M$10 == 02
+          IF M$11 == F7
+            IF M6 == 40
+              EXIT
+            END
+            IF M6 == 5B
+              EXIT
+            END
+          END
+        END
+      END
+    END
+  END
+END
+BLOCK
