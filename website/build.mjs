@@ -84,6 +84,10 @@ export function render(c, t = TEXT) {
   const p = (list) => list.map((x) => `<p>${inline(x)}</p>`).join('\n');
   const ul = (list) => `<ul>\n${list.map((x) => `<li>${inline(x)}</li>`).join('\n')}\n</ul>`;
   const summary = MARKS.filter((m) => c.counts[m]).map((m) => `${c.counts[m]} ${m}`).join(', ');
+  const figure = (f) => `<figure>
+<img src="./${f.file}" width="${f.width}" height="${f.height}" alt="${esc(f.alt)}" loading="lazy">
+<figcaption>${inline(f.caption)}</figcaption>
+</figure>`;
   return `<!doctype html>
 <html lang="en">
 <head>
@@ -111,34 +115,57 @@ export function render(c, t = TEXT) {
 <header class="top">
 <div class="wrap">
 <p class="project">${esc(t.project)}</p>
-<nav aria-label="Sections"><a href="#progress">Progress</a><a href="#status">Status</a><a href="#page">Controller</a><a href="#questions">Questions</a><a href="#developers">For developers</a><a href="#open">Open points</a><a href="#reports">Reports</a><a href="${REPO}">GitHub</a></nav>
+<nav aria-label="Sections"><a href="#use">Use it</a><a href="#help">Help</a><a href="#developers">For developers</a><a href="${REPO}">GitHub</a></nav>
 </div>
 </header>
 <main id="main" class="wrap">
 <section class="intro">
 <h1>${esc(t.heading)}</h1>
-${p(t.intro)}
-<p class="updated">Last report: <a href="${latest.url}">${esc(latest.title)}</a>, <time datetime="${latest.date}">${latest.day}</time>. This page is built from the documents in the repository.</p>
+<p class="lead">${inline(t.lead)}</p>
+<p class="state"><strong>${c.progress.measured === c.progress.functions ? `All ${c.progress.functions} functions of the interface are measured.` : `${c.progress.measured} of ${c.progress.functions} functions of the interface are measured.`}</strong> ${inline(t.state)}</p>
+<div class="ways">
+${t.ways.map((w) => `<a class="way" href="${w.href}"><span class="who">${esc(w.who)}</span><strong>${esc(w.title)}</strong><span>${esc(w.text)}</span></a>`).join('\n')}
+</div>
+</section>
+
+<section id="use" aria-labelledby="h-use">
+<h2 id="h-use">${esc(t.pageHeading)}</h2>
+${p(t.page)}
+${ul(t.pageList)}
+<p><a class="button" href="${t.guide}">${esc(t.guideLabel)}</a></p>
+${t.figures.slice(0, 1).map(figure).join('\n')}
+<details>
+<summary>${esc(t.morePictures)}</summary>
+${t.figures.slice(1).map(figure).join('\n')}
+</details>
+${p(t.pageAfter)}
+</section>
+
+<section id="questions" aria-labelledby="h-q">
+<h2 id="h-q">Questions</h2>
+${t.questions.map(([q, a]) => `<details class="q"><summary>${inline(q)}</summary><p>${inline(a)}</p></details>`).join('\n')}
+</section>
+
+<section id="help" aria-labelledby="h-help">
+<h2 id="h-help">${esc(t.helpHeading)}</h2>
+${p(t.help)}
+<p><a class="button" href="${t.helpLink}">${esc(t.helpLabel)}</a></p>
 </section>
 
 <section id="progress" aria-labelledby="h-progress">
 <h2 id="h-progress">How far it is</h2>
-${p(t.progress)}
 <div class="meters">
 <div class="meter"><p><strong>${c.progress.measuredPercent} %</strong> measured on the unit: ${c.progress.measured} of ${c.progress.functions} functions</p><div class="bar" role="img" aria-label="${c.progress.measuredPercent} percent"><span style="width:${c.progress.measuredPercent}%"></span></div></div>
-<div class="meter"><p><strong>${c.progress.onPagePercent} %</strong> usable today from the controller page: ${c.progress.onPage} of ${c.progress.functions} functions</p><div class="bar" role="img" aria-label="${c.progress.onPagePercent} percent"><span style="width:${c.progress.onPagePercent}%"></span></div></div>
+<div class="meter"><p><strong>${c.progress.onPagePercent} %</strong> on the controller page: ${c.progress.onPage} of ${c.progress.functions} functions</p><div class="bar" role="img" aria-label="${c.progress.onPagePercent} percent"><span style="width:${c.progress.onPagePercent}%"></span></div></div>
 <div class="meter"><p><strong>${esc(t.nativePercent)}</strong> ${inline(t.native)}</p><div class="bar" role="img" aria-label="${esc(t.nativePercent)}"><span style="width:0%"></span></div></div>
 </div>
 ${p(t.progressAfter)}
-</section>
-
-<section id="status" aria-labelledby="h-status">
-<h2 id="h-status">What can be controlled</h2>
+<details id="status">
+<summary>${c.coverage.length} functions of TotalMix FX are listed: ${summary}${c.counts.other ? `, ${c.counts.other} that do not belong to the unit or cannot be read` : ''}. Show the table</summary>
 ${p(t.status)}
 <dl class="legend">
 ${t.marks.map(([m, text]) => `<div><dt><span class="mark ${m}">${m}</span></dt><dd>${inline(text)}</dd></div>`).join('\n')}
 </dl>
-<p class="count">${c.coverage.length} functions of TotalMix FX are listed: ${summary}${c.counts.other ? `, ${c.counts.other} that do not belong to the unit or cannot be read` : ''}.</p>
 <table>
 <thead><tr><th scope="col">Function</th><th scope="col">Status</th><th scope="col">On the controller page</th></tr></thead>
 <tbody>
@@ -146,24 +173,7 @@ ${c.coverage.map((r) => `<tr><th scope="row">${inline(r.name)}</th><td>${inline(
 </tbody>
 </table>
 <p class="source">Source: <a href="${c.referenceUrl}">protocol reference</a>, section 5.</p>
-</section>
-
-<section id="page" aria-labelledby="h-page">
-<h2 id="h-page">${esc(t.pageHeading)}</h2>
-${p(t.page)}
-${ul(t.pageList)}
-${t.figures.map((f) => `<figure>
-<img src="./${f.file}" width="${f.width}" height="${f.height}" alt="${esc(f.alt)}" loading="lazy">
-<figcaption>${inline(f.caption)}</figcaption>
-</figure>`).join('\n')}
-${p(t.pageAfter)}
-</section>
-
-<section id="questions" aria-labelledby="h-q">
-<h2 id="h-q">Questions</h2>
-<dl class="qa">
-${t.questions.map(([q, a]) => `<div><dt>${inline(q)}</dt><dd>${inline(a)}</dd></div>`).join('\n')}
-</dl>
+</details>
 </section>
 
 <section id="developers" aria-labelledby="h-dev">
@@ -176,24 +186,34 @@ ${p(t.developers)}
 <li><a href="${c.curvesUrl}">${c.curves} measured equaliser curves</a> with ${c.curvePoints} points, next to the values the codec calculates.</li>
 <li><a href="${c.lawUrl}">The measured level of an output</a> for each of its ${c.levelValues} raw values.</li>
 </ul>
-<h3>What a host has to build around</h3>
+<details>
+<summary>What a host has to build around</summary>
 <ol class="rules">
 ${c.rules.map((r) => `<li><strong>${inline(r.lead)}</strong> ${inline(r.rest)}</li>`).join('\n')}
 </ol>
 <p class="source">Source: <a href="${c.referenceUrl}">protocol reference</a>, section 4.</p>
-</section>
-
-<section id="open" aria-labelledby="h-open">
-<h2 id="h-open">Open points</h2>
+</details>
+<details id="open">
+<summary>Open points</summary>
 ${p(t.open)}
 ${ul(c.open)}
 <p class="source">Source: <a href="${c.referenceUrl}">protocol reference</a>, section 6.</p>
+</details>
 </section>
 
 <section id="reports" aria-labelledby="h-reports">
 <h2 id="h-reports">Reports</h2>
 ${p(t.reports)}
+<p class="updated">Latest: <a href="${latest.url}">${esc(latest.title)}</a>, <time datetime="${latest.date}">${latest.day}</time>.</p>
+<details>
+<summary>All reports, newest first</summary>
 ${days.map((d) => `<h3><time datetime="${d.date}">${d.day}</time></h3>\n<ul class="reports">\n${d.items.map((r) => `<li><a href="${r.url}">${esc(r.title)}</a></li>`).join('\n')}\n</ul>`).join('\n')}
+</details>
+</section>
+
+<section id="story" aria-labelledby="h-story">
+<h2 id="h-story">${esc(t.storyHeading)}</h2>
+${p(t.story)}
 </section>
 </main>
 <footer>

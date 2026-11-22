@@ -113,7 +113,7 @@ test('the progress figures are counted from the coverage table', () => {
   assert.deepEqual([c.progress.functions, c.progress.measured, c.progress.onPage], [unit.length, measured, onPage]);
   assert.equal(c.progress.measuredPercent, Math.round((100 * measured) / unit.length));
   assert.ok(html.includes(`<strong>${c.progress.measuredPercent} %</strong> measured on the unit: ${measured} of ${unit.length} functions`));
-  assert.ok(html.includes(`<strong>${c.progress.onPagePercent} %</strong> usable today from the controller page: ${onPage} of ${unit.length} functions`));
+  assert.ok(html.includes(`<strong>${c.progress.onPagePercent} %</strong> on the controller page: ${onPage} of ${unit.length} functions`));
   assert.ok(c.progress.onPage <= c.progress.functions && c.progress.measured <= c.progress.functions);
 });
 

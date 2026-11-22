@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-11-22 · All 18 functions measured; the website made simpler
+
+- Clock source and optical format are measured, with an optical cable from the unit's output into its own input. With that, every function of the unit in the coverage table is measured.
+- The website opens with one sentence and three ways in: get the controller page, check your own unit, read the protocol reference. The long parts (the table of functions, the rules for hosts, the open points, the list of reports, the questions) open on demand.
+
 ## 2026-11-19 · Controller page 1.1
 
 - Pad and reference level now also switch while the unit's own OUT key stands on "Opt". The unit sets one more bit in its settings then, and the rules of 1.0 refused to write while they saw a bit they did not know. One statement of the rules changed; any other unknown bit is refused as before.
