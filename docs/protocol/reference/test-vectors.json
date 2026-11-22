@@ -1372,26 +1372,26 @@
   {
    "name": "device settings: clock source bit set",
    "hex": "F000200D10000100040000F7",
-   "meaning": "bit 30 of state word 0 stood set in the next state; the effect on audio was not measured",
-   "status": "reported"
+   "meaning": "the unit keeps its own clock: a tone sent over the optical link came back at 0.00 dB in 12 of 12 readings; bit 30 of state word 0 stood set",
+   "status": "measured"
   },
   {
    "name": "device settings: clock source bit clear",
    "hex": "F000200D10000100000000F7",
-   "meaning": "bit 30 of state word 0 stood clear; the state the unit was found in",
-   "status": "reported"
+   "meaning": "the unit follows the optical input: with its own output as that input the tone came back damaged in 12 of 12 readings; bit 30 of state word 0 stood clear; the state the unit was found in",
+   "status": "measured"
   },
   {
    "name": "device settings: optical output S/PDIF (bit 10 set)",
    "hex": "F000200D10000008002000F7",
-   "meaning": "the level meters of the unit showed two lamps for the format (S/PDIF); what leaves the socket was not measured",
-   "status": "reported"
+   "meaning": "only the first pair of channels arrived at the optical input, the others were exactly silent; the level meters of the unit showed two lamps for the format",
+   "status": "measured"
   },
   {
    "name": "device settings: optical output ADAT (bit 10 clear)",
    "hex": "F000200D10000008000000F7",
-   "meaning": "the level meters of the unit showed eight lamps for the format (ADAT), before and after",
-   "status": "reported"
+   "meaning": "all channels arrived at the optical input at 0.00 dB; the level meters of the unit showed eight lamps for the format",
+   "status": "measured"
   },
   {
    "name": "state (built for this file from the values our unit reported)",

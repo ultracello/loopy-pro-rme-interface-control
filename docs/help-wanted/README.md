@@ -1,6 +1,6 @@
 # Help wanted: test with your own unit
 
-This project works out how an RME Babyface Pro FS is controlled without TotalMix FX, so that apps like Loopy Pro can support it natively. Everything so far was measured on one unit. If you own a **Babyface Pro** or **Babyface Pro FS** and a computer, you can check in a few minutes whether yours behaves the same, and close the points we cannot close alone.
+This project works out how an RME Babyface Pro FS is controlled without TotalMix FX, so that apps like Loopy Pro can support it natively. Everything so far was measured on one unit. If you own a **Babyface Pro** or **Babyface Pro FS** and a computer, you can check in a few minutes whether yours behaves the same. Every function of the unit is measured on ours by now; what is missing is a second unit that agrees.
 
 You do not need to program. A small tool talks you through each task, and you can let ChatGPT or Claude guide you: [copy this prompt](PROMPT.md).
 
@@ -10,7 +10,7 @@ You do not need to program. A small tool talks you through each task, and you ca
 |---|---|---|---|
 | `check` | the unit and a computer | 5 min | Does another unit answer like ours? Most wanted from a Babyface Pro **without** FS. |
 | `dim-key` | the same | 5 min | What the DIM key does in this mode, and whether its lamp follows a message. |
-| `clock-optical` | the same, for the clock source (2 min, nothing to do but start it); **a device at the optical output that shows what it receives (ADAT or S/PDIF)** for the optical format | 2 to 10 min | Clock source and optical format: the one function of the unit that is not measured yet. Our unit reports both back (ADAT with the format bit clear, S/PDIF with it set); what is missing is a device that receives it. |
+| `clock-optical` | the same, for the clock source (2 min, nothing to do but start it); **a device at the optical output that shows what it receives (ADAT or S/PDIF)** for the optical format | 2 to 10 min | Clock source and optical format. Measured on our unit with its own optical output plugged into its own input; a second device at the optical sockets would show how the outside world sees it. |
 | `replug` | the power supply of the unit, and headphones | 10 min | Does the unit keep its mixer when USB is pulled while it stays powered? |
 
 Start with `check`. Each task is separate; do as many as you like.

@@ -1,8 +1,8 @@
 # RME Babyface Pro FS in class-compliant mode: control protocol reference
 
-Version 1.5, 19 November 2026. Public domain (Unlicense).
+Version 1.6, 22 November 2026. Public domain (Unlicense).
 
-This document describes how a host application on iPadOS can read and set the Babyface Pro FS without TotalMix FX, over MIDI SysEx. It is written for someone who wants to build native support. Everything in it was worked out on one unit (Babyface Pro FS, iPad, iPadOS 27.2.1) between 8 and 19 November 2026.
+This document describes how a host application on iPadOS can read and set the Babyface Pro FS without TotalMix FX, over MIDI SysEx. It is written for someone who wants to build native support. Everything in it was worked out on one unit (Babyface Pro FS, iPad, iPadOS 27.2.1) between 8 and 22 November 2026.
 
 Each statement carries one of four marks, so that nothing has to be taken on trust:
 
@@ -203,6 +203,13 @@ The same setting decides whether the EQ of an input is recorded. **measured** wi
 
 **Optical format, reported on the unit's own display.** Bit 10 clear is ADAT, bit 10 set is S/PDIF. The unit was plugged in anew and nothing asked for its state; with "Opt" selected and SET pressed, its level meters showed eight lamps, which by RME's manual means ADAT. Bit 10 was then written set, with mask `0x0400` and no state request: the meters changed to two lamps, S/PDIF. Written clear: eight lamps again. **reported** (read by the owner). No word of the state follows the bit, and what leaves the optical socket was not measured, for lack of a device there.
 
+**Clock source and optical format, measured on an optical link.** An optical cable led from the unit's optical output into its own optical input. Playback 1 was sent to the outputs AS1, ADAT3 and ADAT8 at 0 dB, loopback off, and the tone read on the input channels 5, 7 and 12, which then carry what arrives at the optical input.
+
+- Format bit clear (ADAT), clock bit set: the tone arrived on all three channels at 0.00 dB, in 8 of 8 readings. Format bit set (S/PDIF): on channel 5 at 0.00 dB, and channels 7 and 12 were exactly silent, in 4 of 4. So S/PDIF carries the first pair only, and the optical input takes either format without being told.
+- Clock bit set (state bit 30 set): 0.00 dB on all three channels and exact silence on the other optical channels, in 12 of 12 readings. Clock bit clear: the tone came back damaged, at about −13, −4 and −21 dB on the three channels, with noise around −60 dBFS on the others, in 12 of 12. With the bit clear the unit follows the digital input (AutoSync), and here that input was its own output, a loop with no clock to follow; with the bit set it keeps its own clock.
+
+**measured** A host should set the clock bit before it relies on an optical link it cannot vouch for, and should know that a unit left on AutoSync follows whatever arrives.
+
 **Keys and display belong to the host while it asks.** As long as a host was asking for the state, the unit's own display for the format stayed dark and its DIM key did nothing (2.3); after the unit was plugged in anew, with writes alone, the display worked and followed them. So it seems to be the state request that hands the keys of the unit to the host. We did not find out how the unit takes them back other than by being plugged in again.
 
 The codec builds the messages (`set_eq_in_recording`, `set_device_setting`).
@@ -307,7 +314,7 @@ The last column says whether the controller page this project uses in Loopy Pro 
 | EQ and low cut on inputs and outputs | **measured**, whole curves with sine tones: input 1 and Main left at 48 kHz; both headphone channels, Main right, AS1 and ADAT3 at 44.1 kHz | no |
 | Loopback | **measured** for all twelve outputs | no |
 | EQ for Record | **measured** for the EQ of an output in loopback and for the EQ of an input (bit 6 of the device settings) | no |
-| Clock source, optical format | both **reported**: the clock source in the state, the optical format on the unit's own display (bit clear ADAT, set S/PDIF); their effect on a digital link not measured | no |
+| Clock source, optical format | **measured** on an optical link from the unit's output into its own input: ADAT carries all eight channels, S/PDIF the first pair; the clock bit decides between the unit's own clock and the incoming signal | no |
 | Dim, global mute | **measured**: the unit keeps and reports a flag for each and attenuates nothing; the host does it with the levels | no |
 | Mono, solo, stereo link, cue, talkback | by RME's manual functions of the control room of TotalMix FX; a host builds them from levels and mixer cells, the unit has nothing of its own for them that we know of |  |
 | Snapshots, layouts | belong to TotalMix FX, not to the unit |  |
@@ -318,7 +325,7 @@ The last column says whether the controller page this project uses in Loopy Pro 
 - A replug with the unit kept alive by a power supply of its own: does it keep mixer, loopback and EQ then?
 - Where the unit reports its device settings, if it does.
 - How a host tells a press of the DIM key from the other keys of the unit (which of the bits that flash in state word 0), and whether the key behaves the same with the Main output not muted.
-- Optical format and clock source on a real digital link: a device at the optical output that shows what it receives, and a signal at the optical input.
+- Clock source and optical format with a second device at the optical sockets (measured so far with the unit's own output as its input).
 - How the unit takes its keys back from a host, short of being plugged in again.
 
 ## 7. Sources

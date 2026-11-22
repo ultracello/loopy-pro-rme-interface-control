@@ -11,11 +11,11 @@ The website shows what can be controlled and how far each function is measured, 
 <!-- progress:start (written by website/build.mjs --stamp; do not edit by hand) -->
 | | | |
 |---|---|---|
-| Measured on the unit | `███████████████████░` | **94 %**, 17 of 18 functions |
+| Measured on the unit | `████████████████████` | **100 %**, 18 of 18 functions |
 | Usable today from the controller page | `██████░░░░░░░░░░░░░░` | **28 %**, 5 of 18 functions |
 | Native support in Loopy Pro | `░░░░░░░░░░░░░░░░░░░░` | not started |
 
-Counted from the [coverage table](docs/protocol/BABYFACE-PRO-FS-CC-REFERENCE.md#5-coverage-against-what-totalmix-fx-offers) of the protocol reference. Last report: [The optical format, read from the unit's own display](docs/milestones/2026-11-19-optical-format-on-the-units-display.md), 19 November 2026.
+Counted from the [coverage table](docs/protocol/BABYFACE-PRO-FS-CC-REFERENCE.md#5-coverage-against-what-totalmix-fx-offers) of the protocol reference. Last report: [Clock source and optical format, measured](docs/milestones/2026-11-22-clock-source-and-optical-format-measured.md), 22 November 2026.
 <!-- progress:end -->
 
 A function counts as measured when its effect was read at the unit. Native support in Loopy Pro is the aim; it is in the hands of the developer of Loopy Pro, and what he needs is in the protocol reference.
@@ -31,7 +31,7 @@ A function counts as measured when its effect was read at the unit. Native suppo
 
 ## Help wanted
 
-Everything here was measured on one unit. If you own a Babyface Pro or Babyface Pro FS and a computer, you can check in a few minutes whether yours behaves the same, and help with the one function that is not measured yet: [how to help](docs/help-wanted/README.md). No programming needed.
+Everything here was measured on one unit. If you own a Babyface Pro or Babyface Pro FS and a computer, you can check in a few minutes whether yours behaves the same: [how to help](docs/help-wanted/README.md). No programming needed.
 
 ## Built on this reference
 

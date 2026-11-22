@@ -148,8 +148,9 @@ def set_eq_in_recording(on):
 def set_device_setting(bit, on):
     """One device setting (sub ID 00): bit 0 clock source, bit 6 "EQ for Record" (set = not in the recording), bit 10
     optical output format. Only the named bit is sent in the state part; the unit follows the bit named in the mask.
-    (bit 0: reported, bit 30 of state word 0 follows it; bit 6: measured, see set_eq_in_recording; bit 10: reported
-    on the unit's own display, clear = ADAT, set = S/PDIF)"""
+    (measured on an optical link from the unit's output into its own input: bit 0 set keeps the unit on its own clock,
+    clear lets it follow the optical input; bit 10 clear is ADAT with eight channels, set is S/PDIF with the first pair;
+    bit 6 see set_eq_in_recording; bit 30 of state word 0 reports bit 0)"""
     if bit not in (0, 6, 10):
         raise ValueError('bit 0, 6 or 10')
     return frame(SUB_STATE, [(1 << bit) | ((1 << bit if on else 0) << 16)])
